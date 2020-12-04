@@ -19,10 +19,10 @@ jobs:
           pip install mypy
       - name: Run image
         uses: abatilo/actions-poetry@v2.0.0
-        run: poetry install
       - name: Install
         shell: bash -l {0}
         run: |
+          poetry install
           conda install -c potassco clingo
           pip install -e .
 
