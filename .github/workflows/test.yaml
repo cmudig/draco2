@@ -17,6 +17,8 @@ jobs:
       - shell: bash -l {0}
         run: |
           pip install mypy
+          pip install wheel
+
       - name: Python Poetry Action
         uses: abatilo/actions-poetry@v2.1.0
         with:
@@ -24,6 +26,8 @@ jobs:
       - name: Install
         shell: bash -l {0}
         run: |
+          ls /usr/bin/
+          which poetry
           poetry install
           conda install -c potassco clingo
           pip install -e .
