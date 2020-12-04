@@ -17,8 +17,8 @@ jobs:
       - shell: bash -l {0}
         run: |
           pip install mypy
-      - name: Run image
-        uses: abatilo/actions-poetry@v2.0.0
+      - name: Python Poetry Action
+        uses: abatilo/actions-poetry@v2.1.0
         with:
           poetry-version: 1.1.4
       - name: Install
