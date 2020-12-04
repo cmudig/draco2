@@ -1,6 +1,6 @@
 name: Test
 
-on: [push]
+on: [push, pull-request]
 
 jobs:
   test:
@@ -17,12 +17,13 @@ jobs:
       - shell: bash -l {0}
         run: |
           pip install mypy
-
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+        run: poetry install
       - name: Install
         shell: bash -l {0}
         run: |
           conda install -c potassco clingo
-          pip install -r requirements.txt
           pip install -e .
 
       - name: Setup Node
