@@ -1,4 +1,4 @@
-# Draco 2
+# Draco v2
 
 **Work in Progress**
 
