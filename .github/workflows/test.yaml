@@ -1,6 +1,6 @@
 name: Test
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   test:
@@ -8,9 +8,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
-        # with:
-        #   python-version: '3.8'
+
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
@@ -18,19 +16,25 @@ jobs:
 
       - shell: bash -l {0}
         run: |
+          which pip
+          pip --version
+          which python
+          python --version
+          which conda
+          conda --version
+
+
+      - shell: bash -l {0}
+        run: |
           pip install mypy
           pip install wheel
-
-      - name: Python Poetry Action
-        uses: abatilo/actions-poetry@v2.1.0
-        with:
-          poetry-version: 1.1.4
 
       - name: Install
         shell: bash -l {0}
         run: |
           pip install poetry==1.0.5
           poetry install
+          conda install -c potassco clingo
           pip install -e .
 
 
