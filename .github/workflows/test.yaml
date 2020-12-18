@@ -32,11 +32,9 @@ jobs:
       - name: Install
         shell: bash -l {0}
         run: |
-          pip install poetry==1.0.5
-          poetry install
+          pip install -r requirements.txt
           conda install -c potassco clingo
           pip install -e .
-
 
       - name: Tests
         shell: bash -l {0}
