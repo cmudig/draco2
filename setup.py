@@ -20,7 +20,6 @@ setup(
     license="BSD-3",
     url="https://github.com/cmudig/draco2",
     packages=["draco"],
-    entry_points={"console_scripts": ["draco=draco.cli:main"]},
     install_requires=["clyngor"],
     include_package_data=True,
     extras_require={
