@@ -2,6 +2,13 @@
 
 from draco import __version__
 
+from setuptools import Command, setup
+from os.path import abspath, dirname, join
+
+
+this_dir = abspath(dirname(__file__))
+with open(join(this_dir, "README.md"), encoding="utf-8") as file:
+    long_description = file.read()
 
 setup(
     name="draco",
@@ -21,9 +28,6 @@ setup(
     },
     package_data={
         "draco": [
-            "../asp/*.lp",
-            "../js/bin/*",
-            "../js/build/draco.js*",
             "../LICENSE",
             "../README.md",
         ]
