@@ -1,6 +1,6 @@
 # Draco 2
 
-![Test](https://github.com/harshil93r/draco2/workflows/Test/badge.svg)
+![Test](https://github.com/cmudig/draco2/workflows/Test/badge.svg)
 
 **Work in Progress**
 

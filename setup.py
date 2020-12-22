@@ -3,6 +3,7 @@
 from draco import __version__
 
 from setuptools import Command, setup
+from setuptools.command.test import test
 from os.path import abspath, dirname, join
 
 
