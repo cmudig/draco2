@@ -84,7 +84,7 @@ def load_file(path: str) -> bytes:
     content = file_cache.get(path)
     if content is not None:
         return content
-    with open(path, encoding='utf-8') as f:
+    with open(path, encoding="utf-8") as f:
         content = f.read().encode("utf8")
         file_cache[path] = content
         return content
@@ -139,7 +139,9 @@ def run_clingo(
         with tempfile.NamedTemporaryFile(mode="w", delete=False) as fd:
             fd.write(program)
             if DEBUG:
-                logger.info('Debug ASP with "clingo %s %s"', " ".join(file_names), fd.name)
+                logger.info(
+                    'Debug ASP with "clingo %s %s"', " ".join(file_names), fd.name
+                )
 
     stdout, stderr = proc.communicate(asp_program)
 
@@ -154,7 +156,7 @@ def run(
     silence_warnings=False,
     debug=False,
     clear_cache=False,
-    multiple_solution=False
+    multiple_solution=False,
 ):
     """ Run clingo to compute a completion of a partial spec or violations. """
 
@@ -164,7 +166,13 @@ def run(
         file_cache.clear()
 
     stderr, stdout = run_clingo(
-        draco_query, constants, files, relax_hard, silence_warnings, debug, multiple_solution
+        draco_query,
+        constants,
+        files,
+        relax_hard,
+        silence_warnings,
+        debug,
+        multiple_solution,
     )
 
     try:
@@ -180,7 +188,7 @@ def run(
     result = json_result["Result"]
 
     if result == "UNSATISFIABLE":
-        #print(f'{result}')
+        # print(f'{result}')
         if DEBUG:
             print("unsat")
             print(json.loads(stdout))
@@ -194,12 +202,15 @@ def run(
             if DEBUG:
                 logger.debug(answers["Value"])
 
-        results = [Result(
-            clyngor.Answers(answers["Value"]).sorted,
-            cost=json_result["Models"]["Costs"][0],
-        ) for answers in all_answers]
+        results = [
+            Result(
+                clyngor.Answers(answers["Value"]).sorted,
+                cost=json_result["Models"]["Costs"][0],
+            )
+            for answers in all_answers
+        ]
 
-        #print(f'{result} | {json_result["Models"]["Costs"][0]} | {len(results)}')
+        # print(f'{result} | {json_result["Models"]["Costs"][0]} | {len(results)}')
 
         if multiple_solution:
             return results
@@ -207,20 +218,23 @@ def run(
             return results[-1]
     elif result == "SATISFIABLE":
         all_answers = json_result["Call"][0]["Witnesses"]
-        
-        #print(f'{result} | {json_result["Models"]["Number"]}')
+
+        # print(f'{result} | {json_result["Models"]["Number"]}')
 
         # assert (
         #     json_result["Models"]["Number"] > 1
         # ), "Should not have more than one model if we don't optimize"
-        
+
         if DEBUG:
             for answers in all_answers:
                 logger.debug(answers["Value"])
-        return [Result(
-            clyngor.Answers(answers["Value"]).sorted,
-            cost=-1,
-        ) for answers in all_answers]
+        return [
+            Result(
+                clyngor.Answers(answers["Value"]).sorted,
+                cost=-1,
+            )
+            for answers in all_answers
+        ]
     else:
         logger.error("Unsupported result: %s", result)
         return None
