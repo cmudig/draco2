@@ -24,27 +24,11 @@ conda activate draco
 To update the environment when dependencies have changed, run
 
 ```sh
-conda env update -f environment.yml --prune
+conda env update -f environment.yml
 ```
 
 This command will ensure that you have the exact same dependencies as other developers.
 
 ## Updating the dependencies
 
-To add a new dependency or update a dependency, update `requirements.txt` or `requirements-dev.txt`. Then update the environment.
-
-```sh
-conda install --file requirements.txt --file requirements-dev.txt
-```
-
-You can update the dependencies in your environment with
-
-```sh
-conda update --all
-```
-
-If you make changes to the environments, make sure to update the `environment.yml` file that we use to share dependency versions.
-
-```sh
-conda env export | grep -v "^prefix: " > environment.yml
-```
+If you update or add a dependency, make sure to also update the environment file `environment.yml`.
