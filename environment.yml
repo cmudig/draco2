@@ -10,3 +10,4 @@ dependencies:
   - pre-commit
   - mypy
   - pytest
+  - black

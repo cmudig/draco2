@@ -24,3 +24,5 @@ jobs:
           conda list
           conda config --show-sources
           conda config --show
+      - run: pytest draco
+      - run: mypy -p draco
