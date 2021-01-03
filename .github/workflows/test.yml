@@ -15,7 +15,9 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           environment-file: environment.yml
-          miniforge-version: latest
+          miniconda-version: "latest"
+          activate-environment: draco
+          auto-activate-base: false
       - run: |
           conda info
           conda list
