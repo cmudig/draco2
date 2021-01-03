@@ -1,4 +1,6 @@
-# Draco v2 ![Test](https://github.com/cmudig/draco2/workflows/Test/badge.svg)
+# Draco v2
+![Test](https://github.com/cmudig/draco2/workflows/Test/badge.svg)
+[![code style black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 **Work in Progress**
 
