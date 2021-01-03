@@ -1,0 +1,15 @@
+name: draco
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - clingo
+  - clyngor
+  - pandas
+
+  # development dependencies
+  - black
+  - flake8
+  - mypy
+  - pytest
