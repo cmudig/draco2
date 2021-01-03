@@ -7,6 +7,6 @@ dependencies:
   - clingo
 
   # development dependencies
-  - black
+  - pre-commit
   - mypy
   - pytest

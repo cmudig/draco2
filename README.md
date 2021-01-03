@@ -18,14 +18,15 @@ To create the virtual environment `draco`, you can run
 
 ```sh
 conda env create -f environment.yml
+conda activate draco
 ```
 
-To update the environment when dependencies have changed
+To update the environment when dependencies have changed, run
 
 ```sh
 conda env update -f environment.yml
 ```
 
-## Update the environment
+## Updating the dependencies
 
-After adding a new dependency or updating a dependency, you need to update the environment as well.
+If you update or add a dependency, make sure to also update the environment file `environment.yml`.
