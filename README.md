@@ -27,8 +27,6 @@ To update the environment when dependencies have changed, run
 conda env update -f environment.yml
 ```
 
-This command will ensure that you have the exact same dependencies as other developers.
-
 ## Updating the dependencies
 
 If you update or add a dependency, make sure to also update the environment file `environment.yml`.
