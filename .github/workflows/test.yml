@@ -32,7 +32,7 @@ jobs:
           conda config --show
 
       - name: Run tests
-        run: pytest --cov=draco --cov-report=term-missing draco
+        run: pytest --cov=draco --cov-report=xml --cov-report=term-missing draco
 
       - name: Check types
         run: mypy -p draco
