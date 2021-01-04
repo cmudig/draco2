@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.9
+  - python=3.8
   - clingo
   - pandas
 
@@ -11,4 +11,6 @@ dependencies:
   - pre-commit
   - mypy
   - pytest
+  - pytest-cov
   - black
+  - data-science-types

@@ -30,5 +30,12 @@ jobs:
           conda list
           conda config --show-sources
           conda config --show
-      - run: pytest draco
-      - run: mypy -p draco
+
+      - name: Run tests
+        run: pytest --cov=draco --cov-report=term-missing draco
+
+      - name: Check types
+        run: mypy -p draco
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
