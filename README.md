@@ -29,4 +29,4 @@ conda env update -f environment.yml
 
 ## Updating the dependencies
 
-If you update or add a dependency, make sure to also update the environment file `environment.yml`.
+If you update or add a dependency, update update the environment file `environment.yml` and then update your environment from the environment file.
