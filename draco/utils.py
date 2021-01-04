@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 import pandas as pd
 
@@ -43,10 +43,10 @@ def file_to_facts(file: str, parse_data_type=dtype_to_field_type) -> List[Fact]:
     """
 
     if file.endswith(".json"):
-        return df_to_facts(pd.read_json(file), parse_data_type)
+        df: Any = pd.read_json(file)
+        return df_to_facts(df, parse_data_type)
     elif file.endswith(".csv"):
         df = pd.read_csv(file)
-        df = df.where((pd.notnull(df)), None)
         return df_to_facts(df, parse_data_type)
     else:
         raise ValueError(f"unsupported file type {file}")
