@@ -25,6 +25,8 @@ def run(program: str = "", facts: List[Tuple] = [], models: int = None):
     if models is not None:
         ctl.configuration.solve.models = str(models)
 
+    ctl.configuration.solve.project = 1
+
     with ctl.solve(yield_=True) as handle:
         for m in handle:
             # print(f"Type: {m.type}")
