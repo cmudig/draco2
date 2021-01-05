@@ -5,11 +5,6 @@ title: Draco
 author: Dominik Moritz
 logo: logo-light.png
 
-# Force re-execution of notebooks on each build.
-# See https://jupyterbook.org/content/execute.html
-execute:
-  execute_notebooks: force
-
 # Define the name of the latex output file for PDF builds
 latex:
   latex_documents:
@@ -26,3 +21,7 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+  use_edit_page_button: true
+
+launch_buttons:
+  notebook_interface: jupyterlab
