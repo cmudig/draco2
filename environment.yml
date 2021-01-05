@@ -14,3 +14,5 @@ dependencies:
   - pytest-cov
   - black
   - data-science-types
+  - flake8
+  - flake8-black

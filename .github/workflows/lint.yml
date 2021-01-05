@@ -3,10 +3,10 @@ name: Lint
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
+      - main
 
 jobs:
   lint:
@@ -15,3 +15,4 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: psf/black@stable
+      - uses: py-actions/flake8@v1
