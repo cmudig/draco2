@@ -3,10 +3,10 @@ name: Test
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
+      - main
 
 jobs:
   test:
@@ -25,6 +25,9 @@ jobs:
           miniconda-version: "latest"
           activate-environment: draco
           auto-activate-base: false
+          mamba-version: "*"
+          channels: conda-forge,defaults
+          use-mamba: true
       - run: |
           conda info
           conda list
