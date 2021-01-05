@@ -11,7 +11,7 @@ lint:
 	flake8 . --statistics
 
 mypy:
-	mypy .
+	mypy -p draco
 
 env-create:
 	conda env create -f environment.yml
