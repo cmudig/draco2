@@ -1,4 +1,5 @@
 import csv
+import datetime
 import json
 
 import pandas as pd
@@ -7,22 +8,31 @@ from draco import data
 
 
 def test_load_df():
-    df = pd.DataFrame({"numbers": [1, 2], "text": ["a", "a"], "bool": [True, False]})
+    df = pd.DataFrame(
+        {
+            "numbers": [1, 2],
+            "text": ["a", "a"],
+            "bools": [True, False],
+            "dates": [datetime.datetime(2018, 1, 1), datetime.datetime(2021, 1, 1)],
+        }
+    )
     assert sorted(data.df_to_facts(df)) == sorted(
         [
             ("numberRows", 2),
             ("fieldCardinality", "numbers", 2),
             ("fieldCardinality", "text", 1),
-            ("fieldCardinality", "bool", 2),
+            ("fieldCardinality", "bools", 2),
+            ("fieldCardinality", "dates", 2),
             ("fieldDataType", "numbers", "number"),
             ("fieldDataType", "text", "string"),
-            ("fieldDataType", "bool", "boolean"),
+            ("fieldDataType", "bools", "boolean"),
+            ("fieldDataType", "dates", "date"),
         ]
     )
 
 
 def test_load_unsupported_data():
-    df = pd.DataFrame({"datetime": [pd.Timestamp("20180310")]})
+    df = pd.DataFrame({"datetime": [pd.Timedelta("2 days")]})
     with pytest.raises(ValueError):
         data.df_to_facts(df)
 

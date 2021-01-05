@@ -16,3 +16,5 @@ dependencies:
   - data-science-types
   - flake8
   - flake8-black
+  - streamlit
+  - vega_datasets

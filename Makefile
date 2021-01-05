@@ -1,5 +1,10 @@
 all: lint mypy test
 
+develop:
+	conda env create -f environment.yml
+	conda activate draco
+	python setup.py develop
+
 test:
 	pytest .
 
@@ -11,7 +16,7 @@ lint:
 	flake8 . --statistics
 
 mypy:
-	mypy .
+	mypy -p draco
 
 env-create:
 	conda env create -f environment.yml

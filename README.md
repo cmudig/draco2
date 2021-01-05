@@ -23,6 +23,7 @@ To create the virtual environment `draco`, you can run
 ```sh
 conda env create -f environment.yml
 conda activate draco
+python setup.py develop
 ```
 
 To update the environment when dependencies have changed, run

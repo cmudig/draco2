@@ -13,6 +13,8 @@ def dtype_to_field_type(ty):
         return "boolean"
     elif ty in ["object"]:
         return "string"
+    elif ty in ["datetime64[ns]"]:
+        return "date"
     else:
         raise ValueError(f"unsupported type {ty}")
 
