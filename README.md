@@ -8,9 +8,9 @@
 
 Experimental/modular version of [Draco](https://github.com/uwdata/draco).
 
-## Install
+## Documentation
 
-TODO
+Read about Draco in the online book at https://dig.cmu.edu/draco2/. 
 
 ## Development
 
