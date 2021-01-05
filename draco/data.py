@@ -1,8 +1,6 @@
-from typing import Any, List
+from typing import Any, List, Tuple
 
 import pandas as pd
-
-from draco import Fact
 
 
 def dtype_to_field_type(ty):
@@ -19,25 +17,25 @@ def dtype_to_field_type(ty):
         raise ValueError(f"unsupported type {ty}")
 
 
-def df_to_facts(df: pd.DataFrame, parse_data_type=dtype_to_field_type) -> List[Fact]:
+def df_to_facts(df: pd.DataFrame, parse_data_type=dtype_to_field_type) -> List[Tuple]:
     """
     Read data statistics from the given dataframe.
     """
 
-    facts = []
-    facts.append(Fact("numberRows", df.shape[0]))
+    facts: List[Tuple] = []
+    facts.append(("numberRows", df.shape[0]))
 
     for col in df.columns:
         cardinality = pd.Series.nunique(df[col])
         data_type = parse_data_type(df[col].dtype)
 
-        facts.append(Fact("fieldCardinality", (col, cardinality)))
-        facts.append(Fact("fieldDataType", (col, data_type)))
+        facts.append(("fieldCardinality", col, cardinality))
+        facts.append(("fieldDataType", col, data_type))
 
     return facts
 
 
-def file_to_facts(file: str, parse_data_type=dtype_to_field_type) -> List[Fact]:
+def file_to_facts(file: str, parse_data_type=dtype_to_field_type) -> List[Tuple]:
     """
     Read data statistics from the given CSV or JSON file.
     """
