@@ -23,6 +23,8 @@ jobs:
           activate-environment: draco
           auto-activate-base: false
 
+      - run: python setup.py develop
+
       - name: Run tests
         run: make book
 
