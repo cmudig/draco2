@@ -1,5 +1,10 @@
 all: lint mypy test
 
+develop:
+	conda env create -f environment.yml
+	conda activate draco
+	python setup.py develop
+
 test:
 	pytest .
 
