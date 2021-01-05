@@ -24,3 +24,9 @@ env-create:
 
 env-update:
 	conda env update -f environment.yml
+
+book:
+	jupyter-book build docs
+
+lab:
+	jupyter lab

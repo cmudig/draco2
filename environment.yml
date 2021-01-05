@@ -16,5 +16,8 @@ dependencies:
   - data-science-types
   - flake8
   - flake8-black
-  - streamlit
+  - jupyterlab
   - vega_datasets
+  - pip
+  - pip:
+      - jupyter-book
