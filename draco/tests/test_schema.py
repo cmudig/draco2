@@ -4,7 +4,7 @@ import json
 
 import pandas as pd
 import pytest
-from draco import data
+from draco import schema
 
 
 def test_load_df():
@@ -16,25 +16,22 @@ def test_load_df():
             "dates": [datetime.datetime(2018, 1, 1), datetime.datetime(2021, 1, 1)],
         }
     )
-    assert sorted(data.df_to_facts(df)) == sorted(
-        [
-            ("numberRows", 2),
-            ("fieldCardinality", "numbers", 2),
-            ("fieldCardinality", "text", 1),
-            ("fieldCardinality", "bools", 2),
-            ("fieldCardinality", "dates", 2),
-            ("fieldDataType", "numbers", "number"),
-            ("fieldDataType", "text", "string"),
-            ("fieldDataType", "bools", "boolean"),
-            ("fieldDataType", "dates", "date"),
-        ]
-    )
+
+    assert schema.schema_from_dataframe(df) == {
+        "numberRows": 2,
+        "field": {
+            "numbers": {"unique": 2, "dataType": "number"},
+            "text": {"unique": 1, "dataType": "string"},
+            "bools": {"unique": 2, "dataType": "boolean"},
+            "dates": {"unique": 2, "dataType": "date"},
+        },
+    }
 
 
 def test_load_unsupported_data():
     df = pd.DataFrame({"datetime": [pd.Timedelta("2 days")]})
     with pytest.raises(ValueError):
-        data.df_to_facts(df)
+        schema.schema_from_dataframe(df)
 
 
 @pytest.fixture(scope="session")
@@ -50,15 +47,13 @@ def csv_file(tmpdir_factory):
 
 
 def test_csv_to_facts(csv_file):
-    assert sorted(data.file_to_facts(csv_file)) == sorted(
-        [
-            ("numberRows", 2),
-            ("fieldCardinality", "numbers", 2),
-            ("fieldCardinality", "text", 1),
-            ("fieldDataType", "numbers", "number"),
-            ("fieldDataType", "text", "string"),
-        ]
-    )
+    assert schema.file_to_facts(csv_file) == {
+        "numberRows": 2,
+        "field": {
+            "numbers": {"unique": 2, "dataType": "number"},
+            "text": {"unique": 1, "dataType": "string"},
+        },
+    }
 
 
 @pytest.fixture(scope="session")
@@ -70,17 +65,15 @@ def json_file(tmpdir_factory):
 
 
 def test_json_to_facts(json_file):
-    assert sorted(data.file_to_facts(json_file)) == sorted(
-        [
-            ("numberRows", 2),
-            ("fieldCardinality", "numbers", 2),
-            ("fieldCardinality", "text", 1),
-            ("fieldDataType", "numbers", "number"),
-            ("fieldDataType", "text", "string"),
-        ]
-    )
+    assert schema.file_to_facts(json_file) == {
+        "numberRows": 2,
+        "field": {
+            "numbers": {"unique": 2, "dataType": "number"},
+            "text": {"unique": 1, "dataType": "string"},
+        },
+    }
 
 
 def test_unknown_file_type():
     with pytest.raises(ValueError):
-        data.file_to_facts("foo.bar")
+        schema.file_to_facts("foo.bar")

@@ -4,4 +4,4 @@ In this book, we describe a new version of Draco. Draco was first published in {
 
 ## Installation
 
-TODO
+TODO: set up and describe installation with conda.
