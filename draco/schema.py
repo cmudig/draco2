@@ -21,17 +21,15 @@ def dtype_to_field_type(ty):
 
 def schema_from_dataframe(
     df: pd.DataFrame, parse_data_type=dtype_to_field_type
-) -> dict:
+) -> Dict:
     """
-    Read data statistics from the given dataframe.
+    Read schema information from the given Pandas dataframe.
     """
 
     schema: Dict[str, Any] = {}
 
     schema["numberRows"] = df.shape[0]
-
     schema["field"] = {}
-    fields = schema["field"]
 
     for col in df.columns:
         column = df[col]
@@ -50,14 +48,14 @@ def schema_from_dataframe(
             objcounts = column.value_counts()
             props["freq"] = objcounts.iloc[0]
 
-        fields[col] = props
+        schema["field"][col] = props
 
     return schema
 
 
-def file_to_facts(file: str, parse_data_type=dtype_to_field_type) -> dict:
+def file_to_facts(file: str, parse_data_type=dtype_to_field_type) -> Dict:
     """
-    Read data statistics from the given CSV or JSON file.
+    Read schema information from the given CSV or JSON file.
     """
 
     if file.endswith(".json"):
