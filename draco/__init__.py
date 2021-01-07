@@ -1,6 +1,6 @@
 __version__ = "2.0.0"
 
-from .asp import dict_to_facts
+from .fact_utils import dict_to_facts
 from .run import run_clingo
 from .schema import schema_from_dataframe
 

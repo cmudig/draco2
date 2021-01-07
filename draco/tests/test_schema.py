@@ -47,7 +47,7 @@ def test_load_df():
                 "unique": 2,
             },
             "dates": {
-                "dataType": "date",
+                "dataType": "datetime",
                 "unique": 2,
             },
         },

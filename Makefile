@@ -6,7 +6,7 @@ develop:
 	python setup.py develop
 
 test:
-	pytest .
+	pytest -s .
 
 cover:
 	pytest --cov=draco --cov-report=term-missing .

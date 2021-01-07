@@ -12,7 +12,7 @@ The schema describes what we know about the dataset and the fields in the data. 
 Draco can use information about the field type and field statistics. Each field property is associated with a field. The facts therefore have the form of e.g. `fact(dataType,foo,number).` (read as _the type of the foo field is number_). For each field, there should be a fact `field` that tells Draco that the field exists (e.g. `fact(field,foo).`).
 
 `dataType`
-: The type of the data in the column for this field. One of `number`, `string`, `boolean`, or `date`.
+: The type of the data in the column for this field. One of `number`, `string`, `boolean`, or `datetime`.
 
 `unique`
 : The number of unique values.
@@ -35,7 +35,7 @@ Draco can use information about the field type and field statistics. Each field 
 fact(numberRows,42).
 
 fact(field,date).
-fact(dataType,date,date).
+fact(dataType,date,datetime).
 fact(unique,date,1461).
 
 fact(field,precipitation).

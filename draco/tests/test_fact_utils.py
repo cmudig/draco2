@@ -1,16 +1,16 @@
-from draco import asp
+from draco.fact_utils import dict_to_facts, facts_to_dict, make_fact
 
 
 def test_make_fact():
-    assert asp.make_fact(("numberRows", 42)) == "fact(numberRows,42)."
+    assert make_fact(("numberRows", 42)) == "fact(numberRows,42)."
 
 
 def test_make_fact_short():
-    assert asp.make_fact(("numberRows", 42), True) == "numberRows(42)."
+    assert make_fact(("numberRows", 42), True) == "numberRows(42)."
 
 
 def test_dict_to_facts():
-    program = asp.dict_to_facts(
+    program = dict_to_facts(
         {
             "numberRows": 42,
             "field": {
@@ -29,3 +29,8 @@ def test_dict_to_facts():
         "fact(unique,f2,32).",
         "fact(dataType,f2,string).",
     ]
+
+
+def test_facts_to_dict():
+    # TODO
+    facts_to_dict([])
