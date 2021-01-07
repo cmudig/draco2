@@ -16,3 +16,15 @@ Draco can use information about the field type and field statistics. This inform
 
 `unique`
 : The number of unique values.
+
+`min`
+: The minimum value. Only used for numbers.
+
+`max`
+: The maximum value. Only used for numbers.
+
+`std`
+: The standard deviation. Only used for numbers.
+
+`freq`
+: The frequency of the most common value. Only used for strings.
