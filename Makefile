@@ -26,7 +26,10 @@ env-update:
 	conda env update -f environment.yml
 
 book:
-	jupyter-book build docs
+	jupyter-book build -W -n --keep-going docs
 
 lab:
 	jupyter lab
+
+clean:
+	jupyter-book clean docs

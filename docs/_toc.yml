@@ -3,11 +3,11 @@
 #
 - file: intro
 
-- part: Descriptions
+- part: Facts
   chapters:
-    - file: descriptions/intro
-    - file: descriptions/schema
-    - file: descriptions/task
+    - file: facts/intro
+    - file: facts/schema
+    - file: facts/task
 
 - part: API
   chapters:
@@ -16,4 +16,4 @@
 
 - part: Reference
   chapters:
-    - file: references
+    - file: bibliography

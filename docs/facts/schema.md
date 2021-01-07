@@ -9,7 +9,7 @@ The schema describes what we know about the dataset and the fields in the data. 
 
 ## Field Properties
 
-Draco can use knowledge about the field type and field statistics.
+Draco can use information about the field type and field statistics. This information can be encoded as the following facts.
 
 `dataType`
 : The type of the data in the column for this field. One of `number`, `string`, `boolean`, or `date`.
