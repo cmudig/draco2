@@ -13,7 +13,7 @@ cover:
 
 lint:
 	black .
-	flake8 . --statistics
+	flake8 draco --statistics
 
 mypy:
 	mypy -p draco

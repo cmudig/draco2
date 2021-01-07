@@ -1,11 +1,14 @@
+from collections import namedtuple
 from typing import Iterable, Union
 
 import clingo
 
+Model = namedtuple("Model", ["answer_set", "cost", "number"])
 
-def run_clingo(program: Union[str, Iterable[str]] = "", models: int = None):
+
+def run_clingo(program: Union[str, Iterable[str]] = "", models: int = 0):
     """
-    Run the solver.
+    Run the solver. Returns all models by default.
     """
 
     if not isinstance(program, str):
@@ -25,11 +28,6 @@ def run_clingo(program: Union[str, Iterable[str]] = "", models: int = None):
     ctl.configuration.solve.project = 1
 
     with ctl.solve(yield_=True) as handle:
-        for m in handle:
-            # print(f"Type: {m.type}")
-            print(f"Number: {m.number}")
-            # print(f"Optimal: {m.optimality_proven}")
-            # print(f"Cost: {m.cost}")
-            print(f"Atoms: {m.symbols(atoms=True)}")
-            # print(f"Answer: {m}")
-            print()
+        for model in handle:
+            answer_set = model.symbols(shown=True)
+            yield Model(answer_set, model.cost, model.number)
