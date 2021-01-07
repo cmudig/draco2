@@ -6,6 +6,5 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
-  },
-  "python.pythonPath": "/Users/dominik/miniforge3/envs/draco/bin/python"
+  }
 }
