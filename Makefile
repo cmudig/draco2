@@ -26,6 +26,9 @@ env-update:
 	conda env update -f environment.yml
 
 book:
+	jupyter-book build docs
+
+book-strict:
 	jupyter-book build -W -n --keep-going docs
 
 lab:
