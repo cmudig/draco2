@@ -25,7 +25,6 @@ def schema_from_dataframe(
     """
     Read schema information from the given Pandas dataframe.
     """
-
     schema: Dict[str, Any] = {}
 
     schema["numberRows"] = df.shape[0]
@@ -57,7 +56,6 @@ def file_to_facts(file: str, parse_data_type=dtype_to_field_type) -> Dict:
     """
     Read schema information from the given CSV or JSON file.
     """
-
     if file.endswith(".json"):
         df: Any = pd.read_json(file)
         return schema_from_dataframe(df, parse_data_type)

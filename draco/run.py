@@ -10,7 +10,6 @@ def run_clingo(program: Union[str, Iterable[str]] = "", models: int = 0):
     """
     Run the solver. Returns all models by default.
     """
-
     if not isinstance(program, str):
         program = "\n".join(program)
 
