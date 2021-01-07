@@ -23,8 +23,8 @@ def asp_file(tmpdir_factory):
 
 def test_parse_blocks(asp_file):
     assert parse_blocks(asp_file) == {
-        "foo": "% @test(foo) some description\nfact1.\n",
-        "bar": "% @test(bar) some description\nfact2.\n",
+        "foo": ("test", "some description", "fact1.\n"),
+        "bar": ("test", "some description", "fact2.\n"),
     }
 
 

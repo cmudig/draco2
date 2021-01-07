@@ -1,4 +1,7 @@
 import re
+from collections import namedtuple
+
+Block = namedtuple("Block", ["block_type", "description", "program"])
 
 
 def parse_blocks(filename: str):
@@ -37,11 +40,11 @@ def parse_blocks(filename: str):
                 elif len(line.strip()):
                     block.append(line)
 
-            match = re.match(r"% @\w+\((\w+)\) \w+", block[0])
+            match = re.match(r"% @(\w+)\((\w+)\) ([^\n]+)", block[0])
 
             if match:
-                (name,) = match.groups()
-                defs[name] = "".join(block)
+                block_type, name, description = match.groups()
+                defs[name] = Block(block_type, description, "".join(block[1:]))
 
             if len(line) == 0:
                 return defs
