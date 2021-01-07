@@ -1,5 +1,6 @@
 import re
 from collections import namedtuple
+from typing import Dict
 
 Block = namedtuple("Block", ["block_type", "description", "program"])
 
@@ -13,7 +14,7 @@ def parse_blocks(filename: str):
     # %foo(name) description
     ```
     """
-    defs = {}
+    defs: Dict[str, Block] = {}
 
     with open(filename) as f:
         # find the first block
