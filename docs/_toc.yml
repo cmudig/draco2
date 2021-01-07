@@ -2,5 +2,18 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
 - file: intro
-- file: data
-- file: references
+
+- part: Descriptions
+  chapters:
+    - file: descriptions/intro
+    - file: descriptions/schema
+    - file: descriptions/task
+
+- part: API
+  chapters:
+    - file: api/intro
+    - file: api/schema
+
+- part: Reference
+  chapters:
+    - file: references

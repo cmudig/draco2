@@ -2,7 +2,7 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: Draco
-author: Dominik Moritz
+author: CMU Data Interaction Group
 logo: logo-light.png
 
 # Define the name of the latex output file for PDF builds
@@ -25,3 +25,6 @@ html:
 
 launch_buttons:
   notebook_interface: jupyterlab
+
+parse:
+  myst_extended_syntax: true

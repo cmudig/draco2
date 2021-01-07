@@ -1,18 +1,15 @@
-from typing import List, Tuple
+from typing import Iterable, Union
 
 import clingo
 
 
-def run(program: str = "", facts: List[Tuple] = [], models: int = None):
+def run_clingo(program: Union[str, Iterable[str]] = "", models: int = None):
     """
     Run the solver.
     """
 
-    program = program or ""
-
-    for fact in facts:
-        fact_strings = map(str, fact)
-        program += "fact({}).\n".format(",".join(fact_strings))
+    if not isinstance(program, str):
+        program = "\n".join(program)
 
     ctl = clingo.Control()
     ctl.add(
