@@ -6,6 +6,20 @@ import pandas as pd
 import pytest
 from draco import schema
 
+SIMPLE_SCHEMA = {
+    "numberRows": 2,
+    "field": {
+        "numbers": {
+            "dataType": "number",
+            "unique": 2,
+            "max": 2,
+            "min": 1,
+            "std": 0,
+        },
+        "text": {"dataType": "string", "unique": 1, "freq": 2},
+    },
+}
+
 
 def test_load_df():
     df = pd.DataFrame(
@@ -20,10 +34,22 @@ def test_load_df():
     assert schema.schema_from_dataframe(df) == {
         "numberRows": 2,
         "field": {
-            "numbers": {"unique": 2, "dataType": "number"},
-            "text": {"unique": 1, "dataType": "string"},
-            "bools": {"unique": 2, "dataType": "boolean"},
-            "dates": {"unique": 2, "dataType": "date"},
+            "numbers": {
+                "dataType": "number",
+                "unique": 2,
+                "max": 2,
+                "min": 1,
+                "std": 0,
+            },
+            "text": {"dataType": "string", "unique": 1, "freq": 2},
+            "bools": {
+                "dataType": "boolean",
+                "unique": 2,
+            },
+            "dates": {
+                "dataType": "date",
+                "unique": 2,
+            },
         },
     }
 
@@ -47,13 +73,7 @@ def csv_file(tmpdir_factory):
 
 
 def test_csv_to_facts(csv_file):
-    assert schema.file_to_facts(csv_file) == {
-        "numberRows": 2,
-        "field": {
-            "numbers": {"unique": 2, "dataType": "number"},
-            "text": {"unique": 1, "dataType": "string"},
-        },
-    }
+    assert schema.file_to_facts(csv_file) == SIMPLE_SCHEMA
 
 
 @pytest.fixture(scope="session")
@@ -65,13 +85,7 @@ def json_file(tmpdir_factory):
 
 
 def test_json_to_facts(json_file):
-    assert schema.file_to_facts(json_file) == {
-        "numberRows": 2,
-        "field": {
-            "numbers": {"unique": 2, "dataType": "number"},
-            "text": {"unique": 1, "dataType": "string"},
-        },
-    }
+    assert schema.file_to_facts(json_file) == SIMPLE_SCHEMA
 
 
 def test_unknown_file_type():

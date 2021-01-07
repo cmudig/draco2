@@ -34,10 +34,23 @@ def schema_from_dataframe(
     fields = schema["field"]
 
     for col in df.columns:
-        unique = pd.Series.nunique(df[col])
-        data_type = parse_data_type(df[col].dtype)
+        column = df[col]
+        dtype = column.dtype
+        unique = pd.Series.nunique(column)
+        data_type = parse_data_type(dtype)
 
-        fields[col] = {"unique": unique, "dataType": data_type}
+        props = {"dataType": data_type, "unique": unique}
+
+        if data_type == "number":
+            props["min"] = int(column.min())
+            props["max"] = int(column.max())
+            props["std"] = int(column.std())
+
+        elif data_type == "string":
+            objcounts = column.value_counts()
+            props["freq"] = objcounts.iloc[0]
+
+        fields[col] = props
 
     return schema
 

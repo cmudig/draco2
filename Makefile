@@ -1,4 +1,4 @@
-all: lint mypy test
+all: lint mypy cover book
 
 develop:
 	conda env create -f environment.yml
