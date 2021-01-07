@@ -6,3 +6,9 @@ The task that the user tries to complete when looking at a visualization helps D
 
 `taskType`
 : Type task type. Can be one of `value` and `summary`.
+
+## Example
+
+```prolog
+fact(taskType,value).
+```

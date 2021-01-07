@@ -1,5 +1,5 @@
 # Bibliography
 
-```{bibliography} bibliography.bib
+```{bibliography} references.bib
 
 ```
