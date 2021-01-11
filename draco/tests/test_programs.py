@@ -1,9 +1,9 @@
-from draco.definitions import definitions
+from draco.programs import definitions
 
 
 def test_has_definitions():
     assert len(definitions)
 
 
-def test_has_marktype():
+def test_definitions_has_marktype():
     assert "marktype" in definitions
