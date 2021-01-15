@@ -1,34 +1,51 @@
 from collections import abc
+from enum import Enum, unique
 from typing import Generator, List, Mapping
 
 
-def make_fact(values=List, short=False) -> str:
+@unique
+class FactKind(Enum):
+    # a nested property ("is a" relationship)
+    PROPERTY = "property"
+    # an attribute (value)
+    ATTRIBUTE = "attribute"
+
+
+# the root object that is not the property of any other object
+ROOT = "root"
+
+
+def make_fact(kind: FactKind, values=List, short=False) -> str:
     """
-    Create an ASP fact from a list. The function can generate both a
+    Create an ASP fact from a list of values. The function can generate both a
     long form (`fact(x,y,z)`) and a short form (`x(y,z)`). The short form uses
-    the first element as the name of the fact.
+    the first element as the name of the fact. The short form ignores the fact kind.
     """
     if short:
         rest = ",".join(map(str, values[1:]))
         return f"{values[0]}({rest})."
     else:
         parts = ",".join(map(str, values))
-        return f"fact({parts})."
+        return f"{kind.value}({parts})."
 
 
 def dict_to_facts(
-    data: Mapping, fact_key: str = None, short=False
+    data: Mapping, parent: str = ROOT, short=False
 ) -> Generator[str, None, None]:
     """
     A generic encoder for dictionaries as answer set programming facts.
     """
     for key, value in data.items():
         if isinstance(value, abc.Mapping):
-            if fact_key is not None:
-                yield make_fact((fact_key, key), short)
-            yield from dict_to_facts(value, key)
+            for prop, obj in value.items():
+                yield make_fact(FactKind.PROPERTY, (key, parent, prop), short)
+                yield from dict_to_facts(obj, prop, short)
         else:
-            yield make_fact((key, fact_key, value) if fact_key else (key, value), short)
+            yield make_fact(
+                FactKind.ATTRIBUTE,
+                (key, parent, value),
+                short,
+            )
 
 
 def facts_to_dict(facts: List) -> Mapping:

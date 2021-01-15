@@ -1,27 +1,27 @@
-% ====== Definitions ======
+% ====== Definitions of valid function domains ======
 
-% @definition(marktype) Types of marks to encode data.
-marktype(point;bar;line;area;text;tick;rect).
+% @definition(mark_type) Types of marks to encode data.
+domain(mark_type,(point;bar;line;area;text;tick;rect)).
 
 % @definition(field_type) Basic types of the data.
-fieldType(string;number;boolean;datetime).
+domain(field_type,(string;number;boolean;datetime)).
 
 % @definition(aggregate) Supported aggregation functions.
-aggregate_op(count;mean;median;min;max;stdev;sum).
-summative_aggregate_op(count;sum).
+domain(aggregate_op,(count;mean;median;min;max;stdev;sum)).
+domain(summative_aggregate_op,(count;sum)).
 
-% @definition(binning) Numbers of bins that can be recommended; any natural number is allowed.
-binning(10;25;200).
+% @definition(binning) Numbers of bins that can be recommended, any natural number is allowed.
+domain(binning,(10;25;200)).
 
 % @definition(channel) Encoding channels.
-single_channel(x;y;color;size;shape;text;row;column).
-multi_channel(detail).
-channel(C) :- single_channel(C).
-channel(C) :- multi_channel(C).
-non_positional(color;size;shape;text;detail).
+domain(single_channel,(x;y;color;size;shape;text;row;column)).
+domain(multi_channel,detail).
+domain(channel,C) :- domain(single_channel,C).
+domain(channel,C) :- domain(multi_channel,C).
+domain(non_positional,(color;size;shape;text;detail)).
 
 % @definition(task) Possible tasks.
-task(value;summary).
+domain(task,(value;summary)).
 
 % @definition(stack) Possible stacking methods.
-stack(zero;normalize).
+domain(stack,(zero;normalize)).
