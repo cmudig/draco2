@@ -1,11 +1,16 @@
 import re
 from collections import namedtuple
-from typing import Dict
+from pathlib import Path
+from typing import Dict, Union
 
 Block = namedtuple("Block", ["block_type", "description", "program"])
 
+METADATA_PREFIX = "% @"
 
-def parse_blocks(filename: str):
+Blocks = Dict[str, Union[Block, str]]
+
+
+def parse_blocks(file_path: Path) -> Blocks:
     """
     Parses definitions, constraints, or other blocks from ASP files.
     In an ASP file, a block is denoted with a comment of the form:
@@ -14,13 +19,19 @@ def parse_blocks(filename: str):
     # %foo(name) description
     ```
     """
-    defs: Dict[str, Block] = {}
+    defs: Blocks = {}
 
-    with open(filename) as f:
+    with open(file_path) as f:
         # find the first block
         line = f.readline()
-        while not line.startswith("% @") and len(line):
+        preamble = [line]
+        while not line.startswith(METADATA_PREFIX) and len(line):
             line = f.readline()
+            if not line.startswith(METADATA_PREFIX) and len(line.strip()):
+                preamble.append(line)
+
+        if len([line for line in preamble if line.strip()]):
+            defs["__preamble__"] = "".join(preamble).lstrip()
 
         # exit if we have reached the end of the file already
         if len(line) == 0:
@@ -36,12 +47,12 @@ def parse_blocks(filename: str):
             while len(line):
                 line = f.readline()
 
-                if line.startswith("% @"):
+                if line.startswith(METADATA_PREFIX):
                     break
                 elif len(line.strip()):
                     block.append(line)
 
-            match = re.match(r"% @(\w+)\((\w+)\) ([^\n]+)", block[0])
+            match = re.match(rf"{METADATA_PREFIX}(\w+)\((\w+)\) ([^\n]+)", block[0])
 
             if match:
                 block_type, name, description = match.groups()

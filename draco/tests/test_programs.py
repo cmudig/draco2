@@ -6,4 +6,4 @@ def test_has_definitions():
 
 
 def test_definitions_has_marktype():
-    assert "marktype" in definitions
+    assert "mark_type" in definitions

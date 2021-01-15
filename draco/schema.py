@@ -21,7 +21,7 @@ def dtype_to_field_type(ty):
 
 def schema_from_dataframe(
     df: pd.DataFrame, parse_data_type=dtype_to_field_type
-) -> Dict:
+) -> Dict[str, Any]:
     """
     Read schema information from the given Pandas dataframe.
     """
@@ -52,7 +52,7 @@ def schema_from_dataframe(
     return schema
 
 
-def file_to_facts(file: str, parse_data_type=dtype_to_field_type) -> Dict:
+def file_to_facts(file: str, parse_data_type=dtype_to_field_type) -> Dict[str, Any]:
     """
     Read schema information from the given CSV or JSON file.
     """

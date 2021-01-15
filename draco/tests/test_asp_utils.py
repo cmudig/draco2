@@ -23,6 +23,7 @@ def asp_file(tmpdir_factory):
 
 def test_parse_blocks(asp_file):
     assert parse_blocks(asp_file) == {
+        "__preamble__": "some content to ignore\n",
         "foo": ("test", "some description", "fact1.\n"),
         "bar": ("test", "some description", "fact2.\n"),
     }
