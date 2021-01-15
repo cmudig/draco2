@@ -10,6 +10,7 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },
+  "files.trimTrailingWhitespace": true,
   "files.exclude": {
     ".mypy_cache": true,
     ".pytest_cache": true,
