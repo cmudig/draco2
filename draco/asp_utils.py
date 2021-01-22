@@ -1,7 +1,7 @@
 import re
 from collections import namedtuple
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, List, Union
 
 Block = namedtuple("Block", ["block_type", "description", "program"])
 
@@ -60,3 +60,7 @@ def parse_blocks(file_path: Path) -> Blocks:
 
             if len(line) == 0:
                 return defs
+
+
+def blocks_to_program(blocks: Blocks) -> List[str]:
+    return [b.program for b in blocks.values() if isinstance(b, Block)]

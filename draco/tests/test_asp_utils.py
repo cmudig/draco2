@@ -1,5 +1,5 @@
 import pytest
-from draco.asp_utils import parse_blocks
+from draco.asp_utils import blocks_to_program, parse_blocks
 
 VALID_CONTENT = """
 some content to ignore
@@ -39,3 +39,10 @@ def empty_file(tmpdir_factory):
 
 def test_parse_empty_file(empty_file):
     assert parse_blocks(empty_file) == {}
+
+
+def test_blocks_to_program(asp_file):
+    blocks = parse_blocks(asp_file)
+    program = blocks_to_program(blocks)
+
+    assert program == ["fact1.\n", "fact2.\n"]
