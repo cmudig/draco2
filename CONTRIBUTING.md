@@ -12,9 +12,9 @@ After installing the dependencies with `poetry install`, you can activate the vi
 
 ## Development setup with Conda
 
-You can set up this project with Poetry inside a Conda environment.
+You can set up this project with Poetry inside a Conda environment. Running inside a Conda environment can be useful to install difficult to install native dependencies (like numpy). You can install any dependencies that are stubborn before running `poetry install`.
 
-Install Conda (we use [miniforge](https://github.com/conda-forge/miniforge) but any other conda distribution should work as well).
+Install Conda (we use [miniforge](https://github.com/conda-forge/miniforge) but any other Conda distribution should work as well).
 
 To create a virtual environment named `draco`, you can run
 
