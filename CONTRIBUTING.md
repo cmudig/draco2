@@ -8,19 +8,23 @@ This document describes how you can set up your development environment if you w
 
 This project uses [Poetry](https://python-poetry.org). Please skim the documentation if you are not familiar with Poetry.
 
+After installing the dependencies with `poetry install`, you can activate the virtual environment with `poetry shell`.
+
 ## Development setup with Conda
 
 You can set up this project with Poetry inside a Conda environment.
 
 Install Conda (we use [miniforge](https://github.com/conda-forge/miniforge) but any other conda distribution should work as well).
 
-To create the virtual environment `draco`, you can run
+To create a virtual environment named `draco`, you can run
 
 ```sh
 conda create -n draco python=3.9
 conda activate draco
 poetry install
 ```
+
+Next time you want to work on Draco, you can just run `conda activate draco`.
 
 ## Make commands
 
