@@ -1,26 +1,26 @@
 all: lint mypy cover book check
 
 test:
-	@pytest -svv .
+	@poetry run pytest -svv .
 
 cover:
-	@pytest --cov=draco --cov-report=term-missing .
+	@poetry run pytest --cov=draco --cov-report=term-missing .
 
 lint:
-	@black .
-	@flake8 draco --statistics
+	@poetry run black .
+	@poetry run flake8 draco --statistics
 
 mypy:
-	@mypy -p draco
+	@poetry run mypy -p draco
 
 book:
-	@jupyter-book build docs
+	@poetry run jupyter-book build docs
 
 book-strict:
-	@jupyter-book build -W -n --keep-going docs
+	@poetry run jupyter-book build -W -n --keep-going docs
 
 lab:
-	@jupyter lab
+	@poetry run jupyter lab
 
 build:
 	@poetry build -vvv
