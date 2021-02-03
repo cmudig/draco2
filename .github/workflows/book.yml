@@ -9,25 +9,19 @@ jobs:
   book:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        shell: bash -l {0}
-
     steps:
       - uses: actions/checkout@v2
-      - uses: conda-incubator/setup-miniconda@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          auto-update-conda: true
-          environment-file: environment.yml
-          miniconda-version: "latest"
-          activate-environment: draco
-          auto-activate-base: false
-
-      - run: python setup.py develop
+          python-version: 3.9
+      - name: Install Poetry
+        uses: snok/install-poetry@v1.1.1
+      - name: Install dependencies
+        run: poetry install --no-interaction
 
       - name: Run tests
         run: make book
-
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3
         with:
