@@ -44,6 +44,30 @@ def test_dict_to_facts():
     ]
 
 
+def test_deep_dict_to_facts():
+    program = dict_to_facts(
+        {
+            "numberRows": 42,
+            "field": {
+                "f1": {
+                    "dataType": "number",
+                    "bin": {"b1": {"maxbins": 20}},
+                },
+            },
+        }
+    )
+
+    assert list(program) == [
+        # root
+        "attribute(numberRows,root,42).",
+        # f1
+        "property(field,root,f1).",
+        "attribute(dataType,f1,number).",
+        "property(bin,f1,b1).",
+        "attribute(maxbins,b1,20).",
+    ]
+
+
 def test_facts_to_dict():
     # TODO
     facts_to_dict([])
