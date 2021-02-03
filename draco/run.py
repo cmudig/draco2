@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import Iterable, Union
+from typing import Any, Iterable, Union
 
 import clingo
 
@@ -21,12 +21,16 @@ def run_clingo(program: Union[str, Iterable[str]] = "", models: int = 0):
     )
     ctl.ground([("base", [])])
 
+    config: Any = ctl.configuration
+
     if models is not None:
-        ctl.configuration.solve.models = str(models)
+        config.solve.models = str(models)
 
-    ctl.configuration.solve.project = 1
+    config.solve.project = 1
 
-    with ctl.solve(yield_=True) as handle:
-        for model in handle:
-            answer_set = model.symbols(shown=True)
-            yield Model(answer_set, model.cost, model.number)
+    solve_handle = ctl.solve(yield_=True)
+    if isinstance(solve_handle, clingo.solving.SolveHandle):
+        with solve_handle as handle:
+            for model in handle:
+                answer_set = model.symbols(shown=True)
+                yield Model(answer_set, model.cost, model.number)

@@ -6,25 +6,21 @@ This document describes how you can set up your development environment if you w
 
 ## Development setup
 
-Install conda (we use [miniforge](https://github.com/conda-forge/miniforge) but any other conda distribution should work as well).
+This project uses [Poetry](https://python-poetry.org). Please skim the documentation if you are not familiar with Poetry.
+
+## Development setup with Conda
+
+You can set up this project with Poetry inside a Conda environment.
+
+Install Conda (we use [miniforge](https://github.com/conda-forge/miniforge) but any other conda distribution should work as well).
 
 To create the virtual environment `draco`, you can run
 
 ```sh
-conda env create -f environment.yml
+conda create -n draco python=3.9
 conda activate draco
-python setup.py develop
+poetry install
 ```
-
-To update the environment when dependencies have changed, run
-
-```sh
-conda env update -f environment.yml
-```
-
-## Updating the dependencies
-
-If you update or add a dependency, update update the environment file `environment.yml` and `pyproject.toml` and then update your environment from the environment file.
 
 ## Make commands
 

@@ -1,10 +1,5 @@
 all: lint mypy cover book check
 
-develop:
-	@conda env create -f environment.yml
-	@conda activate draco
-	@python setup.py develop
-
 test:
 	@pytest -svv .
 
@@ -17,13 +12,6 @@ lint:
 
 mypy:
 	@mypy -p draco
-
-env-create:
-	@conda env create -f environment.yml
-	@conda activate draco
-
-env-update:
-	@conda env update -f environment.yml
 
 book:
 	@jupyter-book build docs
