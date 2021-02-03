@@ -31,6 +31,9 @@ jobs:
           conda config --show-sources
           conda config --show
 
+      - name: Install Poetry
+        run: poetry install
+
       - name: Run tests
         run: pytest --cov=draco --cov-report=xml --cov-report=term-missing draco
 
