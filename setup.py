@@ -22,7 +22,7 @@ setup(
     url="https://github.com/cmudig/draco2",
     packages=["draco"],
     include_package_data=True,
-    extras_require={"test": ["coverage", "pytest", "pytest-cov", "black", "mypy"]},
+    install_requires=["clingo", "pandas"],
     package_data={
         "draco": [
             "../LICENSE",
