@@ -1,4 +1,4 @@
-from draco.programs import constraints, definitions
+from draco.programs import constraints, definitions, generate
 
 
 def test_has_definitions():
@@ -15,3 +15,11 @@ def test_has_constraints():
 
 def test_constraints_has_invalid_domain():
     assert "invalid_domain" in constraints
+
+
+def test_has_generate():
+    assert len(generate)
+
+
+def test_generate_has_marktype():
+    assert "mark_type" in generate
