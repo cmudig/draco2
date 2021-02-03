@@ -7,8 +7,8 @@ domain(mark_type,(point;bar;line;area;text;tick;rect)).
 domain(field_type,(string;number;boolean;datetime)).
 
 % @definition(aggregate) Supported aggregation functions.
-domain(aggregate_op,(count;mean;median;min;max;stdev;sum)).
-domain(summative_aggregate_op,(count;sum)).
+domain(aggregate,(count;mean;median;min;max;stdev;sum)).
+domain(summative_aggregate,(count;sum)).
 
 % @definition(binning) Numbers of bins that can be recommended, any natural number is allowed.
 domain(binning,(10;25;200)).
