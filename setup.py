@@ -18,7 +18,7 @@ setup(
     long_description=long_description,
     author="Dominik Moritz, Chenglong Wang",
     author_email="domoritz@cs.washington.edu, clwang@cs.washington.edu",
-    license="BSD-3",
+    license="MIT",
     url="https://github.com/cmudig/draco2",
     packages=["draco"],
     include_package_data=True,
