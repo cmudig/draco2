@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "draco"
+version = "2.0.0-alpha.0"
+description = "Visualization recommendation using constraints"
+authors = [
+    "Dominik Moritz <domoritz@cmu.edu>",
+    "Chenglong Wang <clwang@cs.washington.edu>",
+]
+license = "MIT"
+homepage = "https://github.com/cmudig/draco2"
+repository = "https://github.com/cmudig/draco2"
+documentation = "https://dig.cmu.edu/draco2/"
+keywords = ["constraints", "visualization", "design", "charts"]
+exclude = ["draco/tests/*"]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Environment :: MacOS X",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7.1"
+clingo-cffi = { version = "5.5.0.post26", source = "test" }
+pandas = "^1.2.1"
+
+[[tool.poetry.source]]
+name = "test"
+url = "https://test.pypi.org/simple/"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

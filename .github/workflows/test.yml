@@ -37,6 +37,9 @@ jobs:
       - name: Check types
         run: mypy -p draco
 
+      - name: Check Poetry
+        run: poetry check
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
 

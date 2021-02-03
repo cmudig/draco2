@@ -24,7 +24,7 @@ conda env update -f environment.yml
 
 ## Updating the dependencies
 
-If you update or add a dependency, update update the environment file `environment.yml` and then update your environment from the environment file.
+If you update or add a dependency, update update the environment file `environment.yml` and `pyproject.toml` and then update your environment from the environment file.
 
 ## Make commands
 
