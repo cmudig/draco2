@@ -24,11 +24,12 @@ jobs:
         run: poetry install --no-interaction
 
       - name: Run tests
-        run: poetry run pytest --cov=draco --cov-report=xml --cov-report=term-missing draco
+        run: poetry run pytest --cov=./ --cov-report=xml draco
       - name: Check types
         run: make mypy
       - name: Check Poetry
         run: make check
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
