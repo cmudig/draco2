@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Dict
 
 import pandas as pd
@@ -52,15 +53,17 @@ def schema_from_dataframe(
     return schema
 
 
-def file_to_facts(file: str, parse_data_type=dtype_to_field_type) -> Dict[str, Any]:
+def file_to_facts(
+    file_path: Path, parse_data_type=dtype_to_field_type
+) -> Dict[str, Any]:
     """
     Read schema information from the given CSV or JSON file.
     """
-    if file.endswith(".json"):
-        df: Any = pd.read_json(file)
+    if file_path.suffix == ".json":
+        df: Any = pd.read_json(str(file_path))
         return schema_from_dataframe(df, parse_data_type)
-    elif file.endswith(".csv"):
-        df = pd.read_csv(file)
+    elif file_path.suffix == ".csv":
+        df = pd.read_csv(file_path)
         return schema_from_dataframe(df, parse_data_type)
     else:
-        raise ValueError(f"unsupported file type {file}")
+        raise ValueError(f"unsupported file type {file_path}")

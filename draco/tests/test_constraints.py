@@ -1,8 +1,7 @@
 from draco import run_clingo
-from draco.asp_utils import blocks_to_program
 from draco.programs import constraints, definitions
 
-BASE_PROGRAMS = blocks_to_program(definitions) + blocks_to_program(constraints)
+BASE_PROGRAMS = [definitions.program, constraints.program]
 
 
 def test_domain_valid():

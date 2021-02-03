@@ -1,7 +1,7 @@
 % ====== Generators ======
 
 % @generator(task) The task the viewer is trying to complete.
-{ attribute(task,root,T) : domain(task,M) } = 1.
+{ attribute(task,root,T) : domain(task,T) } = 1.
 
 % @generator(mark_type) Marktype.
 { attribute(mark_type,V,M) : domain(mark_type,M) } = 1 :- property(view,root,V).
@@ -18,7 +18,7 @@ obj_id(1..max_extra_encs).
 { property(encoding,V,E) : obj_id(E), property(view,root,V) }.
 
 % use smaller ids first
-:- not property(encoding,_,ID)), property(encoding,_,ID-1), obj_id(ID), obj_id(ID-1).
+:- not property(encoding,_,ID), property(encoding,_,ID-1), obj_id(ID), obj_id(ID-1).
 
 % do not use the same encoding for different views
 :- property(encoding,V1,E), property(encoding,V2,E), V1 != V2.

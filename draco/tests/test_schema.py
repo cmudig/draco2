@@ -1,6 +1,7 @@
 import csv
 import datetime
 import json
+from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -69,7 +70,7 @@ def csv_file(tmpdir_factory):
         writer.writeheader()
         writer.writerow({"numbers": 1, "text": "a"})
         writer.writerow({"numbers": 2, "text": "a"})
-    return str(filename)
+    return Path(filename)
 
 
 def test_csv_to_facts(csv_file):
@@ -81,7 +82,7 @@ def json_file(tmpdir_factory):
     filename = tmpdir_factory.mktemp("data").join("test.json")
     with open(filename, "w") as f:
         json.dump([{"numbers": 1, "text": "a"}, {"numbers": 2, "text": "a"}], f)
-    return str(filename)
+    return Path(filename)
 
 
 def test_json_to_facts(json_file):
@@ -90,4 +91,4 @@ def test_json_to_facts(json_file):
 
 def test_unknown_file_type():
     with pytest.raises(ValueError):
-        schema.file_to_facts("foo.bar")
+        schema.file_to_facts(Path("foo.bar"))

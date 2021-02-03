@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from draco.asp_utils import blocks_to_program, parse_blocks
 
@@ -18,7 +20,7 @@ def asp_file(tmpdir_factory):
     filename = tmpdir_factory.mktemp("data").join("test.asp")
     with open(filename, "w") as f:
         f.write(VALID_CONTENT)
-    return str(filename)
+    return Path(filename)
 
 
 def test_parse_blocks(asp_file):
@@ -34,7 +36,7 @@ def empty_file(tmpdir_factory):
     filename = tmpdir_factory.mktemp("data").join("test.asp")
     with open(filename, "w") as f:
         f.write("")
-    return str(filename)
+    return Path(filename)
 
 
 def test_parse_empty_file(empty_file):
