@@ -45,12 +45,15 @@ def dict_to_facts(
                 yield from dict_to_facts(obj, prop, short)
         elif isinstance(value, list):
             for obj in value:
-                object_id = start_id
-                start_id += 1
+                if "__id__" in obj:
+                    object_id = obj["__id__"]
+                else:
+                    object_id = start_id
+                    start_id += 1
 
                 yield make_fact(FactKind.PROPERTY, (key, parent, object_id), short)
                 yield from dict_to_facts(obj, object_id, short, start_id)
-        else:
+        elif not key.startswith("__"):  # ignore keys that start with "__"
             yield make_fact(
                 FactKind.ATTRIBUTE,
                 (key, parent, value),
