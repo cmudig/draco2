@@ -30,17 +30,30 @@ def make_fact(kind: FactKind, values=List, short=False) -> str:
 
 
 def dict_to_facts(
-    data: Mapping, parent: str = ROOT, short=False
+    data: Mapping, parent: str = ROOT, short=False, start_id=0
 ) -> Generator[str, None, None]:
     """
     A generic encoder for dictionaries as answer set programming facts.
+
+    The encoder can convert dictionaries in dictionaries (using the keys as
+    names) as well as lists (generating identifiers as numbers).
     """
     for key, value in data.items():
         if isinstance(value, abc.Mapping):
             for prop, obj in value.items():
                 yield make_fact(FactKind.PROPERTY, (key, parent, prop), short)
                 yield from dict_to_facts(obj, prop, short)
-        else:
+        elif isinstance(value, list):
+            for obj in value:
+                if "__id__" in obj:
+                    object_id = obj["__id__"]
+                else:
+                    object_id = start_id
+                    start_id += 1
+
+                yield make_fact(FactKind.PROPERTY, (key, parent, object_id), short)
+                yield from dict_to_facts(obj, object_id, short, start_id)
+        elif not key.startswith("__"):  # ignore keys that start with "__"
             yield make_fact(
                 FactKind.ATTRIBUTE,
                 (key, parent, value),
