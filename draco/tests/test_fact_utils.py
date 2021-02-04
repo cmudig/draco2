@@ -44,6 +44,24 @@ def test_dict_to_facts():
     ]
 
 
+def test_dict_to_facts_start_id():
+    program = dict_to_facts(
+        {
+            "field": [{"dataType": "number"}, {"dataType": "string"}],
+        },
+        start_id=42,
+    )
+
+    assert list(program) == [
+        # first field
+        "property(field,root,42).",
+        "attribute(dataType,42,number).",
+        # second fields
+        "property(field,root,43).",
+        "attribute(dataType,43,string).",
+    ]
+
+
 def test_dict_to_facts_dict():
     program = dict_to_facts(
         {
