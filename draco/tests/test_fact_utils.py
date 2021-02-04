@@ -23,6 +23,31 @@ def test_dict_to_facts():
     program = dict_to_facts(
         {
             "numberRows": 42,
+            "field": [
+                {"unique": 12, "dataType": "number"},
+                {"unique": 32, "dataType": "string"},
+            ],
+        }
+    )
+
+    assert list(program) == [
+        # root
+        "attribute(numberRows,root,42).",
+        # first field
+        "property(field,root,0).",
+        "attribute(unique,0,12).",
+        "attribute(dataType,0,number).",
+        # second fields
+        "property(field,root,1).",
+        "attribute(unique,1,32).",
+        "attribute(dataType,1,string).",
+    ]
+
+
+def test_dict_to_facts_dict():
+    program = dict_to_facts(
+        {
+            "numberRows": 42,
             "field": {
                 "f1": {"unique": 12, "dataType": "number"},
                 "f2": {"unique": 32, "dataType": "string"},
@@ -48,23 +73,23 @@ def test_deep_dict_to_facts():
     program = dict_to_facts(
         {
             "numberRows": 42,
-            "field": {
-                "f1": {
+            "field": [
+                {
                     "dataType": "number",
-                    "bin": {"b1": {"maxbins": 20}},
+                    "bin": [{"maxbins": 20}],
                 },
-            },
+            ],
         }
     )
 
     assert list(program) == [
         # root
         "attribute(numberRows,root,42).",
-        # f1
-        "property(field,root,f1).",
-        "attribute(dataType,f1,number).",
-        "property(bin,f1,b1).",
-        "attribute(maxbins,b1,20).",
+        # first field
+        "property(field,root,0).",
+        "attribute(dataType,0,number).",
+        "property(bin,0,1).",
+        "attribute(maxbins,1,20).",
     ]
 
 
