@@ -42,7 +42,7 @@ flake8 = "^3.8.4"
 flake8-black = "^0.2.1"
 jupyterlab = "^3.0.7"
 vega-datasets = "^0.9.0"
-jupyter-book = "^0.9.1"
+jupyter-book = "^0.10.0"
 
 [[tool.poetry.source]]
 name = "test"
