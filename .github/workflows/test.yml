@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: 3.8
       - name: Install Poetry
         uses: snok/install-poetry@v1.1.1
       - name: Install dependencies
@@ -26,7 +26,9 @@ jobs:
       - name: Run tests
         run: poetry run pytest --cov=./ --cov-report=xml draco
       - name: Check types
-        run: make mypy
+        run: |
+          make mypy
+          make pytype
       - name: Check Poetry
         run: make check
 

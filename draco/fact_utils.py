@@ -66,3 +66,4 @@ def facts_to_dict(facts: List) -> Mapping:
     A generic decoder that converts an answer set into a nested data structure
     """
     pass  # TODO: https://github.com/cmudig/draco2/issues/24
+    return {}

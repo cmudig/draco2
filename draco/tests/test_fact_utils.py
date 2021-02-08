@@ -16,7 +16,7 @@ def test_make_property():
 
 
 def test_make_fact_short():
-    assert make_fact(None, ("numberRows", 42), True) == "numberRows(42)."
+    assert make_fact(FactKind.ATTRIBUTE, ("numberRows", 42), True) == "numberRows(42)."
 
 
 def test_dict_to_facts():

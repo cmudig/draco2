@@ -13,6 +13,7 @@
   "files.trimTrailingWhitespace": true,
   "files.exclude": {
     ".mypy_cache": true,
+    ".pytype": true,
     ".pytest_cache": true,
     "**/__pycache__": true,
     "**/*ipynb_checkpoints": true

@@ -128,5 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Pytype type checker
+.pytype
+
 # temporary files
 **/_tmp/*
