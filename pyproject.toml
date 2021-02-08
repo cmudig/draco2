@@ -32,7 +32,7 @@ clingo-cffi = { version = "5.5.0.post26", source = "test" }
 pandas = "^1.2.1"
 
 [tool.poetry.dev-dependencies]
-pre-commit = "^2.10.0"
+pre-commit = "^2.10.1"
 mypy = "^0.800"
 pytest = "^6.2.2"
 pytest-cov = "^2.11.1"
