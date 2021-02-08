@@ -2,13 +2,13 @@ import re
 from collections import namedtuple
 from io import StringIO
 from pathlib import Path
-from typing import Dict, List, TextIO, Union
+from typing import Dict, List, Optional, TextIO, Union
 
 Block = namedtuple("Block", ["block_type", "description", "program"])
 
 METADATA_PREFIX = "% @"
 
-Blocks = Dict[str, Union[Block, str]]
+Blocks = Dict[Optional[str], Union[Block, str]]
 
 
 def parse_blocks(program: Union[str, Path]) -> Blocks:

@@ -27,4 +27,9 @@ launch_buttons:
   notebook_interface: jupyterlab
 
 parse:
-  myst_extended_syntax: true
+  myst_enable_extensions:
+    - linkify
+    - substitution
+
+bibtex_bibfiles:
+  - references.bib
