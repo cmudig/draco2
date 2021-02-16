@@ -262,7 +262,7 @@ reference = "test"
 
 [[package]]
 name = "data-science-types"
-version = "0.2.22"
+version = "0.2.23"
 description = "Type stubs for Python machine learning libraries"
 category = "dev"
 optional = false
@@ -741,7 +741,7 @@ test = ["pytest (>=6.0)", "pytest-cov", "pytest-console-scripts", "pytest-check-
 
 [[package]]
 name = "jupyterlab-server"
-version = "2.2.0"
+version = "2.2.1"
 description = "JupyterLab Server"
 category = "dev"
 optional = false
@@ -929,7 +929,7 @@ testing = ["pytest (>=5.4,<6.0)", "pytest-cov (>=2.8,<3.0)", "coverage (<5.0)", 
 
 [[package]]
 name = "myst-parser"
-version = "0.13.3"
+version = "0.13.5"
 description = "An extended commonmark compliant parser, with bridges to docutils & sphinx."
 category = "dev"
 optional = false
@@ -938,8 +938,8 @@ python-versions = ">=3.6"
 [package.dependencies]
 docutils = ">=0.15"
 jinja2 = "*"
-markdown-it-py = ">=0.6.0,<0.7.0"
-mdit-py-plugins = ">=0.2.4,<0.3.0"
+markdown-it-py = ">=0.6.2,<0.7.0"
+mdit-py-plugins = ">=0.2.5,<0.3.0"
 pyyaml = "*"
 sphinx = ">=2,<4"
 
@@ -1362,7 +1362,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pygments"
-version = "2.7.4"
+version = "2.8.0"
 description = "Pygments is a syntax highlighting package written in Python."
 category = "dev"
 optional = false
@@ -1594,7 +1594,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "sphinx"
-version = "3.4.3"
+version = "3.5.1"
 description = "Python documentation generator"
 category = "dev"
 optional = false
@@ -1620,7 +1620,7 @@ sphinxcontrib-serializinghtml = "*"
 
 [package.extras]
 docs = ["sphinxcontrib-websupport"]
-lint = ["flake8 (>=3.5.0)", "isort", "mypy (>=0.790)", "docutils-stubs"]
+lint = ["flake8 (>=3.5.0)", "isort", "mypy (>=0.800)", "docutils-stubs"]
 test = ["pytest", "pytest-cov", "html5lib", "cython", "typed-ast"]
 
 [[package]]
@@ -2191,8 +2191,8 @@ coverage = [
     {file = "coverage-5.4.tar.gz", hash = "sha256:6d2e262e5e8da6fa56e774fb8e2643417351427604c2b177f8e8c5f75fc928ca"},
 ]
 data-science-types = [
-    {file = "data-science-types-0.2.22.tar.gz", hash = "sha256:5b6bb2ca4cb6b8c467c799382e12156816f38122522bdaafd882d5a3828c7345"},
-    {file = "data_science_types-0.2.22-py3-none-any.whl", hash = "sha256:065475a4c5ee9b5f30883e65cdcffdd1b09a9d2e203857af25d21ffb336fece0"},
+    {file = "data-science-types-0.2.23.tar.gz", hash = "sha256:8096b9a35a8a187bf9a122b4707c97de841d810744690ee2a4ac30c6462e0d16"},
+    {file = "data_science_types-0.2.23-py3-none-any.whl", hash = "sha256:bca319abc0e53a0316f9fcb887937e942477cb9e5fc63c8581e0b0438903b977"},
 ]
 decorator = [
     {file = "decorator-4.4.2-py2.py3-none-any.whl", hash = "sha256:41fa54c2a0cc4ba648be4fd43cff00aedf5b9465c9bf18d64325bc225f08f760"},
@@ -2316,8 +2316,8 @@ jupyterlab = [
     {file = "jupyterlab-3.0.7.tar.gz", hash = "sha256:1d531765932f95bf756c088867714efe75bd906e332c0375178f1d905d0ccccf"},
 ]
 jupyterlab-server = [
-    {file = "jupyterlab_server-2.2.0-py3-none-any.whl", hash = "sha256:8bb220b1926a418c80869337f79096cae487ac579f304f574b970ed37c84e31c"},
-    {file = "jupyterlab_server-2.2.0.tar.gz", hash = "sha256:68b9322eee2561c89a22fcdf755c57fd750e8132f18fda81d47ca336d1f9b066"},
+    {file = "jupyterlab_server-2.2.1-py3-none-any.whl", hash = "sha256:b647c532bbb45dad83b1dcd18e9b8cd9a22a68f799811cbca35616b3e8d27acc"},
+    {file = "jupyterlab_server-2.2.1.tar.gz", hash = "sha256:8b619ec5e13c2d1ac2e3a43a8147382f41fb17b425b50fa38b1cc84849c7bf94"},
 ]
 jupyterlab-widgets = [
     {file = "jupyterlab_widgets-1.0.0-py3-none-any.whl", hash = "sha256:caeaf3e6103180e654e7d8d2b81b7d645e59e432487c1d35a41d6d3ee56b3fef"},
@@ -2427,8 +2427,8 @@ myst-nb = [
     {file = "myst_nb-0.11.1-py3-none-any.whl", hash = "sha256:f009fc7552b425be2250476c92a0e07a5c6f12a27755f265fc2bc5be511a47a6"},
 ]
 myst-parser = [
-    {file = "myst-parser-0.13.3.tar.gz", hash = "sha256:4f40e1355708182195c28c00bc35375a536f819b67a730d13fecb058d3004a97"},
-    {file = "myst_parser-0.13.3-py3-none-any.whl", hash = "sha256:530a3ad80d2383494af272d3d81fdfeca2c28215c39e97d2a35d83f1695d9080"},
+    {file = "myst-parser-0.13.5.tar.gz", hash = "sha256:72cf89cc0d6f35070736da19643c9ef52e570e3e13e30c007ad9b94a21f5457a"},
+    {file = "myst_parser-0.13.5-py3-none-any.whl", hash = "sha256:47e469cef8ba209f4dcb82cd0b4f935171c78c6a2cc0072cd3a9724242eb81ee"},
 ]
 nbclassic = [
     {file = "nbclassic-0.2.6-py3-none-any.whl", hash = "sha256:0248333262d6f90c2fbe05aacb4f008f1d71b5250a9f737488e0a03cfa1c6ed5"},
@@ -2600,8 +2600,8 @@ pyflakes = [
     {file = "pyflakes-2.2.0.tar.gz", hash = "sha256:35b2d75ee967ea93b55750aa9edbbf72813e06a66ba54438df2cfac9e3c27fc8"},
 ]
 pygments = [
-    {file = "Pygments-2.7.4-py3-none-any.whl", hash = "sha256:bc9591213a8f0e0ca1a5e68a479b4887fdc3e75d0774e5c71c31920c427de435"},
-    {file = "Pygments-2.7.4.tar.gz", hash = "sha256:df49d09b498e83c1a73128295860250b0b7edd4c723a32e9bc0d295c7c2ec337"},
+    {file = "Pygments-2.8.0-py3-none-any.whl", hash = "sha256:01dbde65c9c2b8f4bef1851e37867082afa5350bccf684fc343dbd3e9776794b"},
+    {file = "Pygments-2.8.0.tar.gz", hash = "sha256:ca0d097795321fee7ce5ac1398d1989189b2a5aad00400f6fc16cb13a569805c"},
 ]
 pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
@@ -2787,8 +2787,8 @@ soupsieve = [
     {file = "soupsieve-2.2.tar.gz", hash = "sha256:407fa1e8eb3458d1b5614df51d9651a1180ea5fedf07feb46e45d7e25e6d6cdd"},
 ]
 sphinx = [
-    {file = "Sphinx-3.4.3-py3-none-any.whl", hash = "sha256:c314c857e7cd47c856d2c5adff514ac2e6495f8b8e0f886a8a37e9305dfea0d8"},
-    {file = "Sphinx-3.4.3.tar.gz", hash = "sha256:41cad293f954f7d37f803d97eb184158cfd90f51195131e94875bc07cd08b93c"},
+    {file = "Sphinx-3.5.1-py3-none-any.whl", hash = "sha256:e90161222e4d80ce5fc811ace7c6787a226b4f5951545f7f42acf97277bfc35c"},
+    {file = "Sphinx-3.5.1.tar.gz", hash = "sha256:11d521e787d9372c289472513d807277caafb1684b33eb4f08f7574c405893a9"},
 ]
 sphinx-book-theme = [
     {file = "sphinx-book-theme-0.0.39.tar.gz", hash = "sha256:07f9651233cb8ad4f5bde2b88205597622c6ef57c4d9f8799e93999e7ac4f070"},
