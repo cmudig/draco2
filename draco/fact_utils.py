@@ -1,6 +1,6 @@
 from collections import abc
 from enum import Enum, unique
-from typing import Generator, List, Mapping
+from typing import Generator, List, Mapping, Tuple, Union
 
 
 @unique
@@ -15,50 +15,64 @@ class FactKind(Enum):
 ROOT = "root"
 
 
-def make_fact(kind: FactKind, values=List, short=False) -> str:
+def stringify(value):
+    if isinstance(value, (list, tuple)):
+        if len(value) == 1:
+            return stringify(value[0])
+        return "({})".format(",".join(map(stringify, value)))
+
+    value = str(value)
+    return value[:1].lower() + value[1:]
+
+
+def make_fact(kind: FactKind, values=List) -> str:
     """
-    Create an ASP fact from a list of values. The function can generate both a
-    long form (`fact(x,y,z)`) and a short form (`x(y,z)`). The short form uses
-    the first element as the name of the fact. The short form ignores the fact kind.
+    Create an ASP fact from a list of values. The function generates either
+    attribute or property facts.
     """
-    if short:
-        rest = ",".join(map(str, values[1:]))
-        return f"{values[0]}({rest})."
-    else:
-        parts = ",".join(map(str, values))
-        return f"{kind.value}({parts})."
+    parts = stringify(values)
+    return f"{kind.value}{parts}."
 
 
 def dict_to_facts(
-    data: Mapping, parent: str = ROOT, short=False, start_id=0
+    data: Union[Mapping, List, str],
+    path: Tuple[str] = (),
+    parent: str = ROOT,
+    start_id=0,
 ) -> Generator[str, None, None]:
     """
     A generic encoder for dictionaries as answer set programming facts.
 
-    The encoder can convert dictionaries in dictionaries (using the keys as
-    names) as well as lists (generating identifiers as numbers).
+    The encoder can convert dictionaries as well as lists (generating
+    identifiers as numbers).
     """
-    for key, value in data.items():
-        if isinstance(value, abc.Mapping):
-            for prop, obj in value.items():
-                yield make_fact(FactKind.PROPERTY, (key, parent, prop), short)
-                yield from dict_to_facts(obj, prop, short)
-        elif isinstance(value, list):
-            for obj in value:
+    if isinstance(data, abc.Mapping):
+        for prop, obj in data.items():
+            yield from dict_to_facts(obj, path + (prop,), parent, start_id)
+    else:
+        if isinstance(data, list):
+            for obj in data:
                 if "__id__" in obj:
                     object_id = obj["__id__"]
                 else:
                     object_id = start_id
                     start_id += 1
 
-                yield make_fact(FactKind.PROPERTY, (key, parent, object_id), short)
-                yield from dict_to_facts(obj, object_id, short, start_id)
-        elif not key.startswith("__"):  # ignore keys that start with "__"
-            yield make_fact(
-                FactKind.ATTRIBUTE,
-                (key, parent, value),
-                short,
-            )
+                yield make_fact(FactKind.PROPERTY, (path, parent, object_id))
+                yield from dict_to_facts(obj, (), object_id, start_id)
+        elif not path[-1].startswith("__"):  # ignore keys that start with "__"
+            if isinstance(data, bool):
+                # special cases for boolean values
+                fact = make_fact(
+                    FactKind.ATTRIBUTE,
+                    (path, parent),
+                )
+                if data:
+                    yield fact
+                else:
+                    yield f":- {fact}"
+            else:
+                yield make_fact(FactKind.ATTRIBUTE, (path, parent, data))
 
 
 def facts_to_dict(facts: List) -> Mapping:

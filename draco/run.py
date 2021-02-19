@@ -34,3 +34,11 @@ def run_clingo(program: Union[str, Iterable[str]] = "", models: int = 0):
             for model in handle:
                 answer_set = model.symbols(shown=True)
                 yield Model(answer_set, model.cost, model.number)
+
+
+def is_satisfiable(program: Union[str, Iterable[str]] = ""):
+    try:
+        next(run_clingo(program, 1))
+        return True
+    except StopIteration:
+        return False
