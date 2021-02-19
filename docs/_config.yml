@@ -31,5 +31,10 @@ parse:
     - linkify
     - substitution
 
+sphinx:
+  extra_extensions:
+    - "sphinx.ext.autodoc"
+    - "sphinx_autodoc_typehints"
+
 bibtex_bibfiles:
   - references.bib

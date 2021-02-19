@@ -1,4 +1,4 @@
-from draco.programs import constraints, definitions, generate
+from draco.programs import constraints, definitions, generate, hard, helpers
 
 
 def test_has_definitions():
@@ -26,3 +26,13 @@ def test_has_generate():
 
 def test_generate_has_marktype():
     assert "mark_type" in generate.blocks
+
+
+def test_has_hard():
+    assert len(hard.program)
+    assert len(hard.blocks)
+
+
+def test_has_helpers():
+    assert len(helpers.program)
+    assert len(helpers.blocks)

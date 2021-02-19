@@ -7,12 +7,15 @@
   chapters:
     - file: facts/intro
     - file: facts/schema
+    - file: facts/view
+    - file: facts/mark
     - file: facts/task
 
 - part: API
   chapters:
     - file: api/intro
     - file: api/schema
+    - file: api/programs
 
 - part: Reference
   chapters:

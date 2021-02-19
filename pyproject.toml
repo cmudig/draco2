@@ -44,6 +44,7 @@ jupyterlab = "^3.0.7"
 vega-datasets = "^0.9.0"
 jupyter-book = "^0.10.0"
 pytype = "^2021.1.28"
+sphinx-autodoc-typehints = "^1.11.1"
 
 [[tool.poetry.source]]
 name = "test"

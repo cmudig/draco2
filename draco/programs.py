@@ -8,6 +8,13 @@ asp_path = Path(__file__).resolve().parent / "asp"
 
 @dataclass
 class Program:
+    """Class for an Answer Set Programming (ASP) program.
+
+    Attributes:
+        :program: The complete program.
+        :blocks: The blocks in the program.
+    """
+
     program: str
     blocks: Blocks
 
@@ -22,3 +29,4 @@ definitions = get_program(asp_path / "define.lp")
 constraints = get_program(asp_path / "constraints.lp")
 generate = get_program(asp_path / "generate.lp")
 hard = get_program(asp_path / "hard.lp")
+helpers = get_program(asp_path / "helpers.lp")

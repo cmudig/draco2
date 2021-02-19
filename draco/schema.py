@@ -5,8 +5,8 @@ import pandas as pd
 
 
 def dtype_to_field_type(ty):
-    """
-    Simple converter that translates Pandas column types to data types for Draco.
+    """Simple converter that translates Pandas column types to data types for
+    Draco.
     """
     if ty in ["float64", "int64"]:
         return "number"
@@ -23,13 +23,16 @@ def dtype_to_field_type(ty):
 def schema_from_dataframe(
     df: pd.DataFrame, parse_data_type=dtype_to_field_type
 ) -> Dict[str, Any]:
-    """
-    Read schema information from the given Pandas dataframe.
+    """Read schema information from the given Pandas dataframe.
+
+    :param df: DataFrame to generate schema for.
+    :param parse_data_type: Function to parse data types.
+    :return: A dictionary representing the schema.
     """
     schema: Dict[str, Any] = {}
 
-    schema["numberRows"] = df.shape[0]
-    schema["field"] = {}
+    schema["number_rows"] = df.shape[0]
+    schema["field"] = []
 
     for col in df.columns:
         column = df[col]
@@ -37,7 +40,7 @@ def schema_from_dataframe(
         unique = pd.Series.nunique(column)
         data_type = parse_data_type(dtype)
 
-        props = {"dataType": data_type, "unique": unique}
+        props = {"__id__": col, "data_type": data_type, "unique": unique}
 
         if data_type == "number":
             props["min"] = int(column.min())
@@ -48,16 +51,20 @@ def schema_from_dataframe(
             objcounts = column.value_counts()
             props["freq"] = objcounts.iloc[0]
 
-        schema["field"][col] = props
+        schema["field"].append(props)
 
     return schema
 
 
-def file_to_facts(
+def schema_from_file(
     file_path: Path, parse_data_type=dtype_to_field_type
 ) -> Dict[str, Any]:
-    """
-    Read schema information from the given CSV or JSON file.
+    """Read schema information from the given CSV or JSON file.
+
+    :param file_path: Path to CSV or JSON file.
+    :param parse_data_type: Function to parse data types.
+    :raises ValueError: If the file has an unsupported data type.
+    :return: A dictionary representing the schema.
     """
     if file_path.suffix == ".json":
         df: Any = pd.read_json(str(file_path))
