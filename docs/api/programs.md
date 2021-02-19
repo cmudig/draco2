@@ -10,7 +10,7 @@ Draco exposes the following programs.
 
 Draco loads these programs from files.
 
-## Details for each Program
+## Options for Each Program
 
 ```{eval-rst}
 .. autodata:: draco.programs
