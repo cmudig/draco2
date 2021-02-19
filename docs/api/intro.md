@@ -1,3 +1,8 @@
 # Overview
 
-TODO: Describe the Draco API.
+Draco exposes the following methods.
+
+```{eval-rst}
+.. automodule:: draco
+   :members:
+```

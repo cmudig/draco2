@@ -7,15 +7,16 @@ from typing import Dict, List, Optional, TextIO, Union
 
 @dataclass
 class Block:
-    """Class for a code block."""
+    """Class for a code block.
 
-    # The type of code block.
+    Attributes:
+        :block_type: The type of code block.
+        :description: Short description of the code block.
+        :program: The program in Answer Set Programming (ASP).
+    """
+
     block_type: str
-
-    # Short description of the code block.
     description: str
-
-    # The program in Answer Set Programming (ASP).
     program: str
 
 
@@ -33,8 +34,7 @@ def parse_blocks(program: Union[str, Path]) -> Blocks:
 
 
 def _parse_blocks(f: TextIO) -> Blocks:
-    """
-    Parses definitions, constraints, or other blocks from ASP files.
+    """Parses definitions, constraints, or other blocks from ASP files.
     In an ASP file, a block is denoted with a comment of the form:
 
     ```

@@ -5,9 +5,14 @@ from typing import Generator, List, Mapping, Tuple, Union
 
 @unique
 class FactKind(Enum):
-    # a nested property ("is a" relationship)
+    """The kind of ASP fact.
+
+    Attributes:
+        :PROPERTY: a nested property ("is a" relationship)
+        :ATTRIBUTE: an attribute (value)
+    """
+
     PROPERTY = "property"
-    # an attribute (value)
     ATTRIBUTE = "attribute"
 
 
@@ -26,8 +31,7 @@ def stringify(value):
 
 
 def make_fact(kind: FactKind, values=List) -> str:
-    """
-    Create an ASP fact from a list of values. The function generates either
+    """Create an ASP fact from a list of values. The function generates either
     attribute or property facts.
     """
     parts = stringify(values)
@@ -40,8 +44,7 @@ def dict_to_facts(
     parent: str = ROOT,
     start_id=0,
 ) -> Generator[str, None, None]:
-    """
-    A generic encoder for dictionaries as answer set programming facts.
+    """A generic encoder for dictionaries as answer set programming facts.
 
     The encoder can convert dictionaries as well as lists (generating
     identifiers as numbers).
@@ -76,8 +79,6 @@ def dict_to_facts(
 
 
 def facts_to_dict(facts: List) -> Mapping:
-    """
-    A generic decoder that converts an answer set into a nested data structure
-    """
+    """A generic decoder that converts an answer set into a nested data structure"""
     pass  # TODO: https://github.com/cmudig/draco2/issues/24
     return {}
