@@ -36,7 +36,7 @@ def make_fact(kind: FactKind, values=List) -> str:
 
 def dict_to_facts(
     data: Union[Mapping, List, str],
-    path: Tuple[str] = (),
+    path: Tuple = (),
     parent: str = ROOT,
     start_id=0,
 ) -> Generator[str, None, None]:
