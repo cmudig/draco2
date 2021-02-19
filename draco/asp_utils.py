@@ -1,10 +1,23 @@
 import re
-from collections import namedtuple
+from dataclasses import dataclass
 from io import StringIO
 from pathlib import Path
 from typing import Dict, List, Optional, TextIO, Union
 
-Block = namedtuple("Block", ["block_type", "description", "program"])
+
+@dataclass
+class Block:
+    """Class for a code block."""
+
+    # The type of code block.
+    block_type: str
+
+    # Short description of the code block.
+    description: str
+
+    # The program in Answer Set Programming (ASP).
+    program: str
+
 
 METADATA_PREFIX = "% @"
 

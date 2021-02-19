@@ -1,9 +1,21 @@
-from collections import namedtuple
-from typing import Any, Iterable, Union
+from dataclasses import dataclass
+from typing import Any, Iterable, List, Union
 
 import clingo
 
-Model = namedtuple("Model", ["answer_set", "cost", "number"])
+
+@dataclass
+class Model:
+    """Class for a model."""
+
+    # The answer set of this model.
+    answer_set: List[clingo.Symbol]
+
+    # The cost of this answer set.
+    cost: int
+
+    # The sequence number of this answer.
+    number: int
 
 
 def run_clingo(program: Union[str, Iterable[str]] = "", models: int = 0):
