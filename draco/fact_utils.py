@@ -107,23 +107,24 @@ def remove_memo(Root: Dict[Union[str, int], Any]):
         del Root[key]
 
 
-def parse_values(values: List) -> Any:
+def parse_values(values: List) -> List:
     """
     If the value is a number, the function converts the string to a nuumber
     and return the string otherwise
     """
-    for i in range(len(values)):
-        if values[i].type == SymbolType.Function:
-            name, args = values[i].name, values[i].arguments
+    result = []
+    for value in values:
+        if value.type == SymbolType.Function:
+            name, args = value.name, value.arguments
             if args == []:
-                values[i] = name
+                result.append(name)
             else:
-                values[i] = tuple(parse_values(list(args)))
-        elif values[i].type == SymbolType.Number:
-            values[i] = values[i].number
+                result.append(tuple(parse_values(list(args))))
+        elif value.type == SymbolType.Number:
+            result.append(value.number)
         else:
-            values[i] = values[i].string
-    return values
+            result.append(value.string)
+    return result
 
 
 def handle_path(address, value, nested_dict):
@@ -148,14 +149,16 @@ def facts_to_dict(facts: List) -> Mapping:
 
     """
     Root: Dict[Union[int, str], Any] = dict()
-    print(len(facts))
     # Creating the memo dictionary that maps numbers to nested properties
     if facts == []:
         return Root
     for fact in facts:
         assert fact.type == SymbolType.Function
         kind, values = fact.name, fact.arguments
-        key, parent_index, val = parse_values(values)
+        parsed_values = parse_values(values)
+        if len(parsed_values) < 3:
+            continue
+        (key, parent_index, val) = parsed_values
         if kind == FactKind.PROPERTY.value:
             if parent_index == ROOT:
                 if type(key) == tuple:
@@ -188,11 +191,9 @@ def facts_to_dict(facts: List) -> Mapping:
                     Root[parent_index] = handle_path(list(key), val, Root[parent_index])
                 else:
                     Root[parent_index][key] = val
-        print("ROOT", Root)
     # Running through the memoized dictionary to replace the integer ID
     # with the actual property
     deep_nest(Root, Root)
     # Removing integer ID -> property mappings from the dictionary
     remove_memo(Root)
-    print(Root)
     return Root
