@@ -17,5 +17,8 @@
     ".pytest_cache": true,
     "**/__pycache__": true,
     "**/*ipynb_checkpoints": true
-  }
+  },
+  "autoDocstring.docstringFormat": "sphinx",
+  "autoDocstring.guessTypes": true,
+  "python.formatting.provider": "black"
 }

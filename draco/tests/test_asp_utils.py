@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from draco.asp_utils import blocks_to_program, parse_blocks
+from draco.asp_utils import Block, blocks_to_program, parse_blocks
 
 VALID_CONTENT = """
 some content to ignore
@@ -26,8 +26,8 @@ def asp_file(tmpdir_factory):
 def test_parse_blocks(asp_file):
     assert parse_blocks(asp_file) == {
         "__preamble__": "some content to ignore\n",
-        "foo": ("test", "some description", "fact1.\n"),
-        "bar": ("test", "some description", "fact2.\n"),
+        "foo": Block("test", "some description", "fact1.\n"),
+        "bar": Block("test", "some description", "fact2.\n"),
     }
 
 

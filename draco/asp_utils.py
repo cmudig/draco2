@@ -1,10 +1,24 @@
 import re
-from collections import namedtuple
+from dataclasses import dataclass
 from io import StringIO
 from pathlib import Path
 from typing import Dict, List, Optional, TextIO, Union
 
-Block = namedtuple("Block", ["block_type", "description", "program"])
+
+@dataclass
+class Block:
+    """Class for a code block.
+
+    Attributes:
+        :block_type: The type of code block.
+        :description: Short description of the code block.
+        :program: The program in Answer Set Programming (ASP).
+    """
+
+    block_type: str
+    description: str
+    program: str
+
 
 METADATA_PREFIX = "% @"
 
@@ -20,8 +34,7 @@ def parse_blocks(program: Union[str, Path]) -> Blocks:
 
 
 def _parse_blocks(f: TextIO) -> Blocks:
-    """
-    Parses definitions, constraints, or other blocks from ASP files.
+    """Parses definitions, constraints, or other blocks from ASP files.
     In an ASP file, a block is denoted with a comment of the form:
 
     ```

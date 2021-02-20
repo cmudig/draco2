@@ -4,11 +4,11 @@ The task that the user tries to complete when looking at a visualization helps D
 
 ## Task Properties
 
-`taskType`
+`task`
 : Type task type. Can be one of `value` and `summary`.
 
 ## Example
 
 ```prolog
-fact(taskType,value).
+attribute(task,root,value).
 ```

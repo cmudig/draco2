@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction
 
-      - name: Run tests
+      - name: Make book
         run: make book
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3

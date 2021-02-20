@@ -1,4 +1,6 @@
+import pytest
 from draco.fact_utils import FactKind, dict_to_facts, facts_to_dict, make_fact
+from draco.run import run_clingo
 
 
 def test_make_attribute():
@@ -7,16 +9,27 @@ def test_make_attribute():
         == "attribute(numberRows,root,42)."
     )
 
+    assert (
+        make_fact(FactKind.ATTRIBUTE, ("XTest", "root", 42))
+        == "attribute(xTest,root,42)."
+    )
+
+    assert (
+        make_fact(FactKind.ATTRIBUTE, (("foo", "bar"), "root", 42))
+        == "attribute((foo,bar),root,42)."
+    )
+
+    assert (
+        make_fact(FactKind.ATTRIBUTE, (("foo"), "root", 42))
+        == "attribute(foo,root,42)."
+    )
+
 
 def test_make_property():
     assert (
         make_fact(FactKind.PROPERTY, ("field", "root", "f1"))
         == "property(field,root,f1)."
     )
-
-
-def test_make_fact_short():
-    assert make_fact(FactKind.ATTRIBUTE, ("numberRows", 42), True) == "numberRows(42)."
 
 
 def test_dict_to_facts():
@@ -79,31 +92,6 @@ def test_dict_to_facts_explicit_id():
     ]
 
 
-def test_dict_to_facts_dict():
-    program = dict_to_facts(
-        {
-            "numberRows": 42,
-            "field": {
-                "f1": {"unique": 12, "dataType": "number"},
-                "f2": {"unique": 32, "dataType": "string"},
-            },
-        }
-    )
-
-    assert list(program) == [
-        # root
-        "attribute(numberRows,root,42).",
-        # f1
-        "property(field,root,f1).",
-        "attribute(unique,f1,12).",
-        "attribute(dataType,f1,number).",
-        # f2
-        "property(field,root,f2).",
-        "attribute(unique,f2,32).",
-        "attribute(dataType,f2,string).",
-    ]
-
-
 def test_deep_dict_to_facts():
     program = dict_to_facts(
         {
@@ -128,6 +116,81 @@ def test_deep_dict_to_facts():
     ]
 
 
+def test_nested_dict_to_facts():
+    program = dict_to_facts({"view": [{"scale": {"x": "linear"}}]})
+
+    assert list(program) == [
+        # root
+        "property(view,root,0).",
+        # first field
+        "attribute((scale,x),0,linear).",
+    ]
+
+
+def test_nested_deep_dict_to_facts():
+    program = dict_to_facts(
+        {"view": [{"scale": {"x": {"type": "linear", "zero": "no"}}}]}
+    )
+
+    assert list(program) == [
+        # root
+        "property(view,root,0).",
+        # first field
+        "attribute((scale,x,type),0,linear).",
+        "attribute((scale,x,zero),0,no).",
+    ]
+
+
+def test_false_dict_to_facts():
+    program = dict_to_facts(
+        {"view": [{"scale": {"x": {"type": "linear", "zero": False}}}]}
+    )
+
+    assert list(program) == [
+        # root
+        "property(view,root,0).",
+        # first field
+        "attribute((scale,x,type),0,linear).",
+        ":- attribute((scale,x,zero),0).",  # note: this cannot be reversed
+    ]
+
+
+def test_true_dict_to_facts():
+    program = dict_to_facts(
+        {"view": [{"scale": {"x": {"type": "linear", "zero": True}}}]}
+    )
+
+    assert list(program) == [
+        # root
+        "property(view,root,0).",
+        # first field
+        "attribute((scale,x,type),0,linear).",
+        "attribute((scale,x,zero),0).",  # note: this cannot be reversed
+    ]
+
+
+def test_dict_to_facts_string():
+    """ We need at least some path. """
+    program = dict_to_facts("foo")
+
+    with pytest.raises(IndexError):
+        list(program)
+
+
 def test_facts_to_dict():
-    # TODO
-    facts_to_dict([])
+    program = [
+        "attribute(numberRows,root,42).",
+        "property(field,root,0).",
+        "attribute(dataType,0,number).",
+        "property(bin,0,1).",
+        "attribute(maxbins,1,20).",
+    ]
+
+    program2 = dict_to_facts(
+        {"view": [{"scale": {"x": {"type": "linear", "zero": False}}}]}
+    )
+
+    for model in run_clingo(program):
+        facts_to_dict(model.answer_set)
+    for model in run_clingo(program2):
+        facts_to_dict(model.answer_set)

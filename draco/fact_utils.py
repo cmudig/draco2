@@ -1,13 +1,20 @@
 from collections import abc
 from enum import Enum, unique
-from typing import Any, Dict, Generator, List, Mapping, Union
+from typing import Any, Dict, Generator, List, Mapping, Tuple, Union
+
+from clingo import SymbolType
 
 
 @unique
 class FactKind(Enum):
-    # a nested property ("is a" relationship)
+    """The kind of ASP fact.
+
+    Attributes:
+        :PROPERTY: a nested property ("is a" relationship)
+        :ATTRIBUTE: an attribute (value)
+    """
+
     PROPERTY = "property"
-    # an attribute (value)
     ATTRIBUTE = "attribute"
 
 
@@ -15,64 +22,62 @@ class FactKind(Enum):
 ROOT = "root"
 
 
-def make_fact(kind: FactKind, values=List, short=False) -> str:
+def stringify(value):
+    if isinstance(value, (list, tuple)):
+        if len(value) == 1:
+            return stringify(value[0])
+        return "({})".format(",".join(map(stringify, value)))
+
+    value = str(value)
+    return value[:1].lower() + value[1:]
+
+
+def make_fact(kind: FactKind, values=List) -> str:
+    """Create an ASP fact from a list of values. The function generates either
+    attribute or property facts.
     """
-    Create an ASP fact from a list of values. The function can generate both a
-    long form (`fact(x,y,z)`) and a short form (`x(y,z)`). The short form uses
-    the first element as the name of the fact. The short form ignores the fact kind.
-    """
-    if short:
-        rest = ",".join(map(str, values[1:]))
-        return f"{values[0]}({rest})."
-    else:
-        parts = ",".join(map(str, values))
-        return f"{kind.value}({parts})."
+    parts = stringify(values)
+    return f"{kind.value}{parts}."
 
 
 def dict_to_facts(
-    data: Mapping, parent: str = ROOT, short=False, start_id=0
+    data: Union[Mapping, List, str],
+    path: Tuple = (),
+    parent: str = ROOT,
+    start_id=0,
 ) -> Generator[str, None, None]:
-    """
-    A generic encoder for dictionaries as answer set programming facts.
+    """A generic encoder for dictionaries as answer set programming facts.
 
-    The encoder can convert dictionaries in dictionaries (using the keys as
-    names) as well as lists (generating identifiers as numbers).
+    The encoder can convert dictionaries as well as lists (generating
+    identifiers as numbers).
     """
-    for key, value in data.items():
-        if isinstance(value, abc.Mapping):
-            for prop, obj in value.items():
-                yield make_fact(FactKind.PROPERTY, (key, parent, prop), short)
-                yield from dict_to_facts(obj, prop, short)
-        elif isinstance(value, list):
-            for obj in value:
+    if isinstance(data, abc.Mapping):
+        for prop, obj in data.items():
+            yield from dict_to_facts(obj, path + (prop,), parent, start_id)
+    else:
+        if isinstance(data, list):
+            for obj in data:
                 if "__id__" in obj:
                     object_id = obj["__id__"]
                 else:
                     object_id = start_id
                     start_id += 1
 
-                yield make_fact(FactKind.PROPERTY, (key, parent, object_id), short)
-                yield from dict_to_facts(obj, object_id, short, start_id)
-        elif not key.startswith("__"):  # ignore keys that start with "__"
-            yield make_fact(
-                FactKind.ATTRIBUTE,
-                (key, parent, value),
-                short,
-            )
-
-
-def extract_elems(fact: str):
-    """
-    Splits every fact into a tuple of:
-    (property or attribute, list of comma separated values)
-    """
-    kind = fact[: fact.index("(")]
-    str_values = fact[fact.index("(") + 1 : fact.index(")")]
-    list_values = str_values.split(",")
-    if kind == FactKind.PROPERTY.value:
-        return (FactKind.PROPERTY, list_values)
-    else:
-        return (FactKind.ATTRIBUTE, list_values)
+                yield make_fact(FactKind.PROPERTY, (path, parent, object_id))
+                yield from dict_to_facts(obj, (), object_id, start_id)
+        elif not path[-1].startswith("__"):  # ignore keys that start with "__"
+            if isinstance(data, bool):
+                # special cases for boolean values
+                fact = make_fact(
+                    FactKind.ATTRIBUTE,
+                    (path, parent),
+                )
+                if data:
+                    yield fact
+                else:
+                    yield f":- {fact}"
+            else:
+                yield make_fact(FactKind.ATTRIBUTE, (path, parent, data))
 
 
 def deep_nest(Root: Mapping, current_dict: Mapping):
@@ -102,16 +107,39 @@ def remove_memo(Root: Dict[Union[str, int], Any]):
         del Root[key]
 
 
-def parse_value(val: str):
+def parse_values(values: List) -> Any:
     """
     If the value is a number, the function converts the string to a nuumber
     and return the string otherwise
     """
-    try:
-        Numeric = float(val)
-        return Numeric
-    except ValueError:
-        return val
+    for i in range(len(values)):
+        if values[i].type == SymbolType.Function:
+            name, args = values[i].name, values[i].arguments
+            if args == []:
+                values[i] = name
+            else:
+                values[i] = tuple(parse_values(list(args)))
+        elif values[i].type == SymbolType.Number:
+            values[i] = values[i].number
+        else:
+            values[i] = values[i].string
+    return values
+
+
+def handle_path(address, value, nested_dict):
+    assert len(address) != 0
+    if len(address) == 1:
+        last = address[0]
+        nested_dict[last] = value
+        return nested_dict
+
+    else:
+        elem = address[0]
+        if elem in nested_dict:
+            nested_dict[elem] = handle_path(address[1:], value, nested_dict[elem])
+        else:
+            nested_dict[elem] = handle_path(address[1:], value, dict())
+        return nested_dict
 
 
 def facts_to_dict(facts: List) -> Mapping:
@@ -120,33 +148,51 @@ def facts_to_dict(facts: List) -> Mapping:
 
     """
     Root: Dict[Union[int, str], Any] = dict()
+    print(len(facts))
     # Creating the memo dictionary that maps numbers to nested properties
     if facts == []:
         return Root
     for fact in facts:
-        kind, values = extract_elems(fact)
-        (key, parent_index, val) = values
-        if kind.value == FactKind.PROPERTY.value:
-            if parent_index == "root":
-                if key in Root:
-                    Root[key].append(int(val))
+        assert fact.type == SymbolType.Function
+        kind, values = fact.name, fact.arguments
+        key, parent_index, val = parse_values(values)
+        if kind == FactKind.PROPERTY.value:
+            if parent_index == ROOT:
+                if type(key) == tuple:
+                    Root = handle_path(list(key), val, Root)
                 else:
-                    Root[key] = [int(val)]
-                Root[int(val)] = dict()
+                    if key in Root:
+                        Root[key].append(val)
+                    else:
+                        Root[key] = [val]
             else:
-                if key in Root[int(parent_index)]:
-                    Root[int(parent_index)][key].append(int(val))
+                if type(key) == tuple:
+                    Root[parent_index] = handle_path(list(key), val, Root[parent_index])
+                if key in Root[parent_index]:
+                    Root[parent_index][key].append(val)
                 else:
-                    Root[int(parent_index)][key] = [int(val)]
-                Root[int(val)] = dict()
+                    Root[parent_index][key] = [val]
+
+            if val not in Root:
+                Root[val] = dict()
         else:
-            if parent_index == "root":
-                Root[key] = parse_value(val)
+            if parent_index == ROOT:
+                if type(key) == tuple:
+                    Root = handle_path(list(key), val, Root)
+                else:
+                    Root[key] = val
             else:
-                Root[int(parent_index)][key] = parse_value(val)
+                if parent_index not in Root:
+                    Root[parent_index] = dict()
+                if type(key) == tuple:
+                    Root[parent_index] = handle_path(list(key), val, Root[parent_index])
+                else:
+                    Root[parent_index][key] = val
+        print("ROOT", Root)
     # Running through the memoized dictionary to replace the integer ID
     # with the actual property
     deep_nest(Root, Root)
     # Removing integer ID -> property mappings from the dictionary
     remove_memo(Root)
+    print(Root)
     return Root

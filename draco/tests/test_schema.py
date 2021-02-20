@@ -8,17 +8,18 @@ import pytest
 from draco import schema
 
 SIMPLE_SCHEMA = {
-    "numberRows": 2,
-    "field": {
-        "numbers": {
-            "dataType": "number",
+    "number_rows": 2,
+    "field": [
+        {
+            "__id__": "numbers",
+            "data_type": "number",
             "unique": 2,
             "max": 2,
             "min": 1,
             "std": 0,
         },
-        "text": {"dataType": "string", "unique": 1, "freq": 2},
-    },
+        {"__id__": "text", "data_type": "string", "unique": 1, "freq": 2},
+    ],
 }
 
 
@@ -33,25 +34,28 @@ def test_load_df():
     )
 
     assert schema.schema_from_dataframe(df) == {
-        "numberRows": 2,
-        "field": {
-            "numbers": {
-                "dataType": "number",
+        "number_rows": 2,
+        "field": [
+            {
+                "__id__": "numbers",
+                "data_type": "number",
                 "unique": 2,
                 "max": 2,
                 "min": 1,
                 "std": 0,
             },
-            "text": {"dataType": "string", "unique": 1, "freq": 2},
-            "bools": {
-                "dataType": "boolean",
+            {"__id__": "text", "data_type": "string", "unique": 1, "freq": 2},
+            {
+                "__id__": "bools",
+                "data_type": "boolean",
                 "unique": 2,
             },
-            "dates": {
-                "dataType": "datetime",
+            {
+                "__id__": "dates",
+                "data_type": "datetime",
                 "unique": 2,
             },
-        },
+        ],
     }
 
 
@@ -73,8 +77,8 @@ def csv_file(tmpdir_factory):
     return Path(filename)
 
 
-def test_csv_to_facts(csv_file):
-    assert schema.file_to_facts(csv_file) == SIMPLE_SCHEMA
+def test_csv_to_schema(csv_file):
+    assert schema.schema_from_file(csv_file) == SIMPLE_SCHEMA
 
 
 @pytest.fixture(scope="session")
@@ -85,10 +89,10 @@ def json_file(tmpdir_factory):
     return Path(filename)
 
 
-def test_json_to_facts(json_file):
-    assert schema.file_to_facts(json_file) == SIMPLE_SCHEMA
+def test_json_to_schema(json_file):
+    assert schema.schema_from_file(json_file) == SIMPLE_SCHEMA
 
 
 def test_unknown_file_type():
     with pytest.raises(ValueError):
-        schema.file_to_facts(Path("foo.bar"))
+        schema.schema_from_file(Path("foo.bar"))
