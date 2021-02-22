@@ -379,7 +379,7 @@ gitdb = ">=4.0.1,<5"
 
 [[package]]
 name = "identify"
-version = "1.5.13"
+version = "1.5.14"
 description = "File identification library for Python"
 category = "dev"
 optional = false
@@ -451,7 +451,7 @@ reference = "test"
 
 [[package]]
 name = "ipykernel"
-version = "5.4.3"
+version = "5.5.0"
 description = "IPython Kernel for Jupyter"
 category = "dev"
 optional = false
@@ -741,7 +741,7 @@ test = ["pytest (>=6.0)", "pytest-cov", "pytest-console-scripts", "pytest-check-
 
 [[package]]
 name = "jupyterlab-server"
-version = "2.2.1"
+version = "2.3.0"
 description = "JupyterLab Server"
 category = "dev"
 optional = false
@@ -752,7 +752,7 @@ babel = "*"
 jinja2 = ">=2.10"
 json5 = "*"
 jsonschema = ">=3.0.1"
-jupyter-server = ">=1.1,<2.0"
+jupyter-server = ">=1.4,<2.0"
 packaging = "*"
 requests = "*"
 
@@ -1449,7 +1449,7 @@ reference = "test"
 
 [[package]]
 name = "pytype"
-version = "2021.2.9"
+version = "2021.2.19"
 description = "Python type inferencer"
 category = "dev"
 optional = false
@@ -2009,7 +2009,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.9"
-content-hash = "e933f2ee125016e13c5e0a8341080ea4f09d36c9df775dbd3175b46321eb2ac7"
+content-hash = "c445765583bd4011a8c64baddf2bd6a0104ccf24fa53869ebf766febed408e44"
 
 [metadata.files]
 alabaster = [
@@ -2248,8 +2248,8 @@ gitpython = [
     {file = "GitPython-3.1.13.tar.gz", hash = "sha256:8621a7e777e276a5ec838b59280ba5272dd144a18169c36c903d8b38b99f750a"},
 ]
 identify = [
-    {file = "identify-1.5.13-py2.py3-none-any.whl", hash = "sha256:9dfb63a2e871b807e3ba62f029813552a24b5289504f5b071dea9b041aee9fe4"},
-    {file = "identify-1.5.13.tar.gz", hash = "sha256:70b638cf4743f33042bebb3b51e25261a0a10e80f978739f17e7fd4837664a66"},
+    {file = "identify-1.5.14-py2.py3-none-any.whl", hash = "sha256:e0dae57c0397629ce13c289f6ddde0204edf518f557bfdb1e56474aa143e77c3"},
+    {file = "identify-1.5.14.tar.gz", hash = "sha256:de7129142a5c86d75a52b96f394d94d96d497881d2aaf8eafe320cdbe8ac4bcc"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
@@ -2271,8 +2271,8 @@ iniconfig = [
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:714dfcaf550420126ed7e66bb1cbc893752af388742828f294c21f847d78b88a"},
 ]
 ipykernel = [
-    {file = "ipykernel-5.4.3-py3-none-any.whl", hash = "sha256:4ed205700001a83b5832d4821c46a5733f1bf4b1c55744314ae3c756be6b6095"},
-    {file = "ipykernel-5.4.3.tar.gz", hash = "sha256:697103d218e9a8828025af7986e033c89e0b36e2b6eb84a5bda4739b9a27f3cb"},
+    {file = "ipykernel-5.5.0-py3-none-any.whl", hash = "sha256:efd07253b54d84d26e0878d268c8c3a41582a18750da633c2febfd2ece0d467d"},
+    {file = "ipykernel-5.5.0.tar.gz", hash = "sha256:98321abefdf0505fb3dc7601f60fc4087364d394bd8fad53107eb1adee9ff475"},
 ]
 ipython = [
     {file = "ipython-7.20.0-py3-none-any.whl", hash = "sha256:1918dea4bfdc5d1a830fcfce9a710d1d809cbed123e85eab0539259cb0f56640"},
@@ -2331,8 +2331,8 @@ jupyterlab = [
     {file = "jupyterlab-3.0.8.tar.gz", hash = "sha256:e2250dec8042bb824d9dd5381f38b2b34eff7f93bed693bd486b252abafddcbe"},
 ]
 jupyterlab-server = [
-    {file = "jupyterlab_server-2.2.1-py3-none-any.whl", hash = "sha256:b647c532bbb45dad83b1dcd18e9b8cd9a22a68f799811cbca35616b3e8d27acc"},
-    {file = "jupyterlab_server-2.2.1.tar.gz", hash = "sha256:8b619ec5e13c2d1ac2e3a43a8147382f41fb17b425b50fa38b1cc84849c7bf94"},
+    {file = "jupyterlab_server-2.3.0-py3-none-any.whl", hash = "sha256:653cb811739e59f2f6998f659b4635a90c110a128e0245ce27dc3fe02c46543a"},
+    {file = "jupyterlab_server-2.3.0.tar.gz", hash = "sha256:e7a0245aa3de23a1803de2eff401e4ca4594538d9f59806134f30419a6d8b6a3"},
 ]
 jupyterlab-widgets = [
     {file = "jupyterlab_widgets-1.0.0-py3-none-any.whl", hash = "sha256:caeaf3e6103180e654e7d8d2b81b7d645e59e432487c1d35a41d6d3ee56b3fef"},
@@ -2638,13 +2638,13 @@ python-dateutil = [
     {file = "python_dateutil-2.8.1-py2.py3-none-any.whl", hash = "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"},
 ]
 pytype = [
-    {file = "pytype-2021.2.9-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:f12c5760a15ef9e25897d98fb2dd7f779ea336fba5f946be9579cfbf4267aeb4"},
-    {file = "pytype-2021.2.9-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:72963e7053dbab7aec4aa31dbd5092a316268fa29191af4d174c603ad6feb5be"},
-    {file = "pytype-2021.2.9-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:37730cbc20799c46dfcb68e8692a22aa4b12fe429e97707773cc3045fd4d1729"},
-    {file = "pytype-2021.2.9-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:87dd1afad8c5126562d388b9ad761331b12e1b80aba0a144ec229243c6e95bd9"},
-    {file = "pytype-2021.2.9-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:f0dec3da27e6e1502ddafb118d8d699866abf8e6c9cc581551e10808179ff55c"},
-    {file = "pytype-2021.2.9-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:6527d82bc4101bec0e4f70b492f6812bac91b39474819a926f2e740f6e3cbb23"},
-    {file = "pytype-2021.2.9.tar.gz", hash = "sha256:fb153a42c57abbb6ea545f8fe33eccb942c3f00903eb4447738e246726acb3b7"},
+    {file = "pytype-2021.2.19-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:f3c12fe26d25bae0ddf260e4d0356598aa9239027fdd5dfedea8db656877469f"},
+    {file = "pytype-2021.2.19-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:32e53031245357f6f539b63320509065063671764233a5c3e05caac4021c6f9c"},
+    {file = "pytype-2021.2.19-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:e87712449bbbfddb6bde0604104949f8c20951e90c605d4fd06ea9f11f9c9db3"},
+    {file = "pytype-2021.2.19-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:43664e00204a9b21782443716e7e621c471451089aeb11f750b8eacc06b9fe27"},
+    {file = "pytype-2021.2.19-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:85496a0b6a41f4b01b6811b732c7e4465df2bffe496b581873607a7629756566"},
+    {file = "pytype-2021.2.19-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:9b10a4e7f9078c4b62a45eeff98a63c99228f68d6f56540064cf3b13a234334b"},
+    {file = "pytype-2021.2.19.tar.gz", hash = "sha256:6df77173a5593f524cfa2a8e8450977d9bfa5ccacf09379d5244f9ee5a6a8210"},
 ]
 pytz = [
     {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
