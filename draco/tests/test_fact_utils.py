@@ -178,19 +178,57 @@ def test_dict_to_facts_string():
 
 
 def test_facts_to_dict():
-    program = [
+    program1 = [
         "attribute(numberRows,root,42).",
         "property(field,root,0).",
         "attribute(dataType,0,number).",
         "property(bin,0,1).",
-        "attribute(maxbins,1,20).",
+        "property(bin,0,2).",
+        "attribute(maxbins,2,20)." "attribute(maxbins,1,20).",
     ]
 
     program2 = dict_to_facts(
         {"view": [{"scale": {"x": {"type": "linear", "zero": False}}}]}
     )
 
-    for model in run_clingo(program):
+    program3 = dict_to_facts(
+        {
+            "view": [
+                {
+                    "scale": {
+                        "x": {"type": "linear", "metric": "numeric", "zero": False}
+                    }
+                },
+                {"scalar": "numeric"},
+            ]
+        }
+    )
+
+    program4 = dict_to_facts(
+        {
+            "path1": {"path2": {"path3": [{"maxbins": 20}], "otherattr": 40}},
+            "view": [
+                {
+                    "scale": {
+                        "x": {
+                            "type": "linear",
+                            "metric": [
+                                {"rowtype": "number", "columntype": "number"},
+                                {"rownum": 56, "columnNum": 42},
+                            ],
+                            "zero": False,
+                        }
+                    }
+                },
+                {"scale": "y"},
+            ],
+        }
+    )
+    for model in run_clingo(program1):
         facts_to_dict(model.answer_set)
     for model in run_clingo(program2):
+        facts_to_dict(model.answer_set)
+    for model in run_clingo(program3):
+        facts_to_dict(model.answer_set)
+    for model in run_clingo(program4):
         facts_to_dict(model.answer_set)
