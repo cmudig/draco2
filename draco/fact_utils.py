@@ -209,5 +209,4 @@ def facts_to_dict(facts: List) -> Mapping:
     deep_nest(Root, Root)
     # Removing integer ID -> property mappings from the dictionary
     remove_memo(Root)
-    print(Root)
     return Root
