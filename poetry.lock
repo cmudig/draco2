@@ -217,7 +217,7 @@ reference = "test"
 
 [[package]]
 name = "clingo-cffi"
-version = "5.5.0.post27"
+version = "5.5.0.post29"
 description = "CFFI-based bindings to the clingo solver."
 category = "main"
 optional = false
@@ -2024,7 +2024,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.9"
-content-hash = "1fadbd05d19850aedaa01d68d108bf3e543caa75dbf24b3b24e15db77439d95e"
+content-hash = "1e895fea988c1abe096a9d861309222789a1f00ba07f6ce5be7f2aea9dbfc1f3"
 
 [metadata.files]
 alabaster = [
@@ -2151,19 +2151,19 @@ click = [
     {file = "click-7.1.2.tar.gz", hash = "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a"},
 ]
 clingo-cffi = [
-    {file = "clingo-cffi-5.5.0.post27.tar.gz", hash = "sha256:53c47933aa39f3054eabe6555418a166e362537dea5a0b12f34aed2ad09d196f"},
-    {file = "clingo_cffi-5.5.0.post27-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:75cb74f2e35721e907ebc09f3f390c7f9ab85775bd1ea7944203321256cdf99a"},
-    {file = "clingo_cffi-5.5.0.post27-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:0cdcf4032e732c93857f0b5e1517d0130c9be6ca0359487f3e67dfea2b245694"},
-    {file = "clingo_cffi-5.5.0.post27-cp36-cp36m-win_amd64.whl", hash = "sha256:c9940a549953a1e5469d5d1fd256afb5b47a80f5e614664f6e0b0f1d78aa9031"},
-    {file = "clingo_cffi-5.5.0.post27-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:0590f5c8feb840f4886f865421be18ad3514b69d6cab30240c9cab0d95a1fa38"},
-    {file = "clingo_cffi-5.5.0.post27-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:c64f1f05737c68b0db9b900ff95c7af98d582827d2778d5b9e3bf91a16421871"},
-    {file = "clingo_cffi-5.5.0.post27-cp37-cp37m-win_amd64.whl", hash = "sha256:9caa25ce26f9b00daeb7a95765c9d07068bfdb4b6169609a7922de91a2975101"},
-    {file = "clingo_cffi-5.5.0.post27-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:925d5f4b1b9e044b190684ed99646c32612dca3225e1750c21102aed47ae57ce"},
-    {file = "clingo_cffi-5.5.0.post27-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:aba6105cec560d628e7d710219f6a8ebf409969e6c54b15290cbd3b7b2720c0a"},
-    {file = "clingo_cffi-5.5.0.post27-cp38-cp38-win_amd64.whl", hash = "sha256:335f89768a2e2122e889814a1f4b601eaff74f4d72770c1d6e4d8246d080d965"},
-    {file = "clingo_cffi-5.5.0.post27-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:5f33f753000f05169e1e8b9545a7d43c1208c935785c4db28d1ca76c6eb000b8"},
-    {file = "clingo_cffi-5.5.0.post27-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:b17cc13c1a8c6d9787c9b2fa6e123616b1c4e42e768a11cc755ca2212458ea2d"},
-    {file = "clingo_cffi-5.5.0.post27-cp39-cp39-win_amd64.whl", hash = "sha256:cefc42d178fb6644bed8858e126a2a82487296ebddd6980b6b638d5a1d9d8e03"},
+    {file = "clingo-cffi-5.5.0.post29.tar.gz", hash = "sha256:330b83539fc5bcd38937ba5208c1207f012a39144c0e15ba7d28b514f11df097"},
+    {file = "clingo_cffi-5.5.0.post29-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:b45657b013740ca422b254f2aebc58ed18a21556cc242e9832c01ac45ae3958b"},
+    {file = "clingo_cffi-5.5.0.post29-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:128a327dbcda95fa9577ef62fc62b219790bbb705abc17bd17f7dcf0269e03a3"},
+    {file = "clingo_cffi-5.5.0.post29-cp36-cp36m-win_amd64.whl", hash = "sha256:496cc936219028a7322d53e56036a0909dfe14b2b4ace58f2983bd8550c469b5"},
+    {file = "clingo_cffi-5.5.0.post29-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:8a891a3811769bf4136ad03cb1549e0a67f84f16b0d9a0c844c14323ca86f752"},
+    {file = "clingo_cffi-5.5.0.post29-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:dc64d7ba55ee5bc918ca28d270198a7b25ef9ebbcb8fde63eb685184bf40797d"},
+    {file = "clingo_cffi-5.5.0.post29-cp37-cp37m-win_amd64.whl", hash = "sha256:79f3d55df45abd41fd0491cb9afa6ef1eb3aa898ebe354a25aeb7b16a3793f84"},
+    {file = "clingo_cffi-5.5.0.post29-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:9322f146e4278a1af895b7470e42a4c8a674dbc1b552fcdc862ef552f8a8e14e"},
+    {file = "clingo_cffi-5.5.0.post29-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:bf33bb75f1d77dd84d04d841956a455037a57c8d4deb306e22a1931b1ea1d840"},
+    {file = "clingo_cffi-5.5.0.post29-cp38-cp38-win_amd64.whl", hash = "sha256:abc8d4a76a09a2192727aba9c419430933ca55ccc73853bec046451f42fcffb8"},
+    {file = "clingo_cffi-5.5.0.post29-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:ba79f2a8b6975986c6609d95aee5703f9aed3420b662c7c70601d55aacb7c365"},
+    {file = "clingo_cffi-5.5.0.post29-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:1f3bde06f2864c701e47356e66b59441cdc59e8169466a7c59dbbe82ce3c660c"},
+    {file = "clingo_cffi-5.5.0.post29-cp39-cp39-win_amd64.whl", hash = "sha256:4f0b885ddb63d04fd10844a1a2e358b475e1debc9810bcc4202824b3ff064260"},
 ]
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:df1b75950404284103727ee967f46375d1bb4ba7302bb1af74521e12233c48a2"},
