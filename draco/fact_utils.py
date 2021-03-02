@@ -68,7 +68,12 @@ def dict_to_facts(
                 if "__id__" in obj:
                     object_id = obj["__id__"]
                 else:
-                    object_id = next(id_generator)
+                    try:
+                        object_id = next(id_generator)
+                    except StopIteration:
+                        # should never happen but guards against
+                        # # https://www.python.org/dev/peps/pep-0479/
+                        pass
 
                 yield make_fact(FactKind.PROPERTY, (path, parent, object_id))
                 yield from dict_to_facts(obj, (), object_id, id_generator)
