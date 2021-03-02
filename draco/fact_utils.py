@@ -1,6 +1,7 @@
+import itertools
 from collections import abc
 from enum import Enum, unique
-from typing import Any, Dict, Generator, List, Mapping, Tuple, Union
+from typing import Any, Dict, Generator, Iterator, List, Mapping, Tuple, Union
 
 from clingo import SymbolType
 
@@ -44,27 +45,30 @@ def dict_to_facts(
     data: Union[Mapping, List, str],
     path: Tuple = (),
     parent: str = ROOT,
-    start_id=0,
+    id_generator: Iterator[int] = None,
 ) -> Generator[str, None, None]:
     """A generic encoder for dictionaries as answer set programming facts.
 
     The encoder can convert dictionaries as well as lists (generating
     identifiers as numbers).
     """
+
+    if id_generator is None:
+        id_generator = itertools.count()
+
     if isinstance(data, abc.Mapping):
         for prop, obj in data.items():
-            yield from dict_to_facts(obj, path + (prop,), parent, start_id)
+            yield from dict_to_facts(obj, path + (prop,), parent, id_generator)
     else:
         if isinstance(data, list):
             for obj in data:
                 if "__id__" in obj:
                     object_id = obj["__id__"]
                 else:
-                    object_id = start_id
-                    start_id += 1
+                    object_id = next(id_generator)
 
                 yield make_fact(FactKind.PROPERTY, (path, parent, object_id))
-                yield from dict_to_facts(obj, (), object_id, start_id)
+                yield from dict_to_facts(obj, (), object_id, id_generator)
         elif not path[-1].startswith("__"):  # ignore keys that start with "__"
             if isinstance(data, bool):
                 # special cases for boolean values

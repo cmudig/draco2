@@ -1,3 +1,5 @@
+import itertools
+
 import pytest
 from draco.fact_utils import FactKind, dict_to_facts, facts_to_dict, make_fact
 from draco.run import run_clingo
@@ -62,7 +64,7 @@ def test_dict_to_facts_start_id():
         {
             "field": [{"dataType": "number"}, {"dataType": "string"}],
         },
-        start_id=42,
+        id_generator=itertools.count(42),
     )
 
     assert list(program) == [
@@ -175,6 +177,46 @@ def test_dict_to_facts_string():
 
     with pytest.raises(IndexError):
         list(program)
+
+
+def test_dict_to_facts_complex():
+    program = dict_to_facts(
+        {
+            "path1": {"path2": {"path3": [{"maxbins": 20}], "otherattr": 40}},
+            "view": [
+                {
+                    "scale": {
+                        "x": {
+                            "type": "linear",
+                            "metric": [
+                                {"row_type": "number", "column_type": "number"},
+                                {"row_num": 56, "column_num": 42},
+                            ],
+                            "zero": "false",
+                        }
+                    }
+                },
+                {"scale": "y"},
+            ],
+        }
+    )
+
+    assert list(program) == [
+        "property((path1,path2,path3),root,0).",
+        "attribute(maxbins,0,20).",
+        "attribute((path1,path2,otherattr),root,40).",
+        "property(view,root,1).",
+        "attribute((scale,x,type),1,linear).",
+        "property((scale,x,metric),1,2).",
+        "attribute(row_type,2,number).",
+        "attribute(column_type,2,number).",
+        "property((scale,x,metric),1,3).",
+        "attribute(row_num,3,56).",
+        "attribute(column_num,3,42).",
+        "attribute((scale,x,zero),1,false).",
+        "property(view,root,4).",
+        "attribute(scale,4,y).",
+    ]
 
 
 def test_facts_to_dict():
