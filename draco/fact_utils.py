@@ -1,7 +1,7 @@
 import itertools
 from collections import abc, defaultdict
 from enum import Enum, unique
-from typing import Generator, Iterator, List, Mapping, Tuple, Union
+from typing import Any, Generator, Iterator, List, Mapping, Tuple, Union
 
 from clingo import Symbol
 from clingo.symbol import SymbolType
@@ -96,22 +96,41 @@ def get_value(symbol: Symbol):
     """Get the value of a Clingo symbol."""
     if symbol.type == SymbolType.Number:
         return symbol.number
-    elif symbol.type == SymbolType.String or symbol.type == SymbolType.Function:
+    elif symbol.type == SymbolType.Function:
+        if len(symbol.arguments):
+            return tuple(map(get_value, symbol.arguments))
         return symbol.name
+    else:
+        raise ValueError("Unsupported type")
 
 
 def collect_children(name: str, collector: dict):
     """Helper function to collect the children for a name into a dictionary."""
-    out = {}
+    out: dict = {}
 
     for prop, value in collector[name].items():
         if isinstance(value, list):
-            children = [collect_children(child, collector) for child in value]
-            out[prop] = children
+            assign_value(
+                out, prop, [collect_children(child, collector) for child in value]
+            )
         else:
-            out[prop] = value
+            assign_value(out, prop, value)
 
     return out
+
+
+def assign_value(d: dict, path: Union[tuple, str], value: Any):
+    """Helper function to assign a value to a dictionary
+    creating a nested value if necessary."""
+    if len(path) == 1:
+        path = path[0]
+
+    if isinstance(path, str):
+        d[path] = value
+    else:
+        if path[0] not in d:
+            d[path[0]] = {}
+        assign_value(d[path[0]], path[1:], value)
 
 
 def answer_set_to_dict(answer_set: List[Symbol]) -> Mapping:
@@ -123,16 +142,10 @@ def answer_set_to_dict(answer_set: List[Symbol]) -> Mapping:
 
     for symbol in answer_set:
         if symbol.match("attribute", 3):
-            prop = symbol.arguments[0].name
-            obj = get_value(symbol.arguments[1])
-            val = get_value(symbol.arguments[2])
+            prop, obj, val = map(get_value, symbol.arguments)
             collector[obj][prop] = val
         elif symbol.match("property", 3):
-            prop = symbol.arguments[0].name
-            obj = get_value(symbol.arguments[1])
-            child = get_value(symbol.arguments[2])
-            children = collector[obj].get(prop, [])
-            children.append(child)
-            collector[obj][prop] = children
+            prop, obj, child = map(get_value, symbol.arguments)
+            collector[obj][prop] = collector[obj].get(prop, []) + [child]
 
     return collect_children("root", collector)
