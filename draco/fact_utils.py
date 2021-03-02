@@ -145,19 +145,14 @@ def handle_path(
         if kind == FactKind.ATTRIBUTE.value:
             nested_dict[last] = value
         else:
-            if last in nested_dict:
-                nested_dict[last].append(value)
-            else:
-                nested_dict[last] = [value]
+            nested_dict[last] = nested_dict.get(last, []) + [value]
         return nested_dict
     # there are some nested dicts to get through
     else:
         elem = address[0]
-        # if the successive dict in the address has been created already
-        if elem in nested_dict:
-            nested_dict[elem] = handle_path(address[1:], value, nested_dict[elem], kind)
-        else:
-            nested_dict[elem] = handle_path(address[1:], value, dict(), kind)
+        nested_dict[elem] = handle_path(
+            address[1:], value, nested_dict.get(elem, dict()), kind
+        )
         return nested_dict
 
 
@@ -177,10 +172,7 @@ def facts_to_dict(facts: List) -> Mapping:
                     root = handle_path(list(key), val, root, kind)
                 # if the current dictionary is the destination
                 else:
-                    if key in root:
-                        root[key].append(val)
-                    else:
-                        root[key] = [val]
+                    root[key] = root.get(key, []) + [val]
             else:
                 # the process is identical except the parent is not root
                 if type(key) == tuple:
@@ -188,10 +180,7 @@ def facts_to_dict(facts: List) -> Mapping:
                         list(key), val, root[parent_index], kind
                     )
                 else:
-                    if key in root[parent_index]:
-                        root[parent_index][key].append(val)
-                    else:
-                        root[parent_index][key] = [val]
+                    root[parent_index][key] = root[parent_index].get(key, []) + [val]
             # adding property's id as a key to root
             if val not in root:
                 root[val] = dict()
@@ -214,7 +203,6 @@ def facts_to_dict(facts: List) -> Mapping:
                     )
                 else:
                     root[parent_index][key] = val
-
     deep_nest(root, root)
     # Removing integer ID -> property mappings from the dictionary
     remove_memo(root)

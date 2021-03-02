@@ -271,7 +271,6 @@ def test_facts_to_dict():
     for model in run_clingo(program_3):
         result = facts_to_dict(model.answer_set)
         assert result == dict_3
-    print(list(program_4))
     for model in run_clingo(program_4):
         result = facts_to_dict(model.answer_set)
         assert result == dict_4
