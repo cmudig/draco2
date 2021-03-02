@@ -1,7 +1,7 @@
 import itertools
 
 import pytest
-from draco.fact_utils import FactKind, dict_to_facts, facts_to_dict, make_fact
+from draco.fact_utils import FactKind, answer_set_to_dict, dict_to_facts, make_fact
 from draco.run import run_clingo
 
 
@@ -118,7 +118,7 @@ def test_deep_dict_to_facts():
     ]
 
 
-def test_nested_dict_to_facts():
+def test_path_to_facts():
     program = dict_to_facts({"view": [{"scale": {"x": "linear"}}]})
 
     assert list(program) == [
@@ -219,14 +219,54 @@ def test_dict_to_facts_complex():
     ]
 
 
-def test_facts_to_dict():
+def test_answer_set_to_dict():
     program = [
+        # root
         "attribute(numberRows,root,42).",
+        # first field
         "property(field,root,0).",
+        "attribute(unique,0,12).",
         "attribute(dataType,0,number).",
-        "property(bin,0,1).",
-        "attribute(maxbins,1,20).",
+        # second fields
+        "property(field,root,1).",
+        "attribute(unique,1,32).",
+        "attribute(dataType,1,string).",
     ]
 
-    for model in run_clingo(program):
-        facts_to_dict(model.answer_set)
+    result = run_clingo(program)
+    assert answer_set_to_dict(next(result).answer_set) == {
+        "numberRows": 42,
+        "field": [
+            {"unique": 12, "dataType": "number"},
+            {"unique": 32, "dataType": "string"},
+        ],
+    }
+
+
+def test_answer_set_to_path_dict():
+    program = [
+        # root
+        "property(view,root,0).",
+        # first field
+        "attribute((scale,x),0,linear).",
+    ]
+
+    result = run_clingo(program)
+    assert answer_set_to_dict(next(result).answer_set) == {
+        "view": [{"scale": {"x": "linear"}}]
+    }
+
+
+def test_answer_set_to_nested_deep_dict():
+    program = [
+        # root
+        "property(view,root,0).",
+        # first field
+        "attribute((scale,x,type),0,linear).",
+        "attribute((scale,x,zero),0,no).",
+    ]
+
+    result = run_clingo(program)
+    assert answer_set_to_dict(next(result).answer_set) == {
+        "view": [{"scale": {"x": {"type": "linear", "zero": "no"}}}]
+    }
