@@ -72,7 +72,7 @@ def dict_to_facts(
                         object_id = next(id_generator)
                     except StopIteration:
                         # should never happen but guards against
-                        # # https://www.python.org/dev/peps/pep-0479/
+                        # https://www.python.org/dev/peps/pep-0479/
                         pass
 
                 yield make_fact(FactKind.PROPERTY, (path, parent, object_id))
@@ -133,7 +133,7 @@ def assign_value(d: dict, path: Union[tuple, str], value: Any):
         assign_value(d[path[0]], path[1:], value)
 
 
-def answer_set_to_dict(answer_set: List[Symbol]) -> Mapping:
+def answer_set_to_dict(answer_set: List[Symbol], root=ROOT) -> Mapping:
     """A generic decoder that converts an answer set into a nested data structure.
     The inverse of this function is `dict_to_facts`.
     """
@@ -148,4 +148,4 @@ def answer_set_to_dict(answer_set: List[Symbol]) -> Mapping:
             prop, obj, child = map(get_value, symbol.arguments)
             collector[obj][prop] = collector[obj].get(prop, []) + [child]
 
-    return collect_children("root", collector)
+    return collect_children(root, collector)
