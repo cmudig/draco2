@@ -70,7 +70,7 @@ def dict_to_facts(
                 else:
                     try:
                         object_id = next(id_generator)
-                    except StopIteration:
+                    except StopIteration:  # pragma: no cover
                         # should never happen but guards against
                         # https://www.python.org/dev/peps/pep-0479/
                         pass
@@ -100,7 +100,7 @@ def get_value(symbol: Symbol):
         if len(symbol.arguments):
             return tuple(map(get_value, symbol.arguments))
         return symbol.name
-    else:
+    else:  # pragma: no cover
         raise ValueError("Unsupported type")
 
 
