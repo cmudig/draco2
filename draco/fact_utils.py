@@ -80,34 +80,30 @@ def dict_to_facts(
                 yield make_fact(FactKind.ATTRIBUTE, (path, parent, data))
 
 
-def deep_nest(Root: Dict[Union[str, int], Any], current_dict: Dict):
-    """
-    Indexes into the memo dictionary and creates the nested data structure
-    """
+def deep_nest(root: Dict[Union[str, int], Any], current_dict: Dict):
+    """Indexes into the memo dictionary and creates the nested data structure"""
     for key in current_dict:
+        # replacing ids (ints) in lists with the corresponding values in root
         if isinstance(current_dict[key], list):
             current_list = current_dict[key]
-            for i in range(len(current_list)):
-                if isinstance(current_list[i], int) and current_list[i] in Root:
-                    index = current_list[i]
-                    current_list[i] = Root[index]
-                deep_nest(Root, current_list[i])
+            for i, element in enumerate(current_list):
+                if isinstance(element, int) and element in root:
+                    index = element
+                    current_list[i] = root[index]
+                deep_nest(root, current_list[i])
+        # go deeper into nested dicts to look for ids (ints) to replace
         elif isinstance(current_dict[key], Mapping):
-            deep_nest(Root, current_dict[key])
+            deep_nest(root, current_dict[key])
     return
 
 
-def remove_memo(Root: Dict[Union[str, int], Any]):
+def remove_memo(root: Dict[Union[str, int], Any]):
     """
     Removes the integer ID mappings in the dictionary
     """
-    to_delete = []
-    for key in Root:
-        if isinstance(key, int):
-            to_delete.append(key)
-
+    to_delete = [key for key in root if isinstance(key, int)]
     for key in to_delete:
-        del Root[key]
+        del root[key]
 
     return
 
@@ -121,8 +117,10 @@ def parse_values(values: List) -> List:
     for value in values:
         if value.type == SymbolType.Function:
             name, args = value.name, value.arguments
+            # strings are parsed as SymbolType functions with no arguments
             if args == []:
                 result.append(name)
+            # functions are parsed as SymbolType functions with >=1 arguments
             else:
                 result.append(tuple(parse_values(list(args))))
         else:
@@ -133,7 +131,11 @@ def parse_values(values: List) -> List:
 def handle_path(
     address: List[Union[str, int]], value: Any, nested_dict: Dict, kind: FactKind
 ) -> Dict[Union[str, int], Any]:
-    assert len(address) != 0
+
+    """Unpacks address tuples into nested dictionaries and adds them to the
+    appropriate root/ parent_index dictionary
+    """
+    # nested_dict is destination dictionary
     if len(address) == 1:
         last = address[0]
         if kind == FactKind.ATTRIBUTE.value:
@@ -144,9 +146,10 @@ def handle_path(
             else:
                 nested_dict[last] = [value]
         return nested_dict
-
+    # there are some nested dicts to get through
     else:
         elem = address[0]
+        # if the successive dict in the address has been created already
         if elem in nested_dict:
             nested_dict[elem] = handle_path(address[1:], value, nested_dict[elem], kind)
         else:
@@ -155,58 +158,60 @@ def handle_path(
 
 
 def facts_to_dict(facts: List) -> Mapping:
-    """
-    A generic decoder that converts an answer set into a nested data structure
+    """A generic decoder that converts an answer set into a nested data structure"""
 
-    """
-    Root: Dict[Union[str, int], Any] = dict()
-    # Creating the memo dictionary that maps numbers to nested properties
+    root: Dict[Union[str, int], Any] = dict()
+    # Creating the memo dictionary that maps ids to nested properties
     for fact in facts:
-        assert fact.type == SymbolType.Function
         kind, values = fact.name, fact.arguments
         parsed_values = parse_values(values)
-        (key, parent_index, val) = parsed_values
+        key, parent_index, val = parsed_values
         if kind == FactKind.PROPERTY.value:
             if parent_index == ROOT:
+                # if the destination has an address
                 if type(key) == tuple:
-                    Root = handle_path(list(key), val, Root, kind)
+                    root = handle_path(list(key), val, root, kind)
+                # if the current dictionary is the destination
                 else:
-                    if key in Root:
-                        Root[key].append(val)
+                    if key in root:
+                        root[key].append(val)
                     else:
-                        Root[key] = [val]
+                        root[key] = [val]
             else:
+                # the process is identical except the parent is not root
                 if type(key) == tuple:
-                    Root[parent_index] = handle_path(
-                        list(key), val, Root[parent_index], kind
+                    root[parent_index] = handle_path(
+                        list(key), val, root[parent_index], kind
                     )
                 else:
-                    if key in Root[parent_index]:
-                        Root[parent_index][key].append(val)
+                    if key in root[parent_index]:
+                        root[parent_index][key].append(val)
                     else:
-                        Root[parent_index][key] = [val]
-
-            if val not in Root:
-                Root[val] = dict()
+                        root[parent_index][key] = [val]
+            # adding property's id as a key to root
+            if val not in root:
+                root[val] = dict()
         else:
             if parent_index == ROOT:
+                # if the destination has an address
                 if type(key) == tuple:
-                    Root = handle_path(list(key), val, Root, kind)
+                    root = handle_path(list(key), val, root, kind)
+                # if the current dictionary is the destination
                 else:
-                    Root[key] = val
+                    root[key] = val
             else:
-                if parent_index not in Root:
-                    Root[parent_index] = dict()
+                if parent_index not in root:
+                    # if facts are not in order and parent index doesn't exist
+                    root[parent_index] = dict()
+                # the process is identical except the parent is not root
                 if type(key) == tuple:
-                    Root[parent_index] = handle_path(
-                        list(key), val, Root[parent_index], kind
+                    root[parent_index] = handle_path(
+                        list(key), val, root[parent_index], kind
                     )
                 else:
-                    Root[parent_index][key] = val
-    # Running through the memoized dictionary to replace the integer ID
-    # with the actual property
+                    root[parent_index][key] = val
 
-    deep_nest(Root, Root)
+    deep_nest(root, root)
     # Removing integer ID -> property mappings from the dictionary
-    remove_memo(Root)
-    return Root
+    remove_memo(root)
+    return root

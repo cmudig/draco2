@@ -178,57 +178,58 @@ def test_dict_to_facts_string():
 
 
 def test_facts_to_dict():
-    program1 = [
-        "attribute(numberRows,root,42).",
-        "property(field,root,0).",
-        "attribute(dataType,0,number).",
-        "property(bin,0,1).",
-        "property(bin,0,2).",
-        "attribute(maxbins,2,20)." "attribute(maxbins,1,20).",
-    ]
+    dict_1 = {
+        "numberRows": 42,
+        "field": [
+            {
+                "dataType": "number",
+                "bin": [{"maxbins": 20}, {"minbins": 10}],
+            },
+        ],
+    }
 
-    program2 = dict_to_facts(
-        {"view": [{"scale": {"x": {"type": "linear", "zero": False}}}]}
-    )
+    dict_2 = {"view": [{"scale": {"x": {"type": "linear"}}}]}
 
-    program3 = dict_to_facts(
-        {
-            "view": [
-                {
-                    "scale": {
-                        "x": {"type": "linear", "metric": "numeric", "zero": False}
+    dict_3 = {
+        "view": [
+            {"scale": {"x": {"type": "linear", "metric": "numeric"}}},
+            {"scalar": "numeric"},
+        ]
+    }
+
+    dict_4 = {
+        "path1": {"path2": {"path3": [{"maxbins": 20}], "otherattr": 40}},
+        "view": [
+            {
+                "scale": {
+                    "x": {
+                        "type": "linear",
+                        "metric": [
+                            {"rowtype": "number", "columntype": "number"},
+                            {"rownum": 56, "columnNum": 42},
+                        ],
+                        "zero": "false",
                     }
-                },
-                {"scalar": "numeric"},
-            ]
-        }
-    )
+                }
+            },
+            {"scale": "y"},
+        ],
+    }
 
-    program4 = dict_to_facts(
-        {
-            "path1": {"path2": {"path3": [{"maxbins": 20}], "otherattr": 40}},
-            "view": [
-                {
-                    "scale": {
-                        "x": {
-                            "type": "linear",
-                            "metric": [
-                                {"rowtype": "number", "columntype": "number"},
-                                {"rownum": 56, "columnNum": 42},
-                            ],
-                            "zero": False,
-                        }
-                    }
-                },
-                {"scale": "y"},
-            ],
-        }
-    )
-    for model in run_clingo(program1):
-        facts_to_dict(model.answer_set)
-    for model in run_clingo(program2):
-        facts_to_dict(model.answer_set)
-    for model in run_clingo(program3):
-        facts_to_dict(model.answer_set)
-    for model in run_clingo(program4):
-        facts_to_dict(model.answer_set)
+    program_1 = dict_to_facts(dict_1)
+    program_2 = dict_to_facts(dict_2)
+    program_3 = dict_to_facts(dict_3)
+    program_4 = dict_to_facts(dict_4)
+    for model in run_clingo(program_1):
+        result = facts_to_dict(model.answer_set)
+        assert result == dict_1
+    for model in run_clingo(program_2):
+        result = facts_to_dict(model.answer_set)
+        assert result == dict_2
+    for model in run_clingo(program_3):
+        result = facts_to_dict(model.answer_set)
+        assert result == dict_3
+    print(list(program_4))
+    for model in run_clingo(program_4):
+        result = facts_to_dict(model.answer_set)
+        assert result == dict_4
