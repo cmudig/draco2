@@ -28,7 +28,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.7.1,<3.9"
-clingo-cffi = { version = "5.5.0.post30", source = "test" }
+clingo-cffi = { version = "5.5.0.post36", source = "test" }
 pandas = "^1.2.2"
 
 [tool.poetry.dev-dependencies]
