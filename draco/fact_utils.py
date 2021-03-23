@@ -46,6 +46,7 @@ def dict_to_facts(
     data: Union[Mapping, List, str],
     path: Tuple = (),
     parent: str = ROOT,
+    parent_path: Tuple = (),
     id_generator: Iterator[int] = None,
 ) -> Generator[str, None, None]:
     """A generic encoder for dictionaries as answer set programming facts.
@@ -61,7 +62,9 @@ def dict_to_facts(
 
     if isinstance(data, abc.Mapping):
         for prop, obj in data.items():
-            yield from dict_to_facts(obj, path + (prop,), parent, id_generator)
+            yield from dict_to_facts(
+                obj, path + (prop,), parent, parent_path, id_generator
+            )
     else:
         if isinstance(data, list):
             for obj in data:
@@ -76,20 +79,23 @@ def dict_to_facts(
                         pass
 
                 yield make_fact(FactKind.PROPERTY, (path, parent, object_id))
-                yield from dict_to_facts(obj, (), object_id, id_generator)
+                yield from dict_to_facts(obj, (), object_id, path, id_generator)
         elif not path[-1].startswith("__"):  # ignore keys that start with "__"
             if isinstance(data, bool):
                 # special cases for boolean values
                 fact = make_fact(
                     FactKind.ATTRIBUTE,
-                    (path, parent),
+                    (parent_path if parent_path else "view", path, parent),
                 )
                 if data:
                     yield fact
                 else:
                     yield f":- {fact}"
             else:
-                yield make_fact(FactKind.ATTRIBUTE, (path, parent, data))
+                yield make_fact(
+                    FactKind.ATTRIBUTE,
+                    (parent_path if parent_path else "view", path, parent, data),
+                )
 
 
 def get_value(symbol: Symbol):

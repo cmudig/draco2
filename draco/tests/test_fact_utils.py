@@ -39,30 +39,30 @@ def test_dict_to_facts():
         {
             "numberRows": 42,
             "field": [
-                {"unique": 12, "dataType": "number"},
-                {"unique": 32, "dataType": "string"},
+                {"unique": 12, "type": "number"},
+                {"unique": 32, "type": "string"},
             ],
         }
     )
 
     assert list(program) == [
         # root
-        "attribute(numberRows,root,42).",
+        "attribute(view,numberRows,root,42).",
         # first field
         "property(field,root,0).",
-        "attribute(unique,0,12).",
-        "attribute(dataType,0,number).",
+        "attribute(field,unique,0,12).",
+        "attribute(field,type,0,number).",
         # second fields
         "property(field,root,1).",
-        "attribute(unique,1,32).",
-        "attribute(dataType,1,string).",
+        "attribute(field,unique,1,32).",
+        "attribute(field,type,1,string).",
     ]
 
 
 def test_dict_to_facts_start_id():
     program = dict_to_facts(
         {
-            "field": [{"dataType": "number"}, {"dataType": "string"}],
+            "field": [{"type": "number"}, {"type": "string"}],
         },
         id_generator=itertools.count(42),
     )
@@ -70,27 +70,27 @@ def test_dict_to_facts_start_id():
     assert list(program) == [
         # first field
         "property(field,root,42).",
-        "attribute(dataType,42,number).",
+        "attribute(field,type,42,number).",
         # second fields
         "property(field,root,43).",
-        "attribute(dataType,43,string).",
+        "attribute(field,type,43,string).",
     ]
 
 
 def test_dict_to_facts_explicit_id():
     program = dict_to_facts(
         {
-            "field": [{"dataType": "number", "__id__": "foo"}, {"dataType": "string"}],
+            "field": [{"type": "number", "__id__": "foo"}, {"type": "string"}],
         },
     )
 
     assert list(program) == [
         # first field
         "property(field,root,foo).",
-        "attribute(dataType,foo,number).",
+        "attribute(field,type,foo,number).",
         # second fields
         "property(field,root,0).",
-        "attribute(dataType,0,string).",
+        "attribute(field,type,0,string).",
     ]
 
 
@@ -100,7 +100,7 @@ def test_deep_dict_to_facts():
             "numberRows": 42,
             "field": [
                 {
-                    "dataType": "number",
+                    "type": "number",
                     "bin": [{"maxbins": 20}],
                 },
             ],
@@ -109,12 +109,12 @@ def test_deep_dict_to_facts():
 
     assert list(program) == [
         # root
-        "attribute(numberRows,root,42).",
+        "attribute(view,numberRows,root,42).",
         # first field
         "property(field,root,0).",
-        "attribute(dataType,0,number).",
+        "attribute(field,type,0,number).",
         "property(bin,0,1).",
-        "attribute(maxbins,1,20).",
+        "attribute(bin,maxbins,1,20).",
     ]
 
 
@@ -125,7 +125,7 @@ def test_path_to_facts():
         # root
         "property(view,root,0).",
         # first field
-        "attribute((scale,x),0,linear).",
+        "attribute(view,(scale,x),0,linear).",
     ]
 
 
@@ -138,8 +138,8 @@ def test_nested_deep_dict_to_facts():
         # root
         "property(view,root,0).",
         # first field
-        "attribute((scale,x,type),0,linear).",
-        "attribute((scale,x,zero),0,no).",
+        "attribute(view,(scale,x,type),0,linear).",
+        "attribute(view,(scale,x,zero),0,no).",
     ]
 
 
@@ -152,8 +152,8 @@ def test_false_dict_to_facts():
         # root
         "property(view,root,0).",
         # first field
-        "attribute((scale,x,type),0,linear).",
-        ":- attribute((scale,x,zero),0).",  # note: this cannot be reversed
+        "attribute(view,(scale,x,type),0,linear).",
+        ":- attribute(view,(scale,x,zero),0).",  # note: this cannot be reversed
     ]
 
 
@@ -166,8 +166,8 @@ def test_true_dict_to_facts():
         # root
         "property(view,root,0).",
         # first field
-        "attribute((scale,x,type),0,linear).",
-        "attribute((scale,x,zero),0).",  # note: this cannot be reversed
+        "attribute(view,(scale,x,type),0,linear).",
+        "attribute(view,(scale,x,zero),0).",  # note: this cannot be reversed
     ]
 
 
@@ -203,19 +203,19 @@ def test_dict_to_facts_complex():
 
     assert list(program) == [
         "property((path1,path2,path3),root,0).",
-        "attribute(maxbins,0,20).",
-        "attribute((path1,path2,otherattr),root,40).",
+        "attribute((path1,path2,path3),maxbins,0,20).",
+        "attribute(view,(path1,path2,otherattr),root,40).",
         "property(view,root,1).",
-        "attribute((scale,x,type),1,linear).",
+        "attribute(view,(scale,x,type),1,linear).",
         "property((scale,x,metric),1,2).",
-        "attribute(row_type,2,number).",
-        "attribute(column_type,2,number).",
+        "attribute((scale,x,metric),row_type,2,number).",
+        "attribute((scale,x,metric),column_type,2,number).",
         "property((scale,x,metric),1,3).",
-        "attribute(row_num,3,56).",
-        "attribute(column_num,3,42).",
-        "attribute((scale,x,zero),1,false).",
+        "attribute((scale,x,metric),row_num,3,56).",
+        "attribute((scale,x,metric),column_num,3,42).",
+        "attribute(view,(scale,x,zero),1,false).",
         "property(view,root,4).",
-        "attribute(scale,4,y).",
+        "attribute(view,scale,4,y).",
     ]
 
 
@@ -226,19 +226,19 @@ def test_answer_set_to_dict():
         # first field
         "property(field,root,0).",
         "attribute(unique,0,12).",
-        "attribute(dataType,0,number).",
+        "attribute(type,0,number).",
         # second fields
         "property(field,root,1).",
         "attribute(unique,1,32).",
-        "attribute(dataType,1,string).",
+        "attribute(type,1,string).",
     ]
 
     result = run_clingo(program)
     assert answer_set_to_dict(next(result).answer_set) == {
         "numberRows": 42,
         "field": [
-            {"unique": 12, "dataType": "number"},
-            {"unique": 32, "dataType": "string"},
+            {"unique": 12, "type": "number"},
+            {"unique": 32, "type": "string"},
         ],
     }
 
