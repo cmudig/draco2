@@ -6,6 +6,8 @@ To express knowledge about visualizations, we first need a language to describe 
 You could design your own description language and use it with Draco or extend the existing language we use here. If you add new information, Draco will not immediately use the new facts until you also add constraints over the facts.
 ```
 
+While our encoding is inspired by Vega-Lite {cite}`satyanarayan2016vega`, Draco is not limited to the features Vega-Lite supports.
+
 The constraint solver Clingo reasons about the facts that describe a visualization. The specific format we use to provide facts to the solver is as a _function_ of the name `property` or `attribute`.
 
 Properties describe what properties exist on an object. If a property has no parents, we use a special object `root`. For example, `property(view,root,v1).` says that there is a view v1 on the root.
