@@ -1,7 +1,7 @@
 import itertools
 from collections import abc, defaultdict
 from enum import Enum, unique
-from typing import Any, Generator, Iterator, List, Mapping, Tuple, Union
+from typing import Generator, Iterator, List, Mapping, Tuple, Union
 
 from clingo import Symbol
 from clingo.symbol import SymbolType
@@ -46,7 +46,6 @@ def dict_to_facts(
     data: Union[Mapping, List, str],
     path: Tuple = (),
     parent: str = ROOT,
-    parent_path: Tuple = (),
     id_generator: Iterator[int] = None,
 ) -> Generator[str, None, None]:
     """A generic encoder for dictionaries as answer set programming facts.
@@ -62,9 +61,7 @@ def dict_to_facts(
 
     if isinstance(data, abc.Mapping):
         for prop, obj in data.items():
-            yield from dict_to_facts(
-                obj, path + (prop,), parent, parent_path, id_generator
-            )
+            yield from dict_to_facts(obj, path + (prop,), parent, id_generator)
     else:
         if isinstance(data, list):
             for obj in data:
@@ -78,14 +75,15 @@ def dict_to_facts(
                         # https://www.python.org/dev/peps/pep-0479/
                         pass
 
-                yield make_fact(FactKind.PROPERTY, (path, parent, object_id))
-                yield from dict_to_facts(obj, (), object_id, path, id_generator)
+                path_tail = (path[-1],)
+                yield make_fact(FactKind.PROPERTY, (path_tail, parent, object_id))
+                yield from dict_to_facts(obj, path_tail, object_id, id_generator)
         elif not path[-1].startswith("__"):  # ignore keys that start with "__"
             if isinstance(data, bool):
                 # special cases for boolean values
                 fact = make_fact(
                     FactKind.ATTRIBUTE,
-                    (parent_path if parent_path else "view", path, parent),
+                    (path, parent),
                 )
                 if data:
                     yield fact
@@ -94,7 +92,7 @@ def dict_to_facts(
             else:
                 yield make_fact(
                     FactKind.ATTRIBUTE,
-                    (parent_path if parent_path else "view", path, parent, data),
+                    (path, parent, data),
                 )
 
 
@@ -115,28 +113,14 @@ def collect_children(name: str, collector: dict):
     out: dict = {}
 
     for prop, value in collector[name].items():
+        if isinstance(prop, tuple):
+            prop = prop[-1]
         if isinstance(value, list):
-            assign_value(
-                out, prop, [collect_children(child, collector) for child in value]
-            )
+            out[prop] = [collect_children(child, collector) for child in value]
         else:
-            assign_value(out, prop, value)
+            out[prop] = value
 
     return out
-
-
-def assign_value(d: dict, path: Union[tuple, str], value: Any):
-    """Helper function to assign a value to a dictionary
-    creating a nested value if necessary."""
-    if len(path) == 1:
-        path = path[0]
-
-    if isinstance(path, str):
-        d[path] = value
-    else:
-        if path[0] not in d:
-            d[path[0]] = {}
-        assign_value(d[path[0]], path[1:], value)
 
 
 def answer_set_to_dict(answer_set: List[Symbol], root=ROOT) -> Mapping:

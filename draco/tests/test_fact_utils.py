@@ -47,15 +47,15 @@ def test_dict_to_facts():
 
     assert list(program) == [
         # root
-        "attribute(view,numberRows,root,42).",
+        "attribute(numberRows,root,42).",
         # first field
         "property(field,root,0).",
-        "attribute(field,unique,0,12).",
-        "attribute(field,type,0,number).",
+        "attribute((field,unique),0,12).",
+        "attribute((field,type),0,number).",
         # second fields
         "property(field,root,1).",
-        "attribute(field,unique,1,32).",
-        "attribute(field,type,1,string).",
+        "attribute((field,unique),1,32).",
+        "attribute((field,type),1,string).",
     ]
 
 
@@ -70,10 +70,10 @@ def test_dict_to_facts_start_id():
     assert list(program) == [
         # first field
         "property(field,root,42).",
-        "attribute(field,type,42,number).",
+        "attribute((field,type),42,number).",
         # second fields
         "property(field,root,43).",
-        "attribute(field,type,43,string).",
+        "attribute((field,type),43,string).",
     ]
 
 
@@ -87,10 +87,10 @@ def test_dict_to_facts_explicit_id():
     assert list(program) == [
         # first field
         "property(field,root,foo).",
-        "attribute(field,type,foo,number).",
+        "attribute((field,type),foo,number).",
         # second fields
         "property(field,root,0).",
-        "attribute(field,type,0,string).",
+        "attribute((field,type),0,string).",
     ]
 
 
@@ -109,65 +109,28 @@ def test_deep_dict_to_facts():
 
     assert list(program) == [
         # root
-        "attribute(view,numberRows,root,42).",
+        "attribute(numberRows,root,42).",
         # first field
         "property(field,root,0).",
-        "attribute(field,type,0,number).",
+        "attribute((field,type),0,number).",
         "property(bin,0,1).",
-        "attribute(bin,maxbins,1,20).",
-    ]
-
-
-def test_path_to_facts():
-    program = dict_to_facts({"view": [{"scale": {"x": "linear"}}]})
-
-    assert list(program) == [
-        # root
-        "property(view,root,0).",
-        # first field
-        "attribute(view,(scale,x),0,linear).",
-    ]
-
-
-def test_nested_deep_dict_to_facts():
-    program = dict_to_facts(
-        {"view": [{"scale": {"x": {"type": "linear", "zero": "no"}}}]}
-    )
-
-    assert list(program) == [
-        # root
-        "property(view,root,0).",
-        # first field
-        "attribute(view,(scale,x,type),0,linear).",
-        "attribute(view,(scale,x,zero),0,no).",
+        "attribute((bin,maxbins),1,20).",
     ]
 
 
 def test_false_dict_to_facts():
-    program = dict_to_facts(
-        {"view": [{"scale": {"x": {"type": "linear", "zero": False}}}]}
-    )
+    program = dict_to_facts({"zero": False})
 
     assert list(program) == [
-        # root
-        "property(view,root,0).",
-        # first field
-        "attribute(view,(scale,x,type),0,linear).",
-        ":- attribute(view,(scale,x,zero),0).",  # note: this cannot be reversed
+        ":- attribute(zero,root).",  # note: this cannot be reversed
     ]
 
 
 def test_true_dict_to_facts():
-    program = dict_to_facts(
-        {"view": [{"scale": {"x": {"type": "linear", "zero": True}}}]}
-    )
+    program = dict_to_facts({"zero": True})
 
     assert list(program) == [
-        # root
-        "property(view,root,0).",
-        # first field
-        "attribute(view,(scale,x,type),0,linear).",
-        "attribute(view,(scale,x,zero),0).",  # note: this cannot be reversed
+        "attribute(zero,root).",  # note: this cannot be reversed
     ]
 
 
@@ -182,40 +145,27 @@ def test_dict_to_facts_string():
 def test_dict_to_facts_complex():
     program = dict_to_facts(
         {
-            "path1": {"path2": {"path3": [{"maxbins": 20}], "otherattr": 40}},
             "view": [
                 {
-                    "scale": {
-                        "x": {
-                            "type": "linear",
-                            "metric": [
-                                {"row_type": "number", "column_type": "number"},
-                                {"row_num": 56, "column_num": 42},
-                            ],
-                            "zero": "false",
-                        }
-                    }
-                },
-                {"scale": "y"},
+                    "mark": [
+                        {"type": "bar", "encoding": [{"channel": "x", "field": "foo"}]}
+                    ],
+                    "scale": [{"channel": "x", "type": "linear"}],
+                }
             ],
         }
     )
 
     assert list(program) == [
-        "property((path1,path2,path3),root,0).",
-        "attribute((path1,path2,path3),maxbins,0,20).",
-        "attribute(view,(path1,path2,otherattr),root,40).",
-        "property(view,root,1).",
-        "attribute(view,(scale,x,type),1,linear).",
-        "property((scale,x,metric),1,2).",
-        "attribute((scale,x,metric),row_type,2,number).",
-        "attribute((scale,x,metric),column_type,2,number).",
-        "property((scale,x,metric),1,3).",
-        "attribute((scale,x,metric),row_num,3,56).",
-        "attribute((scale,x,metric),column_num,3,42).",
-        "attribute(view,(scale,x,zero),1,false).",
-        "property(view,root,4).",
-        "attribute(view,scale,4,y).",
+        "property(view,root,0).",
+        "property(mark,0,1).",
+        "attribute((mark,type),1,bar).",
+        "property(encoding,1,2).",
+        "attribute((encoding,channel),2,x).",
+        "attribute((encoding,field),2,foo).",
+        "property(scale,0,3).",
+        "attribute((scale,channel),3,x).",
+        "attribute((scale,type),3,linear).",
     ]
 
 
@@ -225,12 +175,12 @@ def test_answer_set_to_dict():
         "attribute(numberRows,root,42).",
         # first field
         "property(field,root,0).",
-        "attribute(unique,0,12).",
-        "attribute(type,0,number).",
+        "attribute((field, unique),0,12).",
+        "attribute((field,type),0,number).",
         # second fields
         "property(field,root,1).",
-        "attribute(unique,1,32).",
-        "attribute(type,1,string).",
+        "attribute((field, unique),1,32).",
+        "attribute((field,type),1,string).",
     ]
 
     result = run_clingo(program)
@@ -240,33 +190,4 @@ def test_answer_set_to_dict():
             {"unique": 12, "type": "number"},
             {"unique": 32, "type": "string"},
         ],
-    }
-
-
-def test_answer_set_to_path_dict():
-    program = [
-        # root
-        "property(view,root,0).",
-        # first field
-        "attribute((scale,x),0,linear).",
-    ]
-
-    result = run_clingo(program)
-    assert answer_set_to_dict(next(result).answer_set) == {
-        "view": [{"scale": {"x": "linear"}}]
-    }
-
-
-def test_answer_set_to_nested_deep_dict():
-    program = [
-        # root
-        "property(view,root,0).",
-        # first field
-        "attribute((scale,x,type),0,linear).",
-        "attribute((scale,x,zero),0,no).",
-    ]
-
-    result = run_clingo(program)
-    assert answer_set_to_dict(next(result).answer_set) == {
-        "view": [{"scale": {"x": {"type": "linear", "zero": "no"}}}]
     }

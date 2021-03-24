@@ -40,7 +40,7 @@ def schema_from_dataframe(
         unique = pd.Series.nunique(column)
         data_type = parse_data_type(dtype)
 
-        props = {"__id__": col, "data_type": data_type, "unique": unique}
+        props = {"name": col, "type": data_type, "unique": unique}
 
         if data_type == "number":
             props["min"] = int(column.min())
