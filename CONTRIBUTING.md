@@ -29,3 +29,9 @@ Next time you want to work on Draco, you can just run `conda activate draco`.
 ## Make commands
 
 You can run various test and lint commands via make. For example, run `make test` to run the tests. Or just `make` to run tests, lint, and type checks.
+
+## Update dependencies
+
+Run `poetry show -o` to show the latest versions of the packages Draco depends on. Then update the dependencies accordingly.
+
+Run `poetry update` to update dependencies within the specified range and update the lockfile.
