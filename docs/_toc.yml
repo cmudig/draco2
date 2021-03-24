@@ -10,6 +10,7 @@
     - file: facts/view
     - file: facts/mark
     - file: facts/task
+    - file: facts/examples
 
 - part: API
   chapters:

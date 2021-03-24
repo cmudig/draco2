@@ -4,11 +4,11 @@ The mark represents the graphical mark of the visualization. Draco uses an encod
 
 ## Mark Properties
 
-`mark_type`
-: The mark type.
+`(mark,type)`
+: The mark type. One of `point`, `bar`, `line`, `area`, `text`, `tick`, or `rect`.
 
 ## Example
 
 ```prolog
-
+attribute((mark,type),1,tick).
 ```

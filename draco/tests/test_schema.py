@@ -11,14 +11,14 @@ SIMPLE_SCHEMA = {
     "number_rows": 2,
     "field": [
         {
-            "__id__": "numbers",
-            "data_type": "number",
+            "name": "numbers",
+            "type": "number",
             "unique": 2,
             "max": 2,
             "min": 1,
             "std": 0,
         },
-        {"__id__": "text", "data_type": "string", "unique": 1, "freq": 2},
+        {"name": "text", "type": "string", "unique": 1, "freq": 2},
     ],
 }
 
@@ -37,22 +37,22 @@ def test_load_df():
         "number_rows": 2,
         "field": [
             {
-                "__id__": "numbers",
-                "data_type": "number",
+                "name": "numbers",
+                "type": "number",
                 "unique": 2,
                 "max": 2,
                 "min": 1,
                 "std": 0,
             },
-            {"__id__": "text", "data_type": "string", "unique": 1, "freq": 2},
+            {"name": "text", "type": "string", "unique": 1, "freq": 2},
             {
-                "__id__": "bools",
-                "data_type": "boolean",
+                "name": "bools",
+                "type": "boolean",
                 "unique": 2,
             },
             {
-                "__id__": "dates",
-                "data_type": "datetime",
+                "name": "dates",
+                "type": "datetime",
                 "unique": 2,
             },
         ],
