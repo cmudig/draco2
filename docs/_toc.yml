@@ -17,6 +17,8 @@
     - file: api/intro
     - file: api/schema
     - file: api/programs
+    - file: api/run
+    - file: api/spec
 
 - part: Reference
   chapters:

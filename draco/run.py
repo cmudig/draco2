@@ -10,6 +10,7 @@ class Model:
 
     Attributes:
         :answer_set: The answer set of this model.
+            An answer set is a list of Clingo Symbols.
         :cost: The cost of this answer set.
         :number: The sequence number of this answer.
     """
