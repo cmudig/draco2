@@ -4,49 +4,51 @@ The schema describes what we know about the dataset and the fields in the data. 
 
 ## Dataset Properties
 
+General properties of the dataset that are not specific to a field are properties of the root.
+
 `number_rows`
 : The number of rows in the dataset. Draco can use this fact about the data to recommend chart design that scale to the size of the dataset.
 
 ## Field Properties
 
-Draco can use information about the field type and field statistics. Each field property is associated with a field. The facts therefore have the form of e.g. `attribute(data_type,foo,number).` (read as _the type of the foo field is number_). For each field, there should be a property fact `property` that tells Draco that the field exists on the root object (e.g. `property(field,root,foo).`).
+Draco can use information about the field type and field statistics. Each field property is associated with a field. The facts therefore have the form of e.g. `attribute((field,type),foo,number).` (read as _the type of the foo field is number_). For each field, there should be a property fact `property` that tells Draco that the field exists on the root object (e.g. `property(field,root,foo).`).
 
-`data_type`
+`(field,type)`
 : The type of the data in the column for this field. One of `number`, `string`, `boolean`, or `datetime`.
 
-`unique`
+`(field,unique)`
 : The number of unique values.
 
-`min`
+`(field,min)`
 : The minimum value. Only used for numbers.
 
-`max`
+`(field,max)`
 : The maximum value. Only used for numbers.
 
-`std`
+`(field,std)`
 : The standard deviation. Only used for numbers.
 
-`freq`
+`(field,freq)`
 : The frequency of the most common value. Only used for strings.
 
 ## Example
 
 ```prolog
-fact(number_rows,root,42).
+attribute(number_rows,root,42).
 
 property(field,root,date).
-attribute(data_type,date,datetime).
-attribute(unique,date,1461).
+attribute((field,type),date,datetime).
+attribute((field,unique),date,1461).
 
 property(field,root,precipitation).
-attribute(data_type,precipitation,number).
-attribute(unique,precipitation,111).
-attribute(min,precipitation,0).
-attribute(max,precipitation,55).
-attribute(std,precipitation,6).
+attribute((field,type),precipitation,number).
+attribute((field,unique),precipitation,111).
+attribute((field,min),precipitation,0).
+attribute((field,max),precipitation,55).
+attribute((field,std),precipitation,6).
 
 property(field,root,weather).
-attribute(data_type,weather,string).
-attribute(unique,weather,5).
-attribute(freq,weather,714).
+attribute((field,type),weather,string).
+attribute((field,unique),weather,5).
+attribute((field,freq),weather,714).
 ```
