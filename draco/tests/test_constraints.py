@@ -29,3 +29,11 @@ def test_duplicate_attribute():
         BASE_PROGRAMS
         + ["attribute((mark,type),0,bar).", "attribute((mark,type),0,line)."]
     )
+
+
+def test_fields():
+    assert is_satisfiable(
+        BASE_PROGRAMS
+        + ["attribute((field,name),0,foo).", "attribute((encoding,field),1,foo)."]
+    )
+    assert not is_satisfiable(BASE_PROGRAMS + ["attribute((encoding,field),0,foo)."])
