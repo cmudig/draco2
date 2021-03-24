@@ -6,10 +6,18 @@ BASE_PROGRAMS = [definitions.program, constraints.program]
 
 def test_domain_valid():
     assert is_satisfiable(BASE_PROGRAMS + ["attribute((mark,type),0,bar)."])
+    assert is_satisfiable(BASE_PROGRAMS + ["attribute((scale,type),0,linear)."])
+    assert is_satisfiable(BASE_PROGRAMS + ["attribute((scale,channel),0,x)."])
+    assert is_satisfiable(BASE_PROGRAMS + ["attribute((encoding,channel),0,x)."])
 
 
 def test_domain_invlid():
     assert not is_satisfiable(BASE_PROGRAMS + ["attribute((mark,type),0,invalid)."])
+    assert not is_satisfiable(BASE_PROGRAMS + ["attribute((scale,type),0,invalid)."])
+    assert not is_satisfiable(BASE_PROGRAMS + ["attribute((scale,channel),0,invalid)."])
+    assert not is_satisfiable(
+        BASE_PROGRAMS + ["attribute((encoding,channel),0,invalid)."]
+    )
 
 
 def test_duplicate_attribute():
