@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass
 from io import StringIO
 from pathlib import Path
-from typing import Dict, List, Optional, TextIO, Union
+from typing import Dict, Iterable, List, Optional, TextIO, Union
 
 
 @dataclass
@@ -26,6 +26,13 @@ Blocks = Dict[Optional[str], Union[Block, str]]
 
 
 def parse_blocks(program: Union[str, Path]) -> Blocks:
+    """Parses definitions, constraints, or other blocks from ASP files.
+    In an ASP file, a block is denoted with a comment of the form:
+
+    ```
+    # %foo(name) description
+    ```
+    """
     if isinstance(program, Path):
         with open(program) as f:
             return _parse_blocks(f)
@@ -34,13 +41,6 @@ def parse_blocks(program: Union[str, Path]) -> Blocks:
 
 
 def _parse_blocks(f: TextIO) -> Blocks:
-    """Parses definitions, constraints, or other blocks from ASP files.
-    In an ASP file, a block is denoted with a comment of the form:
-
-    ```
-    # %foo(name) description
-    ```
-    """
     defs: Blocks = {}
 
     # find the first block
@@ -83,5 +83,11 @@ def _parse_blocks(f: TextIO) -> Blocks:
             return defs
 
 
-def blocks_to_program(blocks: Blocks) -> List[str]:
-    return [b.program for b in blocks.values() if isinstance(b, Block)]
+def blocks_to_program(
+    blocks: Blocks, keys: Optional[Iterable[Union[str, None]]] = None
+) -> List[str]:
+    return [
+        block.program
+        for name, block in blocks.items()
+        if isinstance(block, Block) and (keys is None or name in keys)
+    ]

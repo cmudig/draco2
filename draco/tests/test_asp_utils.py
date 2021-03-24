@@ -48,3 +48,10 @@ def test_blocks_to_program(asp_file):
     program = blocks_to_program(blocks)
 
     assert program == ["fact1.\n", "fact2.\n"]
+
+
+def test_blocks_to_program_keys(asp_file):
+    blocks = parse_blocks(asp_file)
+    program = blocks_to_program(blocks, set(["foo"]))
+
+    assert program == ["fact1.\n"]

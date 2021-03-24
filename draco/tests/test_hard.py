@@ -15,7 +15,7 @@ def test_text_mark_without_text_channel():
     property(encoding,m1,e1).
     attribute(channel,e1,text).
 
-    :- violoation(_).
+    :- violation(_).
     """
     )
 
@@ -28,7 +28,7 @@ def test_text_mark_without_text_channel():
     property(encoding,m1,e2).
     attribute(channel,e2,text).
 
-    :- violoation(_).
+    :- violation(_).
     """
     )
 
@@ -41,7 +41,7 @@ def test_text_mark_without_text_channel():
     property(encoding,m1,e2).
     attribute(channel,e2,y).
 
-    :- violoation(_).
+    :- violation(_).
     """
     )
 
@@ -55,7 +55,7 @@ def test_text_mark_without_text_channel():
     attribute(channel,e2,y).
     attribute(channel,e3,text).
 
-    :- violoation(_).
+    :- violation(_).
     """
     )
 
@@ -72,7 +72,7 @@ def test_text_channel_without_text_mark():
     property(encoding,m1,e1).
     attribute(channel,e1,text).
 
-    :- violoation(_).
+    :- violation(_).
     """
     )
 
@@ -83,6 +83,6 @@ def test_text_channel_without_text_mark():
     property(encoding,m1,e1).
     attribute(channel,e1,text).
 
-    :- violoation(_).
+    :- violation(_).
     """
     )
