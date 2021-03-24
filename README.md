@@ -1,3 +1,9 @@
+<p align="center">
+   <a href="https://uwdata.github.io/draco/">
+      <img src="docs/logo-dark.png" width=260></img>
+   </a>
+</p>
+
 # Draco v2
 
 ![Test](https://github.com/cmudig/draco2/workflows/Test/badge.svg)
