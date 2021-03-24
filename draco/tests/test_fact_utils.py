@@ -45,7 +45,7 @@ def test_dict_to_facts():
         }
     )
 
-    assert list(program) == [
+    assert program == [
         # root
         "attribute(numberRows,root,42).",
         # first field
@@ -67,7 +67,7 @@ def test_dict_to_facts_start_id():
         id_generator=itertools.count(42),
     )
 
-    assert list(program) == [
+    assert program == [
         # first field
         "property(field,root,42).",
         "attribute((field,type),42,number).",
@@ -84,7 +84,7 @@ def test_dict_to_facts_explicit_id():
         },
     )
 
-    assert list(program) == [
+    assert program == [
         # first field
         "property(field,root,foo).",
         "attribute((field,type),foo,number).",
@@ -107,7 +107,7 @@ def test_deep_dict_to_facts():
         }
     )
 
-    assert list(program) == [
+    assert program == [
         # root
         "attribute(numberRows,root,42).",
         # first field
@@ -121,7 +121,7 @@ def test_deep_dict_to_facts():
 def test_false_dict_to_facts():
     program = dict_to_facts({"zero": False})
 
-    assert list(program) == [
+    assert program == [
         ":- attribute(zero,root).",  # note: this cannot be reversed
     ]
 
@@ -129,17 +129,14 @@ def test_false_dict_to_facts():
 def test_true_dict_to_facts():
     program = dict_to_facts({"zero": True})
 
-    assert list(program) == [
+    assert program == [
         "attribute(zero,root).",  # note: this cannot be reversed
     ]
 
 
 def test_dict_to_facts_string():
-    """ We need at least some path. """
-    program = dict_to_facts("foo")
-
     with pytest.raises(IndexError):
-        list(program)
+        dict_to_facts("foo")
 
 
 def test_dict_to_facts_complex():
@@ -156,7 +153,7 @@ def test_dict_to_facts_complex():
         }
     )
 
-    assert list(program) == [
+    assert program == [
         "property(view,root,0).",
         "property(mark,0,1).",
         "attribute((mark,type),1,bar).",
@@ -175,11 +172,11 @@ def test_answer_set_to_dict():
         "attribute(numberRows,root,42).",
         # first field
         "property(field,root,0).",
-        "attribute((field, unique),0,12).",
+        "attribute((field,unique),0,12).",
         "attribute((field,type),0,number).",
         # second fields
         "property(field,root,1).",
-        "attribute((field, unique),1,32).",
+        "attribute((field,unique),1,32).",
         "attribute((field,type),1,string).",
     ]
 
@@ -191,3 +188,20 @@ def test_answer_set_to_dict():
             {"unique": 32, "type": "string"},
         ],
     }
+
+
+def test_dict_to_fact_and_answer_set_to_dict():
+    expected = {
+        "view": [
+            {
+                "mark": [
+                    {"type": "bar", "encoding": [{"channel": "x", "field": "foo"}]}
+                ],
+                "scale": [{"channel": "x", "type": "linear"}],
+            }
+        ],
+    }
+
+    program = dict_to_facts(expected)
+    result = run_clingo(program)
+    assert answer_set_to_dict(next(result).answer_set) == expected

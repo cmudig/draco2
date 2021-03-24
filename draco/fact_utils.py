@@ -47,15 +47,23 @@ def dict_to_facts(
     path: Tuple = (),
     parent: str = ROOT,
     id_generator: Iterator[int] = None,
-) -> Generator[str, None, None]:
+) -> List[str]:
     """A generic encoder for dictionaries as answer set programming facts.
 
     The encoder can convert dictionaries as well as lists (generating
     identifiers as numbers).
 
-    The inverse of this function is `answer_set_to_dict`.
+    The inverse of this function is :code:`answer_set_to_dict`.
     """
+    return list(_dict_to_facts(data, path, parent, id_generator))
 
+
+def _dict_to_facts(
+    data: Union[Mapping, List, str],
+    path: Tuple = (),
+    parent: str = ROOT,
+    id_generator: Iterator[int] = None,
+) -> Generator[str, None, None]:
     if id_generator is None:
         id_generator = itertools.count()
 
@@ -125,7 +133,7 @@ def collect_children(name: str, collector: dict):
 
 def answer_set_to_dict(answer_set: List[Symbol], root=ROOT) -> Mapping:
     """A generic decoder that converts an answer set into a nested data structure.
-    The inverse of this function is `dict_to_facts`.
+    The inverse of this function is :code:`dict_to_facts`.
     """
 
     collector: dict = defaultdict(dict)

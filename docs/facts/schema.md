@@ -1,6 +1,10 @@
-# Schema Description
+# Data and Schema
 
-The schema describes what we know about the dataset and the fields in the data. Besides general statistics about the whole dataset, the schema also has information about field types and field statistics.
+In Draco, you can describe what you know about the dataset and the fields in the data. There can be only one dataset in a Draco program.
+
+Besides general statistics about the whole dataset, the schema has information about field types and field statistics.
+
+You can use Draco's [data schema API](../api/schema.ipynb) to generate a schema description from a file or Pandas dataframe.
 
 ## Dataset Properties
 

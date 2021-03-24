@@ -9,6 +9,8 @@
     - file: facts/schema
     - file: facts/view
     - file: facts/mark
+    - file: facts/encoding
+    - file: facts/scale
     - file: facts/task
     - file: facts/examples
 
@@ -16,9 +18,10 @@
   chapters:
     - file: api/intro
     - file: api/schema
-    - file: api/programs
-    - file: api/run
     - file: api/spec
+    - file: api/run
+    - file: api/facts
+    - file: api/programs
 
 - part: Reference
   chapters:
