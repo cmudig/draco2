@@ -35,3 +35,7 @@ You can run various test and lint commands via make. For example, run `make test
 Run `poetry show -o` to show the latest versions of the packages Draco depends on. Then update the dependencies accordingly.
 
 Run `poetry update` to update dependencies within the specified range and update the lockfile.
+
+## Writing constraints
+
+For more information about writing constraints and optimization based problems, take a look at the [Pottasco guide](https://github.com/potassco/guide/releases/)

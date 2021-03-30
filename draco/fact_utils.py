@@ -10,7 +10,6 @@ from clingo.symbol import SymbolType
 @unique
 class FactKind(Enum):
     """The kind of ASP fact.
-
     Attributes:
         :PROPERTY: a nested property ("is a" relationship)
         :ATTRIBUTE: an attribute (value)
@@ -49,10 +48,8 @@ def dict_to_facts(
     id_generator: Iterator[int] = None,
 ) -> List[str]:
     """A generic encoder for dictionaries as answer set programming facts.
-
     The encoder can convert dictionaries as well as lists (generating
     identifiers as numbers).
-
     The inverse of this function is :code:`answer_set_to_dict`.
     """
     return list(_dict_to_facts(data, path, parent, id_generator))

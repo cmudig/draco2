@@ -19,5 +19,6 @@
     "**/*ipynb_checkpoints": true
   },
   "autoDocstring.docstringFormat": "sphinx",
-  "autoDocstring.guessTypes": true
+  "autoDocstring.guessTypes": true,
+  "python.formatting.provider": "black"
 }

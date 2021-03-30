@@ -11,7 +11,6 @@ def test_run_clingo_fact():
 
 def test_run_clingo_no_opt():
     model = next(run_clingo("fact(a,42)."))
-
     assert model.cost == []
     assert model.number == 1
 
