@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "abelcour.asp-syntax-highlight",
+    "ms-toolsai.jupyter",
+    "njpwerner.autodocstring",
+    "visualstudioexptteam.vscodeintellicode"
+  ]
+}
