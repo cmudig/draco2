@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, Generator, Iterable, List, Union
 
+# Clingo Python API is documented at https://potassco.org/clingo/python-api/current/
 import clingo
 
 
