@@ -211,7 +211,7 @@ reference = "test"
 
 [[package]]
 name = "clingo-cffi"
-version = "5.5.0.post37"
+version = "5.5.0.post39"
 description = "CFFI-based bindings to the clingo solver."
 category = "main"
 optional = false
@@ -641,7 +641,7 @@ testing = ["coverage", "pytest (>=3.6,<4)", "pytest-cov", "pytest-regressions", 
 
 [[package]]
 name = "jupyter-client"
-version = "6.1.12"
+version = "6.1.13"
 description = "Jupyter protocol implementation and client libraries"
 category = "dev"
 optional = false
@@ -649,6 +649,7 @@ python-versions = ">=3.5"
 
 [package.dependencies]
 jupyter-core = ">=4.6.0"
+nest-asyncio = ">=1.5"
 python-dateutil = ">=2.1"
 pyzmq = ">=13"
 tornado = ">=4.1"
@@ -656,7 +657,7 @@ traitlets = "*"
 
 [package.extras]
 doc = ["sphinx (>=1.3.6)", "sphinx-rtd-theme", "sphinxcontrib-github-alt"]
-test = ["async-generator", "ipykernel", "ipython", "mock", "pytest-asyncio", "pytest-timeout", "pytest", "jedi (<0.18)"]
+test = ["async-generator", "ipykernel", "ipython", "mock", "pytest-asyncio", "pytest-timeout", "pytest", "mypy", "pre-commit", "jedi (<0.18)"]
 
 [[package]]
 name = "jupyter-core"
@@ -686,7 +687,7 @@ test = ["pytest"]
 
 [[package]]
 name = "jupyter-server"
-version = "1.5.2"
+version = "1.6.0"
 description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications."
 category = "dev"
 optional = false
@@ -694,6 +695,7 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 anyio = ">=2.0.2"
+argon2-cffi = "*"
 ipython-genutils = "*"
 jinja2 = "*"
 jupyter-client = ">=6.1.1"
@@ -709,13 +711,7 @@ tornado = ">=6.1.0"
 traitlets = ">=4.2.1"
 
 [package.extras]
-publishing = ["github-activity (>=0.1,<1.0)", "tbump", "twine"]
 test = ["coverage", "requests", "pytest", "pytest-cov", "pytest-tornasync", "pytest-console-scripts", "ipykernel"]
-
-[package.source]
-type = "legacy"
-url = "https://test.pypi.org/simple"
-reference = "test"
 
 [[package]]
 name = "jupyter-sphinx"
@@ -752,7 +748,7 @@ testing = ["coverage", "pytest (>=3.6,<4)", "pytest-cov (>=2.8,<3.0)", "coverage
 
 [[package]]
 name = "jupyterlab"
-version = "3.0.12"
+version = "3.0.13"
 description = "The JupyterLab server extension."
 category = "dev"
 optional = false
@@ -985,14 +981,14 @@ testing = ["coverage", "pytest (>=3.6,<4)", "pytest-cov", "pytest-regressions", 
 
 [[package]]
 name = "nbclassic"
-version = "0.2.6"
+version = "0.2.7"
 description = "Jupyter Notebook as a Jupyter Server Extension."
 category = "dev"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-jupyter-server = ">=1.1,<2.0"
+jupyter-server = ">=1.5,<2.0"
 notebook = "<7"
 
 [package.extras]
@@ -1295,7 +1291,7 @@ virtualenv = ">=20.0.8"
 
 [[package]]
 name = "prometheus-client"
-version = "0.10.0"
+version = "0.10.1"
 description = "Python client for the Prometheus monitoring system."
 category = "dev"
 optional = false
@@ -2032,7 +2028,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.9"
-content-hash = "df3f7a6f5fd6f3b420a61dc66daa6b2dcf6d127ab74197f1656c95ef2d12d181"
+content-hash = "1778b4fc816351556c10e6d8809fd97d067e68af922d444f0067678a879299b6"
 
 [metadata.files]
 alabaster = [
@@ -2133,19 +2129,19 @@ click = [
     {file = "click-7.1.2.tar.gz", hash = "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a"},
 ]
 clingo-cffi = [
-    {file = "clingo-cffi-5.5.0.post37.tar.gz", hash = "sha256:9d83ad8330c4fcf256127006805b45e772bb5ac4de78d69887a9c1d997012b4a"},
-    {file = "clingo_cffi-5.5.0.post37-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:30243bfec50d744a949047fc8a7cd593d832be538e76267f2c12edb0548635d8"},
-    {file = "clingo_cffi-5.5.0.post37-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:b6a68ce4fc8169b1a29cf86a9cc8b1e48607eab8c03348bb9678d37a82e4d307"},
-    {file = "clingo_cffi-5.5.0.post37-cp36-cp36m-win_amd64.whl", hash = "sha256:ba718a9a8b45e6febce17326370f358ffa7550f24e7657662d95d77d4648d0c8"},
-    {file = "clingo_cffi-5.5.0.post37-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:ded3f1d401d26ae8e52e90a914fd76353e715d843d22d131a443013bbc5ae8a5"},
-    {file = "clingo_cffi-5.5.0.post37-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:c74996de05f2d46bff4d0caf138b9d1453d1b5134ec248a859d02cc02cd543e0"},
-    {file = "clingo_cffi-5.5.0.post37-cp37-cp37m-win_amd64.whl", hash = "sha256:97ae4b2a6622693db894ec9dbf39b398ce0e4b568dffb511a1eb80f0ac7a329c"},
-    {file = "clingo_cffi-5.5.0.post37-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:cc8b937af34e26ad7a5d7b0f8040f35b3eeb748609fc4f96433fd5d2d9527996"},
-    {file = "clingo_cffi-5.5.0.post37-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:fd7d5f0c88f63cf96e48848a0231f48ec82896b55a6dc6643e6b9d265fc03b30"},
-    {file = "clingo_cffi-5.5.0.post37-cp38-cp38-win_amd64.whl", hash = "sha256:5cc571c9ff82d2b6f1c7b32280bea4a98fa913fa5458f3ea7491083879b379a7"},
-    {file = "clingo_cffi-5.5.0.post37-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:6c814cc9fa48935902b3ed99940475d6437aeb35067b7adfd8f280afb27c9c65"},
-    {file = "clingo_cffi-5.5.0.post37-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:3c242e96c2619c40966ad3d3f0307ea869b7c43b12a9d0176491f8ffcdae32a7"},
-    {file = "clingo_cffi-5.5.0.post37-cp39-cp39-win_amd64.whl", hash = "sha256:518bb03d345ab2cbeddc3584501116881946c57a137f78350cebe0d910440719"},
+    {file = "clingo-cffi-5.5.0.post39.tar.gz", hash = "sha256:dda979140c90b01ae229139e989a4c7c5e499f84b4867fb8fa2dbb61876126d8"},
+    {file = "clingo_cffi-5.5.0.post39-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:4e036b2052e93ddffd174b782284bf1df2710c9bf2c37c186affed41d96c807f"},
+    {file = "clingo_cffi-5.5.0.post39-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:7ce88e99032178b57e2b39fe3e44b333333e7ee71eb067a6860778d51bb7e33d"},
+    {file = "clingo_cffi-5.5.0.post39-cp36-cp36m-win_amd64.whl", hash = "sha256:1f6e665cf0096188491df0ebd59e56ea372be1c9d90864160a2dcbc99ba787f7"},
+    {file = "clingo_cffi-5.5.0.post39-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:49b91907e68824f18192cc5dc19a7649a313840cd1d3ec8a64609e485e1081b6"},
+    {file = "clingo_cffi-5.5.0.post39-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:0e648163a2ce1bfb2f8717871c15a0acb7e191d3b7f3862b06da38fc03463a09"},
+    {file = "clingo_cffi-5.5.0.post39-cp37-cp37m-win_amd64.whl", hash = "sha256:422037a6343477890a7bda6d78faebf3e9868b53db3a79a93d97cc76a10cb37d"},
+    {file = "clingo_cffi-5.5.0.post39-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:bf0e95bc436a5fb37aa3833b478ab51d6e2f57bcd80e85871ab2a9330676222e"},
+    {file = "clingo_cffi-5.5.0.post39-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:d0d494c44ed891dcd17c9bed18dfacd39d22a72cd9e08059a3f258c5594d22ff"},
+    {file = "clingo_cffi-5.5.0.post39-cp38-cp38-win_amd64.whl", hash = "sha256:437a9c33e87d72d59cf8961afc8f4a9b87b0ed0495d53372e188d31871b457c4"},
+    {file = "clingo_cffi-5.5.0.post39-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:b5b452d1f72defbc1efa3e159faba4eb31fbed6614c50c2c8ee5dbc337460d5a"},
+    {file = "clingo_cffi-5.5.0.post39-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:73cf62d264f39b07621223dd191de17427e9fbef025520ce864849beaa53e9cc"},
+    {file = "clingo_cffi-5.5.0.post39-cp39-cp39-win_amd64.whl", hash = "sha256:67cfdc137a4618fe988a03d48d4a9344c14835d368d0ff678f58d3a23359e0e5"},
 ]
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:df1b75950404284103727ee967f46375d1bb4ba7302bb1af74521e12233c48a2"},
@@ -2311,8 +2307,8 @@ jupyter-cache = [
     {file = "jupyter_cache-0.4.2-py3-none-any.whl", hash = "sha256:db0eba0c3f85ac92af1a3a29db1201ccfa75aa6d894cf254a0c6f6ac0ce010fe"},
 ]
 jupyter-client = [
-    {file = "jupyter_client-6.1.12-py3-none-any.whl", hash = "sha256:e053a2c44b6fa597feebe2b3ecb5eea3e03d1d91cc94351a52931ee1426aecfc"},
-    {file = "jupyter_client-6.1.12.tar.gz", hash = "sha256:c4bca1d0846186ca8be97f4d2fa6d2bae889cce4892a167ffa1ba6bd1f73e782"},
+    {file = "jupyter_client-6.1.13-py3-none-any.whl", hash = "sha256:1df17b0525b45cc03645fc9eeab023765882d3c18fb100f82499cf6a353b3941"},
+    {file = "jupyter_client-6.1.13.tar.gz", hash = "sha256:d03558bc9b7955d8b4a6df604a8d9d257e00bcea7fb364fe41cdef81d998a966"},
 ]
 jupyter-core = [
     {file = "jupyter_core-4.7.1-py3-none-any.whl", hash = "sha256:8c6c0cac5c1b563622ad49321d5ec47017bd18b94facb381c6973a0486395f8e"},
@@ -2323,8 +2319,8 @@ jupyter-packaging = [
     {file = "jupyter_packaging-0.7.12-py2.py3-none-any.whl", hash = "sha256:e36efa5edd52b302f0b784ff2a4d1f2cd50f7058af331151315e98b73f947b8d"},
 ]
 jupyter-server = [
-    {file = "jupyter_server-1.5.2-py3-none-any.whl", hash = "sha256:e0bdefb4975c091ef9a172630fdefeaec9dd23b4a12a1b380d15af0c3741cb46"},
-    {file = "jupyter_server-1.5.2.tar.gz", hash = "sha256:d99e2c04a06c85f6172c070781b2144974884f3a042b4394d28bcc0c6ca93c17"},
+    {file = "jupyter_server-1.6.0-py3-none-any.whl", hash = "sha256:b0ae09aeaf4a73d4f195d55ade9bfdc2e399276c158e27ce820796d2e10ba1f5"},
+    {file = "jupyter_server-1.6.0.tar.gz", hash = "sha256:348f2c744d1fa1676d314475e0be357a95b21cbe6e19d15c2a25a9ea647f99d2"},
 ]
 jupyter-sphinx = [
     {file = "jupyter_sphinx-0.3.1-py3-none-any.whl", hash = "sha256:56f4cd319b96c491c61bfa9d11a2ee452d2758beecbd2723b23916aaac4c2bab"},
@@ -2335,8 +2331,8 @@ jupyterbook-latex = [
     {file = "jupyterbook_latex-0.2.0-py3-none-any.whl", hash = "sha256:58af59fcb5b1939d0c28914e06b48364a452bea0b48ac52df34f225c52cc346f"},
 ]
 jupyterlab = [
-    {file = "jupyterlab-3.0.12-py3-none-any.whl", hash = "sha256:dbbbf6329c18422e7e22e95494933e7ea28b0fad09965cd60431b1b857f80ca2"},
-    {file = "jupyterlab-3.0.12.tar.gz", hash = "sha256:929c60d7fb4aa704084c02d8ededc209b8b378e0b3adab46158b7fa6acc24230"},
+    {file = "jupyterlab-3.0.13-py3-none-any.whl", hash = "sha256:f15beb21274d619fbfeffa1fe9235e2f2dffaca981096b4a4474ae6e69fb5914"},
+    {file = "jupyterlab-3.0.13.tar.gz", hash = "sha256:6aefaf11251309ffdd66ef20025f5165aeec26d59a83c76e4d02cc8f593bc9dc"},
 ]
 jupyterlab-server = [
     {file = "jupyterlab_server-2.4.0-py3-none-any.whl", hash = "sha256:94e606edb7b60e3fc54b8b4de14cded1483959361df9023e50092b6f8ede9cf6"},
@@ -2454,8 +2450,8 @@ myst-parser = [
     {file = "myst_parser-0.13.5-py3-none-any.whl", hash = "sha256:47e469cef8ba209f4dcb82cd0b4f935171c78c6a2cc0072cd3a9724242eb81ee"},
 ]
 nbclassic = [
-    {file = "nbclassic-0.2.6-py3-none-any.whl", hash = "sha256:0248333262d6f90c2fbe05aacb4f008f1d71b5250a9f737488e0a03cfa1c6ed5"},
-    {file = "nbclassic-0.2.6.tar.gz", hash = "sha256:b649436ff85dc731ba8115deef089e5abbe827d7a6dccbad42c15b8d427104e8"},
+    {file = "nbclassic-0.2.7-py3-none-any.whl", hash = "sha256:8843cafa3827db05b9e7da909a4955b552de13e20707474844cfdd84bf4bf655"},
+    {file = "nbclassic-0.2.7.tar.gz", hash = "sha256:6835b27ffaed1f7a497371bb2c05c0f2b123cbcf7c3c116c1ca808ac78ac2fe8"},
 ]
 nbclient = [
     {file = "nbclient-0.5.3-py3-none-any.whl", hash = "sha256:e79437364a2376892b3f46bedbf9b444e5396cfb1bc366a472c37b48e9551500"},
@@ -2581,8 +2577,8 @@ pre-commit = [
     {file = "pre_commit-2.12.0.tar.gz", hash = "sha256:46b6ffbab37986c47d0a35e40906ae029376deed89a0eb2e446fb6e67b220427"},
 ]
 prometheus-client = [
-    {file = "prometheus_client-0.10.0-py2.py3-none-any.whl", hash = "sha256:2b12512953bed26c9701855b0a03e333023e394e8fa274b9b39c2a8bcb540ac5"},
-    {file = "prometheus_client-0.10.0.tar.gz", hash = "sha256:d756250d5d3306a4c649156103c733046ce6c304f0bbb2f9cf37ac579d8f347a"},
+    {file = "prometheus_client-0.10.1-py2.py3-none-any.whl", hash = "sha256:c64022249176a20e0715019bf8b51409205ce43438bfa8da731d6b351151f5e7"},
+    {file = "prometheus_client-0.10.1.tar.gz", hash = "sha256:21aa9b27c3910ecaafff8e0d5b0a552782c99dfab4500783f19226fb5938dcd4"},
 ]
 prompt-toolkit = [
     {file = "prompt_toolkit-3.0.18-py3-none-any.whl", hash = "sha256:bf00f22079f5fadc949f42ae8ff7f05702826a97059ffcc6281036ad40ac6f04"},
@@ -2689,26 +2685,18 @@ pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:bb4191dfc9306777bc594117aee052446b3fa88737cd13b7188d0e7aa8162185"},
     {file = "PyYAML-5.4.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:6c78645d400265a062508ae399b60b8c167bf003db364ecb26dcab2bda048253"},
     {file = "PyYAML-5.4.1-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:4e0583d24c881e14342eaf4ec5fbc97f934b999a6828693a99157fde912540cc"},
-    {file = "PyYAML-5.4.1-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:72a01f726a9c7851ca9bfad6fd09ca4e090a023c00945ea05ba1638c09dc3347"},
-    {file = "PyYAML-5.4.1-cp36-cp36m-manylinux2014_s390x.whl", hash = "sha256:895f61ef02e8fed38159bb70f7e100e00f471eae2bc838cd0f4ebb21e28f8541"},
     {file = "PyYAML-5.4.1-cp36-cp36m-win32.whl", hash = "sha256:3bd0e463264cf257d1ffd2e40223b197271046d09dadf73a0fe82b9c1fc385a5"},
     {file = "PyYAML-5.4.1-cp36-cp36m-win_amd64.whl", hash = "sha256:e4fac90784481d221a8e4b1162afa7c47ed953be40d31ab4629ae917510051df"},
     {file = "PyYAML-5.4.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:5accb17103e43963b80e6f837831f38d314a0495500067cb25afab2e8d7a4018"},
     {file = "PyYAML-5.4.1-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:e1d4970ea66be07ae37a3c2e48b5ec63f7ba6804bdddfdbd3cfd954d25a82e63"},
-    {file = "PyYAML-5.4.1-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:cb333c16912324fd5f769fff6bc5de372e9e7a202247b48870bc251ed40239aa"},
-    {file = "PyYAML-5.4.1-cp37-cp37m-manylinux2014_s390x.whl", hash = "sha256:fe69978f3f768926cfa37b867e3843918e012cf83f680806599ddce33c2c68b0"},
     {file = "PyYAML-5.4.1-cp37-cp37m-win32.whl", hash = "sha256:dd5de0646207f053eb0d6c74ae45ba98c3395a571a2891858e87df7c9b9bd51b"},
     {file = "PyYAML-5.4.1-cp37-cp37m-win_amd64.whl", hash = "sha256:08682f6b72c722394747bddaf0aa62277e02557c0fd1c42cb853016a38f8dedf"},
     {file = "PyYAML-5.4.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:d2d9808ea7b4af864f35ea216be506ecec180628aced0704e34aca0b040ffe46"},
     {file = "PyYAML-5.4.1-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:8c1be557ee92a20f184922c7b6424e8ab6691788e6d86137c5d93c1a6ec1b8fb"},
-    {file = "PyYAML-5.4.1-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:fd7f6999a8070df521b6384004ef42833b9bd62cfee11a09bda1079b4b704247"},
-    {file = "PyYAML-5.4.1-cp38-cp38-manylinux2014_s390x.whl", hash = "sha256:bfb51918d4ff3d77c1c856a9699f8492c612cde32fd3bcd344af9be34999bfdc"},
     {file = "PyYAML-5.4.1-cp38-cp38-win32.whl", hash = "sha256:fa5ae20527d8e831e8230cbffd9f8fe952815b2b7dae6ffec25318803a7528fc"},
     {file = "PyYAML-5.4.1-cp38-cp38-win_amd64.whl", hash = "sha256:0f5f5786c0e09baddcd8b4b45f20a7b5d61a7e7e99846e3c799b05c7c53fa696"},
     {file = "PyYAML-5.4.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:294db365efa064d00b8d1ef65d8ea2c3426ac366c0c4368d930bf1c5fb497f77"},
     {file = "PyYAML-5.4.1-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:74c1485f7707cf707a7aef42ef6322b8f97921bd89be2ab6317fd782c2d53183"},
-    {file = "PyYAML-5.4.1-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:d483ad4e639292c90170eb6f7783ad19490e7a8defb3e46f97dfe4bacae89122"},
-    {file = "PyYAML-5.4.1-cp39-cp39-manylinux2014_s390x.whl", hash = "sha256:fdc842473cd33f45ff6bce46aea678a54e3d21f1b61a7750ce3c498eedfe25d6"},
     {file = "PyYAML-5.4.1-cp39-cp39-win32.whl", hash = "sha256:49d4cdd9065b9b6e206d0595fee27a96b5dd22618e7520c33204a4a3239d5b10"},
     {file = "PyYAML-5.4.1-cp39-cp39-win_amd64.whl", hash = "sha256:c20cfa2d49991c8b4147af39859b167664f2ad4561704ee74c1de03318e898db"},
     {file = "PyYAML-5.4.1.tar.gz", hash = "sha256:607774cbba28732bfa802b54baa7484215f530991055bb562efbed5b2f20a45e"},
