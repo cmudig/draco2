@@ -1512,7 +1512,7 @@ reference = "test"
 
 [[package]]
 name = "pytype"
-version = "2021.4.9"
+version = "2021.4.15.2"
 description = "Python type inferencer"
 category = "dev"
 optional = false
@@ -1525,7 +1525,7 @@ ninja = ">=1.10.0.post2"
 pyyaml = ">=3.11"
 six = "*"
 toml = "*"
-typed_ast = "*"
+typed_ast = ">=1.4.3"
 
 [package.source]
 type = "legacy"
@@ -2064,7 +2064,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.9"
-content-hash = "1afc4252c949b7d9c07473692d86052124bac1c9692362f328c97c14880ef6f4"
+content-hash = "bd798fba20b4de0c12ebd10d1b6c14926cceeabd85baf453c024e9019f61dc9b"
 
 [metadata.files]
 alabaster = [
@@ -2274,6 +2274,7 @@ flake8 = [
 ]
 flake8-black = [
     {file = "flake8-black-0.2.1.tar.gz", hash = "sha256:f26651bc10db786c03f4093414f7c9ea982ed8a244cec323c984feeffdf4c118"},
+    {file = "flake8_black-0.2.1-py3-none-any.whl", hash = "sha256:941514149cb8b489cb17a4bb1cf18d84375db3b34381bb018de83509437931a0"},
 ]
 gitdb = [
     {file = "gitdb-4.0.7-py3-none-any.whl", hash = "sha256:6c4cc71933456991da20917998acbe6cf4fb41eeaab7d6d67fbc05ecd4c865b0"},
@@ -2684,15 +2685,7 @@ python-dateutil = [
     {file = "python_dateutil-2.8.1-py2.py3-none-any.whl", hash = "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"},
 ]
 pytype = [
-    {file = "pytype-2021.4.9-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:a2d2348825eb1d2cb4b7e8ca9f576654e5577cd222f1196f142319e7cd4cbf29"},
-    {file = "pytype-2021.4.9-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:ace0a4c7f269668c5d1f135a8c7013f5e1877ae040530704d9d278c6ca1455c1"},
-    {file = "pytype-2021.4.9-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:66cabc56cfb2d5cc91450d1d2e81b5d021891046681d5163197cb0e26d580c4d"},
-    {file = "pytype-2021.4.9-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:1b52d8ec7dd64f07149b9d960dd23a224a2e0f7ece2d4d64183ed2e598ffb03f"},
-    {file = "pytype-2021.4.9-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:a1a084f585eba188c06d49bb0e5c5b8b030dd2faaa31cc57246f74270e27c3c8"},
-    {file = "pytype-2021.4.9-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:f5d0b474e5d27d327f7028cbda4095c0e3189471357e80c42f6d8717aab20b42"},
-    {file = "pytype-2021.4.9-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:9701250f4824475634ca494a5f3134e550a8d38a0ee9b30c4b12b7f27fd428f1"},
-    {file = "pytype-2021.4.9-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:1e8b8b5249565a32efd2221c014df137256b56f39b1744326e5fedcbbeba1c01"},
-    {file = "pytype-2021.4.9.tar.gz", hash = "sha256:b92cb4a220875e236c0cbbd249dffd353d8eade1f6c7bdfed982dd2de94d830f"},
+    {file = "pytype-2021.4.15.2.tar.gz", hash = "sha256:0011f3b10f667101962e9ee6008135cba685ac7c873373ae1eb5e3eb82c9749d"},
 ]
 pytz = [
     {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
@@ -2729,18 +2722,26 @@ pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:bb4191dfc9306777bc594117aee052446b3fa88737cd13b7188d0e7aa8162185"},
     {file = "PyYAML-5.4.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:6c78645d400265a062508ae399b60b8c167bf003db364ecb26dcab2bda048253"},
     {file = "PyYAML-5.4.1-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:4e0583d24c881e14342eaf4ec5fbc97f934b999a6828693a99157fde912540cc"},
+    {file = "PyYAML-5.4.1-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:72a01f726a9c7851ca9bfad6fd09ca4e090a023c00945ea05ba1638c09dc3347"},
+    {file = "PyYAML-5.4.1-cp36-cp36m-manylinux2014_s390x.whl", hash = "sha256:895f61ef02e8fed38159bb70f7e100e00f471eae2bc838cd0f4ebb21e28f8541"},
     {file = "PyYAML-5.4.1-cp36-cp36m-win32.whl", hash = "sha256:3bd0e463264cf257d1ffd2e40223b197271046d09dadf73a0fe82b9c1fc385a5"},
     {file = "PyYAML-5.4.1-cp36-cp36m-win_amd64.whl", hash = "sha256:e4fac90784481d221a8e4b1162afa7c47ed953be40d31ab4629ae917510051df"},
     {file = "PyYAML-5.4.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:5accb17103e43963b80e6f837831f38d314a0495500067cb25afab2e8d7a4018"},
     {file = "PyYAML-5.4.1-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:e1d4970ea66be07ae37a3c2e48b5ec63f7ba6804bdddfdbd3cfd954d25a82e63"},
+    {file = "PyYAML-5.4.1-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:cb333c16912324fd5f769fff6bc5de372e9e7a202247b48870bc251ed40239aa"},
+    {file = "PyYAML-5.4.1-cp37-cp37m-manylinux2014_s390x.whl", hash = "sha256:fe69978f3f768926cfa37b867e3843918e012cf83f680806599ddce33c2c68b0"},
     {file = "PyYAML-5.4.1-cp37-cp37m-win32.whl", hash = "sha256:dd5de0646207f053eb0d6c74ae45ba98c3395a571a2891858e87df7c9b9bd51b"},
     {file = "PyYAML-5.4.1-cp37-cp37m-win_amd64.whl", hash = "sha256:08682f6b72c722394747bddaf0aa62277e02557c0fd1c42cb853016a38f8dedf"},
     {file = "PyYAML-5.4.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:d2d9808ea7b4af864f35ea216be506ecec180628aced0704e34aca0b040ffe46"},
     {file = "PyYAML-5.4.1-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:8c1be557ee92a20f184922c7b6424e8ab6691788e6d86137c5d93c1a6ec1b8fb"},
+    {file = "PyYAML-5.4.1-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:fd7f6999a8070df521b6384004ef42833b9bd62cfee11a09bda1079b4b704247"},
+    {file = "PyYAML-5.4.1-cp38-cp38-manylinux2014_s390x.whl", hash = "sha256:bfb51918d4ff3d77c1c856a9699f8492c612cde32fd3bcd344af9be34999bfdc"},
     {file = "PyYAML-5.4.1-cp38-cp38-win32.whl", hash = "sha256:fa5ae20527d8e831e8230cbffd9f8fe952815b2b7dae6ffec25318803a7528fc"},
     {file = "PyYAML-5.4.1-cp38-cp38-win_amd64.whl", hash = "sha256:0f5f5786c0e09baddcd8b4b45f20a7b5d61a7e7e99846e3c799b05c7c53fa696"},
     {file = "PyYAML-5.4.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:294db365efa064d00b8d1ef65d8ea2c3426ac366c0c4368d930bf1c5fb497f77"},
     {file = "PyYAML-5.4.1-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:74c1485f7707cf707a7aef42ef6322b8f97921bd89be2ab6317fd782c2d53183"},
+    {file = "PyYAML-5.4.1-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:d483ad4e639292c90170eb6f7783ad19490e7a8defb3e46f97dfe4bacae89122"},
+    {file = "PyYAML-5.4.1-cp39-cp39-manylinux2014_s390x.whl", hash = "sha256:fdc842473cd33f45ff6bce46aea678a54e3d21f1b61a7750ce3c498eedfe25d6"},
     {file = "PyYAML-5.4.1-cp39-cp39-win32.whl", hash = "sha256:49d4cdd9065b9b6e206d0595fee27a96b5dd22618e7520c33204a4a3239d5b10"},
     {file = "PyYAML-5.4.1-cp39-cp39-win_amd64.whl", hash = "sha256:c20cfa2d49991c8b4147af39859b167664f2ad4561704ee74c1de03318e898db"},
     {file = "PyYAML-5.4.1.tar.gz", hash = "sha256:607774cbba28732bfa802b54baa7484215f530991055bb562efbed5b2f20a45e"},
