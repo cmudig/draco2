@@ -211,7 +211,7 @@ reference = "test"
 
 [[package]]
 name = "clingo-cffi"
-version = "5.5.0.post47"
+version = "5.5.0.post49"
 description = "CFFI-based bindings to the clingo solver."
 category = "main"
 optional = false
@@ -2165,19 +2165,19 @@ click = [
     {file = "click-7.1.2.tar.gz", hash = "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a"},
 ]
 clingo-cffi = [
-    {file = "clingo-cffi-5.5.0.post47.tar.gz", hash = "sha256:7c7e551c1d838d1e5f114ea0b5ef2ca33ee276521334167640eed27f75daa9ce"},
-    {file = "clingo_cffi-5.5.0.post47-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:d1fc2a197d081b4fdc9af687a960ca5150e008550715df0388053abbfa065847"},
-    {file = "clingo_cffi-5.5.0.post47-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:1d59e5c28d207ba02726ce724ac1b68de6374492837b057d8b36c60a1ce449b5"},
-    {file = "clingo_cffi-5.5.0.post47-cp36-cp36m-win_amd64.whl", hash = "sha256:655cc25d823b030061065e3c81067341bebedfe1445bc2c014d871e5d4eaabc3"},
-    {file = "clingo_cffi-5.5.0.post47-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:dc872f22d349d980351c5e076d4160981482490ae4a29e85160ded0eb535572f"},
-    {file = "clingo_cffi-5.5.0.post47-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:b29efa39ed46b5bb23e136fb212caee5ea3d954032321422d2ed5dd07c9a4290"},
-    {file = "clingo_cffi-5.5.0.post47-cp37-cp37m-win_amd64.whl", hash = "sha256:36dd59c3c69d43bfdcd643a36169c2a517db37f8202992ed1f2ea71f9aa34953"},
-    {file = "clingo_cffi-5.5.0.post47-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:6a9a170fc44d7fcc7e632b465d7ff4552c9eb5eca256ac87b66fc6e24800ad34"},
-    {file = "clingo_cffi-5.5.0.post47-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:79e3889266d9811fc170b8c9d91b79ff7eea144dd22949baaf86a5dcb4b1aa91"},
-    {file = "clingo_cffi-5.5.0.post47-cp38-cp38-win_amd64.whl", hash = "sha256:c56e6c848182fff3576a601eb761c86e032038bd68a36dba0d0efa8b9c538035"},
-    {file = "clingo_cffi-5.5.0.post47-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:e8c524f00eb196439bb3b5207e654a4b23ac6dbf251a605e8d4fbd539ef4ed6a"},
-    {file = "clingo_cffi-5.5.0.post47-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:17bfec4a5e8aa7382494e90bdf44cefbf9f5c55c227db14e03653f9828847f29"},
-    {file = "clingo_cffi-5.5.0.post47-cp39-cp39-win_amd64.whl", hash = "sha256:5b21c5f355a244e42216411f9d3930e7260719f6f3385485ee2226e489eee491"},
+    {file = "clingo-cffi-5.5.0.post49.tar.gz", hash = "sha256:cc54a91e015dab7a2c574b010db7c80328a621867cb9df94209e4d9b7a7ec9b0"},
+    {file = "clingo_cffi-5.5.0.post49-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:4e3e0b37f80734e02ff03759f13b05a8f8ec73d8b3975c2f89c3fc4984b463b5"},
+    {file = "clingo_cffi-5.5.0.post49-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:92ce2b9d4737f40da23e8e7507e0f8e936856ecb1a532fa2ab73e5558014926f"},
+    {file = "clingo_cffi-5.5.0.post49-cp36-cp36m-win_amd64.whl", hash = "sha256:b6879425714f08c1df0e6f63920eb07f5d0d9fcf848f883a07400ea5a80f1398"},
+    {file = "clingo_cffi-5.5.0.post49-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:f6ef65c8a1f26db7f5f325ec445802311b9bd980c2d6b15407a7c4a4a96b413c"},
+    {file = "clingo_cffi-5.5.0.post49-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:d42dd609dff2f9fab27c3c18a102e0ce9e7d7aaa695a833556b6bada081a79c0"},
+    {file = "clingo_cffi-5.5.0.post49-cp37-cp37m-win_amd64.whl", hash = "sha256:1704e73e94f4f7cbf8c4d94f1aebd7e0a9f655c12fc672f264d677e5bf42196f"},
+    {file = "clingo_cffi-5.5.0.post49-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:15ba791af7f632ed3f3cc58be76decd397cd1e4a2a26e9e5f9d86719c68648d9"},
+    {file = "clingo_cffi-5.5.0.post49-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:3f504e1e5000e10c1bd5b7b85645fb895169e4c4ed6c912d4996dabd43e2382f"},
+    {file = "clingo_cffi-5.5.0.post49-cp38-cp38-win_amd64.whl", hash = "sha256:cf01695a167282b2184bd58af0647ae7e0049da7c7bb1d14ff1d700772426f4b"},
+    {file = "clingo_cffi-5.5.0.post49-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:d64994d120152e9774ab5735455fee8e374ffcb199fb81c851a36b75f674fbe5"},
+    {file = "clingo_cffi-5.5.0.post49-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:1eb353887932e96008821498761c7435099fde8f8f48aa428fc8c87672693c4f"},
+    {file = "clingo_cffi-5.5.0.post49-cp39-cp39-win_amd64.whl", hash = "sha256:c8851ead123e151fb5d996eb90bbebe6efd97b86c07cff7857484a2ca6890d7f"},
 ]
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:df1b75950404284103727ee967f46375d1bb4ba7302bb1af74521e12233c48a2"},
@@ -2274,6 +2274,7 @@ flake8 = [
 ]
 flake8-black = [
     {file = "flake8-black-0.2.1.tar.gz", hash = "sha256:f26651bc10db786c03f4093414f7c9ea982ed8a244cec323c984feeffdf4c118"},
+    {file = "flake8_black-0.2.1-py3-none-any.whl", hash = "sha256:941514149cb8b489cb17a4bb1cf18d84375db3b34381bb018de83509437931a0"},
 ]
 gitdb = [
     {file = "gitdb-4.0.7-py3-none-any.whl", hash = "sha256:6c4cc71933456991da20917998acbe6cf4fb41eeaab7d6d67fbc05ecd4c865b0"},
@@ -2729,18 +2730,26 @@ pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:bb4191dfc9306777bc594117aee052446b3fa88737cd13b7188d0e7aa8162185"},
     {file = "PyYAML-5.4.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:6c78645d400265a062508ae399b60b8c167bf003db364ecb26dcab2bda048253"},
     {file = "PyYAML-5.4.1-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:4e0583d24c881e14342eaf4ec5fbc97f934b999a6828693a99157fde912540cc"},
+    {file = "PyYAML-5.4.1-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:72a01f726a9c7851ca9bfad6fd09ca4e090a023c00945ea05ba1638c09dc3347"},
+    {file = "PyYAML-5.4.1-cp36-cp36m-manylinux2014_s390x.whl", hash = "sha256:895f61ef02e8fed38159bb70f7e100e00f471eae2bc838cd0f4ebb21e28f8541"},
     {file = "PyYAML-5.4.1-cp36-cp36m-win32.whl", hash = "sha256:3bd0e463264cf257d1ffd2e40223b197271046d09dadf73a0fe82b9c1fc385a5"},
     {file = "PyYAML-5.4.1-cp36-cp36m-win_amd64.whl", hash = "sha256:e4fac90784481d221a8e4b1162afa7c47ed953be40d31ab4629ae917510051df"},
     {file = "PyYAML-5.4.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:5accb17103e43963b80e6f837831f38d314a0495500067cb25afab2e8d7a4018"},
     {file = "PyYAML-5.4.1-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:e1d4970ea66be07ae37a3c2e48b5ec63f7ba6804bdddfdbd3cfd954d25a82e63"},
+    {file = "PyYAML-5.4.1-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:cb333c16912324fd5f769fff6bc5de372e9e7a202247b48870bc251ed40239aa"},
+    {file = "PyYAML-5.4.1-cp37-cp37m-manylinux2014_s390x.whl", hash = "sha256:fe69978f3f768926cfa37b867e3843918e012cf83f680806599ddce33c2c68b0"},
     {file = "PyYAML-5.4.1-cp37-cp37m-win32.whl", hash = "sha256:dd5de0646207f053eb0d6c74ae45ba98c3395a571a2891858e87df7c9b9bd51b"},
     {file = "PyYAML-5.4.1-cp37-cp37m-win_amd64.whl", hash = "sha256:08682f6b72c722394747bddaf0aa62277e02557c0fd1c42cb853016a38f8dedf"},
     {file = "PyYAML-5.4.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:d2d9808ea7b4af864f35ea216be506ecec180628aced0704e34aca0b040ffe46"},
     {file = "PyYAML-5.4.1-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:8c1be557ee92a20f184922c7b6424e8ab6691788e6d86137c5d93c1a6ec1b8fb"},
+    {file = "PyYAML-5.4.1-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:fd7f6999a8070df521b6384004ef42833b9bd62cfee11a09bda1079b4b704247"},
+    {file = "PyYAML-5.4.1-cp38-cp38-manylinux2014_s390x.whl", hash = "sha256:bfb51918d4ff3d77c1c856a9699f8492c612cde32fd3bcd344af9be34999bfdc"},
     {file = "PyYAML-5.4.1-cp38-cp38-win32.whl", hash = "sha256:fa5ae20527d8e831e8230cbffd9f8fe952815b2b7dae6ffec25318803a7528fc"},
     {file = "PyYAML-5.4.1-cp38-cp38-win_amd64.whl", hash = "sha256:0f5f5786c0e09baddcd8b4b45f20a7b5d61a7e7e99846e3c799b05c7c53fa696"},
     {file = "PyYAML-5.4.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:294db365efa064d00b8d1ef65d8ea2c3426ac366c0c4368d930bf1c5fb497f77"},
     {file = "PyYAML-5.4.1-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:74c1485f7707cf707a7aef42ef6322b8f97921bd89be2ab6317fd782c2d53183"},
+    {file = "PyYAML-5.4.1-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:d483ad4e639292c90170eb6f7783ad19490e7a8defb3e46f97dfe4bacae89122"},
+    {file = "PyYAML-5.4.1-cp39-cp39-manylinux2014_s390x.whl", hash = "sha256:fdc842473cd33f45ff6bce46aea678a54e3d21f1b61a7750ce3c498eedfe25d6"},
     {file = "PyYAML-5.4.1-cp39-cp39-win32.whl", hash = "sha256:49d4cdd9065b9b6e206d0595fee27a96b5dd22618e7520c33204a4a3239d5b10"},
     {file = "PyYAML-5.4.1-cp39-cp39-win_amd64.whl", hash = "sha256:c20cfa2d49991c8b4147af39859b167664f2ad4561704ee74c1de03318e898db"},
     {file = "PyYAML-5.4.1.tar.gz", hash = "sha256:607774cbba28732bfa802b54baa7484215f530991055bb562efbed5b2f20a45e"},
