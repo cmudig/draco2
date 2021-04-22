@@ -1,4 +1,4 @@
-all: lint mypy pytype cover book check
+all: lint mypy pytype pyright cover book check
 
 test:
 	@poetry run pytest -svv .
@@ -15,6 +15,9 @@ mypy:
 
 pytype:
 	@poetry run pytype draco
+
+pyright:
+	@npx pyright
 
 book:
 	@poetry run jupyter-book build docs
