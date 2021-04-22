@@ -12,7 +12,7 @@ def test_text_mark_without_text_channel():
         p
         + """
     attribute(mark_type,m1,text).
-    property(encoding,m1,e1).
+    entity(encoding,m1,e1).
     attribute(channel,e1,text).
 
     :- violation(_).
@@ -23,9 +23,9 @@ def test_text_mark_without_text_channel():
         p
         + """
     attribute(mark_type,m1,text).
-    property(encoding,m1,e1).
+    entity(encoding,m1,e1).
     attribute(channel,e1,x).
-    property(encoding,m1,e2).
+    entity(encoding,m1,e2).
     attribute(channel,e2,text).
 
     :- violation(_).
@@ -36,9 +36,9 @@ def test_text_mark_without_text_channel():
         p
         + """
     attribute(mark_type,m1,text).
-    property(encoding,m1,e1).
+    entity(encoding,m1,e1).
     attribute(channel,e1,x).
-    property(encoding,m1,e2).
+    entity(encoding,m1,e2).
     attribute(channel,e2,y).
 
     :- violation(_).
@@ -49,9 +49,9 @@ def test_text_mark_without_text_channel():
         p
         + """
     attribute(mark_type,m1,text).
-    property(encoding,m1,e1).
+    entity(encoding,m1,e1).
     attribute(channel,e1,x).
-    property(encoding,m1,e2).
+    entity(encoding,m1,e2).
     attribute(channel,e2,y).
     attribute(channel,e3,text).
 
@@ -69,7 +69,7 @@ def test_text_channel_without_text_mark():
         p
         + """
     attribute(mark_type,m1,text).
-    property(encoding,m1,e1).
+    entity(encoding,m1,e1).
     attribute(channel,e1,text).
 
     :- violation(_).
@@ -80,7 +80,7 @@ def test_text_channel_without_text_mark():
         p
         + """
     attribute(mark_type,m1,bar).
-    property(encoding,m1,e1).
+    entity(encoding,m1,e1).
     attribute(channel,e1,text).
 
     :- violation(_).

@@ -4,15 +4,15 @@ To express knowledge about visualizations, we first need a language to describe 
 
 ## Draco has a Generic Specification Format
 
-The constraint solver Clingo reasons about the facts that describe a visualization. The specific format we use to describe facts to the solver is as a _function_ of the name `property` or `attribute`.
+The constraint solver Clingo reasons about the facts that describe a visualization. The specific format we use to describe facts to the solver is as a _function_ of the name `entity` or `attribute`.
 
-### Properties
+### Entities
 
-Properties describe what properties exist on an object. If a property has no parents, we use a special object `root`. For example, `property(view,root,v1).` says that there is a view v1 on the root.
+Entities describe objects. The facts `entity` describes what other entities are associates with an entity. If a entity has no parents, we use a special identifier `root`. For example, `entity(view,root,v1).` says that there is a view v1 on the root.
 
 ### Attributes
 
-Attribute facts specify properties of objects. For example, the number of rows in the dataset in this function form is `attribute(number_rows,root,42).` (read as _the number of rows (on the root object) is 42_). Property names can be tuples, which allow us to distinguish the same property that exists on different objects. For example `attribute((field,type),f1,number).` specifies the type of a field (here `f1`) while `attribute((mark,type),m1,bar).` specifies the mark type (here of `m1`).
+Attribute facts specify properties of entities. For example, the number of rows in the dataset in this function form is `attribute(number_rows,root,42).` (read as _the number of rows (on the root entity) is 42_). Attribute names can be tuples, which allow us to distinguish the same attribute that exists on different entities. For example `attribute((field,type),f1,number).` specifies the type of a field (here `f1`) while `attribute((mark,type),m1,bar).` specifies the mark type (here of `m1`).
 
 ## Draco's Specification Format for Visualizations
 

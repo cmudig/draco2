@@ -12,15 +12,15 @@ class FactKind(Enum):
     """The kind of ASP fact.
 
     Attributes:
-        :PROPERTY: a nested property ("is a" relationship)
+        :ENTITY: a nested entity ("is a" relationship)
         :ATTRIBUTE: an attribute (value)
     """
 
-    PROPERTY = "property"
+    ENTITY = "entity"
     ATTRIBUTE = "attribute"
 
 
-# the root object that is not the property of any other object
+# the root object that is not the entity of any other object
 ROOT = "root"
 
 
@@ -36,7 +36,7 @@ def stringify(value):
 
 def make_fact(kind: FactKind, values=List) -> str:
     """Create an ASP fact from a list of values. The function generates either
-    attribute or property facts.
+    attribute or entity facts.
     """
     parts = stringify(values)
     return f"{kind.value}{parts}."
@@ -74,18 +74,18 @@ def _dict_to_facts(
         if isinstance(data, list):
             for obj in data:
                 if "__id__" in obj:
-                    object_id = obj["__id__"]
+                    entity_id = obj["__id__"]
                 else:
                     try:
-                        object_id = next(id_generator)
+                        entity_id = next(id_generator)
                     except StopIteration:  # pragma: no cover
                         # should never happen but guards against
                         # https://www.python.org/dev/peps/pep-0479/
                         pass
 
                 path_tail = (path[-1],)
-                yield make_fact(FactKind.PROPERTY, (path_tail, parent, object_id))
-                yield from dict_to_facts(obj, path_tail, object_id, id_generator)
+                yield make_fact(FactKind.ENTITY, (path_tail, parent, entity_id))
+                yield from dict_to_facts(obj, path_tail, entity_id, id_generator)
         elif not path[-1].startswith("__"):  # ignore keys that start with "__"
             if isinstance(data, bool):
                 # special cases for boolean values
@@ -142,7 +142,7 @@ def answer_set_to_dict(answer_set: List[Symbol], root=ROOT) -> Mapping:
         if symbol.match("attribute", 3):
             prop, obj, val = map(get_value, symbol.arguments)
             collector[obj][prop] = val
-        elif symbol.match("property", 3):
+        elif symbol.match("entity", 3):
             prop, obj, child = map(get_value, symbol.arguments)
             collector[obj][prop] = collector[obj].get(prop, []) + [child]
 

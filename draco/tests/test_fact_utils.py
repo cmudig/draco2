@@ -27,10 +27,9 @@ def test_make_attribute():
     )
 
 
-def test_make_property():
+def test_make_entity():
     assert (
-        make_fact(FactKind.PROPERTY, ("field", "root", "f1"))
-        == "property(field,root,f1)."
+        make_fact(FactKind.ENTITY, ("field", "root", "f1")) == "entity(field,root,f1)."
     )
 
 
@@ -49,11 +48,11 @@ def test_dict_to_facts():
         # root
         "attribute(numberRows,root,42).",
         # first field
-        "property(field,root,0).",
+        "entity(field,root,0).",
         "attribute((field,unique),0,12).",
         "attribute((field,type),0,number).",
         # second fields
-        "property(field,root,1).",
+        "entity(field,root,1).",
         "attribute((field,unique),1,32).",
         "attribute((field,type),1,string).",
     ]
@@ -69,10 +68,10 @@ def test_dict_to_facts_start_id():
 
     assert program == [
         # first field
-        "property(field,root,42).",
+        "entity(field,root,42).",
         "attribute((field,type),42,number).",
         # second fields
-        "property(field,root,43).",
+        "entity(field,root,43).",
         "attribute((field,type),43,string).",
     ]
 
@@ -86,10 +85,10 @@ def test_dict_to_facts_explicit_id():
 
     assert program == [
         # first field
-        "property(field,root,foo).",
+        "entity(field,root,foo).",
         "attribute((field,type),foo,number).",
         # second fields
-        "property(field,root,0).",
+        "entity(field,root,0).",
         "attribute((field,type),0,string).",
     ]
 
@@ -111,9 +110,9 @@ def test_deep_dict_to_facts():
         # root
         "attribute(numberRows,root,42).",
         # first field
-        "property(field,root,0).",
+        "entity(field,root,0).",
         "attribute((field,type),0,number).",
-        "property(bin,0,1).",
+        "entity(bin,0,1).",
         "attribute((bin,maxbins),1,20).",
     ]
 
@@ -154,13 +153,13 @@ def test_dict_to_facts_complex():
     )
 
     assert program == [
-        "property(view,root,0).",
-        "property(mark,0,1).",
+        "entity(view,root,0).",
+        "entity(mark,0,1).",
         "attribute((mark,type),1,bar).",
-        "property(encoding,1,2).",
+        "entity(encoding,1,2).",
         "attribute((encoding,channel),2,x).",
         "attribute((encoding,field),2,foo).",
-        "property(scale,0,3).",
+        "entity(scale,0,3).",
         "attribute((scale,channel),3,x).",
         "attribute((scale,type),3,linear).",
     ]
@@ -171,11 +170,11 @@ def test_answer_set_to_dict():
         # root
         "attribute(numberRows,root,42).",
         # first field
-        "property(field,root,0).",
+        "entity(field,root,0).",
         "attribute((field,unique),0,12).",
         "attribute((field,type),0,number).",
         # second fields
-        "property(field,root,1).",
+        "entity(field,root,1).",
         "attribute((field,unique),1,32).",
         "attribute((field,type),1,string).",
     ]

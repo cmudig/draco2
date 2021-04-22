@@ -15,7 +15,7 @@ General properties of the dataset that are not specific to a field are propertie
 
 ## Field Properties
 
-Draco can use information about the field type and field statistics. Each field property is associated with a field. The facts therefore have the form of e.g. `attribute((field,type),foo,number).` (read as _the type of the foo field is number_). For each field, there should be a property fact `property` that tells Draco that the field exists on the root object (e.g. `property(field,root,foo).`).
+Draco can use information about the field type and field statistics. Each field entity is associated with a field. The facts therefore have the form of e.g. `attribute((field,type),foo,number).` (read as _the type of the foo field is number_). For each field, there should be a entity fact `entity` that tells Draco that the field exists on the root (e.g. `entity(field,root,foo).`).
 
 `(field,type)`
 : The type of the data in the column for this field. One of `number`, `string`, `boolean`, or `datetime`.
@@ -40,18 +40,18 @@ Draco can use information about the field type and field statistics. Each field 
 ```prolog
 attribute(number_rows,root,42).
 
-property(field,root,date).
+entity(field,root,date).
 attribute((field,type),date,datetime).
 attribute((field,unique),date,1461).
 
-property(field,root,precipitation).
+entity(field,root,precipitation).
 attribute((field,type),precipitation,number).
 attribute((field,unique),precipitation,111).
 attribute((field,min),precipitation,0).
 attribute((field,max),precipitation,55).
 attribute((field,std),precipitation,6).
 
-property(field,root,weather).
+entity(field,root,weather).
 attribute((field,type),weather,string).
 attribute((field,unique),weather,5).
 attribute((field,freq),weather,714).
