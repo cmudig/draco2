@@ -24,10 +24,7 @@ jobs:
       - name: Run tests
         run: poetry run pytest --cov=./ --cov-report=xml draco
       - name: Check types
-        run: |
-          make mypy
-          make pytype
-          make pyright
+        run: make typecheck
       - name: Check Poetry
         run: make check
 
