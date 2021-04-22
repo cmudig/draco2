@@ -17,7 +17,7 @@ pytype:
 	@poetry run pytype draco
 
 pyright:
-	@npx pyright
+	@poetry run npx pyright
 
 book:
 	@poetry run jupyter-book build docs
