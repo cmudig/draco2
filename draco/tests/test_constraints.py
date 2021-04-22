@@ -39,10 +39,10 @@ def test_fields():
     assert not is_satisfiable(BASE_PROGRAMS + ["attribute((encoding,field),0,foo)."])
 
 
-def test_attribute_property():
+def test_attribute_entity():
     assert is_satisfiable(
-        BASE_PROGRAMS + ["property(mark,root,0).", "attribute((mark,type),0,bar)."]
+        BASE_PROGRAMS + ["entity(mark,root,0).", "attribute((mark,type),0,bar)."]
     )
     assert not is_satisfiable(
-        BASE_PROGRAMS + ["property(invalid,root,0).", "attribute((mark,type),0,bar)."]
+        BASE_PROGRAMS + ["entity(invalid,root,0).", "attribute((mark,type),0,bar)."]
     )

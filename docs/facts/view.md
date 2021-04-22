@@ -13,15 +13,15 @@ By default, views don't have any properties.
 Here, we define a single view `v` of a tick plot.
 
 ```prolog
-property(view,root,v).
+entity(view,root,v).
 
-property(mark,v,m).
+entity(mark,v,m).
 attribute((mark,type),m,tick).
-property(encoding,m,e1).
+entity(encoding,m,e1).
 attribute((encoding,channel),e1,x).
 attribute((encoding,field),e1,temperature).
 
-property(scale,v,4).
+entity(scale,v,4).
 attribute((scale,channel),4,x).
 attribute((scale,type),4,linear).
 ```

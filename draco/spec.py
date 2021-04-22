@@ -27,7 +27,8 @@ def check_spec(spec: Union[str, Iterable[str]]) -> bool:
 
 
 def get_violations(spec: Union[str, Iterable[str]]):
-    """Get the list of violations for a given specification.
+    """Get the list of violations for a given specification. Returns None if the
+    problem is not satisfiable.
 
     Internally, Draco checks against the definitions, constraints, helpers,
     and hard constraints.
@@ -45,10 +46,15 @@ def get_violations(spec: Union[str, Iterable[str]]):
 
     program = definitions.program + c + helpers.program + hard.program + spec
 
-    model = next(run_clingo(program, 1))
+    try:
+        model = next(run_clingo(program, 1))
 
-    return [
-        symbol.arguments[0].name
-        for symbol in model.answer_set
-        if symbol.name == "violation"
-    ]
+        return [
+            symbol.arguments[0].name
+            for symbol in model.answer_set
+            if symbol.name == "violation"
+        ]
+    except StopIteration:
+        # Since the problem is not satisfiable, we return None to distinguish it from
+        # satisfiable programs where you would expect violations to be []
+        return None

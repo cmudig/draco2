@@ -47,3 +47,13 @@ def test_get_violations():
         }
     )
     assert get_violations(prog) == ["invalid_domain"]
+
+
+def test_get_violations_satisfiable():
+    prog = ":- a."
+    assert get_violations(prog) == []
+
+
+def test_get_violations_unsatisfiable():
+    prog = ":- a. :- not a."
+    assert get_violations(prog) is None
