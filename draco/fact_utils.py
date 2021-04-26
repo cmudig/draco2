@@ -45,7 +45,7 @@ def make_fact(kind: FactKind, values=List) -> str:
 def dict_to_facts(
     data: Union[Mapping, List, str],
     path: Tuple = (),
-    parent: str = ROOT,
+    parent: Union[str, int] = ROOT,
     id_generator: Iterator[int] = None,
 ) -> List[str]:
     """A generic encoder for dictionaries as answer set programming facts.
@@ -61,7 +61,7 @@ def dict_to_facts(
 def _dict_to_facts(
     data: Union[Mapping, List, str],
     path: Tuple = (),
-    parent: str = ROOT,
+    parent: Union[str, int] = ROOT,
     id_generator: Iterator[int] = None,
 ) -> Generator[str, None, None]:
     if id_generator is None:
@@ -69,10 +69,11 @@ def _dict_to_facts(
 
     if isinstance(data, abc.Mapping):
         for prop, obj in data.items():
-            yield from dict_to_facts(obj, path + (prop,), parent, id_generator)
+            yield from _dict_to_facts(obj, path + (prop,), parent, id_generator)
     else:
         if isinstance(data, list):
             for obj in data:
+                entity_id: Union[str, int] = 0
                 if "__id__" in obj:
                     entity_id = obj["__id__"]
                 else:
@@ -85,7 +86,7 @@ def _dict_to_facts(
 
                 path_tail = (path[-1],)
                 yield make_fact(FactKind.ENTITY, (path_tail, parent, entity_id))
-                yield from dict_to_facts(obj, path_tail, entity_id, id_generator)
+                yield from _dict_to_facts(obj, path_tail, entity_id, id_generator)
         elif not path[-1].startswith("__"):  # ignore keys that start with "__"
             if isinstance(data, bool):
                 # special cases for boolean values

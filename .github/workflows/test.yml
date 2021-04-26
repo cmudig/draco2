@@ -27,6 +27,7 @@ jobs:
         run: |
           make mypy
           make pytype
+          make pyright
       - name: Check Poetry
         run: make check
 
