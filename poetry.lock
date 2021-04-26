@@ -124,11 +124,11 @@ lxml = ["lxml"]
 
 [[package]]
 name = "black"
-version = "20.8b1"
+version = "21.4b0"
 description = "The uncompromising code formatter."
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.6.2"
 
 [package.dependencies]
 appdirs = "*"
@@ -137,12 +137,13 @@ mypy-extensions = ">=0.4.3"
 pathspec = ">=0.6,<1"
 regex = ">=2020.1.8"
 toml = ">=0.10.1"
-typed-ast = ">=1.4.0"
-typing-extensions = ">=3.7.4"
+typed-ast = {version = ">=1.4.2", markers = "python_version < \"3.8\""}
+typing-extensions = {version = ">=3.7.4", markers = "python_version < \"3.8\""}
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
 d = ["aiohttp (>=3.3.2)", "aiohttp-cors"]
+python2 = ["typed-ast (>=1.4.2)"]
 
 [[package]]
 name = "bleach"
@@ -1961,7 +1962,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.9"
-content-hash = "6dc295b2f846c0bf24383703bbbc41d936b86d2d4607c6b90f10ffe02197d1d0"
+content-hash = "73ecf443830d89c361b297e8743f2e182a49a6ea9945b3315f7c13a868cea195"
 
 [metadata.files]
 alabaster = [
@@ -2026,7 +2027,8 @@ beautifulsoup4 = [
     {file = "beautifulsoup4-4.9.3.tar.gz", hash = "sha256:84729e322ad1d5b4d25f805bfa05b902dd96450f43842c4e99067d5e1369eb25"},
 ]
 black = [
-    {file = "black-20.8b1.tar.gz", hash = "sha256:1c02557aa099101b9d21496f8a914e9ed2222ef70336404eeeac8edba836fbea"},
+    {file = "black-21.4b0-py3-none-any.whl", hash = "sha256:2db7040bbbbaa46247bfcc05c6efdebd7ebe50c1c3ca745ca6e0f6776438c96c"},
+    {file = "black-21.4b0.tar.gz", hash = "sha256:915d916c48646dbe8040d5265cff7111421a60a3dfe7f7e07273176a57c24a34"},
 ]
 bleach = [
     {file = "bleach-3.3.0-py2.py3-none-any.whl", hash = "sha256:6123ddc1052673e52bab52cdc955bcb57a015264a1c57d37bea2f6b817af0125"},
@@ -2081,15 +2083,23 @@ click = [
 ]
 clingo = [
     {file = "clingo-5.5.0.post3-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:e71f3bdd46c15ede0114c10c8ffbfbf482712de7eda52fcd6211f8c3d6bc9e21"},
+    {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:33551649891444b7676ef0241223cb7acd9a46118c856323b1a9935be78d08fd"},
+    {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_ppc64le.whl", hash = "sha256:e32008656f7caf7d3fa178da4ec38929ea5a6592419fca4cab6a6fea3e74ba87"},
     {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:f8aa23112ea1f8866cdbc895fe214b5c7409157ce5d0c409e82a8e65ac52742b"},
     {file = "clingo-5.5.0.post3-cp36-cp36m-win_amd64.whl", hash = "sha256:dd81293af732c8646d3823b5a25ac8077ee260969eca207cad9d0eade16ca381"},
     {file = "clingo-5.5.0.post3-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:bd6dfcd7b90a7d4ff7db2abd7be416a465d5fa2933e41552ba6255d2b696793b"},
+    {file = "clingo-5.5.0.post3-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:d4b13b5f69cb95d34de4bc837b0af7a962234083cc1804582cb22eee0995345e"},
+    {file = "clingo-5.5.0.post3-cp37-cp37m-manylinux2014_ppc64le.whl", hash = "sha256:cb8e79a9bd5b730385ec8979f325b950620745d3f4499c3ec43dfde70b7c3a04"},
     {file = "clingo-5.5.0.post3-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:23d84b6df957f7086b28c41a1d9e7b3d199d1d8300475db35f52b4540e9de974"},
     {file = "clingo-5.5.0.post3-cp37-cp37m-win_amd64.whl", hash = "sha256:f0d2180ba5c18ab3cc74bf5cba7bbdc318c053747cab9e5a928b04733e6ab6b2"},
     {file = "clingo-5.5.0.post3-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:6d7e2a94a64bff1c1b5eb99717966e3269f058b7e4d3212a65df2c546ead1cc0"},
+    {file = "clingo-5.5.0.post3-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:862f9dfebc5511b4a22ae0b01314123208158dfbed0dffba4f24597cd675e2c3"},
+    {file = "clingo-5.5.0.post3-cp38-cp38-manylinux2014_ppc64le.whl", hash = "sha256:4bd8370a01b169ccde841917cc51d5b6b804089174f3f22b7442922f87041404"},
     {file = "clingo-5.5.0.post3-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:7e1ec1ab64c10f39a28b2ce339ed85f3123250ced3ec7cf6358ae40682265302"},
     {file = "clingo-5.5.0.post3-cp38-cp38-win_amd64.whl", hash = "sha256:3428c96b735eb0931b257c82f8df3a965198991305becd9e3010ebb3f2b9778b"},
     {file = "clingo-5.5.0.post3-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:2b348feb1b15172c047de716f2a57706dac45fedd2d8abe0be572e03c5791439"},
+    {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:ef3302fb7995377314f12124a2ac673805ba6f5d1dcc2ec313cf7ec0c0891c55"},
+    {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_ppc64le.whl", hash = "sha256:a96c0bb5b7bdabfeebd0f907779768e8e8c48ec7ed1dc6e5d2ec19776e2439c3"},
     {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:a6f82a68bbae54d01218578957df0ce3c746c0b02f754c431f7e1e8a9b5e6700"},
     {file = "clingo-5.5.0.post3-cp39-cp39-win_amd64.whl", hash = "sha256:35891f2741d0845918c0a96205597fe66e0c7cd75893d6235828c2f9b9c1105e"},
     {file = "clingo-5.5.0.post3.tar.gz", hash = "sha256:b0dca95f657f3a7cee52cba518d39d66f2686d3b1dd6e91c60e3a70338e4a2d8"},
@@ -2186,6 +2196,7 @@ flake8 = [
 ]
 flake8-black = [
     {file = "flake8-black-0.2.1.tar.gz", hash = "sha256:f26651bc10db786c03f4093414f7c9ea982ed8a244cec323c984feeffdf4c118"},
+    {file = "flake8_black-0.2.1-py3-none-any.whl", hash = "sha256:941514149cb8b489cb17a4bb1cf18d84375db3b34381bb018de83509437931a0"},
 ]
 gitdb = [
     {file = "gitdb-4.0.7-py3-none-any.whl", hash = "sha256:6c4cc71933456991da20917998acbe6cf4fb41eeaab7d6d67fbc05ecd4c865b0"},
