@@ -669,7 +669,7 @@ test = ["jupyter-server", "pytest"]
 
 [[package]]
 name = "jupyter-sphinx"
-version = "0.3.1"
+version = "0.3.2"
 description = "Jupyter Sphinx Extensions"
 category = "dev"
 optional = false
@@ -725,8 +725,8 @@ test = ["pytest (>=6.0)", "pytest-cov", "pytest-console-scripts", "pytest-check-
 
 [[package]]
 name = "jupyterlab-server"
-version = "2.4.0"
-description = "JupyterLab Server"
+version = "2.5.0"
+description = "A set of server components for JupyterLab and JupyterLab like applications ."
 category = "dev"
 optional = false
 python-versions = ">=3.6"
@@ -736,12 +736,13 @@ babel = "*"
 jinja2 = ">=2.10"
 json5 = "*"
 jsonschema = ">=3.0.1"
+jupyter-packaging = ">=0.9,<1.0"
 jupyter-server = ">=1.4,<2.0"
 packaging = "*"
 requests = "*"
 
 [package.extras]
-test = ["codecov", "ipykernel", "pytest (>=5.3.2)", "pytest-cov", "jupyter-server", "pytest-console-scripts", "strict-rfc3339", "wheel"]
+test = ["codecov", "ipykernel", "pytest (>=5.3.2)", "pytest-cov", "jupyter-server", "openapi-core", "pytest-console-scripts", "strict-rfc3339", "ruamel.yaml", "wheel"]
 
 [[package]]
 name = "jupyterlab-widgets"
@@ -881,7 +882,7 @@ python-versions = "*"
 
 [[package]]
 name = "myst-nb"
-version = "0.12.0"
+version = "0.12.3"
 description = "A Jupyter Notebook Sphinx reader built on top of the MyST markdown parser."
 category = "dev"
 optional = false
@@ -893,8 +894,8 @@ importlib-metadata = "*"
 ipython = "*"
 ipywidgets = ">=7.0.0,<8"
 jupyter-cache = ">=0.4.1,<0.5.0"
-jupyter-sphinx = "0.3.1"
-myst-parser = ">=0.13.3,<0.14.0"
+jupyter-sphinx = ">=0.3.2,<0.4.0"
+myst-parser = ">=0.13.5,<0.14.0"
 nbconvert = ">=5.6,<6.0"
 nbformat = ">=5.0,<6.0"
 pyyaml = "*"
@@ -902,31 +903,31 @@ sphinx = ">=2,<4"
 sphinx-togglebutton = ">=0.2.2,<0.3.0"
 
 [package.extras]
-code_style = ["flake8 (>=3.7.0,<3.8.0)", "black", "pre-commit (==1.17.0)"]
-rtd = ["jupytext (>=1.8.0,<1.9.0)", "coconut (>=1.4.3,<1.5.0)", "sphinxcontrib-bibtex", "ipywidgets", "pandas", "numpy", "sympy", "altair", "alabaster", "bokeh", "plotly", "matplotlib", "sphinx-copybutton", "sphinx-book-theme", "sphinx-panels (>=0.4.1,<0.5.0)"]
-testing = ["pytest (>=5.4,<6.0)", "pytest-cov (>=2.8,<3.0)", "coverage (<5.0)", "pytest-regressions", "matplotlib", "numpy", "sympy", "pandas", "jupytext (>=1.8.0,<1.9.0)"]
+code_style = ["pre-commit (>=2.12,<3.0)"]
+rtd = ["alabaster", "altair", "bokeh", "coconut (>=1.4.3,<1.5.0)", "ipywidgets", "jupytext (>=1.8.0,<1.9.0)", "matplotlib", "numpy", "pandas", "plotly", "sphinx-book-theme (>=0.1.0,<0.2.0)", "sphinx-copybutton", "sphinx-panels (>=0.4.1,<0.5.0)", "sphinxcontrib-bibtex", "sympy"]
+testing = ["coverage (<5.0)", "jupytext (>=1.8.0,<1.9.0)", "matplotlib (>=3.3.0,<3.4.0)", "numpy", "pandas", "pytest (>=5.4,<6.0)", "pytest-cov (>=2.8,<3.0)", "pytest-regressions", "sympy"]
 
 [[package]]
 name = "myst-parser"
-version = "0.13.6"
+version = "0.13.7"
 description = "An extended commonmark compliant parser, with bridges to docutils & sphinx."
 category = "dev"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-docutils = ">=0.15"
+docutils = ">=0.15,<0.18"
 jinja2 = "*"
 markdown-it-py = ">=0.6.2,<0.7.0"
 mdit-py-plugins = ">=0.2.5,<0.3.0"
 pyyaml = "*"
-sphinx = ">=2,<4"
+sphinx = ">=2.1,<4"
 
 [package.extras]
-code_style = ["flake8 (>=3.7.0,<3.8.0)", "black", "pre-commit (==1.17.0)"]
+code_style = ["pre-commit (>=2.12,<3.0)"]
 linkify = ["linkify-it-py (>=1.0,<2.0)"]
-rtd = ["sphinxcontrib-bibtex (<2.0.0)", "ipython", "sphinx-book-theme (>=0.0.36)", "sphinx-panels (>=0.5.2,<0.6.0)"]
-testing = ["coverage", "pytest (>=3.6,<4)", "pytest-cov", "pytest-regressions", "beautifulsoup4", "docutils (>=0.17)"]
+rtd = ["ipython", "sphinx-book-theme (>=0.1.0,<0.2.0)", "sphinx-panels (>=0.5.2,<0.6.0)", "sphinxcontrib-bibtex (>=2.1,<3.0)"]
+testing = ["beautifulsoup4", "coverage", "docutils (>=0.17.0,<0.18.0)", "pytest (>=3.6,<4)", "pytest-cov", "pytest-regressions"]
 
 [[package]]
 name = "nbclassic"
@@ -1329,14 +1330,20 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pydata-sphinx-theme"
-version = "0.4.3"
+version = "0.6.2"
 description = "Bootstrap-based Sphinx theme from the PyData community"
 category = "dev"
 optional = false
 python-versions = ">=3.5"
 
 [package.dependencies]
+beautifulsoup4 = "*"
+docutils = "<0.17"
 sphinx = "*"
+
+[package.extras]
+coverage = ["pytest-cov", "codecov", "sphinx", "numpydoc", "recommonmark", "pandas", "pytest", "pytest-regressions", "beautifulsoup4", "jupyter-sphinx", "plotly", "numpy", "xarray", "docutils (==0.16)"]
+test = ["sphinx", "numpydoc", "recommonmark", "pandas", "pytest", "pytest-regressions", "beautifulsoup4", "jupyter-sphinx", "plotly", "numpy", "xarray", "docutils (==0.16)"]
 
 [[package]]
 name = "pyflakes"
@@ -1595,7 +1602,7 @@ type_comments = ["typed-ast (>=1.4.0)"]
 
 [[package]]
 name = "sphinx-book-theme"
-version = "0.0.42"
+version = "0.1.0"
 description = "Jupyter Book: Create an online book with Jupyter Notebooks"
 category = "dev"
 optional = false
@@ -1605,14 +1612,14 @@ python-versions = ">=3.6"
 beautifulsoup4 = ">=4.6.1,<5"
 click = "*"
 docutils = ">=0.15"
-pydata-sphinx-theme = ">=0.4.1,<0.5.0"
+pydata-sphinx-theme = ">=0.6.0,<0.7.0"
 pyyaml = "*"
 sphinx = ">=2,<4"
 
 [package.extras]
 code_style = ["pre-commit (>=2.7.0,<2.8.0)"]
 live-dev = ["sphinx-autobuild", "web-compile (>=0.2.1,<0.3.0)"]
-sphinx = ["folium", "numpy", "matplotlib", "ipywidgets", "pandas", "nbclient", "myst-nb (>=0.11.1,<0.12.0)", "sphinx-togglebutton (>=0.2.1)", "sphinx-copybutton", "plotly", "sphinxcontrib-bibtex (>=2.1,<3.0)", "sphinx-thebe", "ablog (>=0.10.13,<0.11.0)"]
+sphinx = ["folium", "numpy", "matplotlib", "ipywidgets", "pandas", "nbclient", "myst-nb (>=0.11.1,<0.12.0)", "sphinx-togglebutton (>=0.2.1)", "sphinx-copybutton", "plotly", "sphinxcontrib-bibtex (>=2.2,<3.0)", "sphinx-thebe", "ablog (>=0.10.13,<0.11.0)", "sphinxext-opengraph"]
 testing = ["myst-nb (>=0.11.1,<0.12.0)", "sphinx-thebe", "coverage", "pytest (>=6.0.1,<6.1.0)", "pytest-cov", "pytest-regressions (>=2.0.1,<2.1.0)"]
 
 [[package]]
@@ -2083,23 +2090,15 @@ click = [
 ]
 clingo = [
     {file = "clingo-5.5.0.post3-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:e71f3bdd46c15ede0114c10c8ffbfbf482712de7eda52fcd6211f8c3d6bc9e21"},
-    {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:33551649891444b7676ef0241223cb7acd9a46118c856323b1a9935be78d08fd"},
-    {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_ppc64le.whl", hash = "sha256:e32008656f7caf7d3fa178da4ec38929ea5a6592419fca4cab6a6fea3e74ba87"},
     {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:f8aa23112ea1f8866cdbc895fe214b5c7409157ce5d0c409e82a8e65ac52742b"},
     {file = "clingo-5.5.0.post3-cp36-cp36m-win_amd64.whl", hash = "sha256:dd81293af732c8646d3823b5a25ac8077ee260969eca207cad9d0eade16ca381"},
     {file = "clingo-5.5.0.post3-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:bd6dfcd7b90a7d4ff7db2abd7be416a465d5fa2933e41552ba6255d2b696793b"},
-    {file = "clingo-5.5.0.post3-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:d4b13b5f69cb95d34de4bc837b0af7a962234083cc1804582cb22eee0995345e"},
-    {file = "clingo-5.5.0.post3-cp37-cp37m-manylinux2014_ppc64le.whl", hash = "sha256:cb8e79a9bd5b730385ec8979f325b950620745d3f4499c3ec43dfde70b7c3a04"},
     {file = "clingo-5.5.0.post3-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:23d84b6df957f7086b28c41a1d9e7b3d199d1d8300475db35f52b4540e9de974"},
     {file = "clingo-5.5.0.post3-cp37-cp37m-win_amd64.whl", hash = "sha256:f0d2180ba5c18ab3cc74bf5cba7bbdc318c053747cab9e5a928b04733e6ab6b2"},
     {file = "clingo-5.5.0.post3-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:6d7e2a94a64bff1c1b5eb99717966e3269f058b7e4d3212a65df2c546ead1cc0"},
-    {file = "clingo-5.5.0.post3-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:862f9dfebc5511b4a22ae0b01314123208158dfbed0dffba4f24597cd675e2c3"},
-    {file = "clingo-5.5.0.post3-cp38-cp38-manylinux2014_ppc64le.whl", hash = "sha256:4bd8370a01b169ccde841917cc51d5b6b804089174f3f22b7442922f87041404"},
     {file = "clingo-5.5.0.post3-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:7e1ec1ab64c10f39a28b2ce339ed85f3123250ced3ec7cf6358ae40682265302"},
     {file = "clingo-5.5.0.post3-cp38-cp38-win_amd64.whl", hash = "sha256:3428c96b735eb0931b257c82f8df3a965198991305becd9e3010ebb3f2b9778b"},
     {file = "clingo-5.5.0.post3-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:2b348feb1b15172c047de716f2a57706dac45fedd2d8abe0be572e03c5791439"},
-    {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:ef3302fb7995377314f12124a2ac673805ba6f5d1dcc2ec313cf7ec0c0891c55"},
-    {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_ppc64le.whl", hash = "sha256:a96c0bb5b7bdabfeebd0f907779768e8e8c48ec7ed1dc6e5d2ec19776e2439c3"},
     {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:a6f82a68bbae54d01218578957df0ce3c746c0b02f754c431f7e1e8a9b5e6700"},
     {file = "clingo-5.5.0.post3-cp39-cp39-win_amd64.whl", hash = "sha256:35891f2741d0845918c0a96205597fe66e0c7cd75893d6235828c2f9b9c1105e"},
     {file = "clingo-5.5.0.post3.tar.gz", hash = "sha256:b0dca95f657f3a7cee52cba518d39d66f2686d3b1dd6e91c60e3a70338e4a2d8"},
@@ -2196,7 +2195,6 @@ flake8 = [
 ]
 flake8-black = [
     {file = "flake8-black-0.2.1.tar.gz", hash = "sha256:f26651bc10db786c03f4093414f7c9ea982ed8a244cec323c984feeffdf4c118"},
-    {file = "flake8_black-0.2.1-py3-none-any.whl", hash = "sha256:941514149cb8b489cb17a4bb1cf18d84375db3b34381bb018de83509437931a0"},
 ]
 gitdb = [
     {file = "gitdb-4.0.7-py3-none-any.whl", hash = "sha256:6c4cc71933456991da20917998acbe6cf4fb41eeaab7d6d67fbc05ecd4c865b0"},
@@ -2290,8 +2288,8 @@ jupyter-server-mathjax = [
     {file = "jupyter_server_mathjax-0.2.2.tar.gz", hash = "sha256:0f75fc1ed6fc3a6d94ea9c87932cfd7a43b8c11721b7c3f01281116469280011"},
 ]
 jupyter-sphinx = [
-    {file = "jupyter_sphinx-0.3.1-py3-none-any.whl", hash = "sha256:56f4cd319b96c491c61bfa9d11a2ee452d2758beecbd2723b23916aaac4c2bab"},
-    {file = "jupyter_sphinx-0.3.1.tar.gz", hash = "sha256:c4caf8bbf2be6edfe0319aa76127d17fdbe6927c8189cda2d6ac59c01f38404b"},
+    {file = "jupyter_sphinx-0.3.2-py3-none-any.whl", hash = "sha256:301e36d0fb3007bb5802f6b65b60c24990eb99c983332a2ab6eecff385207dc9"},
+    {file = "jupyter_sphinx-0.3.2.tar.gz", hash = "sha256:37fc9408385c45326ac79ca0452fbd7ae2bf0e97842d626d2844d4830e30aaf2"},
 ]
 jupyterbook-latex = [
     {file = "jupyterbook-latex-0.2.0.tar.gz", hash = "sha256:8083d7aa71bb0dc31847be4edd2b15ef9d55b56a8cf1b07e49b3b627fb7e49c7"},
@@ -2302,8 +2300,8 @@ jupyterlab = [
     {file = "jupyterlab-3.0.14.tar.gz", hash = "sha256:713a84991dfcca8c0bc260911f1bd54ac25a386a86285713b9555a60f795059b"},
 ]
 jupyterlab-server = [
-    {file = "jupyterlab_server-2.4.0-py3-none-any.whl", hash = "sha256:94e606edb7b60e3fc54b8b4de14cded1483959361df9023e50092b6f8ede9cf6"},
-    {file = "jupyterlab_server-2.4.0.tar.gz", hash = "sha256:2a7f0b125a59a7cc543f62e5f9dea50b44b3459b3f679db7e3dbe0f8616f90bc"},
+    {file = "jupyterlab_server-2.5.0-py3-none-any.whl", hash = "sha256:c29784df3269d45f54a1e23e041ae9e8638773fa6b11095938b4d30bec1c75c6"},
+    {file = "jupyterlab_server-2.5.0.tar.gz", hash = "sha256:4c2c482cc91b7439ea5415f8f85ded95059fb9cdab03f5f0e6338246830c2a5c"},
 ]
 jupyterlab-widgets = [
     {file = "jupyterlab_widgets-1.0.0-py3-none-any.whl", hash = "sha256:caeaf3e6103180e654e7d8d2b81b7d645e59e432487c1d35a41d6d3ee56b3fef"},
@@ -2420,12 +2418,12 @@ mypy-extensions = [
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
 myst-nb = [
-    {file = "myst-nb-0.12.0.tar.gz", hash = "sha256:d0b64c41a43594d3a06bc109fdfed27b442c542d9c6b9def257300133a532496"},
-    {file = "myst_nb-0.12.0-py3-none-any.whl", hash = "sha256:4966029f0af73801eef77cefab4d147451c0c1968a5dfd43d1cb72d339df1a80"},
+    {file = "myst-nb-0.12.3.tar.gz", hash = "sha256:4666039f538abf32d6489f4caf912d505e8798a2709bcf7a7936823ca6b15810"},
+    {file = "myst_nb-0.12.3-py3-none-any.whl", hash = "sha256:3bc5191494720748419b8247e9ffc92d39b4ea7689f92d937e65110b346403fd"},
 ]
 myst-parser = [
-    {file = "myst-parser-0.13.6.tar.gz", hash = "sha256:bec01ecebe9b9c04322f8aebd6fd8e61d2cb9ab711d531065a374cc3dcb1d7be"},
-    {file = "myst_parser-0.13.6-py3-none-any.whl", hash = "sha256:a448b3dcb39bc62a6954f5e18544b83d69ed69d8947cf01f8ebe8b654921b4bf"},
+    {file = "myst-parser-0.13.7.tar.gz", hash = "sha256:e4bc99e43e19f70d22e528de8e7cce59f7e8e7c4c34dcba203de92de7a7c7c85"},
+    {file = "myst_parser-0.13.7-py3-none-any.whl", hash = "sha256:260355b4da8e8865fe080b0638d7f1ab1791dc4bed02a7a48630b6bad4249219"},
 ]
 nbclassic = [
     {file = "nbclassic-0.2.7-py3-none-any.whl", hash = "sha256:8843cafa3827db05b9e7da909a4955b552de13e20707474844cfdd84bf4bf655"},
@@ -2591,8 +2589,8 @@ pycparser = [
     {file = "pycparser-2.20.tar.gz", hash = "sha256:2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0"},
 ]
 pydata-sphinx-theme = [
-    {file = "pydata-sphinx-theme-0.4.3.tar.gz", hash = "sha256:8cf8fbc74c6c47d6ed497a91f3bedf94d57383b52eebb4fa05ae7fc4f50767a2"},
-    {file = "pydata_sphinx_theme-0.4.3-py3-none-any.whl", hash = "sha256:aa0ae055de5de36a637387941d0e18d8dad35d97d56f0faf25f5219658d49df2"},
+    {file = "pydata-sphinx-theme-0.6.2.tar.gz", hash = "sha256:0cf2cd9fb8004f374a9133ab0bd79a5e83839299d8a0fc05a1178c7c410ad606"},
+    {file = "pydata_sphinx_theme-0.6.2-py3-none-any.whl", hash = "sha256:f81e79b5a98b1d0df72d92db152cae2cec26a5e5c57383bccc6ed6ad07f54a6f"},
 ]
 pyflakes = [
     {file = "pyflakes-2.3.1-py2.py3-none-any.whl", hash = "sha256:7893783d01b8a89811dd72d7dfd4d84ff098e5eed95cfa8905b22bbffe52efc3"},
@@ -2805,8 +2803,8 @@ sphinx-autodoc-typehints = [
     {file = "sphinx_autodoc_typehints-1.12.0-py3-none-any.whl", hash = "sha256:5e81776ec422dd168d688ab60f034fccfafbcd94329e9537712c93003bddc04a"},
 ]
 sphinx-book-theme = [
-    {file = "sphinx-book-theme-0.0.42.tar.gz", hash = "sha256:a67d3ead308eedec048d52d0ef0f958795f432464b9db02d6612a5697bcf9e33"},
-    {file = "sphinx_book_theme-0.0.42-py3-none-any.whl", hash = "sha256:ce958d2c6d91573215f0f591bf97c68f722be313e3c0a19983ab571cc642aed3"},
+    {file = "sphinx-book-theme-0.1.0.tar.gz", hash = "sha256:b2db884eb9a843f7864a5660322ac7b0b9cd762f31341dedb4530f1546675bbd"},
+    {file = "sphinx_book_theme-0.1.0-py3-none-any.whl", hash = "sha256:182e57262e76c657a8f3082b0922f3617c8b0cb3e4c4079fa6b2ae9b2a5d3ae9"},
 ]
 sphinx-comments = [
     {file = "sphinx-comments-0.0.3.tar.gz", hash = "sha256:00170afff27019fad08e421da1ae49c681831fb2759786f07c826e89ac94cf21"},
