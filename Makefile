@@ -33,7 +33,6 @@ pytype:
 pyright:
 	@poetry run npx pyright
 
-.PHONY: book
 book:
 	@echo "==> 📕 Book"
 	@poetry run jupyter-book build docs
