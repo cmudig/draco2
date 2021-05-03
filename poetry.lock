@@ -1427,7 +1427,7 @@ six = ">=1.5"
 
 [[package]]
 name = "pytype"
-version = "2021.4.15"
+version = "2021.4.26"
 description = "Python type inferencer"
 category = "dev"
 optional = false
@@ -1969,7 +1969,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.9"
-content-hash = "73ecf443830d89c361b297e8743f2e182a49a6ea9945b3315f7c13a868cea195"
+content-hash = "f55267f0403727f92ae3c0739ccd013d8336aed71e15c5359efd2b44936fee04"
 
 [metadata.files]
 alabaster = [
@@ -2090,15 +2090,23 @@ click = [
 ]
 clingo = [
     {file = "clingo-5.5.0.post3-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:e71f3bdd46c15ede0114c10c8ffbfbf482712de7eda52fcd6211f8c3d6bc9e21"},
+    {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:33551649891444b7676ef0241223cb7acd9a46118c856323b1a9935be78d08fd"},
+    {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_ppc64le.whl", hash = "sha256:e32008656f7caf7d3fa178da4ec38929ea5a6592419fca4cab6a6fea3e74ba87"},
     {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:f8aa23112ea1f8866cdbc895fe214b5c7409157ce5d0c409e82a8e65ac52742b"},
     {file = "clingo-5.5.0.post3-cp36-cp36m-win_amd64.whl", hash = "sha256:dd81293af732c8646d3823b5a25ac8077ee260969eca207cad9d0eade16ca381"},
     {file = "clingo-5.5.0.post3-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:bd6dfcd7b90a7d4ff7db2abd7be416a465d5fa2933e41552ba6255d2b696793b"},
+    {file = "clingo-5.5.0.post3-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:d4b13b5f69cb95d34de4bc837b0af7a962234083cc1804582cb22eee0995345e"},
+    {file = "clingo-5.5.0.post3-cp37-cp37m-manylinux2014_ppc64le.whl", hash = "sha256:cb8e79a9bd5b730385ec8979f325b950620745d3f4499c3ec43dfde70b7c3a04"},
     {file = "clingo-5.5.0.post3-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:23d84b6df957f7086b28c41a1d9e7b3d199d1d8300475db35f52b4540e9de974"},
     {file = "clingo-5.5.0.post3-cp37-cp37m-win_amd64.whl", hash = "sha256:f0d2180ba5c18ab3cc74bf5cba7bbdc318c053747cab9e5a928b04733e6ab6b2"},
     {file = "clingo-5.5.0.post3-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:6d7e2a94a64bff1c1b5eb99717966e3269f058b7e4d3212a65df2c546ead1cc0"},
+    {file = "clingo-5.5.0.post3-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:862f9dfebc5511b4a22ae0b01314123208158dfbed0dffba4f24597cd675e2c3"},
+    {file = "clingo-5.5.0.post3-cp38-cp38-manylinux2014_ppc64le.whl", hash = "sha256:4bd8370a01b169ccde841917cc51d5b6b804089174f3f22b7442922f87041404"},
     {file = "clingo-5.5.0.post3-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:7e1ec1ab64c10f39a28b2ce339ed85f3123250ced3ec7cf6358ae40682265302"},
     {file = "clingo-5.5.0.post3-cp38-cp38-win_amd64.whl", hash = "sha256:3428c96b735eb0931b257c82f8df3a965198991305becd9e3010ebb3f2b9778b"},
     {file = "clingo-5.5.0.post3-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:2b348feb1b15172c047de716f2a57706dac45fedd2d8abe0be572e03c5791439"},
+    {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:ef3302fb7995377314f12124a2ac673805ba6f5d1dcc2ec313cf7ec0c0891c55"},
+    {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_ppc64le.whl", hash = "sha256:a96c0bb5b7bdabfeebd0f907779768e8e8c48ec7ed1dc6e5d2ec19776e2439c3"},
     {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:a6f82a68bbae54d01218578957df0ce3c746c0b02f754c431f7e1e8a9b5e6700"},
     {file = "clingo-5.5.0.post3-cp39-cp39-win_amd64.whl", hash = "sha256:35891f2741d0845918c0a96205597fe66e0c7cd75893d6235828c2f9b9c1105e"},
     {file = "clingo-5.5.0.post3.tar.gz", hash = "sha256:b0dca95f657f3a7cee52cba518d39d66f2686d3b1dd6e91c60e3a70338e4a2d8"},
@@ -2195,6 +2203,7 @@ flake8 = [
 ]
 flake8-black = [
     {file = "flake8-black-0.2.1.tar.gz", hash = "sha256:f26651bc10db786c03f4093414f7c9ea982ed8a244cec323c984feeffdf4c118"},
+    {file = "flake8_black-0.2.1-py3-none-any.whl", hash = "sha256:941514149cb8b489cb17a4bb1cf18d84375db3b34381bb018de83509437931a0"},
 ]
 gitdb = [
     {file = "gitdb-4.0.7-py3-none-any.whl", hash = "sha256:6c4cc71933456991da20917998acbe6cf4fb41eeaab7d6d67fbc05ecd4c865b0"},
@@ -2620,15 +2629,15 @@ python-dateutil = [
     {file = "python_dateutil-2.8.1-py2.py3-none-any.whl", hash = "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"},
 ]
 pytype = [
-    {file = "pytype-2021.4.15-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:e98a5260a27128fbb7c58d6a4893ec5c47a0153a760af0ee46b281d55352fe77"},
-    {file = "pytype-2021.4.15-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:286f16b5d41c10261bda5a7ec62832609ba1d56cadb5ed6c1997b6318f372f65"},
-    {file = "pytype-2021.4.15-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:486f6d191c64c55be2d6250da5ea4eb51360cc750cef0cce41a61dcf6fecb8cd"},
-    {file = "pytype-2021.4.15-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:0bcf41b152ee399bc853b2eecc092107730d4ce9fe04327e97beb5e498f251fb"},
-    {file = "pytype-2021.4.15-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:98c1faf5400bdeb62dca69e2690722d0b06b9a9a4d5e5f6ea16405566a2b8fc6"},
-    {file = "pytype-2021.4.15-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:f1823862e1dc8bad5b9c144f8cd6320957615cb50cdaed22a86a9ac700a5ca57"},
-    {file = "pytype-2021.4.15-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:f1d0b491c5a6b1dd2005da1e5ee0e53a2e359196fa177e5fdae5f773f0326b30"},
-    {file = "pytype-2021.4.15-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:d0bceb788f90bd260c794a9b1977f7f3f64887003110b91e311a5f7beefe849b"},
-    {file = "pytype-2021.4.15.tar.gz", hash = "sha256:c34487dbf9cfb840e311a3022e29f519de9ea4473dcc318101d2a8a81a17331a"},
+    {file = "pytype-2021.4.26-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:0ec5f764ec6c68b9ef01286a34330b0a0fc47ad4091a601b980edebc0d363f67"},
+    {file = "pytype-2021.4.26-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:614bc47759f2d7d3e3a79d2e769babc8e833bc87ed7ac303234bf72d9cdf44c9"},
+    {file = "pytype-2021.4.26-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:45c698c4d5c9f40acdb80f344f1929202275841ef0caca8202b2d98a17128769"},
+    {file = "pytype-2021.4.26-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:e8550cfb2db3953af07f45efb4b65fae0f3113a73ab574236439b20e46efab93"},
+    {file = "pytype-2021.4.26-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:2a0aa7d149971766f1468b65b7fc09b5c06fff4907b70c52c96ea4a85b70c450"},
+    {file = "pytype-2021.4.26-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:13f5094204877fbe50be4e1435d3ac354deea7c26fdb7db4323ffe3cd0309fe2"},
+    {file = "pytype-2021.4.26-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:50a7587ba07c35f4ebd90301c0101a2d2dcdfc34167151920370d9e12fc7d919"},
+    {file = "pytype-2021.4.26-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:5d1cd6cc28be89abd1321b72e4534d2c9c6be5ae6c3c78d7bb24765cbcfbd881"},
+    {file = "pytype-2021.4.26.tar.gz", hash = "sha256:ff3f28d591de48b4c13f462c9469f6ba7bc66389a4b36dc53f59821549d8e97c"},
 ]
 pytz = [
     {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
