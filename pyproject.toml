@@ -34,7 +34,7 @@ clingo = "^5.5.0"
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.12.1"
 mypy = "^0.812"
-pytest = "^6.2.3"
+pytest = "^6.2.4"
 pytest-cov = "^2.11.1"
 black = "^21.5b1"
 flake8 = "^3.9.2"
