@@ -705,7 +705,7 @@ testing = ["coverage", "pytest (>=3.6,<4)", "pytest-cov (>=2.8,<3.0)", "coverage
 
 [[package]]
 name = "jupyterlab"
-version = "3.0.15"
+version = "3.0.16"
 description = "JupyterLab computational environment"
 category = "dev"
 optional = false
@@ -1970,7 +1970,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.9"
-content-hash = "7ad11d32268b4eb11d4353c45c8eb35bdb2e3bb7edae0757352fe666aa27744c"
+content-hash = "00df78af460a5e4688e6dbe1d7ff4a0b268d88aa6e00cd07fe2a13f29113a6b7"
 
 [metadata.files]
 alabaster = [
@@ -2322,8 +2322,8 @@ jupyterbook-latex = [
     {file = "jupyterbook_latex-0.2.0-py3-none-any.whl", hash = "sha256:58af59fcb5b1939d0c28914e06b48364a452bea0b48ac52df34f225c52cc346f"},
 ]
 jupyterlab = [
-    {file = "jupyterlab-3.0.15-py3-none-any.whl", hash = "sha256:7ebc32e927b114e3f27250b3d5829ff21507ef81329e53e29338fa4d1a7680f8"},
-    {file = "jupyterlab-3.0.15.tar.gz", hash = "sha256:8e7a1537b39d27ff00666c8ec022e41ecba6669168dd6f8a145941d6b4ec4ca4"},
+    {file = "jupyterlab-3.0.16-py3-none-any.whl", hash = "sha256:88f6e7580c15cf731d96495fda362e786753e18d1e3e7e735915862efb602a92"},
+    {file = "jupyterlab-3.0.16.tar.gz", hash = "sha256:7ad4fbe1f6d38255869410fd151a8b15692a663ca97c0a8146b3f5c40e275c23"},
 ]
 jupyterlab-server = [
     {file = "jupyterlab_server-2.5.0-py3-none-any.whl", hash = "sha256:c29784df3269d45f54a1e23e041ae9e8638773fa6b11095938b4d30bec1c75c6"},
