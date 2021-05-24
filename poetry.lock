@@ -1160,7 +1160,7 @@ test = ["pytest (>=5.0.1)", "pytest-xdist", "hypothesis (>=3.58)"]
 
 [[package]]
 name = "pandas-stubs"
-version = "1.1.0.6"
+version = "1.1.0.7"
 description = "Type annotations for Pandas"
 category = "dev"
 optional = false
@@ -2552,8 +2552,8 @@ pandas = [
     {file = "pandas-1.2.4.tar.gz", hash = "sha256:649ecab692fade3cbfcf967ff936496b0cfba0af00a55dfaacd82bdda5cb2279"},
 ]
 pandas-stubs = [
-    {file = "pandas-stubs-1.1.0.6.tar.gz", hash = "sha256:56ab49a0e414bc5b2aa20efb4d906ddefa8270a14309fd743e433456bd89b3b9"},
-    {file = "pandas_stubs-1.1.0.6-py3-none-any.whl", hash = "sha256:4b16d8373e9a9c030abe7e72d27551ca8536ac8efa4b25ad76d710ca9e905ace"},
+    {file = "pandas-stubs-1.1.0.7.tar.gz", hash = "sha256:1dce450bd06fc871111f2d8ef1aee97137d9d62869b1186637ab90469913ff93"},
+    {file = "pandas_stubs-1.1.0.7-py3-none-any.whl", hash = "sha256:c490c1fbf73c0248f48a5f9197a935843c5b3b43815d238d7ed33ff7593b0278"},
 ]
 pandocfilters = [
     {file = "pandocfilters-1.4.3.tar.gz", hash = "sha256:bc63fbb50534b4b1f8ebe1860889289e8af94a23bff7445259592df25a3906eb"},
