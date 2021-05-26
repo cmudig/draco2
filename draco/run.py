@@ -5,7 +5,7 @@ from typing import Any, Generator, Iterable, List, Union
 import clingo
 
 
-@dataclass
+@dataclass(frozen=True)
 class Model:
     """Class for a model.
 

@@ -6,7 +6,7 @@ from draco.asp_utils import Blocks, parse_blocks
 asp_path = Path(__file__).resolve().parent / "asp"
 
 
-@dataclass
+@dataclass(frozen=True)
 class Program:
     """Class for an Answer Set Programming (ASP) program.
 

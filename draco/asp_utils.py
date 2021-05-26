@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Optional, TextIO, Union
 
 
-@dataclass
+@dataclass(frozen=True)
 class Block:
     """Class for a code block.
 
