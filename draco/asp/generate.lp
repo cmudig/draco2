@@ -33,4 +33,4 @@ obj_id(1..max_extra_encs).
 0 { attribute(aggregate,E,A): domain(aggregate,A) } 1 :- entity(encoding,_,E).
 
 % @generator(field) Binning of the data.
-0 { attribute(binning,E,A): domain(binning,A) } 1 :- entity(encoding,_,E).
+0 { attribute(binning,E,B): domain(binning,B) } 1 :- entity(encoding,_,E).
