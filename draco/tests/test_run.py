@@ -1,3 +1,5 @@
+from unittest import TestCase
+
 from draco import run_clingo
 
 
@@ -33,13 +35,55 @@ def test_run_clingo_list():
 
 
 def test_run_clingo_top_k():
-    for i in range(1, 15):
+    models = list(
+        run_clingo(
+            "2 { a(1..5) }. :- not a(2). #minimize { 1,X : a(X) }.",
+            models=10,
+            topK=True,
+        )
+    )
+    assert len(models) == 10
+    assert models[0].cost == [2]
+    assert models[9].cost == [3]
+
+
+def test_run_clingo_top_k_too_many():
+    models = list(
+        run_clingo(
+            "{ a(1) }. :~ a(1). [1]",
+            models=3,
+            topK=True,
+        )
+    )
+    assert len(models) == 2
+    assert models[0].cost == [0]
+    assert models[1].cost == [1]
+
+
+def test_run_clingo_top_k_counts():
+    for i in range(1, 20):
         models = list(
             run_clingo(
-                "2 { a(1..5) }. :- not a(2). #minimize { 1,X : a(X) }.",
+                "{ a(1..5) }. #minimize { 1,X : a(X) }.",
                 models=i,
                 topK=True,
             )
         )
         assert len(models) == i
-        assert models[0].cost == [2]
+
+
+class LoggingTest(TestCase):
+    def test_run_clingo_top_k_all(self):
+        with self.assertLogs() as cm:
+            models = list(
+                run_clingo(
+                    "{ a(1..5) }. #minimize { 1,X : a(X) }.",
+                    topK=True,
+                )
+            )
+            self.assertEqual(len(cm.records), 1)
+            self.assertEqual(
+                cm.records[0].getMessage(),
+                "Since all models should be computed, topK is ignored.",
+            )
+            assert len(models) == 2 ** 5

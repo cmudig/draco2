@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from typing import Any, Generator, Iterable, List, Sequence, Tuple, Union, cast
 
@@ -53,7 +54,8 @@ def run_clingo(
     )
 
     # topK with all models is the same as ignoring optimization
-    if topK and not models:
+    if topK and models == 0:
+        logging.warning("Since all models should be computed, topK is ignored.")
         topK = False
         config.solve.opt_mode = "ignore"
 
@@ -90,8 +92,7 @@ def run_clingo(
                     backend.add_rule([], [-aux])
 
     else:
-        if models is not None:
-            config.solve.models = str(models)
+        config.solve.models = str(models)
 
         config.solve.project = 1
 
