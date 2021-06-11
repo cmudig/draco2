@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Generator, Iterable, List, Union
+from typing import Any, Generator, Iterable, List, Sequence, Tuple, Union, cast
 
 # Clingo Python API is documented at https://potassco.org/clingo/python-api/current/
 import clingo
@@ -21,8 +21,16 @@ class Model:
     number: int
 
 
+class Observer(clingo.backend.Observer):
+    def __init__(self):
+        self.minimize_literals: Sequence[Tuple[int, int]] = []
+
+    def minimize(self, priority: int, literals: Sequence[Tuple[int, int]]):
+        self.minimize_literals = literals
+
+
 def run_clingo(
-    program: Union[str, Iterable[str]], models: int = 0
+    program: Union[str, Iterable[str]], models: int = 0, topK=False
 ) -> Generator[Model, None, None]:
     """Run the solver and yield the models.
 
@@ -36,22 +44,60 @@ def run_clingo(
         program = "\n".join(program)
 
     ctl = clingo.Control()
+    config: Any = ctl.configuration
+
     ctl.add(
         "base",
         [],
         program,
     )
-    ctl.ground([("base", [])])
 
-    config: Any = ctl.configuration
+    # topK with all models is the same as ignoring optimization
+    if topK and not models:
+        topK = False
+        config.solve.opt_mode = "ignore"
 
-    if models is not None:
-        config.solve.models = str(models)
+    if topK:
+        config.solve.opt_mode = "optN"
+        config.solve.quiet = 1
 
-    config.solve.project = 1
+        obs = Observer()
+        ctl.register_observer(obs)
 
-    solve_handle = ctl.solve(yield_=True)
-    if isinstance(solve_handle, clingo.solving.SolveHandle):
+        ctl.ground([("base", [])])
+
+        while models > 0:
+            cost = 0
+            config.solve.models = str(models)
+
+            solve_handle = cast(clingo.solving.SolveHandle, ctl.solve(yield_=True))
+            with solve_handle as handle:
+                for model in handle:
+                    if model.optimality_proven:
+                        cost = model.cost[0]
+                        models -= 1
+
+                        answer_set = model.symbols(shown=True)
+                        yield Model(answer_set, model.cost, model.number)
+                if handle.get().unsatisfiable:
+                    break
+
+            if models > 0:
+                # add weight rule to disallow optimal models in next solve call
+                with ctl.backend() as backend:
+                    aux = backend.add_atom()
+                    backend.add_weight_rule([aux], cost + 1, obs.minimize_literals)
+                    backend.add_rule([], [-aux])
+
+    else:
+        if models is not None:
+            config.solve.models = str(models)
+
+        config.solve.project = 1
+
+        ctl.ground([("base", [])])
+
+        solve_handle = cast(clingo.solving.SolveHandle, ctl.solve(yield_=True))
         with solve_handle as handle:
             for model in handle:
                 answer_set = model.symbols(shown=True)

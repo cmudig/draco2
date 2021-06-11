@@ -2,7 +2,8 @@ from draco import run_clingo
 
 
 def test_run_all_models():
-    assert len(list(run_clingo("{a;b;c}."))) == 2 ** 3
+    models = list(run_clingo("{a;b;c}."))
+    assert len(models) == 2 ** 3
 
 
 def test_run_clingo_fact():
@@ -29,3 +30,16 @@ def test_run_clingo_models():
 
 def test_run_clingo_list():
     next(run_clingo(["a.", "b."]))
+
+
+def test_run_clingo_top_k():
+    for i in range(1, 15):
+        models = list(
+            run_clingo(
+                "2 { a(1..5) }. :- not a(2). #minimize { 1,X : a(X) }.",
+                models=i,
+                topK=True,
+            )
+        )
+        assert len(models) == i
+        assert models[0].cost == [2]
