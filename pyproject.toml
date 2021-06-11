@@ -33,7 +33,7 @@ clingo = "^5.5.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.13.0"
-mypy = "^0.812"
+mypy = "^0.902"
 pytest = "^6.2.4"
 pytest-cov = "^2.12.1"
 black = "^21.5b2"
