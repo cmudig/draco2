@@ -72,6 +72,17 @@ def test_run_clingo_top_k_counts():
         assert len(models) == i
 
 
+def test_run_clingo_top_k_weight_rules():
+    models = list(
+        run_clingo(
+            "{a(1..5)}. :- not a(3). :~ a(1..5). [1]",
+            models=17,
+            topK=True,
+        )
+    )
+    assert len(models) == 16
+
+
 class LoggingTest(TestCase):
     def test_run_clingo_top_k_all(self):
         with self.assertLogs() as cm:
