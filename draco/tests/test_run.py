@@ -1,8 +1,11 @@
+from unittest import TestCase
+
 from draco import run_clingo
 
 
 def test_run_all_models():
-    assert len(list(run_clingo("{a;b;c}."))) == 2 ** 3
+    models = list(run_clingo("{a;b;c}."))
+    assert len(models) == 2 ** 3
 
 
 def test_run_clingo_fact():
@@ -29,3 +32,69 @@ def test_run_clingo_models():
 
 def test_run_clingo_list():
     next(run_clingo(["a.", "b."]))
+
+
+def test_run_clingo_top_k():
+    models = list(
+        run_clingo(
+            "2 { a(1..5) }. :- not a(2). #minimize { 1,X : a(X) }.",
+            models=10,
+            topK=True,
+        )
+    )
+    assert len(models) == 10
+    assert models[0].cost == [2]
+    assert models[9].cost == [3]
+
+
+def test_run_clingo_top_k_too_many():
+    models = list(
+        run_clingo(
+            "{ a(1) }. :~ a(1). [1]",
+            models=3,
+            topK=True,
+        )
+    )
+    assert len(models) == 2
+    assert models[0].cost == [0]
+    assert models[1].cost == [1]
+
+
+def test_run_clingo_top_k_counts():
+    for i in range(1, 20):
+        models = list(
+            run_clingo(
+                "{ a(1..5) }. #minimize { 1,X : a(X) }.",
+                models=i,
+                topK=True,
+            )
+        )
+        assert len(models) == i
+
+
+def test_run_clingo_top_k_weight_rules():
+    models = list(
+        run_clingo(
+            "{a(1..5)}. :- not a(3). :~ a(1..5). [1]",
+            models=17,
+            topK=True,
+        )
+    )
+    assert len(models) == 16
+
+
+class LoggingTest(TestCase):
+    def test_run_clingo_top_k_all(self):
+        with self.assertLogs() as cm:
+            models = list(
+                run_clingo(
+                    "{ a(1..5) }. #minimize { 1,X : a(X) }.",
+                    topK=True,
+                )
+            )
+            self.assertEqual(len(cm.records), 1)
+            self.assertEqual(
+                cm.records[0].getMessage(),
+                "Since all models should be computed, topK is ignored.",
+            )
+            assert len(models) == 2 ** 5
