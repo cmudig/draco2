@@ -544,7 +544,7 @@ format_nongpl = ["idna", "jsonpointer (>1.13)", "webcolors", "rfc3986-validator 
 
 [[package]]
 name = "jupyter-book"
-version = "0.11.2"
+version = "0.11.3"
 description = "Jupyter Book: Create an online book with Jupyter Notebooks"
 category = "dev"
 optional = false
@@ -559,14 +559,14 @@ linkify-it-py = ">=1.0.1,<1.1.0"
 myst-nb = ">=0.12.0,<0.13.0"
 pyyaml = "*"
 sphinx = ">=2,<4"
-sphinx-book-theme = ">=0.1.0,<0.2.0"
+sphinx-book-theme = ">=0.1.3,<0.2.0"
 sphinx-comments = "*"
 sphinx-copybutton = "*"
 sphinx-external-toc = ">=0.2.1,<0.3.0"
 sphinx-jupyterbook-latex = ">=0.4.2,<0.5.0"
 sphinx-multitoc-numbering = ">=0.1.3,<0.2.0"
 sphinx-panels = ">=0.5.2,<0.6.0"
-sphinx-thebe = ">=0.0.8,<0.1.0"
+sphinx-thebe = ">=0.0.10,<0.1.0"
 sphinx-togglebutton = "*"
 sphinxcontrib-bibtex = ">=2.2.0,<2.3.0"
 
@@ -1606,7 +1606,7 @@ type_comments = ["typed-ast (>=1.4.0)"]
 
 [[package]]
 name = "sphinx-book-theme"
-version = "0.1.0"
+version = "0.1.3"
 description = "Jupyter Book: Create an online book with Jupyter Notebooks"
 category = "dev"
 optional = false
@@ -1623,7 +1623,7 @@ sphinx = ">=2,<4"
 [package.extras]
 code_style = ["pre-commit (>=2.7.0,<2.8.0)"]
 live-dev = ["sphinx-autobuild", "web-compile (>=0.2.1,<0.3.0)"]
-sphinx = ["folium", "numpy", "matplotlib", "ipywidgets", "pandas", "nbclient", "myst-nb (>=0.11.1,<0.12.0)", "sphinx-togglebutton (>=0.2.1)", "sphinx-copybutton", "plotly", "sphinxcontrib-bibtex (>=2.2,<3.0)", "sphinx-thebe", "ablog (>=0.10.13,<0.11.0)", "sphinxext-opengraph"]
+sphinx = ["ablog (>=0.10.13,<0.11.0)", "ipywidgets", "folium", "numpy", "matplotlib", "myst-nb (>=0.11.1,<0.12.0)", "nbclient", "pandas", "plotly", "sphinx-design", "sphinx-copybutton", "sphinx-togglebutton (>=0.2.1)", "sphinx-thebe", "sphinxcontrib-bibtex (>=2.2,<3.0)", "sphinxext-opengraph"]
 testing = ["myst-nb (>=0.11.1,<0.12.0)", "sphinx-thebe", "coverage", "pytest (>=6.0.1,<6.1.0)", "pytest-cov", "pytest-regressions (>=2.0.1,<2.1.0)"]
 
 [[package]]
@@ -1729,14 +1729,14 @@ themes = ["sphinx-rtd-theme", "pydata-sphinx-theme (>=0.4.0,<0.5.0)", "sphinx-bo
 
 [[package]]
 name = "sphinx-thebe"
-version = "0.0.8"
+version = "0.0.10"
 description = "Integrate interactive code blocks into your documentation with Thebe and Binder."
 category = "dev"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-sphinx = ">=1.8"
+sphinx = ">=3.5,<5"
 
 [package.extras]
 sphinx = ["myst-parser", "sphinx-book-theme", "jupyter-sphinx", "sphinx-panels"]
@@ -2055,7 +2055,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.9"
-content-hash = "582fcac6bb80c1c1627c1fb621d8e0a03cca1a2371f0b91ef22a645492f29a2f"
+content-hash = "c60e600de97255e0b59a56fb59c7df4c6ab4467c6100880c563909899e323a7f"
 
 [metadata.files]
 alabaster = [
@@ -2379,8 +2379,8 @@ jsonschema = [
     {file = "jsonschema-3.2.0.tar.gz", hash = "sha256:c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a"},
 ]
 jupyter-book = [
-    {file = "jupyter-book-0.11.2.tar.gz", hash = "sha256:e32298e03c19f514c745062891143693c5e001a098bae9d59d2e4434b2099c54"},
-    {file = "jupyter_book-0.11.2-py3-none-any.whl", hash = "sha256:8b2ad6f94dbc4cb5b8621d297ab310217d237ffc3f76986fa948f1f19435bc8e"},
+    {file = "jupyter-book-0.11.3.tar.gz", hash = "sha256:09acfc33cdd35e46f870f3508184261836bd8230c8a2072dc24a0d8fd82b5261"},
+    {file = "jupyter_book-0.11.3-py3-none-any.whl", hash = "sha256:9b002f2a380b7784d603803eb4a97b2462b190a5761224caac55e7bda4c44451"},
 ]
 jupyter-cache = [
     {file = "jupyter-cache-0.4.2.tar.gz", hash = "sha256:5cd0ab6170e520f31e4557ccff00ec486c33fa6b6a493e11b61399da1773ce8a"},
@@ -2920,8 +2920,8 @@ sphinx-autodoc-typehints = [
     {file = "sphinx_autodoc_typehints-1.12.0-py3-none-any.whl", hash = "sha256:5e81776ec422dd168d688ab60f034fccfafbcd94329e9537712c93003bddc04a"},
 ]
 sphinx-book-theme = [
-    {file = "sphinx-book-theme-0.1.0.tar.gz", hash = "sha256:b2db884eb9a843f7864a5660322ac7b0b9cd762f31341dedb4530f1546675bbd"},
-    {file = "sphinx_book_theme-0.1.0-py3-none-any.whl", hash = "sha256:182e57262e76c657a8f3082b0922f3617c8b0cb3e4c4079fa6b2ae9b2a5d3ae9"},
+    {file = "sphinx-book-theme-0.1.3.tar.gz", hash = "sha256:2fa4320264f4e365959f6a1370df7f76922781f0cc755a9e0974b1b17fa99888"},
+    {file = "sphinx_book_theme-0.1.3-py3-none-any.whl", hash = "sha256:ae530dcb78195723e335f1b9adeedfd46b3e1920fa5a566dd0ef1687ec546684"},
 ]
 sphinx-comments = [
     {file = "sphinx-comments-0.0.3.tar.gz", hash = "sha256:00170afff27019fad08e421da1ae49c681831fb2759786f07c826e89ac94cf21"},
@@ -2948,8 +2948,8 @@ sphinx-panels = [
     {file = "sphinx_panels-0.5.2-py3-none-any.whl", hash = "sha256:2b2e18448b0494e7a232d6c7dfb9aa3982e7aeb92aeea7d1b146e34e9261d2f1"},
 ]
 sphinx-thebe = [
-    {file = "sphinx-thebe-0.0.8.tar.gz", hash = "sha256:6229caa99e996776ffdc5c658d9dcce09e0c749727e5aa3d280a2bbf3a72068a"},
-    {file = "sphinx_thebe-0.0.8-py3-none-any.whl", hash = "sha256:dd3cf6ea66d308539d5b14ec89a284108a74b8e1b30ea88232353fb756bfc88c"},
+    {file = "sphinx-thebe-0.0.10.tar.gz", hash = "sha256:b51ed38e0974c891319aed1554212598597ae12226c7916f2215becc382ae8d7"},
+    {file = "sphinx_thebe-0.0.10-py3-none-any.whl", hash = "sha256:4e349204eab2f059d037be423b93bfe138fa8feceedd5eae7f358f1e82403968"},
 ]
 sphinx-togglebutton = [
     {file = "sphinx-togglebutton-0.2.3.tar.gz", hash = "sha256:41cbe2f87459eade8dc5718bb56146e8e113a05fb97459b90472470f0d357b55"},
