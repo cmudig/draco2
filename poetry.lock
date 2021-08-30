@@ -687,7 +687,7 @@ Sphinx = ">=2"
 
 [[package]]
 name = "jupyterlab"
-version = "3.1.7"
+version = "3.1.9"
 description = "JupyterLab computational environment"
 category = "dev"
 optional = false
@@ -2042,7 +2042,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.9"
-content-hash = "1445301b43ea25888e43a60a1732a564835f4385af11091db279a34039948ac4"
+content-hash = "c60bee725e931624978a24f07ba281de54c4c80a5406278d3b7ce1fdb91a5825"
 
 [metadata.files]
 alabaster = [
@@ -2394,8 +2394,8 @@ jupyter-sphinx = [
     {file = "jupyter_sphinx-0.3.2.tar.gz", hash = "sha256:37fc9408385c45326ac79ca0452fbd7ae2bf0e97842d626d2844d4830e30aaf2"},
 ]
 jupyterlab = [
-    {file = "jupyterlab-3.1.7-py3-none-any.whl", hash = "sha256:15d2fbab3db409a56fcfb38817ad7dfb039c6cec99fc047fcaad2fb79155738a"},
-    {file = "jupyterlab-3.1.7.tar.gz", hash = "sha256:af3f452a6cc2117529bc09ecf9902fe239eec9346ac51b6882a998aa6339f5ea"},
+    {file = "jupyterlab-3.1.9-py3-none-any.whl", hash = "sha256:370545a6a33eb50db3f60bdd5e46ca690b2a7fb09145a5df0fc00dd0a40d06d2"},
+    {file = "jupyterlab-3.1.9.tar.gz", hash = "sha256:007e42f833e59fd36872d459e45be243d899edbd0e4a98d21388632e4e0d8af7"},
 ]
 jupyterlab-server = [
     {file = "jupyterlab_server-2.6.0-py3-none-any.whl", hash = "sha256:10ca364e764a6ca1e387530dfe5a09dc8fd563f1739b2b7b5a49e8cf5c4140ee"},
