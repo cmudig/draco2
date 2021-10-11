@@ -60,7 +60,7 @@ def test_load_df():
 
 
 def test_load_unsupported_data():
-    df = pd.DataFrame({"datetime": [pd.Timedelta("2 days")]})
+    df = pd.DataFrame({"datetime": [pd.to_timedelta("2 days")]})
     with pytest.raises(ValueError):
         schema.schema_from_dataframe(df)
 
