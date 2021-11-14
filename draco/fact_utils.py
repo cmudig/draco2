@@ -1,7 +1,7 @@
 import itertools
 from collections import abc, defaultdict
 from enum import Enum, unique
-from typing import Generator, Iterator, List, Mapping, Tuple, Union
+from typing import Generator, Iterator, List, Mapping, Optional, Tuple, Union
 
 from clingo import Symbol
 from clingo.symbol import SymbolType
@@ -46,7 +46,7 @@ def dict_to_facts(
     data: Union[Mapping, List, str],
     path: Tuple = (),
     parent: Union[str, int] = ROOT,
-    id_generator: Iterator[int] = None,
+    id_generator: Optional[Iterator[int]] = None,
 ) -> List[str]:
     """A generic encoder for dictionaries as answer set programming facts.
 
@@ -62,7 +62,7 @@ def _dict_to_facts(
     data: Union[Mapping, List, str],
     path: Tuple = (),
     parent: Union[str, int] = ROOT,
-    id_generator: Iterator[int] = None,
+    id_generator: Optional[Iterator[int]] = None,
 ) -> Generator[str, None, None]:
     if id_generator is None:
         id_generator = itertools.count()
