@@ -735,7 +735,7 @@ Sphinx = ">=2"
 
 [[package]]
 name = "jupyterlab"
-version = "3.2.3"
+version = "3.2.4"
 description = "JupyterLab computational environment"
 category = "dev"
 optional = false
@@ -2176,7 +2176,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.9"
-content-hash = "5943baddda4000312e16a5d1cb310697a2492f8cd7e384d25da8c22395902a9d"
+content-hash = "d4b4f7a6f203b57489e2b84a5c3a39171d34b22a7efdc72a114fdb8fdda1cd41"
 
 [metadata.files]
 alabaster = [
@@ -2309,6 +2309,7 @@ click = [
     {file = "click-7.1.2.tar.gz", hash = "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a"},
 ]
 clingo = [
+    {file = "clingo-5.5.0.post3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2e00b1b5a73ffa97950446ad50cbb12f11f38c58b5da58f1abe3804135b17dee"},
     {file = "clingo-5.5.0.post3-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:e71f3bdd46c15ede0114c10c8ffbfbf482712de7eda52fcd6211f8c3d6bc9e21"},
     {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:33551649891444b7676ef0241223cb7acd9a46118c856323b1a9935be78d08fd"},
     {file = "clingo-5.5.0.post3-cp36-cp36m-manylinux2014_ppc64le.whl", hash = "sha256:e32008656f7caf7d3fa178da4ec38929ea5a6592419fca4cab6a6fea3e74ba87"},
@@ -2329,6 +2330,8 @@ clingo = [
     {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_ppc64le.whl", hash = "sha256:a96c0bb5b7bdabfeebd0f907779768e8e8c48ec7ed1dc6e5d2ec19776e2439c3"},
     {file = "clingo-5.5.0.post3-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:a6f82a68bbae54d01218578957df0ce3c746c0b02f754c431f7e1e8a9b5e6700"},
     {file = "clingo-5.5.0.post3-cp39-cp39-win_amd64.whl", hash = "sha256:35891f2741d0845918c0a96205597fe66e0c7cd75893d6235828c2f9b9c1105e"},
+    {file = "clingo-5.5.0.post3-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a1acc76dade7d91c185b79ac71a2c971e8660a59d234346795ea920601ab2feb"},
+    {file = "clingo-5.5.0.post3-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:91f52abae48babf5e0a6f0cf3580cb7e196971159f6a7bf5bb30f2a342062aae"},
     {file = "clingo-5.5.0.post3.tar.gz", hash = "sha256:b0dca95f657f3a7cee52cba518d39d66f2686d3b1dd6e91c60e3a70338e4a2d8"},
 ]
 colorama = [
@@ -2587,8 +2590,8 @@ jupyter-sphinx = [
     {file = "jupyter_sphinx-0.3.2.tar.gz", hash = "sha256:37fc9408385c45326ac79ca0452fbd7ae2bf0e97842d626d2844d4830e30aaf2"},
 ]
 jupyterlab = [
-    {file = "jupyterlab-3.2.3-py3-none-any.whl", hash = "sha256:7d7f0280654a8472c47a9d7b5164b74a961a8095ad4ce7fb26ef539ea1d7efd1"},
-    {file = "jupyterlab-3.2.3.tar.gz", hash = "sha256:7d74593e52d4dbfacbb98e14cac4bc765ea2cffb1b980675f44930d622871705"},
+    {file = "jupyterlab-3.2.4-py3-none-any.whl", hash = "sha256:b2375626001ab48af85e5da542a56a163ac8b490828642757e4e0e5e8c5af59d"},
+    {file = "jupyterlab-3.2.4.tar.gz", hash = "sha256:f692e0d95338d60f72dde660f16f3955a087775c59ec541ddb25952e3f97e9b1"},
 ]
 jupyterlab-pygments = [
     {file = "jupyterlab_pygments-0.1.2-py2.py3-none-any.whl", hash = "sha256:abfb880fd1561987efaefcb2d2ac75145d2a5d0139b1876d5be806e32f630008"},
