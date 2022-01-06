@@ -1,5 +1,5 @@
 import itertools
-from collections import abc, defaultdict
+from collections import defaultdict
 from enum import Enum, unique
 from typing import Generator, Iterator, List, Mapping, Optional, Tuple, Union
 
@@ -67,7 +67,7 @@ def _dict_to_facts(
     if id_generator is None:
         id_generator = itertools.count()
 
-    if isinstance(data, abc.Mapping):
+    if isinstance(data, Mapping):
         for prop, obj in data.items():
             yield from _dict_to_facts(obj, path + (prop,), parent, id_generator)
     else:
