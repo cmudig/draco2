@@ -11,9 +11,9 @@ def test_text_mark_without_text_channel():
     assert is_satisfiable(
         p
         + """
-    attribute(mark_type,m1,text).
+    attribute((mark,type),m1,text).
     entity(encoding,m1,e1).
-    attribute(channel,e1,text).
+    attribute((encoding,channel),e1,text).
 
     :- violation(_).
     """
@@ -22,11 +22,11 @@ def test_text_mark_without_text_channel():
     assert is_satisfiable(
         p
         + """
-    attribute(mark_type,m1,text).
+    attribute((mark,type),m1,text).
     entity(encoding,m1,e1).
-    attribute(channel,e1,x).
+    attribute((encoding,channel),e1,x).
     entity(encoding,m1,e2).
-    attribute(channel,e2,text).
+    attribute((encoding,channel),e2,text).
 
     :- violation(_).
     """
@@ -35,11 +35,11 @@ def test_text_mark_without_text_channel():
     assert not is_satisfiable(
         p
         + """
-    attribute(mark_type,m1,text).
+    attribute((mark,type),m1,text).
     entity(encoding,m1,e1).
-    attribute(channel,e1,x).
+    attribute((encoding,channel),e1,x).
     entity(encoding,m1,e2).
-    attribute(channel,e2,y).
+    attribute((encoding,channel),e2,y).
 
     :- violation(_).
     """
@@ -48,12 +48,12 @@ def test_text_mark_without_text_channel():
     assert not is_satisfiable(
         p
         + """
-    attribute(mark_type,m1,text).
+    attribute((mark,type),m1,text).
     entity(encoding,m1,e1).
-    attribute(channel,e1,x).
+    attribute((encoding,channel),e1,x).
     entity(encoding,m1,e2).
-    attribute(channel,e2,y).
-    attribute(channel,e3,text).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,channel),e3,text).
 
     :- violation(_).
     """
@@ -68,9 +68,9 @@ def test_text_channel_without_text_mark():
     assert is_satisfiable(
         p
         + """
-    attribute(mark_type,m1,text).
+    attribute((mark,type),m1,text).
     entity(encoding,m1,e1).
-    attribute(channel,e1,text).
+    attribute((encoding,channel),e1,text).
 
     :- violation(_).
     """
@@ -79,9 +79,9 @@ def test_text_channel_without_text_mark():
     assert not is_satisfiable(
         p
         + """
-    attribute(mark_type,m1,bar).
+    attribute((mark,type),m1,bar).
     entity(encoding,m1,e1).
-    attribute(channel,e1,text).
+    attribute((encoding,channel),e1,text).
 
     :- violation(_).
     """
