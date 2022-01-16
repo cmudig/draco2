@@ -87,6 +87,7 @@ def test_text_channel_without_text_mark():
     """
     )
 
+
 def test_bin_and_aggregate():
     b = hard.blocks["bin_and_aggregate"]
     assert isinstance(b, Block)
@@ -130,6 +131,7 @@ def test_bin_and_aggregate():
     # """
     # )
 
+
 def test_no_encodings():
     b = hard.blocks["no_encodings"]
     assert isinstance(b, Block)
@@ -151,6 +153,7 @@ def test_no_encodings():
     :- violation(_).
     """
     )
+
 
 def test_repeat_channel():
     b = hard.blocks["repeat_channel"]
@@ -220,6 +223,7 @@ def test_row_no_y():
     """
     )
 
+
 def test_encoding_no_field_and_not_count():
     b = hard.blocks["encoding_no_field_and_not_count"]
     assert isinstance(b, Block)
@@ -258,6 +262,7 @@ def test_encoding_no_field_and_not_count():
     """
     )
 
+
 def test_count_with_field():
     b = hard.blocks["count_with_field"]
     assert isinstance(b, Block)
@@ -283,6 +288,7 @@ def test_count_with_field():
     :- violation(_).
     """
     )
+
 
 def test_point_tick_bar_without_x_or_y():
     b = hard.blocks["point_tick_bar_without_x_or_y"]
