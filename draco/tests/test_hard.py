@@ -1,6 +1,6 @@
 from draco import is_satisfiable
 from draco.asp_utils import Block
-from draco.programs import hard, helpers, generate, definitions
+from draco.programs import hard, helpers
 
 
 def test_text_mark_without_text_channel():
