@@ -43,7 +43,8 @@ violation(count_with_field) :-
 
 % @hard(point_tick_bar_without_x_or_y) Point, tick, and bar require x or y channel.
 violation(point_tick_bar_without_x_or_y) :-
-    entity(encoding,_,E),
-    attribute((mark,type),E,(point;tick;bar)),
+    entity(mark,_,M),
+    entity(encoding,M,E),
+    attribute((mark,type),M,(point;tick;bar)),
     not attribute((encoding,channel),E,x),
     not attribute((encoding,channel),E,y).
