@@ -146,14 +146,14 @@ def test_no_encodings():
 def test_repeat_channel():
 
     assert (
-        get_violations(
+        is_satisfiable(
             """
     attribute((encoding,channel),e0,x).
     attribute((encoding,channel),e1,y).
 
     """
         )
-        == []
+
     )
 
     assert (
@@ -230,7 +230,7 @@ def test_encoding_no_field_and_not_count():
     )
 
     assert (
-        get_violations(
+        is_satisfiable(
             """
     entity(encoding,root,1).
     attribute((encoding,aggregate),1,count).
@@ -238,7 +238,6 @@ def test_encoding_no_field_and_not_count():
 
     """
         )
-        == []
     )
 
     assert (
@@ -256,7 +255,7 @@ def test_encoding_no_field_and_not_count():
 def test_count_with_field():
 
     assert (
-        get_violations(
+        is_satisfiable(
             """
     entity(encoding,root,1).
     attribute((encoding,aggregate),1,count).
@@ -265,7 +264,6 @@ def test_count_with_field():
 
     """
         )
-        == []
     )
 
     assert (
