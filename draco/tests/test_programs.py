@@ -1,13 +1,13 @@
-from draco.programs import constraints, definitions, generate, hard, helpers
+from draco.programs import constraints, define, generate, hard, helpers
 
 
-def test_has_definitions():
-    assert len(definitions.program)
-    assert len(definitions.blocks)
+def test_has_define():
+    assert len(define.program)
+    assert len(define.blocks)
 
 
-def test_definitions_has_marktype():
-    assert "mark_type" in definitions.blocks
+def test_define_has_marktype():
+    assert "mark_type" in define.blocks
 
 
 def test_has_constraints():

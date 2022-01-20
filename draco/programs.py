@@ -25,7 +25,7 @@ def get_program(file_path: Path) -> Program:
         return Program(prog, parse_blocks(prog))
 
 
-definitions = get_program(asp_path / "define.lp")
+define = get_program(asp_path / "define.lp")
 constraints = get_program(asp_path / "constraints.lp")
 generate = get_program(asp_path / "generate.lp")
 hard = get_program(asp_path / "hard.lp")
