@@ -1,7 +1,7 @@
 from typing import Iterable, Union
 
 from draco.asp_utils import blocks_to_program
-from draco.programs import constraints, definitions, hard, helpers
+from draco.programs import constraints, define, hard, helpers
 from draco.run import is_satisfiable, run_clingo
 
 
@@ -17,11 +17,7 @@ def check_spec(spec: Union[str, Iterable[str]]) -> bool:
         spec = "\n".join(spec)
 
     program = (
-        definitions.program
-        + constraints.program
-        + helpers.program
-        + hard.program
-        + spec
+        define.program + constraints.program + helpers.program + hard.program + spec
     )
     return is_satisfiable(program)
 
@@ -44,7 +40,7 @@ def get_violations(spec: Union[str, Iterable[str]]):
         )
     )
 
-    program = definitions.program + c + helpers.program + hard.program + spec
+    program = define.program + c + helpers.program + hard.program + spec
 
     try:
         model = next(run_clingo(program, 1))

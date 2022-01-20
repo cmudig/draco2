@@ -6,9 +6,12 @@ domain((mark,type),(point;bar;line;area;text;tick;rect)).
 % @definition(field_type) Basic types of the data.
 domain((field,type),(string;number;boolean;datetime)).
 
+% @definition(field_names) Basic types of the data.
+domain((field,name),F) :- attribute((field,name),_,F).
+
 % @definition(aggregate) Aggregation functions.
 domain((encoding,aggregate),(count;mean;median;min;max;stdev;sum)).
-domain(summative_aggregate,(count;sum)).
+domain((encoding,aggregate),(count;sum)).
 
 % @definition(binning) Numbers of bins that can be recommended, any natural number is allowed.
 domain((encoding,binning),(10;25;200)).
@@ -30,4 +33,4 @@ domain((scale,type),(linear;log;ordinal)).
 domain(task,(value;summary)).
 
 % @definition(stack) Stacking methods.
-domain(stack,(zero;normalize)).
+domain((encoding,stack),(zero;normalize)).

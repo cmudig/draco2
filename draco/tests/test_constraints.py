@@ -1,7 +1,7 @@
 from draco import is_satisfiable
-from draco.programs import constraints, definitions
+from draco.programs import constraints, define
 
-BASE_PROGRAMS = [definitions.program, constraints.program]
+BASE_PROGRAMS = [define.program, constraints.program]
 
 
 def test_domain_valid():

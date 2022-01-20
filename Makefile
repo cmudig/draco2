@@ -31,7 +31,7 @@ pytype:
 
 .PHONY: pyright
 pyright:
-	@poetry run npx pyright
+	npx pyright
 
 book:
 	@echo "==> 📕 Book"
