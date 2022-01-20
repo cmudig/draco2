@@ -119,18 +119,6 @@ def test_bin_and_aggregate():
     """
     )
 
-    # assert not is_satisfiable(
-    #     p
-    #     + """
-    # entity(encoding,root,e1).
-    # attribute((encoding,channel),e1,x).
-    # attribute((encoding,binning),e1).
-    # attribute((encoding,aggregate),e1,count).
-
-    # :- violation(_).
-    # """
-    # )
-
 
 def test_no_encodings():
     b = hard.blocks["no_encodings"]

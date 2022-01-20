@@ -31,9 +31,9 @@ violation(repeat_channel) :-
 
 % @hard(encoding_no_field_and_not_count) All encodings (if they have a channel) require field except if we have a count aggregate.
 violation(encoding_no_field_and_not_count) :-
+    entity(encoding,_,E),
     not attribute((encoding,field),E,_),
-    not attribute((encoding,aggregate),E,count),
-    entity(encoding,_,E).
+    not attribute((encoding,aggregate),E,count).
 
 % @hard(count_with_field) Count should not have a field. Having a field doesn't make a difference.
 violation(count_with_field) :-
