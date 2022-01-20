@@ -136,10 +136,12 @@ def test_no_encodings():
     b = hard.blocks["no_encodings"]
     assert isinstance(b, Block)
     p = b.program
+
     assert is_satisfiable(
         p
         + """
-    entity(encoding,root,e1).
+    entity(mark,root,1).
+    entity(encoding,1,2).
 
     :- violation(_).
     """
@@ -148,7 +150,9 @@ def test_no_encodings():
     assert not is_satisfiable(
         p
         + """
-    attribute((encoding,channel),e2,x).
+    entity(mark,root,1).
+    entity(encoding,1,2).
+    entity(mark,root,3).
 
     :- violation(_).
     """
@@ -158,7 +162,8 @@ def test_no_encodings():
 def test_repeat_channel():
     b = hard.blocks["repeat_channel"]
     assert isinstance(b, Block)
-    p = b.program
+    p = helpers.program + b.program
+
     assert is_satisfiable(
         p
         + """
@@ -183,7 +188,7 @@ def test_repeat_channel():
     """
     )
 
-    assert not is_satisfiable(
+    assert is_satisfiable(
         p
         + """
     entity(encoding,1,2).
@@ -196,17 +201,17 @@ def test_repeat_channel():
     """
     )
 
-
-def test_row_no_y():
-    b = hard.blocks["row_no_y"]
-    assert isinstance(b, Block)
-    p = b.program
     assert is_satisfiable(
         p
         + """
-    attribute((encoding,channel),e0,row).
-    attribute((encoding,channel),e1,y).
+    entity(mark,root,1).
 
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
 
     :- violation(_).
     """
@@ -215,9 +220,14 @@ def test_row_no_y():
     assert not is_satisfiable(
         p
         + """
-    attribute((encoding,channel),e0,row).
-    attribute((encoding,channel),e1,x).
+    entity(mark,root,1).
 
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,x).
 
     :- violation(_).
     """

@@ -51,7 +51,7 @@ def test_get_violations():
 
 def test_get_violations_satisfiable():
     prog = ":- a."
-    assert get_violations(prog) == ["no_encodings"]
+    assert get_violations(prog) == []
 
 
 def test_get_violations_unsatisfiable():

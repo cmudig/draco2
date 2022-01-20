@@ -15,19 +15,19 @@ violation(bin_and_aggregate) :-
     attribute((encoding,binning),E,_),
     attribute((encoding,aggregate),E,_).
 
-% @hard(no_encodings) There has to be at least one encoding.
-violation(no_encodings) :- not entity(encoding,_,_).
+% @hard(no_encodings) There has to be at least one encoding for every mark.
+violation(no_encodings) :-
+    entity(mark,_,M),
+    not entity(encoding,M,_).
 
-% @hard(repeat_channel) Cannot use single channels twice.
+% @hard(repeat_channel) Cannot use single channels twice for the same mark.
 violation(repeat_channel) :-
+    entity(mark,_,M),
+    entity(encoding,M,E1),
+    entity(encoding,M,E2),
     attribute((encoding,channel),E1,C),
     attribute((encoding,channel),E2,C),
     E1 != E2.
-
-% @hard(row_no_y) Don't use row without y. Just using y is simpler.
-violation(row_no_y) :-
-    attribute((encoding,channel),_,row),
-    not attribute((encoding,channel),_,y).
 
 % @hard(encoding_no_field_and_not_count) All encodings (if they have a channel) require field except if we have a count aggregate.
 violation(encoding_no_field_and_not_count) :-
