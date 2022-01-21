@@ -2,7 +2,7 @@
 
 TODO
 
-## Scale Properties
+## Encoding Properties
 
 ## Example
 
