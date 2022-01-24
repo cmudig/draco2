@@ -27,7 +27,7 @@ domain((encoding,channel),C) :- domain(channel,C).
 domain((scale,channel),C) :- domain(channel,C).
 
 % @definition(scale_type) Scale types.
-domain((scale,type),(linear;log;ordinal)).
+domain((scale,type),(linear;log;ordinal;categorical)).
 
 % @definition(task) Tasks.
 domain(task,(value;summary)).
