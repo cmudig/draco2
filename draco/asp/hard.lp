@@ -1,7 +1,5 @@
 % ====== Hard constraints ======
 
-% === Within Encodings ===
-
 % @hard(enc_type_valid) Primitive type has to support data type.
 violation(enc_type_valid) :-
     attribute(field_type,N,(string;boolean)),
@@ -94,8 +92,6 @@ violation(size_negative) :-
     attribute(extent,N,MIN,MAX),
     MIN < 0,
     MAX > 0.
-
-% === Across encodings and between encodings and marks ===
 
 % @hard(repeat_channel) Cannot use single channels twice for the same mark.
 violation(repeat_channel) :-
