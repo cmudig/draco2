@@ -1,4 +1,4 @@
-from draco import is_satisfiable
+from draco import is_satisfiable, dict_to_facts
 from draco.asp_utils import Block
 from draco.programs import hard, helpers
 
@@ -419,6 +419,48 @@ def test_bin_q_o():
     )
 
 
+def test_log_non_positive():
+    b = hard.blocks["log_non_positive"]
+    assert isinstance(b, Block)
+    p = b.program + helpers.program
+
+    assert is_satisfiable(
+        p
+        + """
+    attribute((field,min),precipitation,-10).
+    attribute((field,max),precipitation,55).
+
+    entity(mark,0,1).
+    entity(encoding,1,2).
+    entity(scale,0,4).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,precipitation).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+
+    :- violation(_).
+    """
+    )
+
+    assert not is_satisfiable(
+        p
+        + """
+    attribute((field,min),precipitation,-10).
+    attribute((field,max),precipitation,55).
+
+    entity(mark,0,1).
+    entity(encoding,1,2).
+    entity(scale,0,4).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,precipitation).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,log).
+
+    :- violation(_).
+    """
+    )
+
+
 def test_aggregate_o_valid():
     b = hard.blocks["aggregate_o_valid"]
     assert isinstance(b, Block)
@@ -754,34 +796,35 @@ def test_size_nominal():
     )
 
 
-# def test_size_negative():
-#     b = hard.blocks["size_negative"]
-#     assert isinstance(b, Block)
-#     p = b.program + helpers.program
+def test_size_negative():
+    b = hard.blocks["size_negative"]
+    assert isinstance(b, Block)
+    p = b.program + helpers.program
 
-#     assert is_satisfiable(
-#         p
-#         + """
-#     attribute((field,min),precipitation,0).
-#     attribute((field,max),precipitation,55).
-#     attribute((encoding,channel),4,size).
-#     attribute((encoding,field),4,precipitation).
+    assert is_satisfiable(
+        p
+        + """
+    attribute((field,min),precipitation,0).
+    attribute((field,max),precipitation,55).
+    entity(encoding,0,1).
+    attribute((encoding,channel),1,size).
+    attribute((encoding,field),1,precipitation).
 
-#     :- violation(_).
-#     """
-#     )
+    :- violation(_).
+    """
+    )
 
-#     assert not is_satisfiable(
-#         p
-#         + """
-#     attribute((field,min),precipitation,-4).
-#     attribute((field,max),precipitation,55).
-#     attribute((encoding,channel),4,size).
-#     attribute((encoding,field),4,precipitation).
-
-#     :- violation(_).
-#     """
-#     )
+    assert not is_satisfiable(
+        p
+        + """
+    attribute((field,min),precipitation,-10).
+    attribute((field,max),precipitation,55).
+    entity(encoding,0,1).
+    attribute((encoding,channel),1,size).
+    attribute((encoding,field),1,precipitation).
+    :- violation(_).
+    """
+    )
 
 
 def test_line_area_without_x_y():
@@ -915,112 +958,145 @@ def test_bar_tick_continuous_x_y():
 
     assert is_satisfiable(
         p
+        + ("\n").join(
+            dict_to_facts(
+                {
+                    "mark": [
+                        {
+                            "type": "tick",
+                            "encoding": [
+                                {"channel": "x", "field": "temperature"},
+                                {"channel": "y", "field": "wind"},
+                            ],
+                        }
+                    ],
+                    "scale": [
+                        {"channel": "x", "type": "linear"},
+                        {"channel": "y", "type": "categorical"},
+                    ],
+                }
+            )
+        )
         + """
-    entity(mark,0,1).
-    attribute((mark,type),1,tick).
-    entity(encoding,1,2).
-    attribute((encoding,channel),2,x).
-    entity(encoding,1,3).
-    attribute((encoding,channel),3,y).
-    entity(scale,0,4).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,linear).
-    entity(scale,0,5).
-    attribute((scale,channel),5,y).
-    attribute((scale,type),5,categorical).
-
     :- violation(_).
     """
     )
 
+    # multiple views
     assert not is_satisfiable(
         p
+        + ("\n").join(
+            dict_to_facts(
+                {
+                    "view": [
+                        {
+                            "mark": [
+                                {
+                                    "type": "tick",
+                                    "encoding": [
+                                        {"channel": "y", "field": "temperature"}
+                                    ],
+                                }
+                            ],
+                            "scale": [{"channel": "y", "type": "linear"}],
+                        },
+                        {
+                            "mark": [
+                                {
+                                    "type": "bar",
+                                    "encoding": [
+                                        {"channel": "x", "field": "temperature"},
+                                        {"channel": "y", "aggregate": "count"},
+                                    ],
+                                }
+                            ],
+                            "scale": [
+                                {"channel": "x", "type": "linear"},
+                                {"channel": "y", "type": "linear"},
+                            ],
+                        },
+                    ]
+                }
+            )
+        )
         + """
-    entity(view,root,1).
-    entity(mark,1,2).
-    attribute((mark,type),2,tick).
-    entity(encoding,2,3).
-    attribute((encoding,channel),3,y).
-    attribute((encoding,field),3,temperature).
-    entity(scale,1,4).
-    attribute((scale,channel),4,y).
-    attribute((scale,type),4,linear).
-    entity(view,root,5).
-    entity(mark,5,6).
-    attribute((mark,type),6,bar).
-    entity(encoding,6,7).
-    attribute((encoding,channel),7,x).
-    attribute((encoding,field),7,temperature).
-    entity(encoding,6,8).
-    attribute((encoding,channel),8,y).
-    attribute((encoding,aggregate),8,count).
-    entity(scale,5,9).
-    attribute((scale,channel),9,x).
-    attribute((scale,type),9,linear).
-    entity(scale,5,10).
-    attribute((scale,channel),10,y).
-    attribute((scale,type),10,linear).
-
     :- violation(_).
     """
     )
 
+    # multiple views with one shared-scale
     assert is_satisfiable(
         p
+        + ("\n").join(
+            dict_to_facts(
+                {
+                    "view": [
+                        {
+                            "mark": [
+                                {
+                                    "type": "tick",
+                                    "encoding": [
+                                        {"channel": "y", "field": "temperature"}
+                                    ],
+                                }
+                            ]
+                        },
+                        {
+                            "mark": [
+                                {
+                                    "type": "bar",
+                                    "encoding": [
+                                        {"channel": "x", "field": "temperature"},
+                                        {"channel": "y", "aggregate": "count"},
+                                    ],
+                                }
+                            ],
+                            "scale": [{"channel": "x", "type": "ordinal"}],
+                        },
+                    ],
+                    "scale": [{"channel": "y", "type": "linear"}],
+                }
+            )
+        )
         + """
-    entity(view,root,1).
-    entity(mark,1,2).
-    attribute((mark,type),2,tick).
-    entity(encoding,2,3).
-    attribute((encoding,channel),3,y).
-    attribute((encoding,field),3,temperature).
-    entity(view,root,4).
-    entity(mark,4,5).
-    attribute((mark,type),5,bar).
-    entity(encoding,5,6).
-    attribute((encoding,channel),6,x).
-    attribute((encoding,field),6,temperature).
-    entity(encoding,5,7).
-    attribute((encoding,channel),7,y).
-    attribute((encoding,aggregate),7,count).
-    entity(scale,4,8).
-    attribute((scale,channel),8,x).
-    attribute((scale,type),8,ordinal).
-    entity(scale,root,9).
-    attribute((scale,channel),9,y).
-    attribute((scale,type),9,linear).
-
-
     :- violation(_).
     """
     )
 
     assert not is_satisfiable(
         p
+        + ("\n").join(
+            dict_to_facts(
+                {
+                    "view": [
+                        {
+                            "mark": [
+                                {
+                                    "type": "tick",
+                                    "encoding": [
+                                        {"channel": "y", "field": "temperature"}
+                                    ],
+                                }
+                            ]
+                        },
+                        {
+                            "mark": [
+                                {
+                                    "type": "bar",
+                                    "encoding": [
+                                        {"channel": "x", "field": "temperature"},
+                                        {"channel": "y", "aggregate": "count"},
+                                    ],
+                                }
+                            ],
+                            "scale": [{"channel": "x", "type": "linear"}],
+                        },
+                    ],
+                    "scale": [{"channel": "y", "type": "linear"}],
+                }
+            )
+        )
         + """
-    entity(view,root,1).
-    entity(mark,1,2).
-    attribute((mark,type),2,tick).
-    entity(encoding,2,3).
-    attribute((encoding,channel),3,y).
-    attribute((encoding,field),3,temperature).
-    entity(view,root,4).
-    entity(mark,4,5).
-    attribute((mark,type),5,bar).
-    entity(encoding,5,6).
-    attribute((encoding,channel),6,x).
-    attribute((encoding,field),6,temperature).
-    entity(encoding,5,7).
-    attribute((encoding,channel),7,y).
-    attribute((encoding,aggregate),7,count).
-    entity(scale,4,8).
-    attribute((scale,channel),8,x).
-    attribute((scale,type),8,linear).
-    entity(scale,root,9).
-    attribute((scale,channel),9,y).
-    attribute((scale,type),9,linear).
-
-
     :- violation(_).
     """
     )

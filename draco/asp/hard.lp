@@ -4,14 +4,14 @@
 
 % @hard(enc_type_valid) Primitive type has to support data type.
 violation(enc_type_valid) :-
-    attribute(check_field_type,F,(string;boolean)),
-    attribute(check_scale_type,M,C,T),
-    attribute(check_channel_field,M,C,F),
+    attribute(field_type,N,(string;boolean)),
+    attribute(scale_type,M,C,T),
+    attribute(channel_field,M,C,N),
     T != ordinal.
 
 % @hard(bin_q_o) Can only bin quantitative or ordinal.
 violation(bin_q_o) :-
-    attribute(check_scale_type,M,C,T),
+    attribute(scale_type,M,C,T),
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     attribute((encoding,binning),E,_),
@@ -19,10 +19,12 @@ violation(bin_q_o) :-
     T != log,
     T != ordinal.
 
-% % @hard(log_non_positive) Cannot use log if the data is negative or zero.
-% hard(log_non_positive) :- log(E), field(E,F), extent(F,MIN,_), MIN <= 0.
-%     attribute(check_channel_field,C,F),
-%     attribute(check_scale_type,C,log),
+% @hard(log_non_positive) Cannot use log if the data is negative or zero.
+violation(log_non_positive) :-
+    attribute(extent,N,MIN,_),
+    attribute(channel_field,M,C,N),
+    attribute(scale_type,M,C,log),
+    MIN <= 0.
 
 % @hard(bin_and_aggregate) Cannot bin and aggregate.
 violation(bin_and_aggregate) :-
@@ -34,15 +36,15 @@ violation(aggregate_o_valid) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     attribute((encoding,aggregate),E,A),
-    attribute(check_scale_type,M,C,ordinal),
+    attribute(scale_type,M,C,ordinal),
     A != min,
     A != max,
     A != median.
 
 % @hard(aggregate_t_valid) Temporal only supports min and max.
 violation(aggregate_t_valid) :-
-    attribute(check_field_type,F,datetime),
-    attribute((encoding,field),E,F),
+    attribute(field_type,N,datetime),
+    attribute((encoding,field),E,N),
     attribute((encoding,aggregate),E,A),
     A != min,
     A != max.
@@ -52,7 +54,7 @@ violation(aggregate_nominal) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     attribute((encoding,aggregate),E,_),
-    attribute(check_scale_type,M,C,categorical).
+    attribute(scale_type,M,C,categorical).
 
 % @hard(aggregate_detail) Detail cannot be aggregated.
 violation(aggregate_detail) :-
@@ -67,7 +69,7 @@ violation(count_q_without_field) :-
     entity(encoding,M,E),
     attribute((encoding,aggregate),E,count),
     attribute((encoding,channel),E,C),
-    attribute(check_scale_type,M,C,T),
+    attribute(scale_type,M,C,T),
     T != linear,
     T != log.
 
@@ -86,11 +88,12 @@ violation(size_nominal) :-
     attribute((scale,channel),E,size),
     attribute((scale,type),E,categorical).
 
-% % @hard(size_negative) Do not use size when data is negative as size implies that data is positive.
-% violation(size_negative) :-
-%     attribute(check_field_type,F,size),
-%     attribute(extent,F,MIN,MAX),
-%     MIN < 0.
+% @hard(size_negative) Do not use size when data is negative as size implies that data is positive.
+violation(size_negative) :-
+    attribute(channel_field,_,size,N),
+    attribute(extent,N,MIN,MAX),
+    MIN < 0,
+    MAX > 0.
 
 % === Across encodings and between encodings and marks ===
 
