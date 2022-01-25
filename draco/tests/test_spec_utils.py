@@ -46,7 +46,7 @@ def test_get_violations():
             "scale": [{"channel": "x", "type": "linear"}],
         }
     )
-    assert get_violations(prog) == ["invalid_domain"]
+    assert get_violations(prog) == ["invalid_mark", "invalid_domain"]
 
 
 def test_get_violations_satisfiable():
