@@ -29,7 +29,7 @@ def get_violations(spec: Union[str, Iterable[str]]):
     Internally, Draco checks against the definitions, constraints, helpers,
     and hard constraints.
 
-    :param spec: The specification top check
+    :param spec: The specification to check
     """
     if not isinstance(spec, str):
         spec = "\n".join(spec)
