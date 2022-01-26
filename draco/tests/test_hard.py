@@ -20,6 +20,10 @@ def no_violations(program: str):
     return is_satisfiable(helpers.program + program + ":- violation(_).")
 
 
+def test_list_violations():
+    assert list_violations(":- a. :- not a.") is None
+
+
 def test_text_mark_without_text_channel():
     b = hard.blocks["text_mark_without_text_channel"]
     assert isinstance(b, Block)
