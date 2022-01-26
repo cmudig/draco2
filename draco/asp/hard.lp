@@ -3,12 +3,12 @@
 % @hard(text_mark_without_text_channel) Text mark requires text encoding.
 violation(text_mark_without_text_channel) :-
     attribute((mark,type),M,text),
-    not attribute(has_channel,M,text).
+    not attribute(mark_channel,M,text).
 
 % @hard(text_channel_without_text_mark) Text channel requires text mark.
 violation(text_channel_without_text_mark) :-
-    not attribute((mark,type),M,text),
-    attribute(has_channel,M,text).
+    attribute(mark_channel,M,text),
+    not attribute((mark,type),M,text).
 
 % @hard(bin_and_aggregate) Cannot bin and aggregate.
 violation(bin_and_aggregate) :-
@@ -22,7 +22,6 @@ violation(no_encodings) :-
 
 % @hard(repeat_channel) Cannot use single channels twice for the same mark.
 violation(repeat_channel) :-
-    entity(mark,_,M),
     entity(encoding,M,E1),
     entity(encoding,M,E2),
     attribute((encoding,channel),E1,C),
@@ -40,10 +39,8 @@ violation(count_with_field) :-
     attribute((encoding,aggregate),E,count),
     attribute((encoding,field),E,_).
 
-
 % @hard(point_tick_bar_without_x_or_y) Point, tick, and bar require x or y channel.
 violation(point_tick_bar_without_x_or_y) :-
-    entity(encoding,_,E),
-    attribute((mark,type),E,(point;tick;bar)),
-    not attribute((encoding,channel),E,x),
-    not attribute((encoding,channel),E,y).
+    attribute((mark,type),M,(point;tick;bar)),
+    not attribute(mark_channel,M,x),
+    not attribute(mark_channel,M,y).
