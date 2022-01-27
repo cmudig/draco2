@@ -49,10 +49,8 @@ attribute(continuous,M,C) :-
 
 % @helper(mark_x_y_channels) whether a mark has both x and y channels.
 attribute(mark_x_y_channels,M) :-
-    entity(encoding,M,E1),
-    entity(encoding,M,E2),
-    attribute((encoding,channel),E1,x),
-    attribute((encoding,channel),E2,y).
+    attribute(mark_channel,M,x),
+    attribute(mark_channel,M,y).
 
 % @helper(mark_cont_channel) Whether a mark has a continuous channel C.
 attribute(mark_cont_channel,M,C) :-
