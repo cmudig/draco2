@@ -95,7 +95,6 @@ violation(size_negative) :-
 
 % @hard(repeat_channel) Cannot use single channels twice for the same mark.
 violation(repeat_channel) :-
-    entity(mark,_,M),
     entity(encoding,M,E1),
     entity(encoding,M,E2),
     attribute((encoding,channel),E1,C),
@@ -121,26 +120,23 @@ violation(count_with_field) :-
 % @hard(text_mark_without_text_channel) Text mark requires text encoding.
 violation(text_mark_without_text_channel) :-
     attribute((mark,type),M,text),
-    not attribute(has_channel,M,text).
+    not attribute(mark_channel,M,text).
 
 % @hard(text_channel_without_text_mark) Text channel requires text mark.
 violation(text_channel_without_text_mark) :-
-    not attribute((mark,type),M,text),
-    attribute(has_channel,M,text).
+    attribute(mark_channel,M,text),
+    not attribute((mark,type),M,text).
 
 % @hard(point_tick_bar_without_x_or_y) Point, tick, and bar require x or y channel.
 violation(point_tick_bar_without_x_or_y) :-
-    entity(mark,_,M),
-    entity(encoding,M,E),
     attribute((mark,type),M,(point;tick;bar)),
-    not attribute((encoding,channel),E,x),
-    not attribute((encoding,channel),E,y).
+    not attribute(mark_channel,M,x),
+    not attribute(mark_channel,M,y).
 
 % @hard(line_area_without_x_y) Line and area require x and y channel.
 violation(line_area_without_x_y) :-
-    entity(mark,_,M),
     attribute((mark,type),M,(line;area)),
-    not attribute(has_x_y_channels,M).
+    not attribute(mark_x_y_channels,M).
 
 % @hard(line_area_with_discrete) Line and area cannot have two discrete(ie. x and y cannot both be discrete).
 violation(line_area_with_discrete) :-
@@ -150,7 +146,6 @@ violation(line_area_with_discrete) :-
 
 % @hard(bar_tick_continuous_x_y) Bar and tick cannot have both x and y continuous.
 violation(bar_tick_continuous_x_y) :-
-    entity(mark,_,M),
     attribute((mark,type),M,(tick;bar)),
-    attribute(has_cont_channel,M,x),
-    attribute(has_cont_channel,M,y).
+    attribute(mark_cont_channel,M,x),
+    attribute(mark_cont_channel,M,y).
