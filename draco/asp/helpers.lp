@@ -47,7 +47,7 @@ attribute(continuous,M,C) :-
     attribute(mark_scale_channel,M,E,C),
     attribute((scale,type),E,(linear;log)).
 
-% @helper(mark_x_y_channels) whether a mark has both x and y channels.
+% @helper(mark_x_y_channels) Whether a mark has both x and y channels.
 attribute(mark_x_y_channels,M) :-
     attribute(mark_channel,M,x),
     attribute(mark_channel,M,y).
