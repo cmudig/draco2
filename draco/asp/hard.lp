@@ -71,7 +71,7 @@ violation(count_q_without_field) :-
     T != linear,
     T != log.
 
-% @hard(shape_discrete_non_ordered) Shape requires discrete and not ordered (nominal). Using ordinal would't make a difference in Vega-Lite.
+% @hard(shape_discrete_non_ordered) Shape requires discrete and not ordered (nominal).
 violation(shape_discrete_non_ordered) :-
     attribute((scale,channel),E,shape),
     not attribute((scale,type),E,categorical).
