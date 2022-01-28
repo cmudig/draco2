@@ -138,7 +138,7 @@ violation(line_area_without_x_y) :-
     attribute((mark,type),M,(line;area)),
     not attribute(mark_x_y_channels,M).
 
-% @hard(line_area_with_discrete) Line and area cannot have two discrete(ie. x and y cannot both be discrete).
+% @hard(line_area_with_discrete) Line and area cannot have two discrete positional encodings (i.e. x and y cannot both be discrete).
 violation(line_area_with_discrete) :-
     attribute((mark,type),M,(line;area)),
     attribute(discrete,M,x),
