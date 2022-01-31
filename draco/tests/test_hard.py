@@ -380,57 +380,6 @@ def test_enc_type_valid():
     )
 
 
-def test_bin_q_o():
-    b = hard.blocks["bin_q_o"]
-    assert isinstance(b, Block)
-
-    assert no_violations(
-        b.program
-        + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    entity(scale,0,4).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,binning),2,10).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,ordinal).
-    """
-    )
-
-    assert (
-        list_violations(
-            b.program
-            + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    entity(scale,0,4).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,binning),2,10).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,categorical).
-    """
-        )
-        == ["bin_q_o"]
-    )
-
-    assert (
-        list_violations(
-            b.program
-            + """
-    entity(view,0,1).
-    entity(mark,1,2).
-    entity(encoding,2,3).
-    entity(scale,0,4).
-    attribute((encoding,channel),3,x).
-    attribute((encoding,binning),3,10).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,categorical).
-    """
-        )
-        == ["bin_q_o"]
-    )
-
-
 def test_log_non_positive():
     b = hard.blocks["log_non_positive"]
     assert isinstance(b, Block)
@@ -576,69 +525,6 @@ def test_aggregate_t_valid():
     )
 
 
-def test_aggregate_nominal():
-    b = hard.blocks["aggregate_nominal"]
-    assert isinstance(b, Block)
-
-    assert no_violations(
-        b.program
-        + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    entity(scale,0,4).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,aggregate),2,min).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,ordinal).
-    """
-    )
-
-    assert no_violations(
-        b.program
-        + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    entity(scale,0,4).
-    attribute((encoding,channel),2,x).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,categorical).
-    """
-    )
-
-    assert (
-        list_violations(
-            b.program
-            + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    entity(scale,0,4).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,aggregate),2,min).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,categorical).
-    """
-        )
-        == ["aggregate_nominal"]
-    )
-
-    assert (
-        list_violations(
-            b.program
-            + """
-    entity(view,0,1).
-    entity(mark,1,2).
-    entity(encoding,2,3).
-    entity(scale,0,4).
-    attribute((encoding,channel),3,x).
-    attribute((encoding,aggregate),3,min).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,categorical).
-    """
-        )
-        == ["aggregate_nominal"]
-    )
-
-
 def test_aggregate_detail():
     b = hard.blocks["aggregate_detail"]
     assert isinstance(b, Block)
@@ -655,8 +541,8 @@ def test_aggregate_detail():
     )
 
 
-def test_count_q_without_field():
-    b = hard.blocks["count_q_without_field"]
+def test_count_without_field():
+    b = hard.blocks["count_without_field"]
     assert isinstance(b, Block)
 
     assert no_violations(
@@ -667,21 +553,6 @@ def test_count_q_without_field():
     entity(scale,0,4).
     attribute((encoding,channel),2,x).
     attribute((encoding,aggregate),2,count).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,linear).
-    """
-    )
-
-    assert no_violations(
-        b.program
-        + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    entity(scale,0,4).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,aggregate),2,count).
-    attribute((scale,channel),4,y).
-    attribute((scale,type),4,categorical).
     """
     )
 
@@ -695,7 +566,25 @@ def test_count_q_without_field():
     attribute((encoding,aggregate),2,count).
     """
         )
-        == ["count_q_without_field"]
+        == ["count_without_field"]
+    )
+
+
+def test_count_without_q():
+    b = hard.blocks["count_without_q"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    entity(encoding,1,2).
+    entity(scale,0,4).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,aggregate),2,count).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+    """
     )
 
     assert (
@@ -711,18 +600,18 @@ def test_count_q_without_field():
     attribute((scale,type),4,categorical).
     """
         )
-        == ["count_q_without_field"]
+        == ["count_without_q"]
     )
 
 
-def test_shape_discrete_non_ordered():
-    b = hard.blocks["shape_discrete_non_ordered"]
+def test_categorical_not_color():
+    b = hard.blocks["categorical_not_color"]
     assert isinstance(b, Block)
 
     assert no_violations(
         b.program
         + """
-    attribute((scale,channel),4,shape).
+    attribute((scale,channel),4,color).
     attribute((scale,type),4,categorical).
     """
     )
@@ -732,58 +621,10 @@ def test_shape_discrete_non_ordered():
             b.program
             + """
     attribute((scale,channel),4,shape).
-    attribute((scale,type),4,ordinal).
-    """
-        )
-        == ["shape_discrete_non_ordered"]
-    )
-
-
-def test_detail_non_ordered():
-    b = hard.blocks["detail_non_ordered"]
-    assert isinstance(b, Block)
-
-    assert no_violations(
-        b.program
-        + """
-    attribute((scale,channel),4,detail).
-    attribute((scale,type),4,categorical).
-    """
-    )
-
-    assert (
-        list_violations(
-            b.program
-            + """
-    attribute((scale,channel),4,detail).
-    attribute((scale,type),4,ordinal).
-    """
-        )
-        == ["detail_non_ordered"]
-    )
-
-
-def test_size_nominal():
-    b = hard.blocks["size_nominal"]
-    assert isinstance(b, Block)
-
-    assert no_violations(
-        b.program
-        + """
-    attribute((scale,channel),4,size).
-    attribute((scale,type),4,linear).
-    """
-    )
-
-    assert (
-        list_violations(
-            b.program
-            + """
-    attribute((scale,channel),4,size).
     attribute((scale,type),4,categorical).
     """
         )
-        == ["size_nominal"]
+        == ["categorical_not_color"]
     )
 
 

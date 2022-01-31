@@ -5,17 +5,8 @@ violation(enc_type_valid) :-
     attribute(field_type,N,(string;boolean)),
     attribute(scale_type,M,C,T),
     attribute(channel_field,M,C,N),
-    T != ordinal.
-
-% @hard(bin_q_o) Can only bin quantitative or ordinal.
-violation(bin_q_o) :-
-    attribute(scale_type,M,C,T),
-    entity(encoding,M,E),
-    attribute((encoding,channel),E,C),
-    attribute((encoding,binning),E,_),
-    T != linear,
-    T != log,
-    T != ordinal.
+    T != ordinal,
+    T != categorical.
 
 % @hard(log_non_positive) Cannot use log if the data is negative or zero.
 violation(log_non_positive) :-
@@ -34,7 +25,7 @@ violation(aggregate_o_valid) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     attribute((encoding,aggregate),E,A),
-    attribute(scale_type,M,C,ordinal),
+    attribute(scale_type,M,C,(ordinal;categorical)),
     A != min,
     A != max,
     A != median.
@@ -47,48 +38,32 @@ violation(aggregate_t_valid) :-
     A != min,
     A != max.
 
-% @hard(aggregate_nominal) Cannot aggregate categorical.
-violation(aggregate_nominal) :-
-    entity(encoding,M,E),
-    attribute((encoding,channel),E,C),
-    attribute((encoding,aggregate),E,_),
-    attribute(scale_type,M,C,categorical).
-
 % @hard(aggregate_detail) Detail cannot be aggregated.
 violation(aggregate_detail) :-
     attribute((encoding,channel),E,detail),
     attribute((encoding,aggregate),E,_).
 
-% @hard(count_q_without_field) Count has to be quantitative and not use a field.
-violation(count_q_without_field) :-
+% @hard(count_without_field) Count cannot use a field.
+violation(count_without_field) :-
     attribute((encoding,field),E,_),
     attribute((encoding,aggregate),E,count).
-violation(count_q_without_field) :-
-    entity(encoding,M,E),
+
+% @hard(count_without_q) Count has to have a quantitative scale.
+violation(count_without_q) :-
     attribute((encoding,aggregate),E,count),
-    attribute((encoding,channel),E,C),
-    attribute(scale_type,M,C,T),
-    T != linear,
-    T != log.
+    attribute((encoding,type),E,T),
+    T != log,
+    T != linear.
 
-% @hard(shape_discrete_non_ordered) Shape requires discrete and not ordered (nominal). Using ordinal would't make a difference in Vega-Lite.
-violation(shape_discrete_non_ordered) :-
-    attribute((scale,channel),E,shape),
-    not attribute((scale,type),E,categorical).
-
-% @hard(detail_non_ordered) Detail requires nominal.
-violation(detail_non_ordered) :-
-    attribute((scale,channel),E,detail),
-    not attribute((scale,type),E,categorical).
-
-% @hard(size_nominal)  Size implies order so nominal is misleading.
-violation(size_nominal) :-
-    attribute((scale,channel),E,size),
-    attribute((scale,type),E,categorical).
+% @hard(categorical_not_color) Categorical only applied to color channel.
+violation(categorical_not_color) :-
+    attribute((scale,type),S,categorical),
+    not attribute((scale,channel),S,color).
 
 % @hard(size_negative) Do not use size when data is negative as size implies that data is positive.
 violation(size_negative) :-
-    attribute(channel_field,_,size,N),
+    attribute((encoding,channel),E,size),
+    attribute((encoding,field),E,N),
     attribute(extent,N,MIN,MAX),
     MIN < 0,
     MAX > 0.
@@ -136,7 +111,7 @@ violation(point_tick_bar_without_x_or_y) :-
 % @hard(line_area_without_x_y) Line and area require x and y channel.
 violation(line_area_without_x_y) :-
     attribute((mark,type),M,(line;area)),
-    not attribute(mark_x_y_channels,M).
+    {attribute(mark_channel,M,x);attribute(mark_channel,M,y)} <= 1.
 
 % @hard(line_area_with_discrete) Line and area cannot have two discrete(ie. x and y cannot both be discrete).
 violation(line_area_with_discrete) :-
@@ -147,5 +122,5 @@ violation(line_area_with_discrete) :-
 % @hard(bar_tick_continuous_x_y) Bar and tick cannot have both x and y continuous.
 violation(bar_tick_continuous_x_y) :-
     attribute((mark,type),M,(tick;bar)),
-    attribute(mark_cont_channel,M,x),
-    attribute(mark_cont_channel,M,y).
+    attribute(continuous,M,x),
+    attribute(continuous,M,y).

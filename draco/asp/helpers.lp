@@ -6,15 +6,15 @@ attribute(mark_channel,M,C) :-
     attribute((encoding,channel),E,C).
 
 % @helper(mark_scale_channel) Whether a mark has an scale for a channel.
-attribute(mark_scale_channel,M,E,C) :-
+attribute(mark_scale_channel,M,S,C) :-
     entity(mark,V,M),
-    entity(scale,V,E),
-    attribute((scale,channel),E,C).
-attribute(mark_scale_channel,M,E,C) :-
+    entity(scale,V,S),
+    attribute((scale,channel),S,C).
+attribute(mark_scale_channel,M,S,C) :-
     entity(view,R,V),
     entity(mark,V,M),
-    entity(scale,R,E),
-    attribute((scale,channel),E,C).
+    entity(scale,R,S),
+    attribute((scale,channel),S,C).
 
 % @helper(check_field_type) Whether a field is of type T.
 attribute(field_type,N,T) :-
@@ -23,8 +23,8 @@ attribute(field_type,N,T) :-
 
 % @helper(check_scale_type) Whether a scale is of type T.
 attribute(scale_type,M,C,T) :-
-    attribute(mark_scale_channel,M,E,C),
-    attribute((scale,type),E,T).
+    attribute(mark_scale_channel,M,S,C),
+    attribute((scale,type),S,T).
 
 % @helper(check_channel_field) Whether the channel is referring to the field.
 attribute(channel_field,M,C,N) :-
@@ -33,26 +33,23 @@ attribute(channel_field,M,C,N) :-
     attribute((encoding,field),E,N).
 
 % @helper(extent) extent of a field.
-attribute(extent,N,MIN,MAX) :-
-    attribute((field,min),N,MIN),
-    attribute((field,max),N,MAX).
+attribute(extent,F,MIN,MAX) :-
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX).
 
 % @helper(discrete) Whether the channel is discrete.
 attribute(discrete,M,C) :-
-    attribute(mark_scale_channel,M,E,C),
-    attribute((scale,type),E,(ordinal;categorical)).
+    attribute(mark_scale_channel,M,S,C),
+    attribute((scale,type),S,(ordinal;categorical)).
 
 % @helper(continuous) Whether the channel is continuous.
 attribute(continuous,M,C) :-
-    attribute(mark_scale_channel,M,E,C),
-    attribute((scale,type),E,(linear;log)).
+    attribute(mark_scale_channel,M,S,C),
+    attribute((scale,type),S,(linear;log)).
 
-% @helper(mark_x_y_channels) whether a mark has both x and y channels.
-attribute(mark_x_y_channels,M) :-
-    attribute(mark_channel,M,x),
-    attribute(mark_channel,M,y).
-
-% @helper(mark_cont_channel) Whether a mark has a continuous channel C.
-attribute(mark_cont_channel,M,C) :-
-    attribute(mark_channel,M,C),
-    attribute(continuous,M,C).
+% @helper(encoding_type)
+attribute((encoding,type),E,T) :-
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
+    attribute(mark_scale_channel,M,S,C),
+    attribute((scale,type),S,T).
