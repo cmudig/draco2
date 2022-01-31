@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+
 from draco.asp_utils import Block, blocks_to_program, parse_blocks
 
 VALID_CONTENT = """
