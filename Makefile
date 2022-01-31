@@ -14,6 +14,7 @@ cover:
 lint:
 	@echo "==> 👕 Linting"
 	@poetry run black .
+	@poetry run usort format .
 	@poetry run flake8 draco --statistics
 
 .PHONY: typecheck
