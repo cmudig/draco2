@@ -16,22 +16,6 @@ attribute(mark_scale_channel,M,S,C) :-
     entity(scale,R,S),
     attribute((scale,channel),S,C).
 
-% @helper(check_field_type) Whether a field is of type T.
-attribute(field_type,N,T) :-
-    attribute((field,name),F,N),
-    attribute((field,type),F,T).
-
-% @helper(check_scale_type) Whether a scale is of type T.
-attribute(scale_type,M,C,T) :-
-    attribute(mark_scale_channel,M,S,C),
-    attribute((scale,type),S,T).
-
-% @helper(check_channel_field) Whether the channel is referring to the field.
-attribute(channel_field,M,C,N) :-
-    entity(encoding,M,E),
-    attribute((encoding,channel),E,C),
-    attribute((encoding,field),E,N).
-
 % @helper(extent) extent of a field.
 attribute(extent,F,MIN,MAX) :-
     attribute((field,min),F,MIN),

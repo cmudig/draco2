@@ -329,8 +329,8 @@ def test_enc_type_valid():
     assert no_violations(
         b.program
         + """
-    attribute((field,name),0,temperature).
-    attribute((field,type),0,number).
+    attribute((field,type),temperature,number).
+    attribute((field,type),name,string).
     entity(mark,root,1).
     entity(encoding,1,3).
     entity(scale,root,5).
@@ -345,8 +345,7 @@ def test_enc_type_valid():
         list_violations(
             b.program
             + """
-    attribute((field,name),0,temperature).
-    attribute((field,type),0,string).
+    attribute((field,type),temperature,string).
     entity(mark,0,1).
     entity(encoding,1,3).
     entity(scale,0,5).
@@ -364,8 +363,7 @@ def test_enc_type_valid():
         list_violations(
             b.program
             + """
-    attribute((field,name),0,temperature).
-    attribute((field,type),0,string).
+    attribute((field,type),temperature,string).
     entity(view,0,1).
     entity(mark,1,2).
     entity(encoding,2,3).
@@ -491,8 +489,7 @@ def test_aggregate_t_valid():
     assert no_violations(
         b.program
         + """
-    attribute((field,name),0,time).
-    attribute((field,type),0,datetime).
+    attribute((field,type),time,datetime).
     attribute((encoding,channel),3,x).
     attribute((encoding,field),3,time).
     attribute((encoding,aggregate),3,min).
@@ -502,8 +499,7 @@ def test_aggregate_t_valid():
     assert no_violations(
         b.program
         + """
-    attribute((field,name),0,time).
-    attribute((field,type),0,datetime).
+    attribute((field,type),time,datetime).
     attribute((encoding,channel),3,x).
     attribute((encoding,field),3,time).
     attribute((encoding,aggregate),3,max).
@@ -514,8 +510,7 @@ def test_aggregate_t_valid():
         list_violations(
             b.program
             + """
-    attribute((field,name),0,time).
-    attribute((field,type),0,datetime).
+    attribute((field,type),time,datetime).
     attribute((encoding,channel),3,x).
     attribute((encoding,field),3,time).
     attribute((encoding,aggregate),3,median).

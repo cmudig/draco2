@@ -2,17 +2,15 @@
 
 % @hard(enc_type_valid) Primitive type has to support data type.
 violation(enc_type_valid) :-
-    attribute(field_type,N,(string;boolean)),
-    attribute(scale_type,M,C,T),
-    attribute(channel_field,M,C,N),
-    T != ordinal,
-    T != categorical.
+    attribute((field,type),F,(string;boolean)),
+    attribute((encoding,field),E,F),
+    attribute((encoding,type),E,(linear;log)).
 
 % @hard(log_non_positive) Cannot use log if the data is negative or zero.
 violation(log_non_positive) :-
-    attribute(extent,N,MIN,_),
-    attribute(channel_field,M,C,N),
-    attribute(scale_type,M,C,log),
+    attribute(extent,F,MIN,_),
+    attribute((encoding,field),E,F),
+    attribute((encoding,type),E,log),
     MIN <= 0.
 
 % @hard(bin_and_aggregate) Cannot bin and aggregate.
@@ -22,18 +20,16 @@ violation(bin_and_aggregate) :-
 
 % @hard(aggregate_o_valid) Oridnal only supports min, max, and median.
 violation(aggregate_o_valid) :-
-    entity(encoding,M,E),
-    attribute((encoding,channel),E,C),
     attribute((encoding,aggregate),E,A),
-    attribute(scale_type,M,C,(ordinal;categorical)),
+    attribute((encoding,type),E,(ordinal;categorical)),
     A != min,
     A != max,
     A != median.
 
 % @hard(aggregate_t_valid) Temporal only supports min and max.
 violation(aggregate_t_valid) :-
-    attribute(field_type,N,datetime),
-    attribute((encoding,field),E,N),
+    attribute((field,type),F,datetime),
+    attribute((encoding,field),E,F),
     attribute((encoding,aggregate),E,A),
     A != min,
     A != max.
@@ -63,8 +59,8 @@ violation(categorical_not_color) :-
 % @hard(size_negative) Do not use size when data is negative as size implies that data is positive.
 violation(size_negative) :-
     attribute((encoding,channel),E,size),
-    attribute((encoding,field),E,N),
-    attribute(extent,N,MIN,MAX),
+    attribute((encoding,field),E,F),
+    attribute(extent,F,MIN,MAX),
     MIN < 0,
     MAX > 0.
 
