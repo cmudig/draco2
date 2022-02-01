@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - uses: psf/black@21.12b0
+      - uses: psf/black@stable
         with:
           version: "21.12b0"
       - uses: py-actions/flake8@v2
