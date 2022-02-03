@@ -44,7 +44,7 @@ Draco can use information about the field type and field statistics. Each field 
 attribute(number_rows,root,42).
 
 entity(field,root,f1).
-attribute((field,type),f1,date).
+attribute((field,name),f1,date).
 attribute((field,type),f1,datetime).
 attribute((field,unique),f1,1461).
 
