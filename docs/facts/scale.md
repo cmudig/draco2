@@ -19,11 +19,11 @@ Scales with a discrete domain of categorical values that map to a continuous ran
 ## Example
 
 ```prolog
-attribute((scale,channel),1,x).
-attribute((scale,type),1,linear).
+attribute((scale,channel),s,x).
+attribute((scale,type),s,linear).
 ```
 
 ```prolog
-attribute((scale,channel),1,color).
-attribute((scale,type),1,categorical).
+attribute((scale,channel),s,color).
+attribute((scale,type),s,categorical).
 ```
