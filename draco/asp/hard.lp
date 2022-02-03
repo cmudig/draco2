@@ -26,7 +26,7 @@ violation(aggregate_o_valid) :-
     A != max,
     A != median.
 
-% @hard(aggregate_t_valid) Temporal only supports min and max.
+% @hard(aggregate_t_valid) Temporal scale only supports min and max.
 violation(aggregate_t_valid) :-
     attribute((field,type),F,datetime),
     attribute((encoding,field),E,F),
@@ -44,14 +44,14 @@ violation(count_without_field) :-
     attribute((encoding,field),E,_),
     attribute((encoding,aggregate),E,count).
 
-% @hard(count_without_q) Count has to have a quantitative scale.
+% @hard(count_without_q) Count has to have a continuous scale.
 violation(count_without_q) :-
     attribute((encoding,aggregate),E,count),
     attribute((encoding,type),E,T),
     T != log,
     T != linear.
 
-% @hard(categorical_not_color) Categorical only applied to color channel.
+% @hard(categorical_not_color) Categorical only works with color channel.
 violation(categorical_not_color) :-
     attribute((scale,type),S,categorical),
     not attribute((scale,channel),S,color).

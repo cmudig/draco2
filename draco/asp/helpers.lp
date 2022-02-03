@@ -32,7 +32,7 @@ attribute(continuous,M,C) :-
     attribute((scale,type),S,(linear;log)).
 
 % @helper(encoding_type)
-attribute((encoding,type),E,T) :-
+attribute((encoding,scale_type),E,T) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     attribute(mark_scale_channel,M,S,C),

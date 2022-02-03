@@ -331,11 +331,13 @@ def test_enc_type_valid():
         + """
     attribute((field,type),temperature,number).
     attribute((field,type),name,string).
+    
     entity(mark,root,1).
     entity(encoding,1,3).
-    entity(scale,root,5).
     attribute((encoding,channel),3,x).
     attribute((encoding,field),3,temperature).
+    
+    entity(scale,root,5).
     attribute((scale,channel),5,x).
     attribute((scale,type),5,linear).
     """
