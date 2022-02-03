@@ -37,3 +37,6 @@ attribute((encoding,scale_type),E,T) :-
     attribute((encoding,channel),E,C),
     attribute(mark_scale_channel,M,S,C),
     attribute((scale,type),S,T).
+
+% % @helper(channel_type)
+% attribute(channel_type,V,T) :-

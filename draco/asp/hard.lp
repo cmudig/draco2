@@ -4,27 +4,19 @@
 violation(enc_type_valid) :-
     attribute((field,type),F,(string;boolean)),
     attribute((encoding,field),E,F),
-    attribute((encoding,type),E,(linear;log)).
+    attribute((encoding,scale_type),E,(linear;log)).
 
 % @hard(log_non_positive) Cannot use log if the data is negative or zero.
 violation(log_non_positive) :-
-    attribute(extent,F,MIN,_),
+    attribute((field,min),F,MIN),
     attribute((encoding,field),E,F),
-    attribute((encoding,type),E,log),
+    attribute((encoding,scale_type),E,log),
     MIN <= 0.
 
 % @hard(bin_and_aggregate) Cannot bin and aggregate.
 violation(bin_and_aggregate) :-
     attribute((encoding,binning),E,_),
     attribute((encoding,aggregate),E,_).
-
-% @hard(aggregate_o_valid) Oridnal only supports min, max, and median.
-violation(aggregate_o_valid) :-
-    attribute((encoding,aggregate),E,A),
-    attribute((encoding,type),E,(ordinal;categorical)),
-    A != min,
-    A != max,
-    A != median.
 
 % @hard(aggregate_t_valid) Temporal scale only supports min and max.
 violation(aggregate_t_valid) :-
@@ -33,6 +25,21 @@ violation(aggregate_t_valid) :-
     attribute((encoding,aggregate),E,A),
     A != min,
     A != max.
+
+% @hard(aggregate_num_valid) Only numbers can be aggregated with mean, sum, stdev
+violation(aggregate_num_valid) :-
+    attribute((field,type),F,T),
+    attribute((encoding,field),E,F),
+    attribute((encoding,aggregate),E,(mean;sum;stdev)),
+    T != number.
+
+% @hard(bin_n_d) Only numbers and datetimes can be binned
+violation(bin_n_d) :-
+    attribute((field,type),F,T),
+    attribute((encoding,field),E,F),
+    attribute((encoding,binning),E,_),
+    T != number,
+    T != datetime.
 
 % @hard(aggregate_detail) Detail cannot be aggregated.
 violation(aggregate_detail) :-
@@ -47,9 +54,8 @@ violation(count_without_field) :-
 % @hard(count_without_q) Count has to have a continuous scale.
 violation(count_without_q) :-
     attribute((encoding,aggregate),E,count),
-    attribute((encoding,type),E,T),
-    T != log,
-    T != linear.
+    attribute((encoding,scale_type),E,T),
+    domain(discrete_scale,T).
 
 % @hard(categorical_not_color) Categorical only works with color channel.
 violation(categorical_not_color) :-

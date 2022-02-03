@@ -1,12 +1,17 @@
+from typing import Iterable, Union
+
 from draco import dict_to_facts
 from draco.asp_utils import Block
-from draco.programs import hard, helpers
+from draco.programs import define, hard, helpers
 from draco.run import is_satisfiable, run_clingo
 
 
-def list_violations(program: str):
+def list_violations(program: Union[str, Iterable[str]]):
+    if not isinstance(program, str):
+        program = "\n".join(program)
+
     try:
-        model = next(run_clingo(helpers.program + program, 1))
+        model = next(run_clingo(helpers.program + define.program + program, 1))
 
         return [
             symbol.arguments[0].name
@@ -17,8 +22,13 @@ def list_violations(program: str):
         return None
 
 
-def no_violations(program: str):
-    return is_satisfiable(helpers.program + program + ":- violation(_).")
+def no_violations(program: Union[str, Iterable[str]]):
+    if not isinstance(program, str):
+        program = "\n".join(program)
+
+    return is_satisfiable(
+        helpers.program + define.program + program + ":- violation(_)."
+    )
 
 
 def test_list_violations():
@@ -331,28 +341,31 @@ def test_enc_type_valid():
         + """
     attribute((field,type),temperature,number).
     attribute((field,type),name,string).
-    
+
     entity(mark,root,1).
     entity(encoding,1,3).
     attribute((encoding,channel),3,x).
     attribute((encoding,field),3,temperature).
-    
+
     entity(scale,root,5).
     attribute((scale,channel),5,x).
     attribute((scale,type),5,linear).
     """
     )
 
+    # linear scale/encoding type doesn't support strings
     assert (
         list_violations(
             b.program
             + """
-    attribute((field,type),temperature,string).
+    attribute((field,type),f1,string).
+
     entity(mark,0,1).
     entity(encoding,1,3).
-    entity(scale,0,5).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,temperature).
+    attribute((encoding,field),3,f1).
+
+    entity(scale,0,5).
     attribute((scale,channel),5,x).
     attribute((scale,type),5,linear).
     """
@@ -360,18 +373,20 @@ def test_enc_type_valid():
         == ["enc_type_valid"]
     )
 
-    # shared scale
+    # previous case with shared scale from root
     assert (
         list_violations(
             b.program
             + """
-    attribute((field,type),temperature,string).
+    attribute((field,type),f1,string).
     entity(view,0,1).
+
     entity(mark,1,2).
     entity(encoding,2,3).
-    entity(scale,0,5).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,temperature).
+    attribute((encoding,field),3,f1).
+
+    entity(scale,0,5).
     attribute((scale,channel),5,x).
     attribute((scale,type),5,linear).
     """
@@ -384,6 +399,7 @@ def test_log_non_positive():
     b = hard.blocks["log_non_positive"]
     assert isinstance(b, Block)
 
+    # a linear scale with both negative and positive numbers
     assert no_violations(
         b.program
         + """
@@ -400,6 +416,24 @@ def test_log_non_positive():
     """
     )
 
+    # a log scale with only positive numbers
+    assert no_violations(
+        b.program
+        + """
+    attribute((field,min),precipitation,10).
+    attribute((field,max),precipitation,55).
+
+    entity(mark,0,1).
+    entity(encoding,1,2).
+    entity(scale,0,4).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,precipitation).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,log).
+    """
+    )
+
+    # a log scale with only negative numbers
     assert (
         list_violations(
             b.program
@@ -417,70 +451,6 @@ def test_log_non_positive():
     """
         )
         == ["log_non_positive"]
-    )
-
-
-def test_aggregate_o_valid():
-    b = hard.blocks["aggregate_o_valid"]
-    assert isinstance(b, Block)
-
-    assert no_violations(
-        b.program
-        + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    entity(scale,0,4).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,aggregate),2,min).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,ordinal).
-    """
-    )
-
-    assert no_violations(
-        b.program
-        + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    entity(scale,0,4).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,aggregate),2,median).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,ordinal).
-    """
-    )
-
-    assert (
-        list_violations(
-            b.program
-            + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    entity(scale,0,4).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,aggregate),2,mean).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,ordinal).
-    """
-        )
-        == ["aggregate_o_valid"]
-    )
-
-    assert (
-        list_violations(
-            b.program
-            + """
-    entity(view,0,1).
-    entity(mark,1,2).
-    entity(encoding,2,3).
-    entity(scale,0,4).
-    attribute((encoding,channel),3,x).
-    attribute((encoding,aggregate),3,mean).
-    attribute((scale,channel),4,x).
-    attribute((scale,type),4,ordinal).
-    """
-        )
-        == ["aggregate_o_valid"]
     )
 
 
@@ -522,6 +492,72 @@ def test_aggregate_t_valid():
     )
 
 
+def test_aggregate_num_valid():
+    b = hard.blocks["aggregate_num_valid"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((field,type),f1,number).
+    attribute((encoding,channel),3,x).
+    attribute((encoding,field),3,f1).
+    attribute((encoding,aggregate),3,mean).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((field,type),f1,string).
+    attribute((encoding,channel),3,x).
+    attribute((encoding,field),3,f1).
+    attribute((encoding,aggregate),3,sum).
+    """
+        )
+        == ["aggregate_num_valid"]
+    )
+
+
+def test_bin_n_d():
+    b = hard.blocks["bin_n_d"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((field,type),f1,number).
+    attribute((encoding,channel),3,x).
+    attribute((encoding,field),3,f1).
+    attribute((encoding,binning),3,10).
+    """
+    )
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((field,type),f1,datetime).
+    attribute((encoding,channel),3,x).
+    attribute((encoding,field),3,f1).
+    attribute((encoding,binning),3,10).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((field,type),f1,string).
+    attribute((encoding,channel),3,x).
+    attribute((encoding,field),3,f1).
+    attribute((encoding,binning),3,10).
+    """
+        )
+        == ["bin_n_d"]
+    )
+
+
 def test_aggregate_detail():
     b = hard.blocks["aggregate_detail"]
     assert isinstance(b, Block)
@@ -547,7 +583,6 @@ def test_count_without_field():
         + """
     entity(mark,0,1).
     entity(encoding,1,2).
-    entity(scale,0,4).
     attribute((encoding,channel),2,x).
     attribute((encoding,aggregate),2,count).
     """
@@ -576,9 +611,10 @@ def test_count_without_q():
         + """
     entity(mark,0,1).
     entity(encoding,1,2).
-    entity(scale,0,4).
     attribute((encoding,channel),2,x).
     attribute((encoding,aggregate),2,count).
+
+    entity(scale,0,4).
     attribute((scale,channel),4,x).
     attribute((scale,type),4,linear).
     """
@@ -590,9 +626,10 @@ def test_count_without_q():
             + """
     entity(mark,0,1).
     entity(encoding,1,2).
-    entity(scale,0,4).
     attribute((encoding,channel),2,x).
     attribute((encoding,aggregate),2,count).
+
+    entity(scale,0,4).
     attribute((scale,channel),4,x).
     attribute((scale,type),4,categorical).
     """
@@ -634,6 +671,7 @@ def test_size_negative():
         + """
     attribute((field,min),precipitation,0).
     attribute((field,max),precipitation,55).
+
     entity(encoding,0,1).
     attribute((encoding,channel),1,size).
     attribute((encoding,field),1,precipitation).
@@ -646,6 +684,7 @@ def test_size_negative():
             + """
     attribute((field,min),precipitation,-10).
     attribute((field,max),precipitation,55).
+
     entity(encoding,0,1).
     attribute((encoding,channel),1,size).
     attribute((encoding,field),1,precipitation).
@@ -718,11 +757,13 @@ def test_line_area_with_discrete():
         b.program
         + """
     entity(mark,0,1).
-    entity(scale,0,2).
-    entity(scale,0,3).
     attribute((mark,type),1,line).
+
+    entity(scale,0,2).
     attribute((scale,channel),2,x).
     attribute((scale,type),2,linear).
+
+    entity(scale,0,3).
     attribute((scale,channel),3,y).
     attribute((scale,type),3,linear).
     """
@@ -732,11 +773,13 @@ def test_line_area_with_discrete():
         b.program
         + """
     entity(mark,0,1).
-    entity(scale,0,2).
-    entity(scale,0,3).
     attribute((mark,type),1,line).
+
+    entity(scale,0,2).
     attribute((scale,channel),2,x).
     attribute((scale,type),2,categorical).
+
+    entity(scale,0,3).
     attribute((scale,channel),3,y).
     attribute((scale,type),3,linear).
     """
@@ -747,11 +790,13 @@ def test_line_area_with_discrete():
             b.program
             + """
     entity(mark,0,1).
-    entity(scale,0,2).
-    entity(scale,0,3).
     attribute((mark,type),1,line).
+
+    entity(scale,0,2).
     attribute((scale,channel),2,x).
     attribute((scale,type),2,categorical).
+
+    entity(scale,0,3).
     attribute((scale,channel),3,y).
     attribute((scale,type),3,ordinal).
     """
@@ -769,8 +814,10 @@ def test_bar_tick_continuous_x_y():
         + """
     entity(mark,0,1).
     attribute((mark,type),1,tick).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
+
     entity(scale,0,4).
     attribute((scale,channel),4,x).
     attribute((scale,type),4,linear).
@@ -778,75 +825,103 @@ def test_bar_tick_continuous_x_y():
     )
 
     assert no_violations(
-        b.program
-        + ("\n").join(
-            dict_to_facts(
-                {
-                    "mark": [
-                        {
-                            "type": "tick",
-                            "encoding": [
-                                {"channel": "x", "field": "temperature"},
-                                {"channel": "y", "field": "wind"},
-                            ],
-                        }
-                    ],
-                    "scale": [
-                        {"channel": "x", "type": "linear"},
-                        {"channel": "y", "type": "categorical"},
-                    ],
-                }
-            )
+        [b.program]
+        + dict_to_facts(
+            {
+                "mark": [
+                    {
+                        "type": "tick",
+                        "encoding": [
+                            {"channel": "x", "field": "temperature"},
+                            {"channel": "y", "field": "wind"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "x", "type": "linear"},
+                    {"channel": "y", "type": "categorical"},
+                ],
+            }
         )
     )
 
-    # multiple views
+    # multiple views with both linear x and y
     assert (
         list_violations(
-            b.program
-            + ("\n").join(
-                dict_to_facts(
-                    {
-                        "view": [
-                            {
-                                "mark": [
-                                    {
-                                        "type": "tick",
-                                        "encoding": [
-                                            {"channel": "y", "field": "temperature"}
-                                        ],
-                                    }
-                                ],
-                                "scale": [{"channel": "y", "type": "linear"}],
-                            },
-                            {
-                                "mark": [
-                                    {
-                                        "type": "bar",
-                                        "encoding": [
-                                            {"channel": "x", "field": "temperature"},
-                                            {"channel": "y", "aggregate": "count"},
-                                        ],
-                                    }
-                                ],
-                                "scale": [
-                                    {"channel": "x", "type": "linear"},
-                                    {"channel": "y", "type": "linear"},
-                                ],
-                            },
-                        ]
-                    }
-                )
+            [b.program]
+            + dict_to_facts(
+                {
+                    "view": [
+                        {
+                            "mark": [
+                                {
+                                    "type": "tick",
+                                    "encoding": [
+                                        {"channel": "y", "field": "temperature"}
+                                    ],
+                                }
+                            ],
+                            "scale": [{"channel": "y", "type": "linear"}],
+                        },
+                        {
+                            "mark": [
+                                {
+                                    "type": "bar",
+                                    "encoding": [
+                                        {"channel": "x", "field": "temperature"},
+                                        {"channel": "y", "aggregate": "count"},
+                                    ],
+                                }
+                            ],
+                            "scale": [
+                                {"channel": "x", "type": "linear"},
+                                {"channel": "y", "type": "linear"},
+                            ],
+                        },
+                    ]
+                }
             )
         )
         == ["bar_tick_continuous_x_y"]
     )
 
-    # multiple views with one shared-scale
+    # multiple views where only y is linear
     assert no_violations(
-        b.program
-        + ("\n").join(
-            dict_to_facts(
+        [b.program]
+        + dict_to_facts(
+            {
+                "view": [
+                    {
+                        "mark": [
+                            {
+                                "type": "tick",
+                                "encoding": [{"channel": "y", "field": "temperature"}],
+                            }
+                        ]
+                    },
+                    {
+                        "mark": [
+                            {
+                                "type": "bar",
+                                "encoding": [
+                                    {"channel": "x", "field": "temperature"},
+                                    {"channel": "y", "aggregate": "count"},
+                                ],
+                            }
+                        ],
+                        "scale": [{"channel": "x", "type": "ordinal"}],
+                    },
+                ],
+                "scale": [{"channel": "y", "type": "linear"}],
+            }
+        )
+    )
+
+    # multiple views where both x and y are linear
+    assert (
+        list_violations(
+            [b.program]
+            + dict_to_facts(
                 {
                     "view": [
                         {
@@ -869,48 +944,11 @@ def test_bar_tick_continuous_x_y():
                                     ],
                                 }
                             ],
-                            "scale": [{"channel": "x", "type": "ordinal"}],
+                            "scale": [{"channel": "x", "type": "linear"}],
                         },
                     ],
                     "scale": [{"channel": "y", "type": "linear"}],
                 }
-            )
-        )
-    )
-
-    assert (
-        list_violations(
-            b.program
-            + ("\n").join(
-                dict_to_facts(
-                    {
-                        "view": [
-                            {
-                                "mark": [
-                                    {
-                                        "type": "tick",
-                                        "encoding": [
-                                            {"channel": "y", "field": "temperature"}
-                                        ],
-                                    }
-                                ]
-                            },
-                            {
-                                "mark": [
-                                    {
-                                        "type": "bar",
-                                        "encoding": [
-                                            {"channel": "x", "field": "temperature"},
-                                            {"channel": "y", "aggregate": "count"},
-                                        ],
-                                    }
-                                ],
-                                "scale": [{"channel": "x", "type": "linear"}],
-                            },
-                        ],
-                        "scale": [{"channel": "y", "type": "linear"}],
-                    }
-                )
             )
         )
         == ["bar_tick_continuous_x_y"]
