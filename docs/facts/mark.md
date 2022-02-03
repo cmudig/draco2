@@ -12,5 +12,5 @@ If you define multiple marks or a view has multiple marks, Draco assumes that th
 ## Example
 
 ```prolog
-attribute((mark,type),1,tick).
+attribute((mark,type),m,tick).
 ```
