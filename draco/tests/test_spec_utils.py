@@ -39,6 +39,7 @@ def test_get_violations():
             "field": [{"name": "temperature", "type": "number"}],
             "mark": [
                 {
+                    # invalid mark
                     "type": "tickk",
                     "encoding": [{"channel": "x", "field": "temperature"}],
                 }
@@ -50,8 +51,7 @@ def test_get_violations():
 
 
 def test_get_violations_satisfiable():
-    prog = ":- a."
-    assert get_violations(prog) == []
+    assert get_violations("") == []
 
 
 def test_get_violations_unsatisfiable():
