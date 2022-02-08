@@ -45,45 +45,10 @@ violation(point_tick_bar_without_x_or_y) :-
     not attribute(mark_channel,M,x),
     not attribute(mark_channel,M,y).
 
-% @hard(invalid_mark) Check mark.
-violation(invalid_mark) :-
-    attribute((mark,type),_,M),
-    not domain((mark,type),M).
-
-% @hard(invalid_channel) Check channel.
-violation(invalid_channel) :-
-    attribute((encoding,channel),_,C),
-    not domain(channel,C).
-
-% @hard(invalid_field_name) Check field name.
-violation(invalid_field_name) :-
-    attribute((encoding,field),_,F),
-    not domain((field,name),F).
-
-% @hard(invalid_scale) Check scale type.
-violation(invalid_scale) :-
-    attribute((scale,type),_,S),
-    not domain((scale,type),S).
-
-% @hard(invalid_aggregate) Check aggregate type.
-violation(invalid_aggregate) :-
-    attribute((encoding,aggregate),_,A),
-    not domain((encoding,aggregate),A).
-
 % @hard(invalid_bin) Check bin type.
 violation(invalid_bin) :-
     attribute((encoding,binning),_,B),
     not B >= 0.
-
-% @hard(invalid_field_type) Check field type.
-violation(invalid_field_type) :-
-    attribute((field,type),_,F),
-    not domain((field,type),F).
-
-% @hard(invalid_task) Task has to be one of the tasks.
-violation(invalid_task) :-
-    attribute(task,root,T),
-    not domain(task,T).
 
 % @hard(invalid_num_rows) Num_rows has to be larger than 0.
 violation(invalid_num_rows) :-
