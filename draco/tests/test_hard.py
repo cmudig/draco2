@@ -320,6 +320,7 @@ def test_point_tick_bar_without_x_or_y():
         == ["point_tick_bar_without_x_or_y"]
     )
 
+
 def test_invalid_mark():
     b = hard.blocks["invalid_mark"]
     assert isinstance(b, Block)
@@ -335,14 +336,15 @@ def test_invalid_mark():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(encoding,root,1).
     attribute((mark,type),1,tickxx).
     """
         )
         == ["invalid_mark"]
     )
+
 
 def test_invalid_channel():
     b = hard.blocks["invalid_channel"]
@@ -361,8 +363,8 @@ def test_invalid_channel():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(mark,root,1).
     attribute((mark,type),1,tick).
     entity(encoding,1,2).
@@ -371,6 +373,7 @@ def test_invalid_channel():
         )
         == ["invalid_channel"]
     )
+
 
 def test_invalid_field_name():
     b = hard.blocks["invalid_field_name"]
@@ -393,8 +396,8 @@ def test_invalid_field_name():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,0).
     attribute((field,name),0,temperature).
     attribute((field,type),0,number).
@@ -407,6 +410,7 @@ def test_invalid_field_name():
         )
         == ["invalid_field_name"]
     )
+
 
 def test_invalid_scale():
     b = hard.blocks["invalid_scale"]
@@ -424,8 +428,8 @@ def test_invalid_scale():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(scale,root,3).
     attribute((scale,channel),3,x).
     attribute((scale,type),3,cosine).
@@ -433,6 +437,7 @@ def test_invalid_scale():
         )
         == ["invalid_scale"]
     )
+
 
 def test_invalid_aggregate():
     b = hard.blocks["invalid_aggregate"]
@@ -451,8 +456,8 @@ def test_invalid_aggregate():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(encoding,2,4).
     attribute((encoding,channel),4,y).
     attribute((encoding,field),4,temperature).
@@ -461,6 +466,7 @@ def test_invalid_aggregate():
         )
         == ["invalid_aggregate"]
     )
+
 
 def test_invalid_bin():
     b = hard.blocks["invalid_bin"]
@@ -489,8 +495,8 @@ def test_invalid_bin():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
     attribute((encoding,field),2,temperature).
@@ -499,6 +505,7 @@ def test_invalid_bin():
         )
         == ["invalid_bin"]
     )
+
 
 def test_invalid_field_type():
     b = hard.blocks["invalid_field_type"]
@@ -515,14 +522,15 @@ def test_invalid_field_type():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,0).
     attribute((field,type),0,log).
     """
         )
         == ["invalid_field_type"]
     )
+
 
 def test_invalid_task():
     b = hard.blocks["invalid_task"]
@@ -538,13 +546,14 @@ def test_invalid_task():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     attribute(task,root,summary_task).
     """
         )
         == ["invalid_task"]
     )
+
 
 def test_invalid_num_rows():
     b = hard.blocks["invalid_num_rows"]
@@ -560,13 +569,14 @@ def test_invalid_num_rows():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     attribute(number_rows,root,0).
     """
         )
         == ["invalid_num_rows"]
     )
+
 
 def test_invalid_unique():
     b = hard.blocks["invalid_unique"]
@@ -584,8 +594,8 @@ def test_invalid_unique():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,date).
     attribute((field,type),date,datetime).
     attribute((field,unique),date,0).
@@ -593,6 +603,7 @@ def test_invalid_unique():
         )
         == ["invalid_unique"]
     )
+
 
 def test_invalid_extent_non_number_min():
     b = hard.blocks["invalid_extent_non_number_min"]
@@ -610,8 +621,8 @@ def test_invalid_extent_non_number_min():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,date).
     attribute((field,type),date,datetime).
     attribute((field,min),date,0).
@@ -619,6 +630,7 @@ def test_invalid_extent_non_number_min():
         )
         == ["invalid_extent_non_number_min"]
     )
+
 
 def test_invalid_extent_non_number_max():
     b = hard.blocks["invalid_extent_non_number_max"]
@@ -636,8 +648,8 @@ def test_invalid_extent_non_number_max():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,date).
     attribute((field,type),date,datetime).
     attribute((field,max),date,55).
@@ -645,6 +657,7 @@ def test_invalid_extent_non_number_max():
         )
         == ["invalid_extent_non_number_max"]
     )
+
 
 def test_invalid_non_number_std():
     b = hard.blocks["invalid_non_number_std"]
@@ -662,8 +675,8 @@ def test_invalid_non_number_std():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,date).
     attribute((field,type),date,datetime).
     attribute((field,std),date,6).
@@ -671,6 +684,7 @@ def test_invalid_non_number_std():
         )
         == ["invalid_non_number_std"]
     )
+
 
 def test_invalid_std():
     b = hard.blocks["invalid_std"]
@@ -689,8 +703,8 @@ def test_invalid_std():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,precipitation).
     attribute((field,type),precipitation,number).
     attribute((field,std),precipitation,-10).
@@ -699,6 +713,7 @@ def test_invalid_std():
         )
         == ["invalid_std"]
     )
+
 
 def test_invalid_extent_order():
     b = hard.blocks["invalid_extent_order"]
@@ -730,8 +745,8 @@ def test_invalid_extent_order():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,precipitation).
     attribute((field,type),precipitation,number).
     attribute((field,min),precipitation,55).
@@ -740,6 +755,7 @@ def test_invalid_extent_order():
         )
         == ["invalid_extent_order"]
     )
+
 
 def test_invalid_non_string_freq():
     b = hard.blocks["invalid_non_string_freq"]
@@ -757,8 +773,8 @@ def test_invalid_non_string_freq():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,precipitation).
     attribute((field,type),precipitation,number).
     attribute((field,freq),precipitation,714).
@@ -766,6 +782,7 @@ def test_invalid_non_string_freq():
         )
         == ["invalid_non_string_freq"]
     )
+
 
 def test_encoding_field_same_name():
     b = hard.blocks["encoding_field_same_name"]
@@ -782,8 +799,8 @@ def test_encoding_field_same_name():
 
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,0).
     attribute((field,name),0,x).
     """
@@ -791,11 +808,10 @@ def test_encoding_field_same_name():
         == ["encoding_field_same_name"]
     )
 
-
     assert (
         list_violations(
-        p
-        + """
+            p
+            + """
     entity(field,root,0).
     attribute((field,name),0,detail).
     """
