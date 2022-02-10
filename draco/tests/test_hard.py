@@ -953,3 +953,37 @@ def test_bar_tick_continuous_x_y():
         )
         == ["bar_tick_continuous_x_y"]
     )
+
+
+def test_view_scale_conflict():
+    b = hard.blocks["view_scale_conflict"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    entity(view,0,1).
+
+    entity(scale,1,2).
+    attribute((scale,channel),2,x).
+
+    entity(scale,0,3).
+    attribute((scale,channel),3,y).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(view,0,1).
+
+    entity(scale,1,2).
+    attribute((scale,channel),2,x).
+
+    entity(scale,0,3).
+    attribute((scale,channel),3,x).
+    """
+        )
+        == ["view_scale_conflict"]
+    )

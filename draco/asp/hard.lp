@@ -4,7 +4,8 @@
 violation(scale_type_data_type) :-
     attribute((field,type),F,(string;boolean)),
     attribute((encoding,field),E,F),
-    attribute((encoding,scale_type),E,(linear;log)).
+    attribute((encoding,scale_type),E,T),
+    domain(continuous_scale,T).
 
 % @hard(log_non_positive) Cannot use log if the data is negative or zero.
 violation(log_non_positive) :-
@@ -136,3 +137,11 @@ violation(bar_tick_continuous_x_y) :-
     attribute((scale,type),S2,T2),
     domain(continuous_scale,T1),
     domain(continuous_scale,T2).
+
+% @hard(view_scale_conflict) A view cannot have a scale definition that conflicts with a shared scale for the same channel.
+violation(view_scale_conflict) :-
+    entity(view,R,V),
+    entity(scale,R,S1),
+    entity(scale,V,S2),
+    attribute((scale,channel),S1,C),
+    attribute((scale,channel),S2,C).
