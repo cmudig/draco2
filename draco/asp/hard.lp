@@ -1,7 +1,7 @@
 % ====== Hard constraints ======
 
-% @hard(enc_type_valid) Primitive type has to support data type.
-violation(enc_type_valid) :-
+% @hard(scale_type_data_type) Primitive type has to support scale type.
+violation(scale_type_data_type) :-
     attribute((field,type),F,(string;boolean)),
     attribute((encoding,field),E,F),
     attribute((encoding,scale_type),E,(linear;log)).
@@ -66,7 +66,8 @@ violation(categorical_not_color) :-
 violation(size_negative) :-
     attribute((encoding,channel),E,size),
     attribute((encoding,field),E,F),
-    attribute(extent,F,MIN,MAX),
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
     MIN < 0,
     MAX > 0.
 
@@ -115,14 +116,23 @@ violation(line_area_without_x_y) :-
     attribute((mark,type),M,(line;area)),
     {attribute(mark_channel,M,x);attribute(mark_channel,M,y)} <= 1.
 
-% @hard(line_area_with_discrete) Line and area cannot have two discrete positional encodings (i.e. x and y cannot both be discrete).
+% @hard(line_area_with_discrete) Line and area cannot have both x and y discrete.
 violation(line_area_with_discrete) :-
     attribute((mark,type),M,(line;area)),
-    attribute(discrete,M,x),
-    attribute(discrete,M,y).
+    attribute(mark_scale_channel,M,S1,x),
+    attribute(mark_scale_channel,M,S2,y),
+    attribute((scale,type),S1,T1),
+    attribute((scale,type),S2,T2),
+    domain(discrete_scale,T1),
+    domain(discrete_scale,T2).
+
 
 % @hard(bar_tick_continuous_x_y) Bar and tick cannot have both x and y continuous.
 violation(bar_tick_continuous_x_y) :-
     attribute((mark,type),M,(tick;bar)),
-    attribute(continuous,M,x),
-    attribute(continuous,M,y).
+    attribute(mark_scale_channel,M,S1,x),
+    attribute(mark_scale_channel,M,S2,y),
+    attribute((scale,type),S1,T1),
+    attribute((scale,type),S2,T2),
+    domain(continuous_scale,T1),
+    domain(continuous_scale,T2).

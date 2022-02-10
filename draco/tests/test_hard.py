@@ -332,8 +332,8 @@ def test_point_tick_bar_without_x_or_y():
     )
 
 
-def test_enc_type_valid():
-    b = hard.blocks["enc_type_valid"]
+def test_scale_type_data_type():
+    b = hard.blocks["scale_type_data_type"]
     assert isinstance(b, Block)
 
     assert no_violations(
@@ -370,7 +370,7 @@ def test_enc_type_valid():
     attribute((scale,type),5,linear).
     """
         )
-        == ["enc_type_valid"]
+        == ["scale_type_data_type"]
     )
 
     # previous case with shared scale from root
@@ -391,7 +391,7 @@ def test_enc_type_valid():
     attribute((scale,type),5,linear).
     """
         )
-        == ["enc_type_valid"]
+        == ["scale_type_data_type"]
     )
 
 
