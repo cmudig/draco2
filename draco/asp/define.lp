@@ -33,4 +33,4 @@ domain((scale,type),(linear;log;ordinal;categorical)).
 domain(task,(value;summary)).
 
 % @definition(stack) Stacking methods.
-domain((encoding,stack),(zero;normalize)).
+domain((encoding,stack),(zero;center;normalize)).
