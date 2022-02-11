@@ -99,23 +99,23 @@ violation(count_with_field) :-
 % @hard(text_mark_without_text_channel) Text mark requires text encoding.
 violation(text_mark_without_text_channel) :-
     attribute((mark,type),M,text),
-    not attribute(mark_channel,M,text).
+    not attribute((mark,channel),M,text).
 
 % @hard(text_channel_without_text_mark) Text channel requires text mark.
 violation(text_channel_without_text_mark) :-
-    attribute(mark_channel,M,text),
+    attribute((mark,channel),M,text),
     not attribute((mark,type),M,text).
 
 % @hard(point_tick_bar_without_x_or_y) Point, tick, and bar require x or y channel.
 violation(point_tick_bar_without_x_or_y) :-
     attribute((mark,type),M,(point;tick;bar)),
-    not attribute(mark_channel,M,x),
-    not attribute(mark_channel,M,y).
+    not attribute((mark,channel),M,x),
+    not attribute((mark,channel),M,y).
 
 % @hard(line_area_without_x_y) Line and area require x and y channel.
 violation(line_area_without_x_y) :-
     attribute((mark,type),M,(line;area)),
-    {attribute(mark_channel,M,x);attribute(mark_channel,M,y)} <= 1.
+    {attribute((mark,channel),M,x);attribute((mark,channel),M,y)} <= 1.
 
 % @hard(line_area_with_discrete) Line and area cannot have both x and y discrete.
 violation(line_area_with_discrete) :-
