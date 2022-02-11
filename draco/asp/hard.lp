@@ -120,10 +120,8 @@ violation(line_area_without_x_y) :-
 % @hard(line_area_with_discrete) Line and area cannot have both x and y discrete.
 violation(line_area_with_discrete) :-
     attribute((mark,type),M,(line;area)),
-    attribute(mark_scale_channel,M,S1,x),
-    attribute(mark_scale_channel,M,S2,y),
-    attribute((scale,type),S1,T1),
-    attribute((scale,type),S2,T2),
+    attribute(mark_scale_channel,M,T1,x),
+    attribute(mark_scale_channel,M,T2,y),
     domain(discrete_scale,T1),
     domain(discrete_scale,T2).
 
@@ -131,10 +129,8 @@ violation(line_area_with_discrete) :-
 % @hard(bar_tick_continuous_x_y) Bar and tick cannot have both x and y continuous.
 violation(bar_tick_continuous_x_y) :-
     attribute((mark,type),M,(tick;bar)),
-    attribute(mark_scale_channel,M,S1,x),
-    attribute(mark_scale_channel,M,S2,y),
-    attribute((scale,type),S1,T1),
-    attribute((scale,type),S2,T2),
+    attribute(mark_scale_channel,M,T1,x),
+    attribute(mark_scale_channel,M,T2,y),
     domain(continuous_scale,T1),
     domain(continuous_scale,T2).
 
