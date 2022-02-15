@@ -987,3 +987,307 @@ def test_view_scale_conflict():
         )
         == ["view_scale_conflict"]
     )
+
+
+def test_invalid_bin():
+    b = hard.blocks["invalid_bin"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,binning),2,30).
+    """
+    )
+
+    assert no_violations(
+        p
+        + """
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,binning),2).
+    """
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,binning),2,-1).
+    """
+        )
+        == ["invalid_bin"]
+    )
+
+
+def test_invalid_num_rows():
+    b = hard.blocks["invalid_num_rows"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    attribute(number_rows,root,42).
+    """
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    attribute(number_rows,root,0).
+    """
+        )
+        == ["invalid_num_rows"]
+    )
+
+
+def test_invalid_unique():
+    b = hard.blocks["invalid_unique"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
+    attribute((field,unique),date,1461).
+    """
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
+    attribute((field,unique),date,0).
+    """
+        )
+        == ["invalid_unique"]
+    )
+
+
+def test_invalid_extent_non_number_min():
+    b = hard.blocks["invalid_extent_non_number_min"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,min),precipitation,0).
+    """
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
+    attribute((field,min),date,0).
+    """
+        )
+        == ["invalid_extent_non_number_min"]
+    )
+
+
+def test_invalid_extent_non_number_max():
+    b = hard.blocks["invalid_extent_non_number_max"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,max),precipitation,55).
+    """
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
+    attribute((field,max),date,55).
+    """
+        )
+        == ["invalid_extent_non_number_max"]
+    )
+
+
+def test_invalid_non_number_std():
+    b = hard.blocks["invalid_non_number_std"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,std),precipitation,6).
+    """
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
+    attribute((field,std),date,6).
+    """
+        )
+        == ["invalid_non_number_std"]
+    )
+
+
+def test_invalid_std():
+    b = hard.blocks["invalid_std"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,std),precipitation,6).
+
+    """
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,std),precipitation,-10).
+
+    """
+        )
+        == ["invalid_std"]
+    )
+
+
+def test_invalid_extent_order():
+    b = hard.blocks["invalid_extent_order"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,min),precipitation,0).
+    attribute((field,max),precipitation,55).
+    """
+    )
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,min),precipitation,30).
+
+    entity(field,root,precipitation2).
+    attribute((field,type),precipitation2,number).
+    attribute((field,max),precipitation2,20).
+    """
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,min),precipitation,55).
+    attribute((field,max),precipitation,0).
+    """
+        )
+        == ["invalid_extent_order"]
+    )
+
+
+def test_invalid_non_string_freq():
+    b = hard.blocks["invalid_non_string_freq"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,weather).
+    attribute((field,type),weather,string).
+    attribute((field,freq),weather,714).
+    """
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,freq),precipitation,714).
+    """
+        )
+        == ["invalid_non_string_freq"]
+    )
+
+
+def test_encoding_field_same_name():
+    b = hard.blocks["encoding_field_same_name"]
+    assert isinstance(b, Block)
+    p = b.program + define.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,0).
+    attribute((field,name),0,temperature).
+    """
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,0).
+    attribute((field,name),0,x).
+    """
+        )
+        == ["encoding_field_same_name"]
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,0).
+    attribute((field,name),0,detail).
+    """
+        )
+        == ["encoding_field_same_name"]
+    )

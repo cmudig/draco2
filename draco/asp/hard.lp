@@ -141,3 +141,54 @@ violation(view_scale_conflict) :-
     entity(scale,V,S2),
     attribute((scale,channel),S1,C),
     attribute((scale,channel),S2,C).
+
+% @hard(invalid_bin) Check bin type.
+violation(invalid_bin) :-
+    attribute((encoding,binning),_,B),
+    not B >= 0.
+
+% @hard(invalid_num_rows) Num_rows has to be larger than 0.
+violation(invalid_num_rows) :-
+    attribute(number_rows,root,R),
+    R <= 0.
+
+% @hard(invalid_unique) The number of unique values has to be larger than 0.
+violation(invalid_unique) :-
+    attribute((field,unique),_,U),
+    U <= 0.
+
+% @hard(invalid_extent_non_number_min) Extent only allowed for numbers (for now).
+violation(invalid_extent_non_number_min) :-
+    attribute((field,min),F,_),
+    not attribute((field,type),F,number).
+
+% @hard(invalid_extent_non_number_max) Extent only allowed for numbers (for now).
+violation(invalid_extent_non_number_max) :-
+    attribute((field,max),F,_),
+    not attribute((field,type),F,number).
+
+% @hard(invalid_non_number_std) Std only allowed for numbers (for now).
+violation(invalid_non_number_std) :-
+    attribute((field,std),F,_),
+    not attribute((field,type),F,number).
+
+% @hard(invalid_std) Std has to be larger or equal to 0.
+violation(invalid_std) :-
+    attribute((field,std),_,S),
+    S < 0.
+
+% @hard(invalid_extent_order) Order has to be correct.
+violation(invalid_extent_order) :-
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
+    MIN > MAX.
+
+% @hard(invalid_non_string_freq) Frequency for strings only.
+violation(invalid_non_string_freq) :-
+    attribute((field,freq),F,_),
+    not attribute((field,type),F,string).
+
+% @hard(encoding_field_same_name) The name of a field cannot be the name of an encoding. This is to prevent errors coming from the shortcuts in define.lp.
+violation(encoding_field_same_name) :-
+    attribute((field,name),0,F),
+    domain(channel,F).
