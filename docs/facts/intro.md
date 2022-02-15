@@ -8,7 +8,7 @@ The constraint solver Clingo reasons about the facts that describe a visualizati
 
 ### Entities
 
-Entities describe objects. The facts `entity` describes what other entities are associates with an entity. If a entity has no parents, we use a special identifier `root`. For example, `entity(view,root,v1).` says that there is a view v1 on the root.
+Entities describe objects. The facts `entity` describes what other entities are associates with an entity. If an entity has no parents, we use a special identifier `root`. For example, `entity(view,root,v1).` says that there is a view v1 on the root.
 
 ### Attributes
 
