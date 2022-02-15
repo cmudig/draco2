@@ -17,20 +17,27 @@ domain((encoding,aggregate),(count;sum)).
 domain((encoding,binning),(10;25;200)).
 
 % @definition(channel) Encoding channels.
-domain(single_channel,(x;y;color;size;shape;text;row;column)).
+domain(positional,(x;y;row;column)).
+domain(non_positional,(color;size;shape;text;detail)).
+domain(single_channel,C) :- domain(positional,C).
+domain(single_channel,C) :- domain(non_positional,C).
 domain(multi_channel,detail).
 domain(channel,C) :- domain(single_channel,C).
 domain(channel,C) :- domain(multi_channel,C).
-domain(non_positional,(color;size;shape;text;detail)).
 
 domain((encoding,channel),C) :- domain(channel,C).
 domain((scale,channel),C) :- domain(channel,C).
 
 % @definition(scale_type) Scale types.
-domain((scale,type),(linear;log;ordinal;categorical)).
+domain(discrete_scale,(ordinal;categorical)).
+domain(continuous_scale,(log;linear)).
+domain(scale_type,T) :- domain(discrete_scale,T).
+domain(scale_type,T) :- domain(continuous_scale,T).
+
+domain((scale,type),T) :- domain(scale_type,T).
 
 % @definition(task) Tasks.
 domain(task,(value;summary)).
 
 % @definition(stack) Stacking methods.
-domain((encoding,stack),(zero;normalize)).
+domain((encoding,stack),(zero;center;normalize)).

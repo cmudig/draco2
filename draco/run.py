@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import Any, cast, Generator, Iterable, List, Sequence, Tuple, Union
+from typing import Any, Generator, Iterable, List, Sequence, Tuple, Union, cast
 
 # Clingo Python API is documented at https://potassco.org/clingo/python-api/current/
 import clingo
@@ -34,7 +34,6 @@ def run_clingo(
     program: Union[str, Iterable[str]], models: int = 0, topK=False
 ) -> Generator[Model, None, None]:
     """Run the solver and yield the models.
-
 
     :param program: Program as a string or iterable of strings that will be
         concatenated.
