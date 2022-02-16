@@ -2,6 +2,8 @@
 
 The mark represents the graphical mark of the visualization. Draco uses an encoding based on the Grammar of Graphics (GoG) {cite}`wilkinson2012grammar`. In the GoG, marks are described as Geometric objects ("geoms" for short). We use the term mark as that's the term Vega-Lite {cite}`satyanarayan2016vega` uses.
 
+Marks have [encodings](encoding.md), which define how data fields map to the mark's visual properties.
+
 If you define multiple marks or a view has multiple marks, Draco assumes that the marks are layered (i.e. they are in the same view space in the chart).
 
 ## Mark Properties
@@ -12,5 +14,7 @@ If you define multiple marks or a view has multiple marks, Draco assumes that th
 ## Example
 
 ```prolog
-attribute((mark,type),1,tick).
+entity(mark,root,m).
+attribute((mark,type),m,tick).
+entity(encoding,m,e).
 ```
