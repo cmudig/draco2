@@ -78,7 +78,7 @@ violation(repeat_channel) :-
     entity(encoding,M,E2),
     attribute((encoding,channel),E1,C),
     attribute((encoding,channel),E2,C),
-    E1 != E2.
+    E1 > E2.
 
 % @hard(no_encodings) There has to be at least one encoding for every mark.
 violation(no_encodings) :-
