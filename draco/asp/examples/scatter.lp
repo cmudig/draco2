@@ -5,7 +5,7 @@ attribute((field,name),f0,temperature).
 attribute((field,type),f0,number).
 
 entity(field,root,f1).
-attribute((field,name),f1,predipitation).
+attribute((field,name),f1,precipitation).
 attribute((field,type),f1,number).
 
 entity(mark,root,m).
