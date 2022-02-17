@@ -115,7 +115,7 @@ violation(point_tick_bar_without_x_or_y) :-
 % @hard(line_area_without_x_y) Line and area require x and y channel.
 violation(line_area_without_x_y) :-
     attribute((mark,type),M,(line;area)),
-    {attribute((mark,channel),M,x);attribute((mark,channel),M,y)} <= 1.
+    { attribute((mark,channel),M,x);attribute((mark,channel),M,y) } <= 1.
 
 % @hard(line_area_with_discrete) Line and area cannot have both x and y discrete.
 violation(line_area_with_discrete) :-

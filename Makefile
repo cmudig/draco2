@@ -1,4 +1,4 @@
-all: lint typecheck cover book check
+all: lint typecheck cover book grounding-size check
 
 .PHONY: test
 test:
@@ -54,6 +54,11 @@ build:
 .PHONY: check
 check:
 	@poetry check
+
+.PHONY: grounding-size
+grounding-size:
+	@echo "==> ⏚ Size of grounded program"
+	@poetry run clingo draco/asp/generate.lp draco/asp/define.lp draco/asp/helpers.lp draco/asp/hard.lp draco/asp/examples/histogram.lp --text | wc -l
 
 .PHONY: publish
 publish: build
