@@ -56,9 +56,12 @@ check:
 	@poetry check
 
 .PHONY: grounding-size
-grounding-size:
+grounding-size: ./draco/asp/examples/*
 	@echo "==> ⏚ Size of grounded program"
-	@poetry run clingo draco/asp/generate.lp draco/asp/define.lp draco/asp/helpers.lp draco/asp/hard.lp draco/asp/examples/histogram.lp --text | wc -l
+	@for file in $^ ; do \
+		echo $${file} ; \
+		poetry run clingo draco/asp/generate.lp draco/asp/define.lp draco/asp/helpers.lp draco/asp/hard.lp $${file} --text | wc -l ; \
+	done
 
 .PHONY: publish
 publish: build
