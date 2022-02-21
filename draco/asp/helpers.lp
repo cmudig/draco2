@@ -18,8 +18,14 @@ attribute(mark_scale_channel,M,T,C) :-
     attribute((scale,channel),S,C),
     attribute((scale,type),S,T).
 
-% @helper(encoding_type)
+% @helper(encoding_type) whether an encoding has a channel for a scale type.
 attribute((encoding,scale_type),E,T) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     attribute(mark_scale_channel,M,T,C).
+
+% @helper(mark_channel_field) Whther a mark has an encoding for a field  and a channel.
+attribute(mark_channel_field,M,C,F) :-
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
+    attribute((encoding,field),E,F).

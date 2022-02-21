@@ -987,3 +987,401 @@ def test_view_scale_conflict():
         )
         == ["view_scale_conflict"]
     )
+
+
+def test_shape_without_point():
+    b = hard.blocks["shape_without_point"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((mark,type),0,point).
+    entity(encoding,0,1).
+    attribute((encoding,channel),1,shape).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((mark,type),0,text).
+    entity(encoding,0,1).
+    attribute((encoding,channel),1,shape).
+    """
+        )
+        == ["shape_without_point"]
+    )
+
+
+def test_size_without_point_text():
+    b = hard.blocks["size_without_point_text"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((mark,type),0,point).
+    entity(encoding,0,1).
+    attribute((encoding,channel),1,size).
+    """
+    )
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((mark,type),0,text).
+    entity(encoding,0,1).
+    attribute((encoding,channel),1,size).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((mark,type),0,bar).
+    entity(encoding,0,1).
+    attribute((encoding,channel),1,size).
+    """
+        )
+        == ["size_without_point_text"]
+    )
+
+
+def test_detail_without_agg():
+    b = hard.blocks["detail_without_agg"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((encoding,channel),1,detail).
+    attribute((encoding, aggregate),1,count).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+        attribute((encoding,channel),1,detail).
+        """
+        )
+        == ["detail_without_agg"]
+    )
+
+
+def test_area_bar_with_log():
+    b = hard.blocks["area_bar_with_log"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(scale,0,2).
+    attribute((scale,channel),2,x).
+    attribute((scale,type),2,linear).
+    """
+    )
+
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,area).
+
+    entity(scale,0,2).
+    attribute((scale,channel),2,y).
+    attribute((scale,type),2,linear).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(scale,0,2).
+    attribute((scale,channel),2,y).
+    attribute((scale,type),2,log).
+    """
+        )
+        == ["area_bar_with_log"]
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,0,1).
+    attribute((mark,type),1,area).
+
+    entity(scale,0,2).
+    attribute((scale,channel),2,x).
+    attribute((scale,type),2,log).
+    """
+        )
+        == ["area_bar_with_log"]
+    )
+
+
+def test_rect_without_d_d():
+    b = hard.blocks["rect_without_d_d"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,rect).
+
+    entity(scale,0,2).
+    attribute((scale,channel),2,x).
+    attribute((scale,type),2,ordinal).
+
+    entity(scale,0,3).
+    attribute((scale,channel),3,y).
+    attribute((scale,type),2,ordinal).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,0,1).
+    attribute((mark,type),1,rect).
+
+    entity(scale,0,2).
+    attribute((scale,channel),2,x).
+    attribute((scale,type),2,linear).
+
+    entity(scale,0,3).
+    attribute((scale,channel),3,y).
+    attribute((scale,type),3,ordinal).
+    """
+        )
+        == ["rect_without_d_d"]
+    )
+
+    # multiple views where y has log scale
+    assert (
+        list_violations(
+            [b.program]
+            + dict_to_facts(
+                {
+                    "view": [
+                        {
+                            "mark": [
+                                {
+                                    "type": "tick",
+                                    "encoding": [
+                                        {"channel": "y", "field": "temperature"}
+                                    ],
+                                }
+                            ]
+                        },
+                        {
+                            "mark": [
+                                {
+                                    "type": "rect",
+                                    "encoding": [
+                                        {"channel": "x", "field": "temperature"},
+                                        {"channel": "y", "aggregate": "count"},
+                                    ],
+                                }
+                            ],
+                            "scale": [{"channel": "x", "type": "ordinal"}],
+                        },
+                    ],
+                    "scale": [{"channel": "y", "type": "log"}],
+                }
+            )
+        )
+        == ["rect_without_d_d"]
+    )
+
+
+def test_same_field_x_and_y():
+    b = hard.blocks["same_field_x_and_y"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    entity(field,root,temperature).
+    entity(field,root,date).
+    entity(mark,root,1).
+    entity(encoding,1,2).
+    entity(encoding,1,3).
+
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+
+    attribute((encoding,channel),3,y).
+    attribute((encoding,field),3,date).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(field,root,temperature).
+    entity(mark,root,1).
+    entity(encoding,1,2).
+    entity(encoding,1,3).
+
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+
+    attribute((encoding,channel),3,y).
+    attribute((encoding,field),3,temperature).
+    """
+        )
+        == ["same_field_x_and_y"]
+    )
+
+
+def test_count_twice():
+    b = hard.blocks["count_twice"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,root,1).
+    entity(encoding,1,2).
+    entity(encoding,1,3).
+
+    attribute((encoding,channel),2,x).
+    attribute((encoding,aggregate),2,count).
+
+    attribute((encoding,channel),3,y).
+    """
+    )
+
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,root,1).
+    entity(encoding,1,3).
+    entity(encoding,2,4).
+
+    attribute((encoding,channel),3,x).
+    attribute((encoding,aggregate),3,count).
+
+    attribute((encoding,channel),4,y).
+    attribute((encoding,aggregate),4,count).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,root,1).
+    entity(encoding,1,2).
+    entity(encoding,1,3).
+
+    attribute((encoding,channel),2,x).
+    attribute((encoding,aggregate),2,count).
+
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+    """
+        )
+        == ["count_twice"]
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,root,1).
+    entity(encoding,1,2).
+    entity(encoding,1,3).
+
+    attribute((encoding,channel),2,x).
+    attribute((encoding,aggregate),2,count).
+
+    attribute((encoding,channel),3,size).
+    attribute((encoding,aggregate),3,count).
+    """
+        )
+        == ["count_twice"]
+    )
+
+
+def test_aggregate_not_all_continuous():
+    b = hard.blocks["aggregate_not_all_continuous"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,root,1).
+    entity(encoding,1,2).
+    entity(encoding,1,3).
+
+    attribute((encoding,channel),2,x).
+    attribute((encoding,aggregate),2,mean).
+
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,mean).
+
+    entity(scale,root,4).
+    attribute((scale,type),4,linear).
+    attribute((scale,channel),4,x).
+    """
+    )
+
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,root,1).
+    entity(encoding,1,2).
+    entity(encoding,1,3).
+
+    attribute((encoding,channel),2,x).
+    attribute((encoding,aggregate),2,mean).
+
+    attribute((encoding,channel),3,y).
+
+    entity(scale,root,4).
+    attribute((scale,type),4,linear).
+    attribute((scale,channel),4,x).
+
+    entity(scale,root,5).
+    attribute((scale,type),5,ordinal).
+    attribute((scale,channel),5,y).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,root,1).
+    entity(encoding,1,2).
+    entity(encoding,1,3).
+
+    attribute((encoding,channel),2,x).
+
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,mean).
+
+    entity(scale,root,4).
+    attribute((scale,type),4,linear).
+    attribute((scale,channel),4,x).
+    """
+        )
+        == ["aggregate_not_all_continuous"]
+    )
