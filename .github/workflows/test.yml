@@ -42,5 +42,5 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: psf/black@stable
         with:
-          version: "21.12b0"
+          version: "22.1.0"
       - uses: py-actions/flake8@v2
