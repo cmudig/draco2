@@ -1057,8 +1057,10 @@ def test_detail_without_agg():
     assert no_violations(
         b.program
         + """
+    entity(encoding,0,1).
+    entity(encoding,0,2).
     attribute((encoding,channel),1,detail).
-    attribute((encoding, aggregate),1,count).
+    attribute((encoding,aggregate),2,count).
     """
     )
 
@@ -1066,8 +1068,10 @@ def test_detail_without_agg():
         list_violations(
             b.program
             + """
-        attribute((encoding,channel),1,detail).
-        """
+    entity(encoding,0,1).
+    entity(encoding,0,2).
+    attribute((encoding,channel),1,detail).
+    """
         )
         == ["detail_without_agg"]
     )

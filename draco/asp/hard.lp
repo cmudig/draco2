@@ -155,8 +155,11 @@ violation(size_without_point_text) :-
 
 % @hard(detail_without_agg) Detail requires aggregation. Detail adds a field to the group by. Detail could also be used to add information to tooltips. We may remove this later.
 violation(detail_without_agg) :-
-    attribute((encoding,channel),E,detail),
-    not attribute((encoding,aggregate),E,_).
+    entity(encoding,M,E1),
+    entity(encoding,M,E2),
+    E1 != E2,
+    attribute((encoding,channel),E1,detail),
+    not attribute((encoding,aggregate),E2,_).
 
 % @hard(area_bar_with_log) Do not use log for bar or area mark as they are often misleading. We may remove this rule in the future.
 violation(area_bar_with_log) :-
@@ -171,7 +174,8 @@ violation(rect_without_d_d) :-
 
 % @hard(same_field_x_and_y) Don't use the same field on x and y.
 violation(same_field_x_and_y) :-
-    { attribute(mark_channel_field,M,x,F);attribute(mark_channel_field,M,y,F) } >= 2,
+    attribute(mark_channel_field,M,x,F),
+    attribute(mark_channel_field,M,y,F),
     entity(field,root,F),
     entity(mark,_,M).
 
@@ -185,6 +189,7 @@ violation(aggregate_not_all_continuous):-
     attribute((encoding,aggregate),E1,_),
     entity(encoding,M,E1),
     entity(encoding,M,E2),
+    E1 > E2,
     attribute((encoding,scale_type),E2,T),
     domain(continuous_scale,T),
     not attribute((encoding,aggregate),E2,_).
