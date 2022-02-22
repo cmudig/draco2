@@ -1249,39 +1249,3 @@ def test_invalid_non_string_freq():
         )
         == ["invalid_non_string_freq"]
     )
-
-
-def test_encoding_field_same_name():
-    b = hard.blocks["encoding_field_same_name"]
-    assert isinstance(b, Block)
-    p = b.program + define.program
-
-    assert no_violations(
-        p
-        + """
-    entity(field,root,0).
-    attribute((field,name),0,temperature).
-    """
-    )
-
-    assert (
-        list_violations(
-            p
-            + """
-    entity(field,root,0).
-    attribute((field,name),0,x).
-    """
-        )
-        == ["encoding_field_same_name"]
-    )
-
-    assert (
-        list_violations(
-            p
-            + """
-    entity(field,root,0).
-    attribute((field,name),0,detail).
-    """
-        )
-        == ["encoding_field_same_name"]
-    )

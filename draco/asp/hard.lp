@@ -182,8 +182,3 @@ violation(invalid_extent_order) :-
 violation(invalid_non_string_freq) :-
     attribute((field,freq),F,_),
     not attribute((field,type),F,string).
-
-% @hard(encoding_field_same_name) The name of a field cannot be the name of an encoding. This is to prevent errors coming from the shortcuts in define.lp.
-violation(encoding_field_same_name) :-
-    attribute((field,name),0,F),
-    domain(channel,F).
