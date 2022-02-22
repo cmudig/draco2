@@ -145,9 +145,9 @@ violation(view_scale_conflict) :-
 % @hard(invalid_bin) Check bin type.
 violation(invalid_bin) :-
     attribute((encoding,binning),_,B),
-    not B >= 0.
+    B < 0.
 
-% @hard(invalid_num_rows) Num_rows has to be larger than 0.
+% @hard(invalid_num_rows) number_rows has to be larger than 0.
 violation(invalid_num_rows) :-
     attribute(number_rows,root,R),
     R <= 0.
@@ -157,14 +157,9 @@ violation(invalid_unique) :-
     attribute((field,unique),_,U),
     U <= 0.
 
-% @hard(invalid_extent_non_number_min) Extent only allowed for numbers (for now).
-violation(invalid_extent_non_number_min) :-
-    attribute((field,min),F,_),
-    not attribute((field,type),F,number).
-
-% @hard(invalid_extent_non_number_max) Extent only allowed for numbers (for now).
-violation(invalid_extent_non_number_max) :-
-    attribute((field,max),F,_),
+% @hard(invalid_extent_non_number) Extent only allowed for numbers (for now).
+violation(invalid_extent_non_number) :-
+    attribute((field,(min;max)),F,_),
     not attribute((field,type),F,number).
 
 % @hard(invalid_non_number_std) Std only allowed for numbers (for now).

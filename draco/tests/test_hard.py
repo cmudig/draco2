@@ -1078,8 +1078,8 @@ def test_invalid_unique():
     )
 
 
-def test_invalid_extent_non_number_min():
-    b = hard.blocks["invalid_extent_non_number_min"]
+def test_invalid_extent_non_number():
+    b = hard.blocks["invalid_extent_non_number"]
     assert isinstance(b, Block)
     p = b.program
 
@@ -1091,24 +1091,6 @@ def test_invalid_extent_non_number_min():
     attribute((field,min),precipitation,0).
     """
     )
-
-    assert (
-        list_violations(
-            p
-            + """
-    entity(field,root,date).
-    attribute((field,type),date,datetime).
-    attribute((field,min),date,0).
-    """
-        )
-        == ["invalid_extent_non_number_min"]
-    )
-
-
-def test_invalid_extent_non_number_max():
-    b = hard.blocks["invalid_extent_non_number_max"]
-    assert isinstance(b, Block)
-    p = b.program
 
     assert no_violations(
         p
@@ -1125,10 +1107,22 @@ def test_invalid_extent_non_number_max():
             + """
     entity(field,root,date).
     attribute((field,type),date,datetime).
+    attribute((field,min),date,0).
+    """
+        )
+        == ["invalid_extent_non_number"]
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
     attribute((field,max),date,55).
     """
         )
-        == ["invalid_extent_non_number_max"]
+        == ["invalid_extent_non_number"]
     )
 
 
