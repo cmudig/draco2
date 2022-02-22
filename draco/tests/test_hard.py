@@ -846,39 +846,44 @@ def test_bar_tick_continuous_x_y():
     )
 
     # multiple views with both linear x and y
-    assert list_violations(
-        [b.program]
-        + dict_to_facts(
-            {
-                "view": [
-                    {
-                        "mark": [
-                            {
-                                "type": "tick",
-                                "encoding": [{"channel": "y", "field": "temperature"}],
-                            }
-                        ],
-                        "scale": [{"channel": "y", "type": "linear"}],
-                    },
-                    {
-                        "mark": [
-                            {
-                                "type": "bar",
-                                "encoding": [
-                                    {"channel": "x", "field": "temperature"},
-                                    {"channel": "y", "aggregate": "count"},
-                                ],
-                            }
-                        ],
-                        "scale": [
-                            {"channel": "x", "type": "linear"},
-                            {"channel": "y", "type": "linear"},
-                        ],
-                    },
-                ]
-            }
+    assert (
+        list_violations(
+            [b.program]
+            + dict_to_facts(
+                {
+                    "view": [
+                        {
+                            "mark": [
+                                {
+                                    "type": "tick",
+                                    "encoding": [
+                                        {"channel": "y", "field": "temperature"}
+                                    ],
+                                }
+                            ],
+                            "scale": [{"channel": "y", "type": "linear"}],
+                        },
+                        {
+                            "mark": [
+                                {
+                                    "type": "bar",
+                                    "encoding": [
+                                        {"channel": "x", "field": "temperature"},
+                                        {"channel": "y", "aggregate": "count"},
+                                    ],
+                                }
+                            ],
+                            "scale": [
+                                {"channel": "x", "type": "linear"},
+                                {"channel": "y", "type": "linear"},
+                            ],
+                        },
+                    ]
+                }
+            )
         )
-    ) == ["bar_tick_continuous_x_y"]
+        == ["bar_tick_continuous_x_y"]
+    )
 
     # multiple views where only y is linear
     assert no_violations(
@@ -913,36 +918,41 @@ def test_bar_tick_continuous_x_y():
     )
 
     # multiple views where both x and y are linear
-    assert list_violations(
-        [b.program]
-        + dict_to_facts(
-            {
-                "view": [
-                    {
-                        "mark": [
-                            {
-                                "type": "tick",
-                                "encoding": [{"channel": "y", "field": "temperature"}],
-                            }
-                        ]
-                    },
-                    {
-                        "mark": [
-                            {
-                                "type": "bar",
-                                "encoding": [
-                                    {"channel": "x", "field": "temperature"},
-                                    {"channel": "y", "aggregate": "count"},
-                                ],
-                            }
-                        ],
-                        "scale": [{"channel": "x", "type": "linear"}],
-                    },
-                ],
-                "scale": [{"channel": "y", "type": "linear"}],
-            }
+    assert (
+        list_violations(
+            [b.program]
+            + dict_to_facts(
+                {
+                    "view": [
+                        {
+                            "mark": [
+                                {
+                                    "type": "tick",
+                                    "encoding": [
+                                        {"channel": "y", "field": "temperature"}
+                                    ],
+                                }
+                            ]
+                        },
+                        {
+                            "mark": [
+                                {
+                                    "type": "bar",
+                                    "encoding": [
+                                        {"channel": "x", "field": "temperature"},
+                                        {"channel": "y", "aggregate": "count"},
+                                    ],
+                                }
+                            ],
+                            "scale": [{"channel": "x", "type": "linear"}],
+                        },
+                    ],
+                    "scale": [{"channel": "y", "type": "linear"}],
+                }
+            )
         )
-    ) == ["bar_tick_continuous_x_y"]
+        == ["bar_tick_continuous_x_y"]
+    )
 
 
 def test_view_scale_conflict():

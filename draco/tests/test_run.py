@@ -5,7 +5,7 @@ from draco import run_clingo
 
 def test_run_all_models():
     models = list(run_clingo("{a;b;c}."))
-    assert len(models) == 2**3
+    assert len(models) == 2 ** 3
 
 
 def test_run_clingo_fact():
@@ -97,4 +97,4 @@ class LoggingTest(TestCase):
                 cm.records[0].getMessage(),
                 "Since all models should be computed, topK is ignored.",
             )
-            assert len(models) == 2**5
+            assert len(models) == 2 ** 5
