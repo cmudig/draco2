@@ -142,7 +142,7 @@ violation(view_scale_conflict) :-
     attribute((scale,channel),S1,C),
     attribute((scale,channel),S2,C).
 
-% @hard(shape_without_point)  Shape channel requires point mark.
+% @hard(shape_without_point) Shape channel requires point mark.
 violation(shape_without_point) :-
     attribute((mark,channel),M,shape),
     not attribute((mark,type),M,point).
@@ -153,7 +153,7 @@ violation(size_without_point_text) :-
     not attribute((mark,type),M,text),
     not attribute((mark,type),M,point).
 
-% @hard(detail_without_agg)  Detail requires aggregation. Detail adds a field to the group by. Detail could also be used to add information to tooltips. We may remove this later.
+% @hard(detail_without_agg) Detail requires aggregation. Detail adds a field to the group by. Detail could also be used to add information to tooltips. We may remove this later.
 violation(detail_without_agg) :-
     attribute((encoding,channel),E,detail),
     not attribute((encoding,aggregate),E,_).
@@ -169,7 +169,7 @@ violation(rect_without_d_d) :-
     attribute(mark_scale_channel,M,T,(x;y)),
     domain(continuous_scale,T).
 
-% @hard(same_field_x_and_y)  Don't use the same field on x and y.
+% @hard(same_field_x_and_y) Don't use the same field on x and y.
 violation(same_field_x_and_y) :-
     { attribute(mark_channel_field,M,x,F);attribute(mark_channel_field,M,y,F) } >= 2,
     entity(field,root,F),
@@ -180,7 +180,7 @@ violation(count_twice):-
     { entity(encoding,M,E) : attribute((encoding,aggregate),E,count) } >= 2,
     entity(mark,_,M).
 
-% @hard(aggregate_not_all_continuous) If we use aggregation, then all continuous scales need to be aggeragted.
+% @hard(aggregate_not_all_continuous) If we use aggregation, then all continuous scales need to be aggregated.
 violation(aggregate_not_all_continuous):-
     attribute((encoding,aggregate),E1,_),
     entity(encoding,M,E1),
