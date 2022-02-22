@@ -18,7 +18,7 @@ attribute(mark_scale_channel,M,T,C) :-
     attribute((scale,channel),S,C),
     attribute((scale,type),S,T).
 
-% @helper(encoding_type) whether an encoding has a channel for a scale type.
+% @helper(encoding_type) Whether an encoding has a channel for a scale type.
 attribute((encoding,scale_type),E,T) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
