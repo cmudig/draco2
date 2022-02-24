@@ -34,7 +34,7 @@ def stringify(value):
     return value[:1].lower() + value[1:]
 
 
-def make_fact(kind: FactKind, values=List) -> str:
+def make_fact(kind: FactKind, values: Tuple = ()) -> str:
     """Create an ASP fact from a list of values. The function generates either
     attribute or entity facts.
     """
