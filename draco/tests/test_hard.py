@@ -1146,6 +1146,7 @@ def test_rect_without_d_d():
     """
     )
 
+    # x is not discrete
     assert (
         list_violations(
             b.program
@@ -1219,6 +1220,7 @@ def test_same_field_x_and_y():
     """
     )
 
+    # same field for x and y
     assert (
         list_violations(
             b.program
@@ -1257,6 +1259,7 @@ def test_count_twice():
     """
     )
 
+    # use count twice but with different marks
     assert no_violations(
         b.program
         + """
@@ -1272,6 +1275,7 @@ def test_count_twice():
     """
     )
 
+    # use count both on x and y
     assert (
         list_violations(
             b.program
@@ -1290,6 +1294,7 @@ def test_count_twice():
         == ["count_twice"]
     )
 
+    # use count both on x and size
     assert (
         list_violations(
             b.program
@@ -1332,6 +1337,7 @@ def test_aggregate_not_all_continuous():
     """
     )
 
+    # x is continuous and aggregated, y is discrete
     assert no_violations(
         b.program
         + """
@@ -1354,6 +1360,7 @@ def test_aggregate_not_all_continuous():
     """
     )
 
+    # x scale is continuous but not aggregated
     assert (
         list_violations(
             b.program
