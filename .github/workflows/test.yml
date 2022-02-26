@@ -29,6 +29,8 @@ jobs:
         run: make typecheck
       - name: Check Poetry
         run: make check
+      - name: Size of Grounded Programs
+        run: make grounding-size
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2.1.0
