@@ -1,7 +1,7 @@
 import itertools
 from collections import defaultdict
 from enum import Enum, unique
-from typing import Generator, Iterator, List, Mapping, Optional, Tuple, Union
+from typing import Generator, Iterable, Iterator, List, Mapping, Optional, Tuple, Union
 
 from clingo import Symbol
 from clingo.symbol import SymbolType
@@ -34,7 +34,7 @@ def stringify(value):
     return value[:1].lower() + value[1:]
 
 
-def make_fact(kind: FactKind, values=List) -> str:
+def make_fact(kind: FactKind, values: Iterable = []) -> str:
     """Create an ASP fact from a list of values. The function generates either
     attribute or entity facts.
     """
