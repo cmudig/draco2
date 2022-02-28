@@ -78,7 +78,7 @@ violation(repeat_channel) :-
     entity(encoding,M,E2),
     attribute((encoding,channel),E1,C),
     attribute((encoding,channel),E2,C),
-    E1 != E2.
+    E1 > E2.
 
 % @hard(no_encodings) There has to be at least one encoding for every mark.
 violation(no_encodings) :-
@@ -115,7 +115,7 @@ violation(point_tick_bar_without_x_or_y) :-
 % @hard(line_area_without_x_y) Line and area require x and y channel.
 violation(line_area_without_x_y) :-
     attribute((mark,type),M,(line;area)),
-    {attribute((mark,channel),M,x);attribute((mark,channel),M,y)} <= 1.
+    { attribute((mark,channel),M,x);attribute((mark,channel),M,y) } <= 1.
 
 % @hard(line_area_with_discrete) Line and area cannot have both x and y discrete.
 violation(line_area_with_discrete) :-
@@ -141,6 +141,58 @@ violation(view_scale_conflict) :-
     entity(scale,V,S2),
     attribute((scale,channel),S1,C),
     attribute((scale,channel),S2,C).
+
+% @hard(shape_without_point) Shape channel requires point mark.
+violation(shape_without_point) :-
+    attribute((mark,channel),M,shape),
+    not attribute((mark,type),M,point).
+
+% @hard(size_without_point_text) Size only works with some marks.
+violation(size_without_point_text) :-
+    attribute((mark,channel),M,size),
+    not attribute((mark,type),M,text),
+    not attribute((mark,type),M,point).
+
+% @hard(detail_without_agg) Detail requires aggregation. Detail adds a field to the group by. Detail could also be used to add information to tooltips. We may remove this later.
+violation(detail_without_agg) :-
+    entity(encoding,M,E1),
+    entity(encoding,M,E2),
+    E1 != E2,
+    attribute((encoding,channel),E1,detail),
+    not attribute((encoding,aggregate),E2,_).
+
+% @hard(area_bar_with_log) Do not use log for bar or area mark as they are often misleading. We may remove this rule in the future.
+violation(area_bar_with_log) :-
+    attribute((mark,type),M,(bar;area)),
+    attribute(mark_scale_channel,M,log,(x;y)).
+
+% @hard(rect_without_d_d) Rect mark needs discrete x and y.
+violation(rect_without_d_d) :-
+    attribute((mark,type),M,rect),
+    attribute(mark_scale_channel,M,T,(x;y)),
+    domain(continuous_scale,T).
+
+% @hard(same_field_x_and_y) Don't use the same field on x and y.
+violation(same_field_x_and_y) :-
+    attribute(mark_channel_field,M,x,F),
+    attribute(mark_channel_field,M,y,F),
+    entity(field,root,F),
+    entity(mark,_,M).
+
+% @hard(count_twice) Don't use count twice.
+violation(count_twice):-
+    { entity(encoding,M,E) : attribute((encoding,aggregate),E,count) } >= 2,
+    entity(mark,_,M).
+
+% @hard(aggregate_not_all_continuous) If we use aggregation, then all continuous scales need to be aggregated.
+violation(aggregate_not_all_continuous):-
+    attribute((encoding,aggregate),E1,_),
+    entity(encoding,M,E1),
+    entity(encoding,M,E2),
+    E1 > E2,
+    attribute((encoding,scale_type),E2,T),
+    domain(continuous_scale,T),
+    not attribute((encoding,aggregate),E2,_).
 
 % @hard(invalid_bin) Check bin type.
 violation(invalid_bin) :-

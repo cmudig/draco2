@@ -29,6 +29,8 @@ jobs:
         run: make typecheck
       - name: Check Poetry
         run: make check
+      - name: Size of Grounded Programs
+        run: make grounding-size
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2.1.0
@@ -42,5 +44,5 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: psf/black@stable
         with:
-          version: "21.12b0"
+          version: "22.1.0"
       - uses: py-actions/flake8@v2
