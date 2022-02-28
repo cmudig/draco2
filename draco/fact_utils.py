@@ -132,7 +132,7 @@ def collect_children(name: str, collector: dict):
     return out
 
 
-def answer_set_to_dict(answer_set: List[Symbol], root=ROOT) -> Mapping:
+def answer_set_to_dict(answer_set: Iterable[Symbol], root=ROOT) -> Mapping:
     """A generic decoder that converts an answer set into a nested data structure.
     The inverse of this function is :code:`dict_to_facts`.
     """

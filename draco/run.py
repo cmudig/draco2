@@ -17,8 +17,8 @@ class Model:
         :number: The sequence number of this answer.
     """
 
-    answer_set: List[clingo.Symbol]
-    cost: int
+    answer_set: Iterable[clingo.Symbol]
+    cost: List[int]
     number: int
 
 
