@@ -1,7 +1,7 @@
 import itertools
 from collections import defaultdict
 from enum import Enum, unique
-from typing import Generator, Iterator, List, Mapping, Optional, Tuple, Union
+from typing import Generator, Iterable, Iterator, List, Mapping, Optional, Tuple, Union
 
 from clingo import Symbol
 from clingo.symbol import SymbolType
@@ -34,7 +34,7 @@ def stringify(value):
     return value[:1].lower() + value[1:]
 
 
-def make_fact(kind: FactKind, values=List) -> str:
+def make_fact(kind: FactKind, values: Iterable = []) -> str:
     """Create an ASP fact from a list of values. The function generates either
     attribute or entity facts.
     """
@@ -132,7 +132,7 @@ def collect_children(name: str, collector: dict):
     return out
 
 
-def answer_set_to_dict(answer_set: List[Symbol], root=ROOT) -> Mapping:
+def answer_set_to_dict(answer_set: Iterable[Symbol], root=ROOT) -> Mapping:
     """A generic decoder that converts an answer set into a nested data structure.
     The inverse of this function is :code:`dict_to_facts`.
     """
