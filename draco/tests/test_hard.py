@@ -809,6 +809,34 @@ def test_bar_tick_continuous_x_y():
     b = hard.blocks["bar_tick_continuous_x_y"]
     assert isinstance(b, Block)
 
+    # binned histogram
+    assert no_violations(
+        b.program
+        + """
+    entity(field,root,0).
+
+    entity(mark,root,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,binning),2,10).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+
+    entity(scale,root,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+
+    entity(scale,root,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,linear).
+    """
+    )
+
     assert no_violations(
         b.program
         + """
@@ -1367,6 +1395,35 @@ def test_aggregate_not_all_continuous():
     b = hard.blocks["aggregate_not_all_continuous"]
     assert isinstance(b, Block)
 
+    # x is binned, thus doesn't need to be aggregated
+    assert no_violations(
+        b.program
+        + """
+    entity(field,root,0).
+
+    entity(mark,root,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,binning),2,10).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+
+    entity(scale,root,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+
+    entity(scale,root,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,linear).
+    """
+    )
+
+    # both x and y are aggregated
     assert no_violations(
         b.program
         + """
@@ -1546,7 +1603,7 @@ def test_zero_d_n():
 
     entity(scale,0,4).
     attribute((scale,channel),4,x).
-    attribute((scale,zero),4).
+    attribute((scale,zero),4,true).
 
     """
     )
@@ -1567,7 +1624,7 @@ def test_zero_d_n():
 
     entity(scale,0,4).
     attribute((scale,channel),4,x).
-    attribute((scale,zero),4).
+    attribute((scale,zero),4,true).
     """
         )
         == ["zero_d_n"]
@@ -1594,12 +1651,12 @@ def test_bar_area_without_zero():
     entity(scale,0,4).
     attribute((scale,channel),4,x).
     attribute((scale,type),4,linear).
-    attribute((scale,zero),4).
+    attribute((scale,zero),4,ture).
 
     entity(scale,0,5).
     attribute((scale,channel),5,y).
     attribute((scale,type),5,linear).
-    attribute((scale,zero),5).
+    attribute((scale,zero),5,true).
     """
     )
 
@@ -1620,7 +1677,7 @@ def test_bar_area_without_zero():
     entity(scale,0,4).
     attribute((scale,channel),4,x).
     attribute((scale,type),4,linear).
-    attribute((scale,zero),4).
+    attribute((scale,zero),4,true).
 
     entity(scale,0,5).
     attribute((scale,channel),5,y).
@@ -1664,7 +1721,7 @@ def test_bar_area_without_zero():
     entity(scale,0,4).
     attribute((scale,channel),4,x).
     attribute((scale,type),4,linear).
-    attribute((scale,zero),4).
+    attribute((scale,zero),4,true).
 
     entity(scale,0,5).
     attribute((scale,channel),5,y).

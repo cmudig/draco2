@@ -191,6 +191,7 @@ violation(aggregate_not_all_continuous):-
     E1 > E2,
     attribute((encoding,scale_type),E2,T),
     domain(continuous_scale,T),
+    not attribute((encoding,binning),E2,_),
     not attribute((encoding,aggregate),E2,_).
 
 % @hard(detail_not_ordinal) Detail requires ordinal scales.
@@ -208,7 +209,7 @@ violation(bar_tick_area_line_without_continuous_x_y) :-
 violation(zero_d_n) :-
     attribute((mark,scale),M,S),
     entity(encoding,M,E),
-    attribute((scale,zero),S),
+    attribute((scale,zero),S,_),
     attribute((encoding,field),E,F),
     attribute((field,type),F,T),
     T != datetime,
@@ -224,7 +225,7 @@ violation(bar_area_without_zero) :-
     attribute((scale,channel),S,x),
     attribute((scale,type),S,T),
     domain(continuous_scale,T),
-    not attribute((scale,zero),S).
+    not attribute((scale,zero),S,_).
 violation(bar_area_without_zero) :-
     attribute((mark,type),M,(bar;area)),
     entity(encoding,M,E),
@@ -234,4 +235,4 @@ violation(bar_area_without_zero) :-
     attribute((scale,channel),S,y),
     attribute((scale,type),S,T),
     domain(continuous_scale,T),
-    not attribute((scale,zero),S).
+    not attribute((scale,zero),S,_).
