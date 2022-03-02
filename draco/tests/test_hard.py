@@ -1398,16 +1398,7 @@ def test_invalid_bin():
     """
     )
 
-    assert no_violations(
-        p
-        + """
-    entity(encoding,1,2).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
-    attribute((encoding,binning),2).
-    """
-    )
-
+    # number of bin cannot be a negative value
     assert (
         list_violations(
             p
@@ -1434,6 +1425,7 @@ def test_invalid_num_rows():
     """
     )
 
+    # number of rows cannot be 0
     assert (
         list_violations(
             p
@@ -1459,6 +1451,7 @@ def test_invalid_unique():
     """
     )
 
+    # number of unique value cannot be 0
     assert (
         list_violations(
             p
@@ -1495,6 +1488,7 @@ def test_invalid_extent_non_number():
     """
     )
 
+    # extent is not allowed for data types other than number
     assert (
         list_violations(
             p
@@ -1507,6 +1501,7 @@ def test_invalid_extent_non_number():
         == ["invalid_extent_non_number"]
     )
 
+    # extent is not allowed for data types other than number
     assert (
         list_violations(
             p
@@ -1534,6 +1529,7 @@ def test_invalid_non_number_std():
     """
     )
 
+    # std is not allowed for data types other than number
     assert (
         list_violations(
             p
@@ -1561,6 +1557,7 @@ def test_invalid_std():
     """
     )
 
+    # std cannot be a negative value
     assert (
         list_violations(
             p
@@ -1601,6 +1598,7 @@ def test_invalid_extent_order():
     """
     )
 
+    # min cannot be larger than max
     assert (
         list_violations(
             p
@@ -1629,6 +1627,7 @@ def test_invalid_non_string_freq():
     """
     )
 
+    # freq is not allowed for data types other than string
     assert (
         list_violations(
             p
