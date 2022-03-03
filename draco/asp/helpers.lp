@@ -39,7 +39,7 @@ attribute(mark_channel_scale_not_binned,M,T,C) :-
     attribute(mark_scale_channel,M,T,C),
     not attribute((encoding,binning),E,_).
 
-% @helper(mark_channel_discrete) Whether a mark has a discrete scale or binned encoding for a channel.
+% @helper(mark_channel_discrete_or_binned) Whether a mark has a discrete scale or binned encoding for a channel.
 attribute(mark_channel_discrete_or_binned,M,C) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
