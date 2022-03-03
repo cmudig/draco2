@@ -1729,8 +1729,9 @@ def test_bar_area_without_zero():
     """
         )
         == ["bar_area_without_zero"]
-      
-      
+    )
+
+
 def test_invalid_bin():
     b = hard.blocks["invalid_bin"]
     assert isinstance(b, Block)
