@@ -1146,6 +1146,7 @@ def test_rect_without_d_d():
     """
     )
 
+    # x is not discrete
     assert (
         list_violations(
             b.program
@@ -1219,6 +1220,7 @@ def test_same_field_x_and_y():
     """
     )
 
+    # same field for x and y
     assert (
         list_violations(
             b.program
@@ -1257,6 +1259,7 @@ def test_count_twice():
     """
     )
 
+    # use count twice but with different marks
     assert no_violations(
         b.program
         + """
@@ -1272,6 +1275,7 @@ def test_count_twice():
     """
     )
 
+    # use count both on x and y
     assert (
         list_violations(
             b.program
@@ -1290,6 +1294,7 @@ def test_count_twice():
         == ["count_twice"]
     )
 
+    # use count both on x and size
     assert (
         list_violations(
             b.program
@@ -1332,6 +1337,7 @@ def test_aggregate_not_all_continuous():
     """
     )
 
+    # x is continuous and aggregated, y is discrete
     assert no_violations(
         b.program
         + """
@@ -1354,6 +1360,7 @@ def test_aggregate_not_all_continuous():
     """
     )
 
+    # x scale is continuous but not aggregated
     assert (
         list_violations(
             b.program
@@ -1373,4 +1380,262 @@ def test_aggregate_not_all_continuous():
     """
         )
         == ["aggregate_not_all_continuous"]
+    )
+
+
+def test_invalid_bin():
+    b = hard.blocks["invalid_bin"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,binning),2,30).
+    """
+    )
+
+    # number of bin cannot be a negative value
+    assert (
+        list_violations(
+            p
+            + """
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,binning),2,-1).
+    """
+        )
+        == ["invalid_bin"]
+    )
+
+
+def test_invalid_num_rows():
+    b = hard.blocks["invalid_num_rows"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    attribute(number_rows,root,42).
+    """
+    )
+
+    # number of rows cannot be 0
+    assert (
+        list_violations(
+            p
+            + """
+    attribute(number_rows,root,0).
+    """
+        )
+        == ["invalid_num_rows"]
+    )
+
+
+def test_invalid_unique():
+    b = hard.blocks["invalid_unique"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
+    attribute((field,unique),date,1461).
+    """
+    )
+
+    # number of unique value cannot be 0
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
+    attribute((field,unique),date,0).
+    """
+        )
+        == ["invalid_unique"]
+    )
+
+
+def test_invalid_extent_non_number():
+    b = hard.blocks["invalid_extent_non_number"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,min),precipitation,0).
+    """
+    )
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,max),precipitation,55).
+    """
+    )
+
+    # extent is not allowed for data types other than number
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
+    attribute((field,min),date,0).
+    """
+        )
+        == ["invalid_extent_non_number"]
+    )
+
+    # extent is not allowed for data types other than number
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
+    attribute((field,max),date,55).
+    """
+        )
+        == ["invalid_extent_non_number"]
+    )
+
+
+def test_invalid_non_number_std():
+    b = hard.blocks["invalid_non_number_std"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,std),precipitation,6).
+    """
+    )
+
+    # std is not allowed for data types other than number
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,date).
+    attribute((field,type),date,datetime).
+    attribute((field,std),date,6).
+    """
+        )
+        == ["invalid_non_number_std"]
+    )
+
+
+def test_invalid_std():
+    b = hard.blocks["invalid_std"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,std),precipitation,6).
+    """
+    )
+
+    # std cannot be a negative value
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,std),precipitation,-10).
+    """
+        )
+        == ["invalid_std"]
+    )
+
+
+def test_invalid_extent_order():
+    b = hard.blocks["invalid_extent_order"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,min),precipitation,0).
+    attribute((field,max),precipitation,55).
+    """
+    )
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,min),precipitation,30).
+    entity(field,root,precipitation2).
+    attribute((field,type),precipitation2,number).
+    attribute((field,max),precipitation2,20).
+    """
+    )
+
+    # min cannot be larger than max
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,min),precipitation,55).
+    attribute((field,max),precipitation,0).
+    """
+        )
+        == ["invalid_extent_order"]
+    )
+
+
+def test_invalid_non_string_freq():
+    b = hard.blocks["invalid_non_string_freq"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,weather).
+    attribute((field,type),weather,string).
+    attribute((field,freq),weather,714).
+    """
+    )
+
+    # freq is not allowed for data types other than string
+    assert (
+        list_violations(
+            p
+            + """
+    entity(field,root,precipitation).
+    attribute((field,type),precipitation,number).
+    attribute((field,freq),precipitation,714).
+    """
+        )
+        == ["invalid_non_string_freq"]
     )

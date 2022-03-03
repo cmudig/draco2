@@ -317,16 +317,16 @@ pyflakes = ">=2.4.0,<2.5.0"
 
 [[package]]
 name = "flake8-black"
-version = "0.2.4"
+version = "0.3.2"
 description = "flake8 plugin to call black as a code style validator"
 category = "dev"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 
 [package.dependencies]
-black = "*"
+black = ">=22.1.0"
 flake8 = ">=3.0.0"
-toml = "*"
+tomli = "*"
 
 [[package]]
 name = "gitdb"
@@ -1224,7 +1224,7 @@ test = ["hypothesis (>=3.58)", "pytest (>=6.0)", "pytest-xdist"]
 
 [[package]]
 name = "pandas-stubs"
-version = "1.2.0.48"
+version = "1.2.0.49"
 description = "Type annotations for Pandas"
 category = "dev"
 optional = false
@@ -1508,7 +1508,7 @@ six = ">=1.5"
 
 [[package]]
 name = "pytype"
-version = "2022.2.17"
+version = "2022.2.23"
 description = "Python type inferencer"
 category = "dev"
 optional = false
@@ -2217,7 +2217,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.10"
-content-hash = "24243b94f7b8dd97c0b91d03f5ed7315c1ecf8ff874301b94eb3123cc3942fe1"
+content-hash = "7a6619fdb308a559e9f0974367d494224d0d1ca9b5de0d91890e26ca876b09e7"
 
 [metadata.files]
 alabaster = [
@@ -2507,8 +2507,8 @@ flake8 = [
     {file = "flake8-4.0.1.tar.gz", hash = "sha256:806e034dda44114815e23c16ef92f95c91e4c71100ff52813adf7132a6ad870d"},
 ]
 flake8-black = [
-    {file = "flake8-black-0.2.4.tar.gz", hash = "sha256:a7871bfd1cbff431a1fc91ba60ae154510c80f575e6b9a2bbb13dfb4650afd22"},
-    {file = "flake8_black-0.2.4-py3-none-any.whl", hash = "sha256:0a70dfd97c8439827f365dc6dbc6c8c9cc087f0833625c6cc6848ff7876256be"},
+    {file = "flake8-black-0.3.2.tar.gz", hash = "sha256:6f6bf198f3f45df43245d1d1a0ba2035ee5817d167680f9e1af23cde70cb7548"},
+    {file = "flake8_black-0.3.2-py3-none-any.whl", hash = "sha256:9c86b24ede16a80555808c6c4779d81bc54cff57d0dd1980029c0e4b39ac8b45"},
 ]
 gitdb = [
     {file = "gitdb-4.0.9-py3-none-any.whl", hash = "sha256:8033ad4e853066ba6ca92050b9df2f89301b8fc8bf7e9324d412a63f8bf1a8fd"},
@@ -2937,8 +2937,8 @@ pandas = [
     {file = "pandas-1.3.5.tar.gz", hash = "sha256:1e4285f5de1012de20ca46b188ccf33521bff61ba5c5ebd78b4fb28e5416a9f1"},
 ]
 pandas-stubs = [
-    {file = "pandas-stubs-1.2.0.48.tar.gz", hash = "sha256:53cf78af9671acd6731941b852904d15ae4cf534e8d4f3ce1d5bd5a4e52057c5"},
-    {file = "pandas_stubs-1.2.0.48-py3-none-any.whl", hash = "sha256:a2555093f7e58f8b6cd0b8d73222ca03b8154e6787336957c16a4a4e9447a71f"},
+    {file = "pandas-stubs-1.2.0.49.tar.gz", hash = "sha256:c13c462a3747fe222a06dbbcc7b1cb641d1782d39d79e9057f364af503312f70"},
+    {file = "pandas_stubs-1.2.0.49-py3-none-any.whl", hash = "sha256:b7fea04d557ad0f4b1113df76ee872d63ae8e83d3897255be5bf54ad32af727a"},
 ]
 pandocfilters = [
     {file = "pandocfilters-1.5.0-py2.py3-none-any.whl", hash = "sha256:33aae3f25fd1a026079f5d27bdd52496f0e0803b3469282162bafdcbdf6ef14f"},
@@ -3056,16 +3056,16 @@ python-dateutil = [
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
 ]
 pytype = [
-    {file = "pytype-2022.2.17-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:09a73c2ae7807fa52ba906b13b37615d963639ebd24c7f29b339c850d298d25d"},
-    {file = "pytype-2022.2.17-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e13594fb64eab700045da8fa0dff8609091cded662a360f39b8f344ccac76297"},
-    {file = "pytype-2022.2.17-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:84759eddacf6119c0175802b7b2ef314c7d8cb61c440d4c4f65d77dd0bd020bc"},
-    {file = "pytype-2022.2.17-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:14a3374296d36ded4fa577c28ca0555cf2770aa85c8ab499830bb7edbc52c6e5"},
-    {file = "pytype-2022.2.17-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:75dcc9f878065d87c4d7ec5f2e8d775e5e278d60b457f1df7bcddb2ec487cc55"},
-    {file = "pytype-2022.2.17-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9e1de920b9681a5cf9b8c1e5d7e8650f6cffd21b8a52f2dbbb421ac04187f3ca"},
-    {file = "pytype-2022.2.17-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:46c8c221530370622703f62a332c88a99fd48eba402d1c7c1763e6606ab71633"},
-    {file = "pytype-2022.2.17-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0efa8fa9a64de2fe465d38ad3a5ed127ae8353dca5654f0a62a67a9ceb2a8147"},
-    {file = "pytype-2022.2.17-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9904e048fac5dc71323e2639deef8abdcea78c30ec95d863170055f8f890c05b"},
-    {file = "pytype-2022.2.17.tar.gz", hash = "sha256:a140b5f2a59a1a48654dd6f0bd19f5c6345fe72ee16f988ac3311ba5c47cb8cb"},
+    {file = "pytype-2022.2.23-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:68fe58023414531e5d3009109f94aa7466051a62cba4a75f4a44dbe1e2f7a9b4"},
+    {file = "pytype-2022.2.23-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:37c70240de25afc3c7e0c7429fb5f2c3cfd3392474f948491111f4871d8869ee"},
+    {file = "pytype-2022.2.23-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cdc06eef78e991c655df95ab6c2579f304c63ad9aa7eae05d507e1e6fcfd0f13"},
+    {file = "pytype-2022.2.23-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:7c93d1a5e6151e9d5643ced245f122f932e23c511fd4bba30077fab3cc34a4ea"},
+    {file = "pytype-2022.2.23-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:acb9060890258d4416720e33eef52739a920c42d47705e10e0391af46e305be9"},
+    {file = "pytype-2022.2.23-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:64a56f5b0fecb42fb3be43f37390867b900563bb37008721387d5f45293ea60b"},
+    {file = "pytype-2022.2.23-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:6ed5b89367264b5283d0d66c861a93e4e57b7c21eea6b36660bfefd1f25735fb"},
+    {file = "pytype-2022.2.23-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:34a03080ae5a987771c1daba918a2392aca3e5123809de88ac44283585377d95"},
+    {file = "pytype-2022.2.23-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:17b89cc0a490b92dae369943cf56daad38b3ec6d58f8c955d3195ea4c047e60d"},
+    {file = "pytype-2022.2.23.tar.gz", hash = "sha256:3e3a97053e7d8c5c7cbb24469ce9c12f87de7aa04684dbf9338ccac8bfa3fa08"},
 ]
 pytz = [
     {file = "pytz-2021.3-py2.py3-none-any.whl", hash = "sha256:3672058bc3453457b622aab7a1c3bfd5ab0bdae451512f6cf25f64ed37f5b87c"},
