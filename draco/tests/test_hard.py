@@ -1604,10 +1604,14 @@ def test_zero_d_n():
     entity(scale,0,4).
     attribute((scale,channel),4,x).
 <<<<<<< HEAD
+<<<<<<< HEAD
     attribute((scale,zero),4,true).
 =======
     attribute((scale,zero),4).
 >>>>>>> 271a9cd (feat: add hard constraints)
+=======
+    attribute((scale,zero),4,true).
+>>>>>>> 418510b (fix: zero scale definition, examples and bar examples)
 
     """
     )
