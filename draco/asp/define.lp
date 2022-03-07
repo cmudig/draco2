@@ -41,3 +41,6 @@ domain(task,(value;summary)).
 
 % @definition(stack) Stacking methods.
 domain((encoding,stack),(zero;center;normalize)).
+
+% @definition(scale_zero) Scale start with 0.
+domain((scale,zero),true).
