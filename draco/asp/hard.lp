@@ -209,7 +209,9 @@ violation(bar_tick_area_line_without_continuous_x_y) :-
 violation(zero_d_n) :-
     attribute((mark,scale),M,S),
     entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
     attribute((scale,zero),S,_),
+    attribute((scale,channel),S,C),
     attribute((encoding,field),E,F),
     attribute((field,type),F,T),
     T != datetime,
