@@ -125,12 +125,11 @@ violation(line_area_with_discrete) :-
     domain(discrete_scale,T1),
     domain(discrete_scale,T2).
 
-
 % @hard(bar_tick_continuous_x_y) Bar and tick cannot have both x and y continuous.
 violation(bar_tick_continuous_x_y) :-
     attribute((mark,type),M,(tick;bar)),
-    attribute(mark_scale_channel,M,T1,x),
-    attribute(mark_scale_channel,M,T2,y),
+    attribute(mark_channel_scale_not_binned,M,T1,x),
+    attribute(mark_channel_scale_not_binned,M,T2,y),
     domain(continuous_scale,T1),
     domain(continuous_scale,T2).
 
@@ -192,4 +191,89 @@ violation(aggregate_not_all_continuous):-
     E1 > E2,
     attribute((encoding,scale_type),E2,T),
     domain(continuous_scale,T),
+    not attribute((encoding,binning),E2,_),
     not attribute((encoding,aggregate),E2,_).
+
+% @hard(detail_not_ordinal) Detail requires ordinal scales.
+violation(detail_not_ordinal) :-
+    attribute((scale,channel),S,detail),
+    not attribute((scale,type),S,ordinal).
+
+% @hard(bar_tick_area_line_without_continuous_x_y) Bar, tick, line, area require some continuous variable on x or y.
+violation(bar_tick_area_line_without_continuous_x_y) :-
+    attribute((mark,type),M,(bar;tick;area;line)),
+    attribute(mark_channel_discrete_or_binned,M,x),
+    attribute(mark_channel_discrete_or_binned,M,y).
+
+% @hard(zero_d_n) Can only use zero with datetime or number.
+violation(zero_d_n) :-
+    attribute((mark,scale),M,S),
+    entity(encoding,M,E),
+    attribute((scale,zero),S,_),
+    attribute((encoding,field),E,F),
+    attribute((field,type),F,T),
+    T != datetime,
+    T != number.
+
+% @hard(bar_area_without_zero) Bar and area mark requires scale of continuous to start at zero.
+violation(bar_area_without_zero) :-
+    attribute((mark,type),M,(bar;area)),
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,x),
+    not attribute((encoding,binning),E,_),
+    attribute((mark,scale),M,S),
+    attribute((scale,channel),S,x),
+    attribute((scale,type),S,T),
+    domain(continuous_scale,T),
+    not attribute((scale,zero),S,_).
+violation(bar_area_without_zero) :-
+    attribute((mark,type),M,(bar;area)),
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,y),
+    not attribute((encoding,binning),E,_),
+    attribute((mark,scale),M,S),
+    attribute((scale,channel),S,y),
+    attribute((scale,type),S,T),
+    domain(continuous_scale,T),
+    not attribute((scale,zero),S,_).
+
+% @hard(invalid_bin) Check bin type.
+violation(invalid_bin) :-
+    attribute((encoding,binning),_,B),
+    B < 0.
+
+% @hard(invalid_num_rows) number_rows has to be larger than 0.
+violation(invalid_num_rows) :-
+    attribute(number_rows,root,R),
+    R <= 0.
+
+% @hard(invalid_unique) The number of unique values has to be larger than 0.
+violation(invalid_unique) :-
+    attribute((field,unique),_,U),
+    U <= 0.
+
+% @hard(invalid_extent_non_number) Extent only allowed for numbers (for now).
+violation(invalid_extent_non_number) :-
+    attribute((field,(min;max)),F,_),
+    not attribute((field,type),F,number).
+
+% @hard(invalid_non_number_std) Std only allowed for numbers (for now).
+violation(invalid_non_number_std) :-
+    attribute((field,std),F,_),
+    not attribute((field,type),F,number).
+
+% @hard(invalid_std) Std has to be larger or equal to 0.
+violation(invalid_std) :-
+    attribute((field,std),_,S),
+    S < 0.
+
+% @hard(invalid_extent_order) Order has to be correct.
+violation(invalid_extent_order) :-
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
+    MIN > MAX.
+
+% @hard(invalid_non_string_freq) Frequency for strings only.
+violation(invalid_non_string_freq) :-
+    attribute((field,freq),F,_),
+    not attribute((field,type),F,string).

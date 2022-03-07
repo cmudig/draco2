@@ -9,6 +9,16 @@ def test_domain_valid():
     assert is_satisfiable(BASE_PROGRAMS + ["attribute((scale,type),0,linear)."])
     assert is_satisfiable(BASE_PROGRAMS + ["attribute((scale,channel),0,x)."])
     assert is_satisfiable(BASE_PROGRAMS + ["attribute((encoding,channel),0,x)."])
+    assert is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "attribute((field,name),0,temperature).",
+            "attribute((encoding,field),1,temperature).",
+        ]
+    )
+    assert is_satisfiable(BASE_PROGRAMS + ["attribute((encoding,aggregate),0,mean)."])
+    assert is_satisfiable(BASE_PROGRAMS + ["attribute((field,type),0,number)."])
+    assert is_satisfiable(BASE_PROGRAMS + ["attribute(task,root,summary)."])
 
 
 def test_domain_invlid():
@@ -18,6 +28,18 @@ def test_domain_invlid():
     assert not is_satisfiable(
         BASE_PROGRAMS + ["attribute((encoding,channel),0,invalid)."]
     )
+    assert not is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "attribute((field,name),0,temperature).",
+            "attribute((encoding,field),2,condition).",
+        ]
+    )
+    assert not is_satisfiable(
+        BASE_PROGRAMS + ["attribute((encoding,aggregate),0,sum_mean)."]
+    )
+    assert not is_satisfiable(BASE_PROGRAMS + ["attribute((field,type),0,log)."])
+    assert not is_satisfiable(BASE_PROGRAMS + ["attribute(task,root,summary_task)."])
 
 
 def test_duplicate_attribute():
