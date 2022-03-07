@@ -809,6 +809,34 @@ def test_bar_tick_continuous_x_y():
     b = hard.blocks["bar_tick_continuous_x_y"]
     assert isinstance(b, Block)
 
+    # binned histogram
+    assert no_violations(
+        b.program
+        + """
+    entity(field,root,0).
+
+    entity(mark,root,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,binning),2,10).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+
+    entity(scale,root,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+
+    entity(scale,root,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,linear).
+    """
+    )
+
     assert no_violations(
         b.program
         + """
@@ -821,6 +849,55 @@ def test_bar_tick_continuous_x_y():
     entity(scale,0,4).
     attribute((scale,channel),4,x).
     attribute((scale,type),4,linear).
+    """
+    )
+
+    # both x and y are continous, and x is binned
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,tick).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,binning),2,10).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+
+    entity(scale,0,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,linear).
+    """
+    )
+
+    # both x and y are continous and binned
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,tick).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,binning),2,10).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,binning),3,10).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+
+    entity(scale,0,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,linear).
     """
     )
 
@@ -1318,6 +1395,35 @@ def test_aggregate_not_all_continuous():
     b = hard.blocks["aggregate_not_all_continuous"]
     assert isinstance(b, Block)
 
+    # x is binned, thus doesn't need to be aggregated
+    assert no_violations(
+        b.program
+        + """
+    entity(field,root,0).
+
+    entity(mark,root,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,binning),2,10).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+
+    entity(scale,root,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+
+    entity(scale,root,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,linear).
+    """
+    )
+
+    # both x and y are aggregated
     assert no_violations(
         b.program
         + """
@@ -1380,6 +1486,249 @@ def test_aggregate_not_all_continuous():
     """
         )
         == ["aggregate_not_all_continuous"]
+    )
+
+
+def test_detail_not_ordinal():
+    b = hard.blocks["detail_not_ordinal"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((scale,type),4,ordinal).
+    attribute((scale,channel),4,detail).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((scale,type),4,linear).
+    attribute((scale,channel),4,detail).
+    """
+        )
+        == ["detail_not_ordinal"]
+    )
+
+
+def test_bar_tick_area_line_without_continuous_x_y():
+    b = hard.blocks["bar_tick_area_line_without_continuous_x_y"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,tick).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+    """
+    )
+
+    # both x and y are continous, and x is binned
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,binning),2,10).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+
+    entity(scale,0,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,linear).
+    """
+    )
+
+    # x is continuous and binned, and y is discrete
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,binning),2,10).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,ordinal).
+
+    entity(scale,0,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,ordinal).
+    """
+        )
+        == ["bar_tick_area_line_without_continuous_x_y"]
+    )
+
+
+def test_zero_d_n():
+    b = hard.blocks["zero_d_n"]
+    assert isinstance(b, Block)
+
+    # x scale start with 0 with datetime data type
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+
+    entity(field,0,2).
+    attribute((field,type),2,number).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,x).
+    attribute((encoding,field),3,2).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,zero),4,true).
+
+    """
+    )
+
+    # x scale start with 0 with string data type
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,0,1).
+
+    entity(field,0,2).
+    attribute((field,type),2,string).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,x).
+    attribute((encoding,field),3,2).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,zero),4,true).
+    """
+        )
+        == ["zero_d_n"]
+    )
+
+
+def test_bar_area_without_zero():
+    b = hard.blocks["bar_area_without_zero"]
+    assert isinstance(b, Block)
+
+    # continuous x and y scale start with 0
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+    attribute((scale,zero),4,ture).
+
+    entity(scale,0,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,linear).
+    attribute((scale,zero),5,true).
+    """
+    )
+
+    # binned (not continuous) y scale not start with 0
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,y).
+    attribute((encoding,binning),2,10).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,x).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+    attribute((scale,zero),4,true).
+
+    entity(scale,0,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,linear).
+    """
+    )
+
+    # continuous x scale not start with 0
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,0,1).
+    attribute((mark,type),1,area).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,x).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+    """
+        )
+        == ["bar_area_without_zero"]
+    )
+
+    # continuous y scale not start with 0
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+    attribute((scale,zero),4,true).
+
+    entity(scale,0,5).
+    attribute((scale,channel),5,y).
+    attribute((scale,type),5,linear).
+    """
+        )
+        == ["bar_area_without_zero"]
     )
 
 
