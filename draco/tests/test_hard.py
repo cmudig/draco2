@@ -1603,7 +1603,11 @@ def test_zero_d_n():
 
     entity(scale,0,4).
     attribute((scale,channel),4,x).
+<<<<<<< HEAD
     attribute((scale,zero),4,true).
+=======
+    attribute((scale,zero),4).
+>>>>>>> 271a9cd (feat: add hard constraints)
 
     """
     )

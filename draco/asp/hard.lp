@@ -128,8 +128,8 @@ violation(line_area_with_discrete) :-
 % @hard(bar_tick_continuous_x_y) Bar and tick cannot have both x and y continuous.
 violation(bar_tick_continuous_x_y) :-
     attribute((mark,type),M,(tick;bar)),
-    attribute(mark_channel_scale,M,T1,x),
-    attribute(mark_channel_scale,M,T2,y),
+    attribute(mark_channel_scale_not_binned,M,T1,x),
+    attribute(mark_channel_scale_not_binned,M,T2,y),
     domain(continuous_scale,T1),
     domain(continuous_scale,T2).
 
@@ -209,7 +209,9 @@ violation(bar_tick_area_line_without_continuous_x_y) :-
 violation(zero_d_n) :-
     attribute((mark,scale),M,S),
     entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
     attribute((scale,zero),S,_),
+    attribute((scale,channel),S,C),
     attribute((encoding,field),E,F),
     attribute((field,type),F,T),
     T != datetime,
@@ -219,14 +221,23 @@ violation(zero_d_n) :-
 violation(bar_area_without_zero) :-
     attribute((mark,type),M,(bar;area)),
     entity(encoding,M,E),
-    attribute((encoding,channel),E,C),
+    attribute((encoding,channel),E,x),
     not attribute((encoding,binning),E,_),
     attribute((mark,scale),M,S),
-    attribute((scale,channel),S,C),
+    attribute((scale,channel),S,x),
     attribute((scale,type),S,T),
     domain(continuous_scale,T),
-    not attribute((scale,zero),S,_),
-    C = (x;y).
+    not attribute((scale,zero),S,_).
+violation(bar_area_without_zero) :-
+    attribute((mark,type),M,(bar;area)),
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,y),
+    not attribute((encoding,binning),E,_),
+    attribute((mark,scale),M,S),
+    attribute((scale,channel),S,y),
+    attribute((scale,type),S,T),
+    domain(continuous_scale,T),
+    not attribute((scale,zero),S,_).
 
 % @hard(invalid_bin) Check bin type.
 violation(invalid_bin) :-
