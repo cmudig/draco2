@@ -1604,7 +1604,6 @@ def test_zero_d_n():
     entity(scale,0,4).
     attribute((scale,channel),4,x).
     attribute((scale,zero),4,true).
-
     """
     )
 

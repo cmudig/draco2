@@ -128,8 +128,8 @@ violation(line_area_with_discrete) :-
 % @hard(bar_tick_continuous_x_y) Bar and tick cannot have both x and y continuous.
 violation(bar_tick_continuous_x_y) :-
     attribute((mark,type),M,(tick;bar)),
-    attribute(mark_channel_scale_not_binned,M,T1,x),
-    attribute(mark_channel_scale_not_binned,M,T2,y),
+    attribute(mark_channel_scale,M,T1,x),
+    attribute(mark_channel_scale,M,T2,y),
     domain(continuous_scale,T1),
     domain(continuous_scale,T2).
 
