@@ -55,4 +55,3 @@ attribute(mark_channel_discrete_or_binned,M,C) :-
     attribute((encoding,channel),E,C),
     attribute(mark_scale_channel,M,T,C),
     attribute((encoding,binning),E,_).
-
