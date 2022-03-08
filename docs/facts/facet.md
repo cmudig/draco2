@@ -7,7 +7,7 @@ The facet option can expand current view into horizontal or vertical small multi
 `(facet,channel)`
 : The facet channel. Can be one of `col`, and `row`.
 
-`(facet,channel)`
+`(facet,field)`
 : The facet field.
 
 `(facet,binning)`
