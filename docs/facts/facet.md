@@ -1,6 +1,6 @@
 # Facets
 
-The facet option can expand current view into horizontal or vertical small multiples.
+With the facet operator, we can partition a dataset by a field and create a view for each field. The resulting chart is often called a small multiples chart. 
 
 ## Facet Properties
 
