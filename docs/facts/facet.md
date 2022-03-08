@@ -11,7 +11,7 @@ With the facet operator, we can partition a dataset by a field and create a view
 : The facet field.
 
 `(facet,binning)`
-: Binning a quantitative field for faceting.
+: Binning a numeric field for faceting.
 
 ## Example
 
