@@ -1604,7 +1604,39 @@ def test_zero_d_n():
     entity(scale,0,4).
     attribute((scale,channel),4,x).
     attribute((scale,zero),4,true).
+    """
+    )
 
+    # y scale start with 0 with number data type
+    assert no_violations(
+        b.program
+        + """
+    entity(field,root,temperature).
+    attribute((field,type),temperature,number).
+
+    entity(field,root,condition).
+    attribute((field,type),condition,string).
+
+    entity(mark,root,0).
+    attribute((mark,type),0,bar).
+
+    entity(encoding,0,1).
+    attribute((encoding,channel),1,x).
+    attribute((encoding,field),1,condition).
+
+    entity(encoding,0,2).
+    attribute((encoding,channel),2,y).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,aggregate),2,mean).
+
+    entity(scale,root,3).
+    attribute((scale,channel),3,x).
+    attribute((scale,type),3,ordinal).
+
+    entity(scale,root,4).
+    attribute((scale,channel),4,y).
+    attribute((scale,type),4,linear).
+    attribute((scale,zero),4,true).
     """
     )
 
