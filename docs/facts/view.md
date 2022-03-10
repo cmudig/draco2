@@ -1,6 +1,6 @@
 # Views
 
-A view can group marks and scales together. You need to have a view to generate visualization.
+A view can group marks and scales together. You need to define a view before you add any marks.
 
 If a view has multiple marks, Draco assumes that the marks are layered (i.e. they are in the same view space in the chart).
 
