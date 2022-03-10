@@ -10,6 +10,7 @@ parts:
       - file: facts/encoding
       - file: facts/scale
       - file: facts/task
+      - file: facts/facet
       - file: facts/examples
   - caption: API
     chapters:

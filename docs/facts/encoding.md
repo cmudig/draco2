@@ -22,7 +22,23 @@ Encodings define how [data fields](schema.md) map to visual properties (channel)
 ## Example
 
 ```prolog
+entity(field,root,temperature).
+attribute((field,name),temperature,temperature).
+attribute((field,type),temperature,number).
+
 entity(encoding,m,e1).
 attribute((encoding,channel),e1,x).
 attribute((encoding,field),e1,temperature).
+attribute((encoding,aggregate),e1,mean).
+```
+
+```prolog
+entity(field,root,temperature).
+attribute((field,name),temperature,temperature).
+attribute((field,type),temperature,number).
+
+entity(encoding,m,e1).
+attribute((encoding,channel),e1,x).
+attribute((encoding,field),e1,temperature).
+attribute((encoding,binning),e1,10).
 ```

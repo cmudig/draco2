@@ -4,7 +4,7 @@ The mark represents the graphical mark of the visualization. Draco uses an encod
 
 Marks have [encodings](encoding.md), which define how data fields map to the mark's visual properties.
 
-If you define multiple marks or a view has multiple marks, Draco assumes that the marks are layered (i.e. they are in the same view space in the chart).
+If a view has multiple marks, Draco assumes that the marks are layered (i.e. they are in the same view space in the chart).
 
 ## Mark Properties
 
@@ -14,7 +14,9 @@ If you define multiple marks or a view has multiple marks, Draco assumes that th
 ## Example
 
 ```prolog
-entity(mark,root,m).
+entity(view,root,v).
+
+entity(mark,v,m).
 attribute((mark,type),m,tick).
 entity(encoding,m,e).
 ```
