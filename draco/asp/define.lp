@@ -9,6 +9,9 @@ domain((field,type),(string;number;boolean;datetime)).
 % @definition(field_names) Basic types of the data.
 domain((field,name),F) :- attribute((field,name),_,F).
 
+% @definition(field_ids)
+domain((encoding,field),F) :- entity(field,_,F).
+
 % @definition(aggregate) Aggregation functions.
 domain((encoding,aggregate),(count;mean;median;min;max;stdev;sum)).
 domain((encoding,aggregate),(count;sum)).
