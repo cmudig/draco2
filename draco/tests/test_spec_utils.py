@@ -5,7 +5,9 @@ from draco.fact_utils import dict_to_facts
 def test_check_spec():
     prog_valid = dict_to_facts(
         {
-            "field": [{"name": "temperature", "type": "number"}],
+            "field": [
+                {"name": "temperature", "type": "number", "__id__": "temperature"}
+            ],
             "mark": [
                 {
                     "type": "tick",
@@ -19,7 +21,9 @@ def test_check_spec():
 
     prog_invalid = dict_to_facts(
         {
-            "field": [{"name": "temperature", "type": "number"}],
+            "field": [
+                {"name": "temperature", "type": "number", "__id__": "temperature"}
+            ],
             "mark": [
                 {
                     # invalid mark
@@ -36,7 +40,9 @@ def test_check_spec():
 def test_get_violations():
     prog = dict_to_facts(
         {
-            "field": [{"name": "temperature", "type": "number"}],
+            "field": [
+                {"name": "temperature", "type": "number", "__id__": "temperature"}
+            ],
             "mark": [
                 {
                     # invalid mark
