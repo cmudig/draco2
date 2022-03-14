@@ -45,7 +45,7 @@ pytest-cov = "^3.0.0"
 pytype = "^2022.2.23"
 sphinx-autodoc-typehints = "^1.17.0"
 types-pkg-resources = "^0.1.2"
-usort = "^1.0.1"
+usort = "^1.0.2"
 vega-datasets = "^0.9.0"
 
 [build-system]
