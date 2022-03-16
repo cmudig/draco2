@@ -230,6 +230,27 @@ violation(bar_area_without_zero) :-
     not attribute((scale,zero),S,_),
     C = (x;y).
 
+% @hard(row_or_col_c) Row and column require discrete. If number, need to be binned.
+violation(row_or_col_c) :-
+    attribute((field,type),F1,number),
+    entity(facet,_,F2),
+    attribute((facet,field),F2,F1),
+    not attribute((facet,binning),F2,_).
+
+% @hard(row_no_y) Don't use row without y. Just using y is simpler.
+violation(row_no_y) :-
+    entity(facet,V,F),
+    attribute((facet,channel),F,row),
+    entity(mark,V,M),
+    not attribute((mark,channel),M,y).
+
+% @hard(col_no_x) Don't use column without x. Just using x is simpler.
+violation(col_no_x) :-
+    entity(facet,V,F),
+    attribute((facet,channel),F,col),
+    entity(mark,V,M),
+    not attribute((mark,channel),M,x).
+
 % @hard(invalid_bin) Check bin type.
 violation(invalid_bin) :-
     attribute((encoding,binning),_,B),
