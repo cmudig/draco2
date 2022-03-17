@@ -50,9 +50,6 @@ domain((scale,zero),true).
 
 % @definition(facets) Definition for facets
 domain((facet,field),F) :- entity(field,_,F).
-
-domain(facet_channel,(row;col)).
-domain((facet,channel),C) :- domain(facet_channel,C).
-
+domain((facet,channel),(row;col)).
 domain((facet,binning),(10;25;200)).
 
