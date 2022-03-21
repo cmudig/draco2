@@ -1764,47 +1764,6 @@ def test_bar_area_without_zero():
     )
 
 
-def test_row_or_col_c():
-    b = hard.blocks["row_or_col_c"]
-    assert isinstance(b, Block)
-    p = b.program
-
-    assert no_violations(
-        p
-        + """
-    attribute((field,type),condition,string).
-    entity(facet,root,1).
-    attribute((facet,channel),1,col).
-    attribute((facet,field),1,condition).
-    """
-    )
-
-    assert no_violations(
-        p
-        + """
-    attribute((field,type),temperature,number).
-    entity(facet,root,1).
-    attribute((facet,channel),1,col).
-    attribute((facet,field),1,temperature).
-    attribute((facet,binning),1,10).
-    """
-    )
-
-    # cannot facet a numberic field without binning
-    assert (
-        list_violations(
-            p
-            + """
-    attribute((field,type),temperature,number).
-    entity(facet,root,1).
-    attribute((facet,channel),1,col).
-    attribute((facet,field),1,temperature).
-    """
-        )
-        == ["row_or_col_c"]
-    )
-
-
 def test_row_no_y():
     b = hard.blocks["row_no_y"]
     assert isinstance(b, Block)
