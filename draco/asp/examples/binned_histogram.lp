@@ -1,28 +1,28 @@
 attribute(number_rows,root,100).
 
-entity(field,root,0).
-attribute((field,name),0,temperature).
-attribute((field,type),0,number).
+entity(field,root,(f,0)).
+attribute((field,name),(f,0),temperature).
+attribute((field,type),(f,0),number).
 
-entity(mark,root,1).
-attribute((mark,type),1,bar).
+entity(mark,root,(m,0)).
+attribute((mark,type),(m,0),bar).
 
-entity(encoding,1,2).
-attribute((encoding,channel),2,x).
-attribute((encoding,field),2,temperature).
-attribute((encoding,binning),2,10).
+entity(encoding,(m,0),(e,0)).
+attribute((encoding,channel),(e,0),x).
+attribute((encoding,field),(e,0),temperature).
+attribute((encoding,binning),(e,0),10).
 
-entity(encoding,1,3).
-attribute((encoding,channel),3,y).
-attribute((encoding,aggregate),3,count).
+entity(encoding,(m,0),(e,1)).
+attribute((encoding,channel),(e,1),y).
+attribute((encoding,aggregate),(e,1),count).
 
-entity(scale,root,4).
-attribute((scale,channel),4,x).
-attribute((scale,type),4,linear).
+entity(scale,root,(s,0)).
+attribute((scale,channel),(s,0),x).
+attribute((scale,type),(s,0),linear).
 
-entity(scale,root,5).
-attribute((scale,channel),5,y).
-attribute((scale,type),5,linear).
+entity(scale,root,(s,1)).
+attribute((scale,channel),(s,1),y).
+attribute((scale,type),(s,1),linear).
 
 #show entity/3.
 #show attribute/3.

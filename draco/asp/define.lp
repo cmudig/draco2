@@ -20,7 +20,7 @@ domain((encoding,aggregate),(count;sum)).
 domain((encoding,binning),(10;25;200)).
 
 % @definition(channel) Encoding channels.
-domain(positional,(x;y;row;column)).
+domain(positional,(x;y)).
 domain(non_positional,(color;size;shape;text;detail)).
 domain(single_channel,C) :- domain(positional,C).
 domain(single_channel,C) :- domain(non_positional,C).
@@ -30,6 +30,11 @@ domain(channel,C) :- domain(multi_channel,C).
 
 domain((encoding,channel),C) :- domain(channel,C).
 domain((scale,channel),C) :- domain(channel,C).
+
+domain(encoding_channel,V,C):-
+    entity(mark,V,M),
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C).
 
 % @definition(scale_type) Scale types.
 domain(discrete_scale,(ordinal;categorical)).

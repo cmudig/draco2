@@ -53,6 +53,63 @@ def test_duplicate_attribute():
     )
 
 
+def test_duplicate_channel():
+    assert is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "entity(encoding,0,1).",
+            "entity(encoding,2,3).",
+            "attribute((encoding,channel),1,x).",
+            "attribute((encoding,channel),3,x).",
+        ]
+    )
+    assert is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "entity(encoding,(m,0),(e,1)).",
+            "entity(encoding,(m,2),(e,3)).",
+            "attribute((encoding,channel),(e,1),x).",
+            "attribute((encoding,channel),(e,3),x).",
+        ]
+    )
+    assert not is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "entity(encoding,0,1).",
+            "entity(encoding,0,2).",
+            "attribute((encoding,channel),1,x).",
+            "attribute((encoding,channel),2,x).",
+        ]
+    )
+    assert not is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "entity(encoding,(m,0),(e,1)).",
+            "entity(encoding,(m,0),(e,3)).",
+            "attribute((encoding,channel),(e,1),x).",
+            "attribute((encoding,channel),(e,3),x).",
+        ]
+    )
+    assert is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "entity(scale,0,1).",
+            "entity(scale,2,3).",
+            "attribute((scale,channel),1,x).",
+            "attribute((scale,channel),3,x).",
+        ]
+    )
+    assert not is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "entity(scale,0,1).",
+            "entity(scale,0,2).",
+            "attribute((scale,channel),1,x).",
+            "attribute((scale,channel),2,x).",
+        ]
+    )
+
+
 def test_fields():
     assert is_satisfiable(
         BASE_PROGRAMS
