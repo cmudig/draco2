@@ -230,6 +230,20 @@ violation(bar_area_without_zero) :-
     not attribute((scale,zero),S,_),
     C = (x;y).
 
+% @hard(row_no_y) Don't use row without y. Just using y is simpler.
+violation(row_no_y) :-
+    entity(facet,V,F),
+    attribute((facet,channel),F,row),
+    entity(mark,V,M),
+    not attribute((mark,channel),M,y).
+
+% @hard(col_no_x) Don't use column without x. Just using x is simpler.
+violation(col_no_x) :-
+    entity(facet,V,F),
+    attribute((facet,channel),F,col),
+    entity(mark,V,M),
+    not attribute((mark,channel),M,x).
+
 % @hard(invalid_bin) Check bin type.
 violation(invalid_bin) :-
     attribute((encoding,binning),_,B),
