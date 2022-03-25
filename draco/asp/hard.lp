@@ -72,13 +72,34 @@ violation(size_negative) :-
     MIN < 0,
     MAX > 0.
 
-% @hard(repeat_channel) Cannot use single channels twice for the same mark.
-violation(repeat_channel) :-
+% @hard(encoding_repeat_channel) Cannot use single channels twice for the same mark.
+violation(encoding_repeat_channel) :-
     entity(encoding,M,E1),
     entity(encoding,M,E2),
     attribute((encoding,channel),E1,C),
     attribute((encoding,channel),E2,C),
     E1 > E2.
+
+% @hard(scale_repeat_channel) Cannot use single channels twice for the same view.
+violation(scale_repeat_channel) :-
+    entity(scale,V,S1),
+    entity(scale,V,S2),
+    attribute((scale,channel),S1,C),
+    attribute((scale,channel),S2,C),
+    S1 > S2.
+
+% @hard(encoding_channel_without_scale) Encoding channel doesn't have a corresponding scale channel.
+violation(encoding_channel_without_scale) :-
+    entity(mark,V,M),
+    attribute((mark,channel),M,C),
+    not domain(scale_channel,V,C).
+
+% @hard(scale_channel_without_encoding) Scale channel doesn't have a corresponding encoding channel.
+violation(scale_channel_without_encoding) :-
+    entity(view,_,V),
+    entity(scale,V,S),
+    attribute((scale,channel),S,C),
+    not domain(encoding_channel,V,C).
 
 % @hard(no_encodings) There has to be at least one encoding for every mark.
 violation(no_encodings) :-

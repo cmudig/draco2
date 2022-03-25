@@ -182,8 +182,8 @@ def test_no_encodings():
     )
 
 
-def test_repeat_channel():
-    b = hard.blocks["repeat_channel"]
+def test_encoding_repeat_channel():
+    b = hard.blocks["encoding_repeat_channel"]
     assert isinstance(b, Block)
 
     # different channels
@@ -230,7 +230,183 @@ def test_repeat_channel():
     attribute((encoding,channel),e1,x).
     """
         )
-        == ["repeat_channel"]
+        == ["encoding_repeat_channel"]
+    )
+
+
+def test_scale_repeat_channel():
+    b = hard.blocks["scale_repeat_channel"]
+    assert isinstance(b, Block)
+
+    # different channels
+    assert no_violations(
+        b.program
+        + """
+    entity(scale,v0,s0).
+    entity(scale,v0,s1).
+    attribute((scale,channel),s0,x).
+    attribute((scale,channel),s1,y).
+    """
+    )
+
+    # different marks
+    assert no_violations(
+        b.program
+        + """
+    entity(view,root,v0).
+    entity(view,root,v1).
+    entity(scale,v0,s0).
+    entity(scale,v1,s1).
+    attribute((scale,channel),s0,x).
+    attribute((scale,channel),s1,x).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(view,root,v0).
+    entity(scale,v0,s0).
+    entity(scale,v0,s1).
+    attribute((scale,channel),s0,x).
+    attribute((scale,channel),s1,x).
+    """
+        )
+        == ["scale_repeat_channel"]
+    )
+
+
+def test_encoding_channel_without_scale():
+    b = hard.blocks["encoding_channel_without_scale"]
+    assert isinstance(b, Block)
+
+    # scale and encoding both have x channel
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,v0,m0).
+    entity(encoding,m0,e0).
+    attribute((encoding,channel),e0,x).
+
+    entity(scale,v0,s0).
+    attribute((scale,channel),s0,x).
+    """
+    )
+
+    # encoding doesn't have y channel, but that's okay
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,v0,m0).
+    entity(encoding,m0,e0).
+    attribute((encoding,channel),e0,x).
+
+    entity(scale,v0,s0).
+    attribute((scale,channel),s0,x).
+    entity(scale,v0,s1).
+    attribute((scale,channel),s1,y).
+    """
+    )
+
+    # both have x and y channels
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,v0,m0).
+    entity(encoding,m0,e0).
+    attribute((encoding,channel),e0,x).
+    entity(encoding,m0,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v0,s0).
+    attribute((scale,channel),s0,x).
+    entity(scale,v0,s1).
+    attribute((scale,channel),s1,y).
+    """
+    )
+
+    # scale doesn't have x channel
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,v0,m0).
+    entity(encoding,m0,e0).
+    attribute((encoding,channel),e0,x).
+
+    entity(scale,v0,s0).
+    attribute((scale,channel),s0,y).
+    """
+        )
+        == ["encoding_channel_without_scale"]
+    )
+
+
+def test_scale_channel_without_encoding():
+    b = hard.blocks["scale_channel_without_encoding"]
+    assert isinstance(b, Block)
+
+    # scale and encoding both have x channel
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,v0,m0).
+    entity(encoding,m0,e0).
+    attribute((encoding,channel),e0,x).
+
+    entity(scale,v0,s0).
+    attribute((scale,channel),s0,x).
+    """
+    )
+
+    # scale doesn't have y channel, but that's okay
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,v0,m0).
+    entity(encoding,m0,e0).
+    attribute((encoding,channel),e0,x).
+    entity(encoding,m0,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v0,s0).
+    attribute((scale,channel),s0,x).
+    """
+    )
+
+    # both have x and y channels
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,v0,m0).
+    entity(encoding,m0,e0).
+    attribute((encoding,channel),e0,x).
+    entity(encoding,m0,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v0,s0).
+    attribute((scale,channel),s0,x).
+    entity(scale,v0,s1).
+    attribute((scale,channel),s1,y).
+    """
+    )
+
+    # encoding doesn't have y channel
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(view,root,v0).
+    entity(mark,v0,m0).
+    entity(encoding,m0,e0).
+    attribute((encoding,channel),e0,x).
+
+    entity(scale,v0,s0).
+    attribute((scale,channel),s0,y).
+    """
+        )
+        == ["scale_channel_without_encoding"]
     )
 
 
