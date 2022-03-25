@@ -20,7 +20,7 @@ domain((encoding,aggregate),(count;sum)).
 domain((encoding,binning),(10;25;200)).
 
 % @definition(channel) Encoding channels.
-domain(positional,(x;y;row;column)).
+domain(positional,(x;y)).
 domain(non_positional,(color;size;shape;text;detail)).
 domain(single_channel,C) :- domain(positional,C).
 domain(single_channel,C) :- domain(non_positional,C).
@@ -47,3 +47,9 @@ domain((encoding,stack),(zero;center;normalize)).
 
 % @definition(scale_zero) Scale start with 0.
 domain((scale,zero),true).
+
+% @definition(facets) Definition for facets
+domain((facet,field),F) :- entity(field,_,F).
+domain((facet,channel),(row;col)).
+domain((facet,binning),(10;25;200)).
+
