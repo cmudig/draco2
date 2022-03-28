@@ -10,14 +10,13 @@ mark_id(0..max_extra_marks).
 :- not entity(mark,_,(m,ID)), entity(mark,_,(m,ID-1)), mark_id(ID), mark_id(ID-1).
 
 % maximum number for total encoding channels
-#const max_extra_encs = 2.
+#const max_extra_encs = 4.
 encoding_id(M,E) :- entity(mark,_,(m,M)), N = 0..max_extra_encs, E = ((max_extra_encs + 1) * M) + N.
 { entity(encoding,(m,M),(e,E)) : entity(mark,_,(m,M)), encoding_id(M,E) }.
-% :- not entity(encoding,_,(e,ID)), entity(encoding,_,(e,ID-1)),encoding_id(_,ID), encoding_id(_,ID-1).
+:- not entity(encoding,_,(e,ID)), entity(encoding,_,(e,ID-1)),encoding_id(_,(e,ID)), encoding_id(_,(e,ID-1)).
 
 % @generate(encoding_channel) Each encoding requires a channel.
 required((encoding,channel)).
-
 % @generator(mark_type) Each mark requires a type.
 required((mark,type)).
 % @generator(task) Each root requires a task.
@@ -34,18 +33,20 @@ not_required((encoding,stack)).
 0 { attribute((N,A),E,V): domain((N,A),V) } 1 :- entity(N,_,E), not_required((N,A)).
 
 % generator(scale) Each view can only have less than 7 scales based on the domain of scale channels
-scale_id(0..6).
-{ entity(scale,V,(s,S)) : entity(view,_,V), scale_id(S) }.
-% :- not entity(scale,_,(s,ID)), entity(scale,_,(s,ID-1)), scale_id(ID), scale_id(ID-1).
+scale_id((v,V),S) :- entity(view,_,(v,V)), S = (C + 1) * V + N, N = 0..C, count_channels((v,V),C).
+{ entity(scale,(v,V),(s,S)) : entity(view,_,(v,V)), scale_id(V,S) }.
+:- not entity(scale,_,(s,ID)), entity(scale,_,(s,ID-1)), scale_id(_,(s,ID)), scale_id(_,(s,ID-1)).
+% count the total number of channels of the marks in the same view.
+count_channels(V,N) :- N = #count{ C : domain(encoding_channel,V,C) }, entity(view,_,V).
 
 required((scale,channel)).
 required((scale,type)).
 
 % generator(facet) Each specification can have at most both row and col facet.
-facet_id(0;1).
-{ entity(facet,root,(fc,F)) : facet_id(F) }.
-:- not entity(facet,root,(fc,ID)), entity(facet,root,(fc,ID-1)),facet_id(ID), facet_id(ID-1).
+facet_id(0..1).
+{ entity(facet,V,(fc,F)) : facet_id(F), entity(view,root,V) }.
+:- not entity(facet,V,(fc,1)), entity(facet,V,(fc,0)),facet_id(1), facet_id(0).
 
 required((facet,channel)).
-required((facet,filed)).
+required((facet,field)).
 not_required((facet,binning)).
