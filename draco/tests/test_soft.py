@@ -1,9 +1,5 @@
-from typing import Iterable, Union
-
-from draco import dict_to_facts
 from draco.asp_utils import Block
-from draco.programs import define, helpers, soft
-from draco.run import is_satisfiable, run_clingo
+from draco.programs import soft
 from draco.tests.test_hard import list_violations, no_violations
 
 
@@ -38,6 +34,5 @@ def test_aggregate():
     attribute((encoding,aggregate),e2,mean).
     """
         )
-        ==  ["aggregate"] * 2
+        == ["aggregate"] * 2
     )
-
