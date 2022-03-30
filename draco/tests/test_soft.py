@@ -6,9 +6,6 @@ from draco.run import is_satisfiable, run_clingo
 
 
 def list_preferences(program: Union[str, Iterable[str]]):
-    if not isinstance(program, str):
-        program = "\n".join(program)
-
     try:
         model = next(run_clingo(helpers.program + define.program + program, 1))
 
@@ -22,12 +19,13 @@ def list_preferences(program: Union[str, Iterable[str]]):
 
 
 def no_preferences(program: Union[str, Iterable[str]]):
-    if not isinstance(program, str):
-        program = "\n".join(program)
-
     return is_satisfiable(
         helpers.program + define.program + program + ":- preference(_)."
     )
+
+
+def test_list_preferences():
+    assert list_preferences(":- a. :- not a.") is None
 
 
 def test_aggregate():
