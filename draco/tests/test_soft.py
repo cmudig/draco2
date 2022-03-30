@@ -1,11 +1,9 @@
-from typing import Iterable, Union
-
 from draco.asp_utils import Block
 from draco.programs import define, helpers, soft
 from draco.run import is_satisfiable, run_clingo
 
 
-def list_preferences(program: Union[str, Iterable[str]]):
+def list_preferences(program: str):
     try:
         model = next(run_clingo(helpers.program + define.program + program, 1))
 
@@ -18,7 +16,7 @@ def list_preferences(program: Union[str, Iterable[str]]):
         return None
 
 
-def no_preferences(program: Union[str, Iterable[str]]):
+def no_preferences(program: str):
     return is_satisfiable(
         helpers.program + define.program + program + ":- preference(_)."
     )
