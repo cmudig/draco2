@@ -330,4 +330,3 @@ def test_same_field():
         )
         == [("same_field", "temperature")]
     )
-
