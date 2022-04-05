@@ -17,7 +17,8 @@ domain((encoding,aggregate),(count;mean;median;min;max;stdev;sum)).
 domain((encoding,aggregate),(count;sum)).
 
 % @definition(binning) Numbers of bins that can be recommended, any natural number is allowed.
-domain((encoding,binning),(10;25;200)).
+domain(binCount,(10;25;200)).
+domain((encoding,binning),N) :- domain(binCount,N).
 
 % @definition(channel) Encoding channels.
 domain(positional,(x;y)).
@@ -30,6 +31,21 @@ domain(channel,C) :- domain(multi_channel,C).
 
 domain((encoding,channel),C) :- domain(channel,C).
 domain((scale,channel),C) :- domain(channel,C).
+
+% @definition(encoding_channel) All channels in the mark's encodings.
+domain(encoding_channel,V,C) :-
+    entity(mark,V,M),
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C).
+
+% @definition(scale_encoding) All channels in the view's and root's scales.
+domain(scale_channel,V,C) :-
+    entity(scale,V,S),
+    attribute((scale,channel),S,C).
+domain(scale_channel,V,C) :-
+    entity(view,V,R),
+    entity(scale,R,S),
+    attribute((scale,channel),S,C).
 
 % @definition(scale_type) Scale types.
 domain(discrete_scale,(ordinal;categorical)).
@@ -51,5 +67,4 @@ domain((scale,zero),true).
 % @definition(facets) Definition for facets
 domain((facet,field),F) :- entity(field,_,F).
 domain((facet,channel),(row;col)).
-domain((facet,binning),(10;25;200)).
-
+domain((facet,binning),N) :- domain(binCount,N).
