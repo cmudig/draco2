@@ -329,8 +329,8 @@ violation(stack_with_non_positional_non_agg) :-
 violation(shape_with_cardinality_gt_eight) :-
     entity(field,root,F),
     attribute((field,unique),F,U),
-    attribute((encoding,channel),C,shape),
-    attribute((encoding,field),C,F),
+    attribute((encoding,channel),E,shape),
+    attribute((encoding,field),E,F),
     U > 8.
 
 % @hard(color_with_cardinality_gt_twenty) At most 20 categorical colors.
@@ -338,7 +338,7 @@ violation(color_with_cardinality_gt_twenty) :-
     entity(field,root,F),
     attribute((field,unique),F,U),
     attribute((encoding,channel),E,color),
-    attribute((encoding,field),C,F),
+    attribute((encoding,field),E,F),
     attribute((scale,channel),S,color),
     attribute((scale,type),S,categorical),
     U > 20.

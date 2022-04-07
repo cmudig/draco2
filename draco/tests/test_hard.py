@@ -2018,8 +2018,10 @@ def test_stack_without_bar_area():
         + """
     entity(mark,root,2).
     attribute((mark,type),2,bar).
+
     entity(encoding,2,3).
     attribute((encoding,channel),3,x).
+
     entity(encoding,2,4).
     attribute((encoding,channel),4,y).
     attribute((encoding,aggregate),4,count).
@@ -2032,8 +2034,10 @@ def test_stack_without_bar_area():
         + """
     entity(mark,root,2).
     attribute((mark,type),2,area).
+
     entity(encoding,2,3).
     attribute((encoding,channel),3,x).
+
     entity(encoding,2,4).
     attribute((encoding,channel),4,y).
     attribute((encoding,aggregate),4,count).
@@ -2048,8 +2052,10 @@ def test_stack_without_bar_area():
             + """
     entity(mark,root,2).
     attribute((mark,type),2,point).
+
     entity(encoding,2,3).
     attribute((encoding,channel),3,x).
+
     entity(encoding,2,4).
     attribute((encoding,channel),4,y).
     attribute((encoding,aggregate),4,count).
@@ -2075,7 +2081,7 @@ def test_stack_without_summative_agg():
     """
     )
 
-    # cannot stack without summative aggregation
+    # cannot stack without summative aggregation: no aggregation
     assert (
         list_violations(
             p
@@ -2088,6 +2094,7 @@ def test_stack_without_summative_agg():
         == ["stack_without_summative_agg"]
     )
 
+    # cannot stack without summative aggregation: aggregation is not summative
     assert (
         list_violations(
             p
@@ -2112,17 +2119,21 @@ def test_no_stack_with_bar_area_discrete_color():
         + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
     attribute((encoding,field),4,condition).
+
     entity(scale,0,6).
     attribute((scale,channel),6,y).
     attribute((scale,type),6,linear).
     attribute((scale,zero),6,true).
+
     entity(scale,0,7).
     attribute((scale,channel),7,color).
     attribute((scale,type),7,categorical).
@@ -2136,16 +2147,20 @@ def test_no_stack_with_bar_area_discrete_color():
             + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
     attribute((encoding,field),4,condition).
+
     entity(scale,0,6).
     attribute((scale,channel),6,y).
     attribute((scale,type),6,linear).
     attribute((scale,zero),6,true).
+
     entity(scale,0,7).
     attribute((scale,channel),7,color).
     attribute((scale,type),7,categorical).
@@ -2165,24 +2180,30 @@ def test_stack_without_discrete_color_or_detail():
         + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
     attribute((encoding,field),2,temperature).
     attribute((encoding,binning),2,10).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
     attribute((encoding,field),4,condition).
+
     entity(scale,0,5).
     attribute((scale,channel),5,x).
     attribute((scale,type),5,linear).
+
     entity(scale,0,6).
     attribute((scale,channel),6,y).
     attribute((scale,type),6,linear).
     attribute((scale,zero),6,true).
+
     entity(scale,0,7).
     attribute((scale,channel),7,color).
     attribute((scale,type),7,categorical).
@@ -2194,30 +2215,38 @@ def test_stack_without_discrete_color_or_detail():
         + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
     attribute((encoding,field),2,temperature).
     attribute((encoding,binning),2,10).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
     attribute((encoding,aggregate),4,count).
+
     entity(encoding,1,5).
     attribute((encoding,channel),5,detail).
     attribute((encoding,field),5,condition).
+
     entity(scale,0,6).
     attribute((scale,channel),6,x).
     attribute((scale,type),6,linear).
+
     entity(scale,0,7).
     attribute((scale,channel),7,y).
     attribute((scale,type),7,linear).
     attribute((scale,zero),7,true).
+
     entity(scale,0,8).
     attribute((scale,channel),8,color).
     attribute((scale,type),8,linear).
+
     entity(scale,0,9).
     attribute((scale,channel),9,detail).
     attribute((scale,type),9,ordinal).
@@ -2231,27 +2260,20 @@ def test_stack_without_discrete_color_or_detail():
             + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
     attribute((encoding,field),2,temperature).
     attribute((encoding,binning),2,10).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,size).
     attribute((encoding,field),4,condition).
-    entity(scale,0,5).
-    attribute((scale,channel),5,x).
-    attribute((scale,type),5,linear).
-    entity(scale,0,6).
-    attribute((scale,channel),6,y).
-    attribute((scale,type),6,linear).
-    attribute((scale,zero),6,true).
-    entity(scale,0,7).
-    attribute((scale,channel),7,size).
-    attribute((scale,type),7,linear).
     """
         )
         == ["stack_without_discrete_color_or_detail"]
@@ -2268,30 +2290,38 @@ def test_stack_detail_without_q_color():
         + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
     attribute((encoding,field),2,temperature).
     attribute((encoding,binning),2,10).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
     attribute((encoding,aggregate),4,count).
+
     entity(encoding,1,5).
     attribute((encoding,channel),5,detail).
     attribute((encoding,field),5,condition).
+
     entity(scale,0,6).
     attribute((scale,channel),6,x).
     attribute((scale,type),6,linear).
+
     entity(scale,0,7).
     attribute((scale,channel),7,y).
     attribute((scale,type),7,linear).
     attribute((scale,zero),7,true).
+
     entity(scale,0,8).
     attribute((scale,channel),8,color).
     attribute((scale,type),8,linear).
+
     entity(scale,0,9).
     attribute((scale,channel),9,detail).
     attribute((scale,type),9,ordinal).
@@ -2305,30 +2335,33 @@ def test_stack_detail_without_q_color():
             + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
     attribute((encoding,field),2,temperature).
     attribute((encoding,binning),2,10).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,detail).
     attribute((encoding,field),4,condition).
+
     entity(scale,0,5).
     attribute((scale,channel),5,x).
     attribute((scale,type),5,linear).
+
     entity(scale,0,6).
     attribute((scale,channel),6,y).
     attribute((scale,type),6,linear).
     attribute((scale,zero),6,true).
+
     entity(scale,0,7).
-    attribute((scale,channel),7,color).
-    attribute((scale,type),7,linear).
-    entity(scale,0,8).
-    attribute((scale,channel),8,detail).
-    attribute((scale,type),8,ordinal).
+    attribute((scale,channel),7,detail).
+    attribute((scale,type),7,ordinal).
     """
         )
         == ["stack_detail_without_q_color"]
@@ -2345,30 +2378,38 @@ def test_stack_detail_without_q_color_agg():
         + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
     attribute((encoding,field),2,temperature).
     attribute((encoding,binning),2,10).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
     attribute((encoding,aggregate),4,count).
+
     entity(encoding,1,5).
     attribute((encoding,channel),5,detail).
     attribute((encoding,field),5,condition).
+
     entity(scale,0,6).
     attribute((scale,channel),6,x).
     attribute((scale,type),6,linear).
+
     entity(scale,0,7).
     attribute((scale,channel),7,y).
     attribute((scale,type),7,linear).
     attribute((scale,zero),7,true).
+
     entity(scale,0,8).
     attribute((scale,channel),8,color).
     attribute((scale,type),8,linear).
+
     entity(scale,0,9).
     attribute((scale,channel),9,detail).
     attribute((scale,type),9,ordinal).
@@ -2382,30 +2423,38 @@ def test_stack_detail_without_q_color_agg():
             + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
     attribute((encoding,field),2,temperature).
     attribute((encoding,binning),2,10).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
     attribute((encoding,field),4,temperature).
+
     entity(encoding,1,5).
     attribute((encoding,channel),5,detail).
     attribute((encoding,field),5,condition).
+
     entity(scale,0,6).
     attribute((scale,channel),6,x).
     attribute((scale,type),6,linear).
+
     entity(scale,0,7).
     attribute((scale,channel),7,y).
     attribute((scale,type),7,linear).
     attribute((scale,zero),7,true).
+
     entity(scale,0,8).
     attribute((scale,channel),8,color).
     attribute((scale,type),8,linear).
+
     entity(scale,0,9).
     attribute((scale,channel),9,detail).
     attribute((scale,type),9,ordinal).
@@ -2454,10 +2503,12 @@ def test_stack_discrete():
         + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(scale,0,6).
     attribute((scale,channel),6,y).
     attribute((scale,type),6,linear).
@@ -2487,6 +2538,7 @@ def test_stack_discrete():
     attribute((encoding,channel),3,y).
     attribute((encoding,binning),3,10).
     attribute((encoding,stack),3,zero).
+
     entity(scale,0,7).
     attribute((scale,channel),7,y).
     attribute((scale,type),7,ordinal).
@@ -2506,10 +2558,12 @@ def test_stack_with_non_positional_non_agg():
         + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
     attribute((encoding,aggregate),4,count).
@@ -2521,12 +2575,15 @@ def test_stack_with_non_positional_non_agg():
         + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
+
     entity(scale,0,8).
     attribute((scale,channel),8,color).
     attribute((scale,type),8,categorical).
@@ -2540,12 +2597,15 @@ def test_stack_with_non_positional_non_agg():
             + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
+
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
+
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
+
     entity(scale,0,8).
     attribute((scale,channel),8,color).
     attribute((scale,type),8,linear).
@@ -2567,6 +2627,7 @@ def test_shape_with_cardinality_gt_eight():
     attribute((field,name),weather,weather).
     attribute((field,type),weather,string).
     attribute((field,unique),weather,5).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,shape).
     attribute((encoding,field),2,weather).
@@ -2582,6 +2643,7 @@ def test_shape_with_cardinality_gt_eight():
     attribute((field,name),weather,weather).
     attribute((field,type),weather,string).
     attribute((field,unique),weather,20).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,shape).
     attribute((encoding,field),2,weather).
@@ -2603,9 +2665,11 @@ def test_color_with_cardinality_gt_twenty():
     attribute((field,name),weather,weather).
     attribute((field,type),weather,string).
     attribute((field,unique),weather,15).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,color).
     attribute((encoding,field),2,weather).
+
     entity(scale,0,3).
     attribute((scale,channel),3,color).
     attribute((scale,type),3,categorical).
@@ -2621,9 +2685,11 @@ def test_color_with_cardinality_gt_twenty():
     attribute((field,name),weather,weather).
     attribute((field,type),weather,string).
     attribute((field,unique),weather,45).
+
     entity(encoding,1,2).
     attribute((encoding,channel),2,color).
     attribute((encoding,field),2,weather).
+
     entity(scale,0,3).
     attribute((scale,channel),3,color).
     attribute((scale,type),3,categorical).
