@@ -10,7 +10,7 @@
 
 % maximum number of non-layered views.
 #const max_views = 1.
-{ entity(view,root,(v,V)) } :- V = 0..(max_views-1).
+{ entity(view,root,(v,0..max_views-1)) }.
 :- entity(view,root,(v,ID)), not entity(view,root,(v,ID-1)), ID > 1.
 
 % maximum number of marks for each view
