@@ -72,6 +72,25 @@ def test_run_clingo_top_k_counts():
         assert len(models) == i
 
 
+def test_run_clingo_arguments():
+
+    for c in [1, 2, 5]:
+        model = next(
+            run_clingo(
+                " #const foo = 0. a(1..foo).",
+                models=1,
+                topK=False,
+                arguments=[f"-c foo={c}"],
+            )
+        )
+        count = 0
+        for symbol in model.answer_set:
+            if symbol.name == "a":
+                count += 1
+
+        assert count == c
+
+
 def test_run_clingo_top_k_weight_rules():
     models = list(
         run_clingo(

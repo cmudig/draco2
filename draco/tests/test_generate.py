@@ -19,7 +19,7 @@ def test_generate():
 
     models = list(
         run_clingo(
-            prog + scatter + ":- {entity(mark,_,_)} < 3.", 10, False, {"max_marks": 3}
+            prog + scatter + ":- {entity(mark,_,_)} < 3.", 10, False, ["-c max_marks=3"]
         )
     )
 
