@@ -1,6 +1,6 @@
 % ====== Generators ======
 
-% helpers to generate attributes based on how they are required.
+% helpers to generate attributes based on whether they are required.
 { attribute(N,root,V) : domain(N,V) } = 1 :- root_required(N).
 { attribute((N,A),E,V): domain((N,A),V) } = 1 :- entity(N,_,E), required((N,A)).
 0 { attribute((N,A),E,V): domain((N,A),V) } 1 :- entity(N,_,E), not_required((N,A)).

@@ -15,8 +15,7 @@ def test_generate():
         + constraints.program
     )
     with open(asp_path / "examples" / "scatter.lp") as file:
-        scatter = file.readlines()
-    scatter = ("").join(scatter)
+        scatter = file.read()
 
     models = list(
         run_clingo(
@@ -24,4 +23,4 @@ def test_generate():
         )
     )
 
-    assert len(models) > 0.0
+    assert len(models) > 0

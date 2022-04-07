@@ -44,7 +44,7 @@ def run_clingo(
     :param topK: Whether to return the top K models. If false (default), the program
         will not optimize the output models.
     :param constants: Dictionary of constants used in genenerator
-        for the maximum number of individual entity types (view, mark and encoding).
+        for the maximum number of individual entity types (view, mark, and encoding).
         The default is {"max_views":1, "max_marks":2, "max_encs":4}.
         You can include a subset of possible keys. Invalid key names will be ignored.
         If the partial specification contains more entities than in the constants,
