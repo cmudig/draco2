@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import Any, cast, Generator, Iterable, List, Sequence, Tuple, Union
+from typing import Any, cast, Dict, Generator, Iterable, List, Sequence, Tuple, Union
 
 # Clingo Python API is documented at https://potassco.org/clingo/python-api/current/
 import clingo
@@ -31,7 +31,10 @@ class Observer(clingo.backend.Observer):
 
 
 def run_clingo(
-    program: Union[str, Iterable[str]], models: int = 0, topK=False
+    program: Union[str, Iterable[str]],
+    models: int = 0,
+    topK=False,
+    constants: Union[Dict, None] = None,
 ) -> Generator[Model, None, None]:
     """Run the solver and yield the models.
 
@@ -40,13 +43,25 @@ def run_clingo(
     :param models: Number of models to generate, defaults to 0 (meaning all models).
     :param topK: Whether to return the top K models. If false (default), the program
         will not optimize the output models.
+    :param constants: Dictionary of constants used in genenerator
+        for the maximum number of individual entity types (view, mark and encoding).
+        The default is {"max_views":1, "max_marks":2, "max_encs":4}.
+        You can include a subset of possible keys. Invalid key names will be ignored.
+        If the partial specification contains more entities than in the constants,
+        the generator will refer to the partial specification.
     :yield: The models.
     """
     if not isinstance(program, str):
         program = "\n".join(program)
 
+    flags = []
+    if constants:
+        for key, value in constants.items():
+            if key in ["max_views", "max_marks", "max_encs"]:
+                flags.append(f"-c {key}={value}")
+
     # single-shot solving is often faster but we cannot change the program
-    ctl = clingo.Control(["--single-shot"] if not topK else [])
+    ctl = clingo.Control(["--single-shot"] + flags if not topK else flags)
     config: Any = ctl.configuration
 
     ctl.add(

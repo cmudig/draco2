@@ -43,7 +43,7 @@ domain(scale_channel,V,C) :-
     entity(scale,V,S),
     attribute((scale,channel),S,C).
 domain(scale_channel,V,C) :-
-    entity(view,V,R),
+    entity(view,R,V),
     entity(scale,R,S),
     attribute((scale,channel),S,C).
 
