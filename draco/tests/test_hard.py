@@ -2181,11 +2181,6 @@ def test_stack_without_discrete_color_or_detail():
     entity(mark,0,1).
     attribute((mark,type),1,bar).
 
-    entity(encoding,1,2).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
-    attribute((encoding,binning),2,10).
-
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
@@ -2194,10 +2189,6 @@ def test_stack_without_discrete_color_or_detail():
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
     attribute((encoding,field),4,condition).
-
-    entity(scale,0,5).
-    attribute((scale,channel),5,x).
-    attribute((scale,type),5,linear).
 
     entity(scale,0,6).
     attribute((scale,channel),6,y).
@@ -2216,36 +2207,19 @@ def test_stack_without_discrete_color_or_detail():
     entity(mark,0,1).
     attribute((mark,type),1,bar).
 
-    entity(encoding,1,2).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
-    attribute((encoding,binning),2,10).
-
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     attribute((encoding,stack),3,zero).
 
-    entity(encoding,1,4).
-    attribute((encoding,channel),4,color).
-    attribute((encoding,aggregate),4,count).
-
     entity(encoding,1,5).
     attribute((encoding,channel),5,detail).
     attribute((encoding,field),5,condition).
-
-    entity(scale,0,6).
-    attribute((scale,channel),6,x).
-    attribute((scale,type),6,linear).
 
     entity(scale,0,7).
     attribute((scale,channel),7,y).
     attribute((scale,type),7,linear).
     attribute((scale,zero),7,true).
-
-    entity(scale,0,8).
-    attribute((scale,channel),8,color).
-    attribute((scale,type),8,linear).
 
     entity(scale,0,9).
     attribute((scale,channel),9,detail).
@@ -2277,190 +2251,6 @@ def test_stack_without_discrete_color_or_detail():
     """
         )
         == ["stack_without_discrete_color_or_detail"]
-    )
-
-
-def test_stack_detail_without_q_color():
-    b = hard.blocks["stack_detail_without_q_color"]
-    assert isinstance(b, Block)
-    p = b.program
-
-    assert no_violations(
-        p
-        + """
-    entity(mark,0,1).
-    attribute((mark,type),1,bar).
-
-    entity(encoding,1,2).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
-    attribute((encoding,binning),2,10).
-
-    entity(encoding,1,3).
-    attribute((encoding,channel),3,y).
-    attribute((encoding,aggregate),3,count).
-    attribute((encoding,stack),3,zero).
-
-    entity(encoding,1,4).
-    attribute((encoding,channel),4,color).
-    attribute((encoding,aggregate),4,count).
-
-    entity(encoding,1,5).
-    attribute((encoding,channel),5,detail).
-    attribute((encoding,field),5,condition).
-
-    entity(scale,0,6).
-    attribute((scale,channel),6,x).
-    attribute((scale,type),6,linear).
-
-    entity(scale,0,7).
-    attribute((scale,channel),7,y).
-    attribute((scale,type),7,linear).
-    attribute((scale,zero),7,true).
-
-    entity(scale,0,8).
-    attribute((scale,channel),8,color).
-    attribute((scale,type),8,linear).
-
-    entity(scale,0,9).
-    attribute((scale,channel),9,detail).
-    attribute((scale,type),9,ordinal).
-    """
-    )
-
-    # cannot stack and detail without quantitative color
-    assert (
-        list_violations(
-            p
-            + """
-    entity(mark,0,1).
-    attribute((mark,type),1,bar).
-
-    entity(encoding,1,2).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
-    attribute((encoding,binning),2,10).
-
-    entity(encoding,1,3).
-    attribute((encoding,channel),3,y).
-    attribute((encoding,aggregate),3,count).
-    attribute((encoding,stack),3,zero).
-
-    entity(encoding,1,4).
-    attribute((encoding,channel),4,detail).
-    attribute((encoding,field),4,condition).
-
-    entity(scale,0,5).
-    attribute((scale,channel),5,x).
-    attribute((scale,type),5,linear).
-
-    entity(scale,0,6).
-    attribute((scale,channel),6,y).
-    attribute((scale,type),6,linear).
-    attribute((scale,zero),6,true).
-
-    entity(scale,0,7).
-    attribute((scale,channel),7,detail).
-    attribute((scale,type),7,ordinal).
-    """
-        )
-        == ["stack_detail_without_q_color"]
-    )
-
-
-def test_stack_detail_without_q_color_agg():
-    b = hard.blocks["stack_detail_without_q_color_agg"]
-    assert isinstance(b, Block)
-    p = b.program
-
-    assert no_violations(
-        p
-        + """
-    entity(mark,0,1).
-    attribute((mark,type),1,bar).
-
-    entity(encoding,1,2).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
-    attribute((encoding,binning),2,10).
-
-    entity(encoding,1,3).
-    attribute((encoding,channel),3,y).
-    attribute((encoding,aggregate),3,count).
-    attribute((encoding,stack),3,zero).
-
-    entity(encoding,1,4).
-    attribute((encoding,channel),4,color).
-    attribute((encoding,aggregate),4,count).
-
-    entity(encoding,1,5).
-    attribute((encoding,channel),5,detail).
-    attribute((encoding,field),5,condition).
-
-    entity(scale,0,6).
-    attribute((scale,channel),6,x).
-    attribute((scale,type),6,linear).
-
-    entity(scale,0,7).
-    attribute((scale,channel),7,y).
-    attribute((scale,type),7,linear).
-    attribute((scale,zero),7,true).
-
-    entity(scale,0,8).
-    attribute((scale,channel),8,color).
-    attribute((scale,type),8,linear).
-
-    entity(scale,0,9).
-    attribute((scale,channel),9,detail).
-    attribute((scale,type),9,ordinal).
-    """
-    )
-
-    # cannot stack and detail without quantitative color
-    assert (
-        list_violations(
-            p
-            + """
-    entity(mark,0,1).
-    attribute((mark,type),1,bar).
-
-    entity(encoding,1,2).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
-    attribute((encoding,binning),2,10).
-
-    entity(encoding,1,3).
-    attribute((encoding,channel),3,y).
-    attribute((encoding,aggregate),3,count).
-    attribute((encoding,stack),3,zero).
-
-    entity(encoding,1,4).
-    attribute((encoding,channel),4,color).
-    attribute((encoding,field),4,temperature).
-
-    entity(encoding,1,5).
-    attribute((encoding,channel),5,detail).
-    attribute((encoding,field),5,condition).
-
-    entity(scale,0,6).
-    attribute((scale,channel),6,x).
-    attribute((scale,type),6,linear).
-
-    entity(scale,0,7).
-    attribute((scale,channel),7,y).
-    attribute((scale,type),7,linear).
-    attribute((scale,zero),7,true).
-
-    entity(scale,0,8).
-    attribute((scale,channel),8,color).
-    attribute((scale,type),8,linear).
-
-    entity(scale,0,9).
-    attribute((scale,channel),9,detail).
-    attribute((scale,type),9,ordinal).
-    """
-        )
-        == ["stack_detail_without_q_color_agg"]
     )
 
 

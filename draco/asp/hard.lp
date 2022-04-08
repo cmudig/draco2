@@ -290,20 +290,6 @@ violation(stack_without_discrete_color_or_detail) :-
     not attribute(mark_channel_discrete_or_binned,M,color),
     not attribute((mark,channel),M,detail).
 
-% @hard(stack_detail_without_q_color) If we use stack and detail, we also have to use quantitative color.
-violation(stack_detail_without_q_color) :-
-    attribute(mark_with_stack,M),
-    attribute((mark,channel),M,detail),
-    not attribute((mark,channel),M,color).
-
-% @hard(stack_detail_without_q_color_agg) If we use stack and detail, we also have to use quantitative color.
-violation(stack_detail_without_q_color_agg) :-
-    attribute(mark_with_stack,M),
-    attribute((mark,channel),M,detail),
-    entity(encoding,M,E),
-    attribute((encoding,channel),E,color),
-    not attribute((encoding,aggregate),E,_).
-
 % @hard(stack_without_x_y) Stack can only be on x or y.
 violation(stack_without_x_y) :-
     attribute((encoding,stack),E,_),
@@ -325,7 +311,7 @@ violation(stack_with_non_positional_non_agg) :-
     not attribute((encoding,aggregate),E,_),
     not attribute(mark_channel_discrete_or_binned,M,C).
 
-% @hard(shape_with_cardinality_gt_eight) Vega-Lite currently supports 8 shapes.
+% @hard(shape_with_cardinality_gt_eight) At most 8 shapes.
 violation(shape_with_cardinality_gt_eight) :-
     entity(field,root,F),
     attribute((field,unique),F,U),
