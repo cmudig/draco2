@@ -15,13 +15,14 @@
 
 % maximum number of marks for each view
 #const max_marks = 2.
-{ entity(mark,(v,V),(m,M)) } :- entity(view,_,(v,V)), N = 0..(max_marks-1), M = max_marks * V + N.
-:- entity(mark,(v,V),(m,ID)), not entity(mark,(v,V),(m,ID-1)), ID > 1 + max_marks * V.
+{ entity(mark,(v,V),(m,V,0..max_marks-1)) : entity(view,_,(v,V)) }.
+:- entity(mark,(v,V),(m,V,ID)), not entity(mark,(v,V),(m,V,ID-1)), ID > 1.
 
 % maximum number for total encoding channels
 #const max_encs = 4.
-{ entity(encoding,(m,M),(e,E)) } :- entity(mark,_,(m,M)), N = 0..(max_encs-1), E = max_encs * M + N.
-:- entity(encoding,(m,M),(e,ID)), not entity(encoding,(m,M),(e,ID-1)), ID > 1 + max_encs * M.
+{ entity(encoding,(m,V,M),(e,V,M,0..max_encs-1)) : entity(mark,(v,V),(m,V,M)) }.
+:- entity(encoding,(m,V,M),(e,V,M,ID)), not entity(encoding,(m,V,M),(e,V,M,ID-1)), ID > 1.
+
 
 % @generate(encoding_channel) Each encoding requires a channel.
 required((encoding,channel)).
