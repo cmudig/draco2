@@ -31,7 +31,10 @@ class Observer(clingo.backend.Observer):
 
 
 def run_clingo(
-    program: Union[str, Iterable[str]], models: int = 0, topK=False
+    program: Union[str, Iterable[str]],
+    models: int = 0,
+    topK=False,
+    arguments: List[str] = [],
 ) -> Generator[Model, None, None]:
     """Run the solver and yield the models.
 
@@ -40,13 +43,18 @@ def run_clingo(
     :param models: Number of models to generate, defaults to 0 (meaning all models).
     :param topK: Whether to return the top K models. If false (default), the program
         will not optimize the output models.
+    :param arguments: Arguments to the clingo grounder and solver.
+        Only gringo options (without --text) and clasp's search options are supported.
+        For example, you can use ["-c foo=5"] to override the occurrences of
+        constant "foo" in your input program.
+        Refer to the potassco guide for the options.
     :yield: The models.
     """
     if not isinstance(program, str):
         program = "\n".join(program)
 
     # single-shot solving is often faster but we cannot change the program
-    ctl = clingo.Control(["--single-shot"] if not topK else [])
+    ctl = clingo.Control(["--single-shot"] + arguments if not topK else arguments)
     config: Any = ctl.configuration
 
     ctl.add(
