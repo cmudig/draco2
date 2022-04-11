@@ -36,7 +36,7 @@ black = {extras = ["jupyter"], version = "^22.3.0"}
 flake8 = "^4.0.1"
 flake8-black = "^0.3.2"
 jupyter-book = "^0.12.3"
-jupyterlab = "^3.3.2"
+jupyterlab = "^3.3.3"
 mypy = "^0.942"
 pandas-stubs = "^1.2.0"
 pre-commit = "^2.18.1"
