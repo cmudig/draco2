@@ -265,6 +265,52 @@ violation(col_no_x) :-
     entity(mark,V,M),
     not attribute((mark,channel),M,x).
 
+% @hard(stack_without_bar_area) Only use stacking for bar and area.
+violation(stack_without_bar_area) :-
+    attribute(mark_with_stack,M),
+    not attribute((mark,type),M,bar),
+    not attribute((mark,type),M,area).
+
+% @hard(stack_without_summative_agg) Don't stack if aggregation is not summative (summative are count, sum, distinct, valid, missing).
+violation(stack_without_summative_agg) :-
+    entity(encoding,_,E),
+    attribute((encoding,stack),E,_),
+    not attribute((encoding,aggregate),E,sum),
+    not attribute((encoding,aggregate),E,count).
+
+% @hard(no_stack_with_bar_area_discrete_color) Need to stack if we use bar, area with discrete color.
+violation(no_stack_with_bar_area_discrete_color) :-
+    attribute(mark_channel_discrete_or_binned,M,color),
+    attribute((mark,type),M,(bar;area)),
+    not attribute(mark_with_stack,M).
+
+% @hard(stack_without_discrete_color_or_detail) Can only use stack if we also use discrete color, or detail.
+violation(stack_without_discrete_color_or_detail) :-
+    attribute(mark_with_stack,M),
+    not attribute(mark_channel_discrete_or_binned,M,color),
+    not attribute((mark,channel),M,detail).
+
+% @hard(stack_without_x_y) Stack can only be on x or y.
+violation(stack_without_x_y) :-
+    attribute((encoding,stack),E,_),
+    not attribute((encoding,channel),E,x),
+    not attribute((encoding,channel),E,y).
+
+% @hard(stack_discrete) Stack can only be on continuous.
+violation(stack_discrete) :-
+    attribute((encoding,channel),E,C),
+    attribute((encoding,stack),E,_),
+    attribute(mark_channel_discrete_or_binned,_,C).
+
+% @hard(stack_with_non_positional_non_agg) Cannot use non positional continuous with stack unless it's aggregated.
+violation(stack_with_non_positional_non_agg) :-
+    attribute(mark_with_stack,M),
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
+    domain(non_positional,C),
+    not attribute((encoding,aggregate),E,_),
+    not attribute(mark_channel_discrete_or_binned,M,C).
+
 % @hard(invalid_bin) Check bin type.
 violation(invalid_bin) :-
     attribute((encoding,binning),_,B),
