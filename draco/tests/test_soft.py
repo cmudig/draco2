@@ -330,3 +330,220 @@ def test_same_field():
         )
         == [("same_field", "temperature")]
     )
+
+
+def test_type_linear():
+    b = soft.blocks["type_linear"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("type_linear", "e1")]
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,linear).
+    """
+        )
+        == [("type_linear", "e1"), ("type_linear", "e2")]
+    )
+
+
+def test_type_log():
+    b = soft.blocks["type_log"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("type_log", "e1")]
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,log).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,log).
+    """
+        )
+        == [("type_log", "e1"), ("type_log", "e2")]
+    )
+
+
+def test_type_ordinal():
+    b = soft.blocks["type_ordinal"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("type_ordinal", "e1")]
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,ordinal).
+    """
+        )
+        == [("type_ordinal", "e1"), ("type_ordinal", "e2")]
+    )
+
+
+def test_type_categorical():
+    b = soft.blocks["type_categorical"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == [("type_categorical", "e1")]
+    )
