@@ -30,3 +30,18 @@ preference(same_field,F) :-
     entity(mark,_,M),
     { entity(encoding,M,E): attribute((encoding,field),E,F) } = 2.
 
+% @soft(type_linear) linear scale
+preference(type_linear,E) :-
+    attribute((encoding,scale_type),E,linear).
+
+% @soft(type_log) log scale
+preference(type_log,E) :-
+    attribute((encoding,scale_type),E,log).
+
+% @soft(type_ordinal) ordinal scale
+preference(type_ordinal,E) :-
+    attribute((encoding,scale_type),E,ordinal).
+
+% @soft(type_categorical) categorical scale
+preference(type_categorical,E) :-
+    attribute((encoding,scale_type),E,categorical).
