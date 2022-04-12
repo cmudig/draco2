@@ -47,11 +47,6 @@ violation(aggregate_detail) :-
     attribute((encoding,channel),E,detail),
     attribute((encoding,aggregate),E,_).
 
-% @hard(count_without_field) Count cannot use a field.
-violation(count_without_field) :-
-    attribute((encoding,field),E,_),
-    attribute((encoding,aggregate),E,count).
-
 % @hard(count_without_q) Count has to have a continuous scale.
 violation(count_without_q) :-
     attribute((encoding,aggregate),E,count),
