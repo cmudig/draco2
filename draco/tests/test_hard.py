@@ -1980,6 +1980,403 @@ def test_col_no_x():
     )
 
 
+def test_stack_without_bar_area():
+    b = hard.blocks["stack_without_bar_area"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(mark,root,2).
+    attribute((mark,type),2,bar).
+
+    entity(encoding,2,3).
+    attribute((encoding,channel),3,x).
+
+    entity(encoding,2,4).
+    attribute((encoding,channel),4,y).
+    attribute((encoding,aggregate),4,count).
+    attribute((encoding,stack),4,zero).
+    """
+    )
+
+    assert no_violations(
+        p
+        + """
+    entity(mark,root,2).
+    attribute((mark,type),2,area).
+
+    entity(encoding,2,3).
+    attribute((encoding,channel),3,x).
+
+    entity(encoding,2,4).
+    attribute((encoding,channel),4,y).
+    attribute((encoding,aggregate),4,count).
+    attribute((encoding,stack),4,normalize).
+    """
+    )
+
+    # cannot stack point mark
+    assert (
+        list_violations(
+            p
+            + """
+    entity(mark,root,2).
+    attribute((mark,type),2,point).
+
+    entity(encoding,2,3).
+    attribute((encoding,channel),3,x).
+
+    entity(encoding,2,4).
+    attribute((encoding,channel),4,y).
+    attribute((encoding,aggregate),4,count).
+    attribute((encoding,stack),4,normalize).
+    """
+        )
+        == ["stack_without_bar_area"]
+    )
+
+
+def test_stack_without_summative_agg():
+    b = hard.blocks["stack_without_summative_agg"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(encoding,2,4).
+    attribute((encoding,channel),4,y).
+    attribute((encoding,aggregate),4,count).
+    attribute((encoding,stack),4,zero).
+    """
+    )
+
+    # cannot stack without summative aggregation: no aggregation
+    assert (
+        list_violations(
+            p
+            + """
+    entity(encoding,2,4).
+    attribute((encoding,channel),4,y).
+    attribute((encoding,stack),4,normalize).
+    """
+        )
+        == ["stack_without_summative_agg"]
+    )
+
+    # cannot stack without summative aggregation: aggregation is not summative
+    assert (
+        list_violations(
+            p
+            + """
+    entity(encoding,2,4).
+    attribute((encoding,channel),4,y).
+    attribute((encoding,aggregate),4,max).
+    attribute((encoding,stack),4,normalize).
+    """
+        )
+        == ["stack_without_summative_agg"]
+    )
+
+
+def test_no_stack_with_bar_area_discrete_color():
+    b = hard.blocks["no_stack_with_bar_area_discrete_color"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+    attribute((encoding,stack),3,zero).
+
+    entity(encoding,1,4).
+    attribute((encoding,channel),4,color).
+    attribute((encoding,field),4,condition).
+
+    entity(scale,0,6).
+    attribute((scale,channel),6,y).
+    attribute((scale,type),6,linear).
+    attribute((scale,zero),6,true).
+
+    entity(scale,0,7).
+    attribute((scale,channel),7,color).
+    attribute((scale,type),7,categorical).
+    """
+    )
+
+    # bar/area mark with discrete color, must stack
+    assert (
+        list_violations(
+            p
+            + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+
+    entity(encoding,1,4).
+    attribute((encoding,channel),4,color).
+    attribute((encoding,field),4,condition).
+
+    entity(scale,0,6).
+    attribute((scale,channel),6,y).
+    attribute((scale,type),6,linear).
+    attribute((scale,zero),6,true).
+
+    entity(scale,0,7).
+    attribute((scale,channel),7,color).
+    attribute((scale,type),7,categorical).
+    """
+        )
+        == ["no_stack_with_bar_area_discrete_color"]
+    )
+
+
+def test_stack_without_discrete_color_or_detail():
+    b = hard.blocks["stack_without_discrete_color_or_detail"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+    attribute((encoding,stack),3,zero).
+
+    entity(encoding,1,4).
+    attribute((encoding,channel),4,color).
+    attribute((encoding,field),4,condition).
+
+    entity(scale,0,6).
+    attribute((scale,channel),6,y).
+    attribute((scale,type),6,linear).
+    attribute((scale,zero),6,true).
+
+    entity(scale,0,7).
+    attribute((scale,channel),7,color).
+    attribute((scale,type),7,categorical).
+    """
+    )
+
+    assert no_violations(
+        p
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+    attribute((encoding,stack),3,zero).
+
+    entity(encoding,1,5).
+    attribute((encoding,channel),5,detail).
+    attribute((encoding,field),5,condition).
+
+    entity(scale,0,7).
+    attribute((scale,channel),7,y).
+    attribute((scale,type),7,linear).
+    attribute((scale,zero),7,true).
+
+    entity(scale,0,9).
+    attribute((scale,channel),9,detail).
+    attribute((scale,type),9,ordinal).
+    """
+    )
+
+    # cannot stack without discrete color or detail
+    assert (
+        list_violations(
+            p
+            + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,x).
+    attribute((encoding,field),2,temperature).
+    attribute((encoding,binning),2,10).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+    attribute((encoding,stack),3,zero).
+
+    entity(encoding,1,4).
+    attribute((encoding,channel),4,size).
+    attribute((encoding,field),4,condition).
+    """
+        )
+        == ["stack_without_discrete_color_or_detail"]
+    )
+
+
+def test_stack_without_x_y():
+    b = hard.blocks["stack_without_x_y"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(encoding,2,4).
+    attribute((encoding,channel),4,y).
+    attribute((encoding,aggregate),4,count).
+    attribute((encoding,stack),4,zero).
+    """
+    )
+
+    # cannot stack without encoding x or y
+    assert (
+        list_violations(
+            p
+            + """
+    entity(encoding,2,4).
+    attribute((encoding,channel),4,color).
+    attribute((encoding,stack),4,normalize).
+    """
+        )
+        == ["stack_without_x_y"]
+    )
+
+
+def test_stack_discrete():
+    b = hard.blocks["stack_discrete"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+    attribute((encoding,stack),3,zero).
+
+    entity(scale,0,6).
+    attribute((scale,channel),6,y).
+    attribute((scale,type),6,linear).
+    attribute((scale,zero),6,true).
+    """
+    )
+
+    # cannot stack on discrete.
+    assert (
+        list_violations(
+            p
+            + """
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,binning),3,10).
+    attribute((encoding,stack),3,zero).
+    """
+        )
+        == ["stack_discrete"]
+    )
+
+    assert (
+        list_violations(
+            p
+            + """
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,binning),3,10).
+    attribute((encoding,stack),3,zero).
+
+    entity(scale,0,7).
+    attribute((scale,channel),7,y).
+    attribute((scale,type),7,ordinal).
+    """
+        )
+        == ["stack_discrete"]
+    )
+
+
+def test_stack_with_non_positional_non_agg():
+    b = hard.blocks["stack_with_non_positional_non_agg"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+    attribute((encoding,stack),3,zero).
+
+    entity(encoding,1,4).
+    attribute((encoding,channel),4,color).
+    attribute((encoding,aggregate),4,count).
+    """
+    )
+
+    assert no_violations(
+        p
+        + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+    attribute((encoding,stack),3,zero).
+
+    entity(encoding,1,4).
+    attribute((encoding,channel),4,color).
+
+    entity(scale,0,8).
+    attribute((scale,channel),8,color).
+    attribute((scale,type),8,categorical).
+    """
+    )
+
+    # cannot use non positional continuous with stack unless it is aggregated.
+    assert (
+        list_violations(
+            p
+            + """
+    entity(mark,0,1).
+    attribute((mark,type),1,bar).
+
+    entity(encoding,1,3).
+    attribute((encoding,channel),3,y).
+    attribute((encoding,aggregate),3,count).
+    attribute((encoding,stack),3,zero).
+
+    entity(encoding,1,4).
+    attribute((encoding,channel),4,color).
+
+    entity(scale,0,8).
+    attribute((scale,channel),8,color).
+    attribute((scale,type),8,linear).
+    """
+        )
+        == ["stack_with_non_positional_non_agg"]
+    )
+
+
 def test_invalid_bin():
     b = hard.blocks["invalid_bin"]
     assert isinstance(b, Block)
