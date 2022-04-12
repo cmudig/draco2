@@ -30,3 +30,18 @@ preference(same_field,F) :-
     entity(mark,_,M),
     { entity(encoding,M,E): attribute((encoding,field),E,F) } = 2.
 
+% @soft(type_linear) Prefer linear=log>ordinal>categorical
+preference(type_linear,E) :-
+    attribute((encoding,scale_type),E,linear).
+
+% @soft(type_log) Prefer linear=log>ordinal>categorical
+preference(type_log,E) :-
+    attribute((encoding,scale_type),E,log).
+
+% @soft(type_ordinal) Prefer linear=log>ordinal>categorical
+preference(type_ordinal,E) :-
+    attribute((encoding,scale_type),E,ordinal).
+
+% @soft(type_categorical) Prefer linear=log>ordinal>categorical
+preference(type_categorical,E) :-
+    attribute((encoding,scale_type),E,categorical).
