@@ -5,6 +5,11 @@ attribute((mark,channel),M,C) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C).
 
+% @helper(mark_with_stack) Whether a mark has an encoding with stacking.
+attribute(mark_with_stack,M) :-
+    entity(encoding,M,E),
+    attribute((encoding,stack),E,_).
+
 % @helper(mark_scale) Whether a mark has a scale.
 attribute((mark,scale),M,S) :-
     entity(mark,V,M),
@@ -53,5 +58,4 @@ attribute(mark_channel_discrete_or_binned,M,C) :-
 attribute(mark_channel_discrete_or_binned,M,C) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
-    attribute(mark_scale_channel,M,T,C),
     attribute((encoding,binning),E,_).
