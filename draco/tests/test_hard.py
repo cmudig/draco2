@@ -750,34 +750,6 @@ def test_aggregate_detail():
     )
 
 
-def test_count_without_field():
-    b = hard.blocks["count_without_field"]
-    assert isinstance(b, Block)
-
-    assert no_violations(
-        b.program
-        + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    attribute((encoding,channel),2,x).
-    attribute((encoding,aggregate),2,count).
-    """
-    )
-
-    assert (
-        list_violations(
-            b.program
-            + """
-    entity(mark,0,1).
-    entity(encoding,1,2).
-    attribute((encoding,field),2,temp).
-    attribute((encoding,aggregate),2,count).
-    """
-        )
-        == ["count_without_field"]
-    )
-
-
 def test_count_without_q():
     b = hard.blocks["count_without_q"]
     assert isinstance(b, Block)
