@@ -64,7 +64,7 @@ preference(bin_not_linear,E) :-
     attribute((encoding,binning),E,_),
     not attribute((encoding,scale_type),E,linear).
 
-% @soft(only_discrete) Plots with only nominal, ordinal, binned q, or t with time unit should add either an aggregation (e.g. count) or a quantitative field.
+% @soft(only_discrete) Only discrete encoding channels are used in a mark.
 preference(only_discrete,M) :-
     attribute(mark_channel_discrete_or_binned,M,_).
 
