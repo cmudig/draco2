@@ -31,3 +31,7 @@ generate = get_program(asp_path / "generate.lp")
 hard = get_program(asp_path / "hard.lp")
 helpers = get_program(asp_path / "helpers.lp")
 soft = get_program(asp_path / "soft.lp")
+assign_weights  = get_program(asp_path / "assign_weights.lp")
+weights  = get_program(asp_path / "weights.lp")
+optimize = get_program(asp_path / "optimize.lp")
+
