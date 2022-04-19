@@ -91,3 +91,19 @@ def blocks_to_program(
         for name, block in blocks.items()
         if isinstance(block, Block) and (keys is None or name in keys)
     ]
+
+
+def get_constants(program: Union[str, Iterable[str]]) -> Dict:
+    if isinstance(program, str):
+        program = program.split(".")
+
+    constants = {}
+    for line in program:
+        match = re.search("#const (.*) = ([-0-9]*)", line)
+        if match:
+            name = match.group(1)
+            value = int(match.group(2))
+
+            constants[name] = value
+
+    return constants

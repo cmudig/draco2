@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import pytest
-
-from draco.asp_utils import Block, blocks_to_program, parse_blocks
+from draco.asp_utils import (Block, blocks_to_program, get_constants,
+                             parse_blocks)
 
 VALID_CONTENT = """
 some content to ignore
@@ -56,3 +56,19 @@ def test_blocks_to_program_keys(asp_file):
     program = blocks_to_program(blocks, set(["foo"]))
 
     assert program == ["fact1.\n"]
+
+
+def test_get_constants():
+
+    program1 = """
+    some content to ignore
+
+    #const const1 = 1.
+    #const const2 = 20.
+
+    """
+
+    program2 = ["#const const3 = 30.\n", "#const const4 = 4.\n"]
+
+    assert get_constants(program1) == {"const1": 1, "const2": 20}
+    assert get_constants(program2) == {"const3": 30, "const4": 4}
