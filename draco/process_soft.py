@@ -7,6 +7,7 @@ from pathlib import Path
 
 asp_path = Path(__file__).resolve().parent / "asp"
 
+
 def main():
     with open(asp_path / "weights.lp") as weight_constants, open(
         asp_path / "assign_weights.lp", "w"
@@ -25,6 +26,7 @@ def main():
                 weights[f"{name}_weight"] = value
 
                 assign.write(f"preference_weight({name},{name}_weight).\n")
+
 
 if __name__ == "__main__":
     main()

@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import pytest
-from draco.asp_utils import (Block, blocks_to_program, get_constants,
-                             parse_blocks)
+
+from draco.asp_utils import Block, blocks_to_program, get_constants, parse_blocks
 
 VALID_CONTENT = """
 some content to ignore
