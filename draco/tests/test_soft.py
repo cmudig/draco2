@@ -634,7 +634,7 @@ def test_number_categorical():
     attribute((scale,type),s1,categorical).
     """
         )
-        == [("number_categorical", "temperature")]
+        == [("number_categorical", "temperature", "m")]
     )
 
     # two scales, categorical for number
@@ -655,15 +655,72 @@ def test_number_categorical():
 
     entity(scale,v2,s2).
     attribute((scale,channel),s2,x).
-    attribute((scale,type),s2,number).
+    attribute((scale,type),s2,linear).
     """
         )
-        == [("number_categorical", "temperature")]
+        == [("number_categorical", "temperature", "m")]
+    )
+
+    # number field used for two times (in two different marks)
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperature,number).
+
+    entity(mark,v1,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,channel),e1,x).
+
+    entity(mark,v2,m2).
+    entity(encoding,m2,e2).
+    attribute((encoding,field),e2,temperature).
+    attribute((encoding,channel),e2,x).
+
+    entity(scale,v1,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,categorical).
+
+    entity(scale,v2,s2).
+    attribute((scale,channel),s2,x).
+    attribute((scale,type),s2,linear).
+    """
+        )
+        == [("number_categorical", "temperature", "m1")]
+    )
+
+    # number field used for two times (in same mark)
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperature,number).
+
+    entity(mark,v1,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,field),e2,temperature).
+    attribute((encoding,channel),e2,color).
+
+    entity(scale,v1,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v1,s2).
+    attribute((scale,channel),s2,color).
+    attribute((scale,type),s2,categorical).
+    """
+        )
+        == [("number_categorical", "temperature", "m1")]
     )
 
 
-def test_bin_number_low_cardinality():
-    b = soft.blocks["bin_number_low_cardinality"]
+def test_bin_low_unique():
+    b = soft.blocks["bin_low_unique"]
     assert isinstance(b, Block)
 
     assert (
@@ -671,6 +728,7 @@ def test_bin_number_low_cardinality():
             b.program
             + """
     attribute((field,type),temperature,number).
+    attribute((field,unique),temperature,50).
     attribute((encoding,field),e1,temperature).
     attribute((encoding,binning),e1,20).
     """
@@ -678,16 +736,32 @@ def test_bin_number_low_cardinality():
         == []
     )
 
+    # number
     assert (
         list_preferences(
             b.program
             + """
     attribute((field,type),temperature,number).
+    attribute((field,unique),temperature,10).
     attribute((encoding,field),e1,temperature).
-    attribute((encoding,binning),e1,10).
+    attribute((encoding,binning),e1,5).
     """
         )
-        == [("bin_number_low_cardinality", "e1")]
+        == [("bin_low_unique", "e1")]
+    )
+
+    # datetime
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),date,datetime).
+    attribute((field,unique),date,10).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,binning),e1,5).
+    """
+        )
+        == [("bin_low_unique", "e1")]
     )
 
 

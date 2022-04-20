@@ -48,16 +48,17 @@ preference(shape_high_cardinality,E) :-
     N > 5.
 
 % @soft(number_categorical) Numbers should not be nominal.
-preference(number_categorical,F) :-
+preference(number_categorical,F,M) :-
     attribute((field,type),F,number),
-    attribute(field_scale,F,categorical).
+    attribute(field_scale,F,M,categorical).
 
-% @soft(bin_number_low_cardinality) Binned number field should not have too low cardinality.
-preference(bin_number_low_cardinality,E) :-
-    attribute((field,type),F,number),
+% @soft(bin_low_unique) Binned field should not have too less unique values.
+preference(bin_low_unique,E) :-
+    attribute((field,type),F,(number;datetime)),
+    attribute((field,unique),F,U),
     attribute((encoding,field),E,F),
-    attribute((encoding,binning),E,B),
-    B < 15.
+    attribute((encoding,binning),E,_),
+    U < 15.
 
 % @soft(bin_not_linear) Prefer linear scale for bin.
 preference(bin_not_linear,E) :-
