@@ -53,7 +53,7 @@ violation(count_without_q) :-
     attribute((encoding,scale_type),E,T),
     domain(discrete_scale,T).
 
-% @hard(shape_not_ordinal) Shape requires discrete and ordinal (ordinal/categorical doesnt matter, so we use oridnal only here).
+% @hard(shape_not_ordinal) Shape requires discrete and ordinal (ordinal/categorical doesn't matter as scale types, so we use oridnal only here).
 violation(shape_not_ordinal) :-
     attribute(mark_scale_channel,_,T,shape),
     T != ordinal.
