@@ -67,8 +67,3 @@ attribute(encoding_cardinality,E,N) :-
     not attribute((encoding,binning),E,_).
 attribute(encoding_cardinality,E,N) :-
     attribute((encoding,binning),E,N).
-
-% @helper(field_scale,F,M,T) The scale type for a field.
-attribute(field_scale,F,M,T) :-
-    attribute(mark_channel_field,M,C,F),
-    attribute(mark_scale_channel,M,T,C).
