@@ -47,11 +47,10 @@ preference(shape_high_cardinality,E) :-
     attribute(encoding_cardinality,E,N),
     N > 5.
 
-% @soft(number_categorical) Should not use categorical scale for numbers.
-preference(number_categorical,M,F,C) :-
+% @soft(number_categorical) Numbers should not be nominal.
+preference(number_categorical,F,M) :-
     attribute((field,type),F,number),
-    attribute(mark_channel_field,M,C,F),
-    attribute(mark_scale_channel,M,categorical,C).
+    attribute(field_scale,F,M,categorical).
 
 % @soft(bin_low_unique) Binned field should not have too less unique values.
 preference(bin_low_unique,E) :-
