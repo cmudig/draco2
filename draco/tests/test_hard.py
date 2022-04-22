@@ -786,6 +786,58 @@ def test_count_without_q():
     )
 
 
+def test_shape_not_ordinal():
+    b = hard.blocks["shape_not_ordinal"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    entity(mark,0,1).
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,shape).
+
+    entity(scale,0,3).
+    attribute((scale,channel),3,shape).
+    attribute((scale,type),3,ordinal).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(mark,0,1).
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,shape).
+
+    entity(scale,0,3).
+    attribute((scale,channel),3,shape).
+    attribute((scale,type),3,categorical).
+    """
+        )
+        == ["shape_not_ordinal"]
+    )
+
+    # scale on root
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(view,root,0).
+    entity(mark,0,1).
+    entity(encoding,1,2).
+    attribute((encoding,channel),2,shape).
+
+    entity(scale,root,3).
+    attribute((scale,channel),3,shape).
+    attribute((scale,type),3,linear).
+    """
+        )
+        == ["shape_not_ordinal"]
+    )
+
+
 def test_categorical_not_color():
     b = hard.blocks["categorical_not_color"]
     assert isinstance(b, Block)
