@@ -368,6 +368,29 @@ def test_same_field_grt3():
         == []
     )
 
+    # use field temperature 3 times but with 2 different marks
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(field,root,temperature).
+
+    entity(mark,v,m1).
+    entity(mark,v,m2).
+
+    entity(encoding,m1,e1).
+    entity(encoding,m1,e2).
+    entity(encoding,m2,e3).
+
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,field),e2,temperature).
+    attribute((encoding,field),e3,temperature).
+    """
+        )
+        == []
+    )
+
+    # use field temperature 3 times with same mark
     assert (
         list_preferences(
             b.program
@@ -387,12 +410,12 @@ def test_same_field_grt3():
         == [("same_field_grt3", "temperature")]
     )
 
+    # use field temperature 4 times with same mark
     assert (
         list_preferences(
             b.program
             + """
     entity(field,root,temperature).
-    entity(field,root,date).
 
     entity(mark,v,m).
 
@@ -400,63 +423,6 @@ def test_same_field_grt3():
     entity(encoding,m,e2).
     entity(encoding,m,e3).
     entity(encoding,m,e4).
-    entity(encoding,m,e5).
-    entity(encoding,m,e6).
-
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,temperature).
-    attribute((encoding,field),e3,temperature).
-    attribute((encoding,field),e4,date).
-    attribute((encoding,field),e5,date).
-    attribute((encoding,field),e6,date).
-    """
-        )
-        == [("same_field_grt3", "temperature"), ("same_field_grt3", "date")]
-    )
-
-    # use field temperature three times with mark m1,
-    # and field date with 2 different marks
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(field,root,temperature).
-    entity(field,root,date).
-
-    entity(mark,v,m1).
-    entity(mark,v,m2).
-
-    entity(encoding,m1,e1).
-    entity(encoding,m1,e2).
-    entity(encoding,m1,e3).
-    entity(encoding,m2,e4).
-    entity(encoding,m1,e5).
-    entity(encoding,m2,e6).
-
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,temperature).
-    attribute((encoding,field),e3,temperature).
-    attribute((encoding,field),e4,date).
-    attribute((encoding,field),e5,date).
-    attribute((encoding,field),e6,date).
-    """
-        )
-        == [("same_field_grt3", "temperature")]
-    )
-
-    # use field temperature four times
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(field,root,temperature).
-
-    entity(mark,v,m1).
-
-    entity(encoding,m1,e1).
-    entity(encoding,m1,e2).
-    entity(encoding,m1,e3).
-    entity(encoding,m1,e4).
 
     attribute((encoding,field),e1,temperature).
     attribute((encoding,field),e2,temperature).
@@ -540,6 +506,7 @@ def test_shape_high_cardinality():
     b = soft.blocks["shape_high_cardinality"]
     assert isinstance(b, Block)
 
+    # unqiue is 5
     assert (
         list_preferences(
             b.program
@@ -552,6 +519,7 @@ def test_shape_high_cardinality():
         == []
     )
 
+    # binning is 5
     assert (
         list_preferences(
             b.program
@@ -634,7 +602,7 @@ def test_number_categorical():
     attribute((scale,type),s1,categorical).
     """
         )
-        == [("number_categorical", "temperature", "m")]
+        == [("number_categorical", "m", "temperature", "x")]
     )
 
     # two scales, categorical for number
@@ -658,36 +626,7 @@ def test_number_categorical():
     attribute((scale,type),s2,linear).
     """
         )
-        == [("number_categorical", "temperature", "m")]
-    )
-
-    # number field used for two times (in two different marks)
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,type),temperature,number).
-
-    entity(mark,v1,m1).
-    entity(encoding,m1,e1).
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,channel),e1,x).
-
-    entity(mark,v2,m2).
-    entity(encoding,m2,e2).
-    attribute((encoding,field),e2,temperature).
-    attribute((encoding,channel),e2,x).
-
-    entity(scale,v1,s1).
-    attribute((scale,channel),s1,x).
-    attribute((scale,type),s1,categorical).
-
-    entity(scale,v2,s2).
-    attribute((scale,channel),s2,x).
-    attribute((scale,type),s2,linear).
-    """
-        )
-        == [("number_categorical", "temperature", "m1")]
+        == [("number_categorical", "m", "temperature", "x")]
     )
 
     # number field used for two times (in same mark)
@@ -715,7 +654,7 @@ def test_number_categorical():
     attribute((scale,type),s2,categorical).
     """
         )
-        == [("number_categorical", "temperature", "m1")]
+        == [("number_categorical", "m1", "temperature", "color")]
     )
 
 
@@ -723,6 +662,7 @@ def test_bin_low_unique():
     b = soft.blocks["bin_low_unique"]
     assert isinstance(b, Block)
 
+    # number
     assert (
         list_preferences(
             b.program
@@ -734,20 +674,6 @@ def test_bin_low_unique():
     """
         )
         == []
-    )
-
-    # number
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,type),temperature,number).
-    attribute((field,unique),temperature,10).
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,binning),e1,5).
-    """
-        )
-        == [("bin_low_unique", "e1")]
     )
 
     # datetime
@@ -805,6 +731,7 @@ def test_bin_not_linear():
         == []
     )
 
+    # log scale
     assert (
         list_preferences(
             b.program
@@ -843,6 +770,7 @@ def test_only_discrete():
         == []
     )
 
+    # 1 encoding
     assert (
         list_preferences(
             b.program
@@ -859,6 +787,7 @@ def test_only_discrete():
         == [("only_discrete", "m1")]
     )
 
+    # 2 encodings
     assert (
         list_preferences(
             b.program
@@ -974,6 +903,7 @@ def test_non_pos_used_before_pos():
         == []
     )
 
+    # both x and y are not used yet
     assert (
         list_preferences(
             b.program
@@ -986,6 +916,7 @@ def test_non_pos_used_before_pos():
         == [("non_pos_used_before_pos", "m1")]
     )
 
+    # x is not used yet
     assert (
         list_preferences(
             b.program
