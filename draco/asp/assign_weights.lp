@@ -1,5 +1,4 @@
 %% GENERATED FILE. DO NOT EDIT.
-
 preference_weight(aggregate,aggregate_weight).
 preference_weight(bin,bin_weight).
 preference_weight(bin_high,bin_high_weight).
