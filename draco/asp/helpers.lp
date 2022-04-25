@@ -59,3 +59,11 @@ attribute(mark_channel_discrete_or_binned,M,C) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     attribute((encoding,binning),E,_).
+
+% @helper(encoding_cardinality,E,N) The cardinality of an encoding.
+attribute(encoding_cardinality,E,N) :-
+    attribute((field,unique),F,N),
+    attribute((encoding,field),E,F),
+    not attribute((encoding,binning),E,_).
+attribute(encoding_cardinality,E,N) :-
+    attribute((encoding,binning),E,N).
