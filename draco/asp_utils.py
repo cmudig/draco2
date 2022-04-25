@@ -4,6 +4,8 @@ from io import StringIO
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, TextIO, Union
 
+from clingo.ast import AST, ASTType, parse_string
+
 
 @dataclass(frozen=True)
 class Block:
@@ -95,15 +97,15 @@ def blocks_to_program(
 
 def get_constants(program: Union[str, Iterable[str]]) -> Dict:
     if isinstance(program, str):
-        program = program.split(".")
+        program = program.split("\n")
 
     constants = {}
     for line in program:
-        match = re.search("#const (.*) = ([-0-9]*)", line)
-        if match:
-            name = match.group(1)
-            value = int(match.group(2))
 
-            constants[name] = value
+        def record(ast: AST):
+            if ast.ast_type == ASTType.Definition:
+                constants[ast.name] = int(str(ast.value))
+
+        parse_string(line, lambda x: record(x))
 
     return constants
