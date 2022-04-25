@@ -253,7 +253,7 @@ def test_same_field():
     entity(field,root,temperature).
     entity(field,root,date).
 
-    entity(mark,root,m).
+    entity(mark,v,m).
     entity(encoding,m,e1).
     entity(encoding,m,e2).
 
@@ -269,10 +269,10 @@ def test_same_field():
             b.program
             + """
     entity(field,root,temperature).
+
+    entity(mark,v,m).
     entity(encoding,m,e1).
     entity(encoding,m,e2).
-
-    entity(mark,root,m).
 
     attribute((encoding,field),e1,temperature).
     attribute((encoding,field),e2,temperature).
@@ -288,13 +288,11 @@ def test_same_field():
     entity(field,root,temperature).
     entity(field,root,date).
 
-    entity(mark,root,m).
-
+    entity(mark,v,m).
     entity(encoding,m,e1).
     entity(encoding,m,e2).
     entity(encoding,m,e3).
     entity(encoding,m,e4).
-
 
     attribute((encoding,field),e1,temperature).
     attribute((encoding,field),e2,temperature).
@@ -313,14 +311,13 @@ def test_same_field():
     entity(field,root,temperature).
     entity(field,root,date).
 
-    entity(mark,root,m1).
-    entity(mark,root,m2).
+    entity(mark,v,m1).
+    entity(mark,v,m2).
 
     entity(encoding,m1,e1).
     entity(encoding,m1,e2).
     entity(encoding,m2,e3).
     entity(encoding,m1,e4).
-
 
     attribute((encoding,field),e1,temperature).
     attribute((encoding,field),e2,temperature).
@@ -332,8 +329,613 @@ def test_same_field():
     )
 
 
-def test_type_linear():
-    b = soft.blocks["type_linear"]
+def test_same_field_grt3():
+    b = soft.blocks["same_field_grt3"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(field,root,temperature).
+    entity(field,root,date).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    entity(encoding,m,e2).
+
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,field),e2,date).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(field,root,temperature).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    entity(encoding,m,e2).
+
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,field),e2,temperature).
+    """
+        )
+        == []
+    )
+
+    # use field temperature 3 times, but with 2 different marks.
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(field,root,temperature).
+
+    entity(mark,v,m1).
+    entity(mark,v,m2).
+
+    entity(encoding,m1,e1).
+    entity(encoding,m1,e2).
+    entity(encoding,m2,e3).
+
+
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,field),e2,temperature).
+    attribute((encoding,field),e3,temperature).
+    """
+        )
+        == []
+    )
+
+    # use field temperature 3 times with the same mark
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(field,root,temperature).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    entity(encoding,m,e2).
+    entity(encoding,m,e3).
+
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,field),e2,temperature).
+    attribute((encoding,field),e3,temperature).
+    """
+        )
+        == [("same_field_grt3", "temperature")]
+    )
+
+    # use field temperature 4 times with the same mark
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(field,root,temperature).
+
+    entity(mark,v,m).
+
+    entity(encoding,m,e1).
+    entity(encoding,m,e2).
+    entity(encoding,m,e3).
+    entity(encoding,m,e4).
+
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,field),e2,temperature).
+    attribute((encoding,field),e3,temperature).
+    attribute((encoding,field),e4,temperature).
+    """
+        )
+        == [("same_field_grt3", "temperature")]
+    )
+
+
+def test_count_grt1():
+    b = soft.blocks["count_grt1"]
+    assert isinstance(b, Block)
+
+    # only 1 count
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,aggregate),e1,count).
+    """
+        )
+        == []
+    )
+
+    # 2 aggregate, but not only 1 count
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    entity(encoding,m,e2).
+
+    attribute((encoding,aggregate),e1,sum).
+    attribute((encoding,aggregate),e2,count).
+    """
+        )
+        == []
+    )
+
+    # 2 counts
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    entity(encoding,m,e2).
+
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,aggregate),e2,count).
+    """
+        )
+        == [("count_grt1", "m")]
+    )
+
+    # 3 counts
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    entity(encoding,m,e2).
+    entity(encoding,m,e3).
+
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,aggregate),e2,count).
+    attribute((encoding,aggregate),e3,count).
+    """
+        )
+        == [("count_grt1", "m")]
+    )
+
+
+def test_shape_high_cardinality():
+    b = soft.blocks["shape_high_cardinality"]
+    assert isinstance(b, Block)
+
+    # unique is low
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),condition,5).
+    attribute((encoding,channel),e1,shape).
+    attribute((encoding,field),e1,condition).
+    """
+        )
+        == []
+    )
+
+    # unique is high, binning is low
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),temperature,111).
+    attribute((encoding,channel),e1,shape).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,binning),e1,5).
+    """
+        )
+        == []
+    )
+
+    # unique too high
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),condition,15).
+    attribute((encoding,channel),e1,shape).
+    attribute((encoding,field),e1,condition).
+    """
+        )
+        == [("shape_high_cardinality", "e1")]
+    )
+
+    # binning too high
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),temperature,111).
+    attribute((encoding,channel),e1,shape).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,binning),e1,15).
+    """
+        )
+        == [("shape_high_cardinality", "e1")]
+    )
+
+
+def test_number_categorical():
+    b = soft.blocks["number_categorical"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperature,number).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # root scale, categorical for number
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperature,number).
+
+    entity(view,root,v).
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == [("number_categorical", "m", "temperature", "x")]
+    )
+
+    # two scales, categorical for number
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperature,number).
+
+    entity(mark,v1,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v1,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,categorical).
+
+    entity(scale,v2,s2).
+    attribute((scale,channel),s2,x).
+    attribute((scale,type),s2,linear).
+    """
+        )
+        == [("number_categorical", "m", "temperature", "x")]
+    )
+
+    # number field used for two times (in same mark)
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperature,number).
+
+    entity(mark,v1,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,field),e2,temperature).
+    attribute((encoding,channel),e2,color).
+
+    entity(scale,v1,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v1,s2).
+    attribute((scale,channel),s2,color).
+    attribute((scale,type),s2,categorical).
+    """
+        )
+        == [("number_categorical", "m1", "temperature", "color")]
+    )
+
+
+def test_bin_low_unique():
+    b = soft.blocks["bin_low_unique"]
+    assert isinstance(b, Block)
+
+    # number
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperature,number).
+    attribute((field,unique),temperature,50).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,binning),e1,20).
+    """
+        )
+        == []
+    )
+
+    # datetime
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),date,datetime).
+    attribute((field,unique),date,10).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,binning),e1,5).
+    """
+        )
+        == [("bin_low_unique", "e1")]
+    )
+
+
+def test_bin_not_linear():
+    b = soft.blocks["bin_not_linear"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,15).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,15).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # log scale
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,15).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("bin_not_linear", "e1")]
+    )
+
+
+def test_only_discrete():
+    b = soft.blocks["only_discrete"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # 1 encoding
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == [("only_discrete", "m1")]
+    )
+
+    # 2 encodings
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("only_discrete", "m1")]
+    )
+
+    # shared scale
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v1).
+    entity(mark,v1,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+
+    entity(view,root,v2).
+    entity(mark,v2,m2).
+    entity(encoding,m2,e3).
+    attribute((encoding,channel),e3,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+
+    entity(scale,v2,s2).
+    attribute((scale,channel),s2,color).
+    attribute((scale,type),s2,categorical).
+    """
+        )
+        == [("only_discrete", "m1"), ("only_discrete", "m2")]
+    )
+
+
+def test_multi_non_pos():
+    b = soft.blocks["multi_non_pos"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,size).
+    """
+        )
+        == [("multi_non_pos", "m1")]
+    )
+
+
+def test_non_pos_used_before_pos():
+    b = soft.blocks["non_pos_used_before_pos"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    """
+        )
+        == []
+    )
+
+    # both x and y are not used yet
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+    """
+        )
+        == [("non_pos_used_before_pos", "m1")]
+    )
+
+    # x is not used yet
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,color).
+    """
+        )
+        == [("non_pos_used_before_pos", "m1")]
+    )
+
+
+def test_linear_scale():
+    b = soft.blocks["linear_scale"]
     assert isinstance(b, Block)
 
     assert (
@@ -365,7 +967,7 @@ def test_type_linear():
     attribute((scale,type),s1,linear).
     """
         )
-        == [("type_linear", "e1")]
+        == [("linear_scale", "e1")]
     )
 
     assert (
@@ -388,12 +990,12 @@ def test_type_linear():
     attribute((scale,type),s2,linear).
     """
         )
-        == [("type_linear", "e1"), ("type_linear", "e2")]
+        == [("linear_scale", "e1"), ("linear_scale", "e2")]
     )
 
 
-def test_type_log():
-    b = soft.blocks["type_log"]
+def test_log_scale():
+    b = soft.blocks["log_scale"]
     assert isinstance(b, Block)
 
     assert (
@@ -425,7 +1027,7 @@ def test_type_log():
     attribute((scale,type),s1,log).
     """
         )
-        == [("type_log", "e1")]
+        == [("log_scale", "e1")]
     )
 
     assert (
@@ -448,12 +1050,12 @@ def test_type_log():
     attribute((scale,type),s2,log).
     """
         )
-        == [("type_log", "e1"), ("type_log", "e2")]
+        == [("log_scale", "e1"), ("log_scale", "e2")]
     )
 
 
-def test_type_ordinal():
-    b = soft.blocks["type_ordinal"]
+def test_ordinal_scale():
+    b = soft.blocks["ordinal_scale"]
     assert isinstance(b, Block)
 
     assert (
@@ -485,7 +1087,7 @@ def test_type_ordinal():
     attribute((scale,type),s1,ordinal).
     """
         )
-        == [("type_ordinal", "e1")]
+        == [("ordinal_scale", "e1")]
     )
 
     assert (
@@ -508,12 +1110,12 @@ def test_type_ordinal():
     attribute((scale,type),s2,ordinal).
     """
         )
-        == [("type_ordinal", "e1"), ("type_ordinal", "e2")]
+        == [("ordinal_scale", "e1"), ("ordinal_scale", "e2")]
     )
 
 
-def test_type_categorical():
-    b = soft.blocks["type_categorical"]
+def test_categorical_scale():
+    b = soft.blocks["categorical_scale"]
     assert isinstance(b, Block)
 
     assert (
@@ -545,5 +1147,5 @@ def test_type_categorical():
     attribute((scale,type),s1,categorical).
     """
         )
-        == [("type_categorical", "e1")]
+        == [("categorical_scale", "e1")]
     )
