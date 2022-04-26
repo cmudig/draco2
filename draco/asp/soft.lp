@@ -81,6 +81,67 @@ preference(non_pos_used_before_pos,M) :-
     domain(non_positional,C),
     not attribute((mark,channel),M,(x;y)).
 
+% @soft(aggregate_group_by_raw) Aggregate plots should not use raw continuous as group by.
+preference(aggregate_group_by_raw,E) :-
+    attribute(mark_has_aggregate,M),
+    entity(encoding,M,E),
+    not attribute(mark_encoding_discrete_or_binned,M,E),
+    not attribute((encoding,aggregate),E,_).
+
+% @soft(aggregate_no_discrete) Aggregate should also have a discrete encoding to group by.
+preference(aggregate_no_discrete,M) :-
+    attribute(mark_has_aggregate,M),
+    not attribute(mark_channel_discrete_or_binned,M,_).
+
+% @soft(x_y_raw) Prefer not to use plot with x and y discrete and no aggregate as it leads to occlusion.
+preference(x_y_raw,M) :-
+    attribute(mark_channel_discrete_or_binned,M,(x;y)),
+    entity(encoding,M,E),
+    not attribute(mark_encoding_discrete_or_binned,M,E),
+    not attribute((encoding,aggregate),E,_).
+
+% @soft(continuous_not_zero) Prefer to include zero for continuous (binned doesn't need zero).
+preference(continuous_not_zero,E) :-
+    not attribute(mark_encoding_discrete_or_binned,M,E),
+    attribute(mark_encoding_scale,M,E,S),
+    not attribute((scale,zero),S,true).
+
+% @soft(size_not_zero) Prefer zero size (even when binned).
+preference(size_not_zero,E) :-
+    attribute((encoding,channel),E,size),
+    attribute(mark_encoding_scale,M,E,S),
+    not attribute((scale,zero),S,true).
+
+% @soft(continuous_pos_not_zero) Prefer zero continuous positional.
+preference(continuous_pos_not_zero,E) :-
+    attribute((encoding,channel),E,(x;y)),
+    not attribute(mark_encoding_discrete_or_binned,M,E),
+    attribute(mark_encoding_scale,M,E,S),
+    not attribute((scale,zero),S,true).
+
+% @soft(skew_zero) Prefer not to use zero when the difference between min and max is smaller than distance to 0.
+preference(skew_zero,E) :-
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
+    EXT = MAX - MIN,
+    |MAX| > EXT,
+    |MIN| > EXT,
+    entity(encoding,M,E),
+    attribute((encoding,field),E,F),
+    attribute(mark_encoding_scale,M,E,S),
+    attribute((scale,zero),S,true).
+
+% @soft(cross_zero) Prefer not to include zero as baseline when the range of data crosses zero.
+preference(cross_zero,E) :-
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
+    MAX > 0,
+    MIN < 0,
+    entity(encoding,M,E),
+    attribute((encoding,field),E,F),
+    attribute(mark_encoding_scale,M,E,S),
+    attribute((scale,zero),S,true).
+
 % @soft(linear_scale) linear scale.
 preference(linear_scale,E) :-
     attribute((encoding,scale_type),E,linear).

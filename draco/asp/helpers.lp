@@ -25,6 +25,13 @@ attribute(mark_scale_channel,M,T,C) :-
     attribute((scale,channel),S,C),
     attribute((scale,type),S,T).
 
+% @helper(mark_encoding_scale) Link mark, encoding, and scale togther.
+attribute(mark_encoding_scale,M,E,S) :-
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
+    attribute((mark,scale),M,S),
+    attribute((scale,channel),S,C).
+
 % @helper(encoding_type) Whether an encoding has a channel for a scale type.
 attribute((encoding,scale_type),E,T) :-
     entity(encoding,M,E),
@@ -60,6 +67,16 @@ attribute(mark_channel_discrete_or_binned,M,C) :-
     attribute((encoding,channel),E,C),
     attribute((encoding,binning),E,_).
 
+% @helper(mark_encoding_discrete_or_binned) Whether a mark has a discrete scale or binned encoding for an encoding.
+attribute(mark_encoding_discrete_or_binned,M,E) :-
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
+    attribute(mark_scale_channel,M,T,C),
+    domain(discrete_scale,T).
+attribute(mark_encoding_discrete_or_binned,M,E) :-
+    entity(encoding,M,E),
+    attribute((encoding,binning),E,_).
+
 % @helper(encoding_cardinality,E,N) The cardinality of an encoding.
 attribute(encoding_cardinality,E,N) :-
     attribute((field,unique),F,N),
@@ -67,3 +84,8 @@ attribute(encoding_cardinality,E,N) :-
     not attribute((encoding,binning),E,_).
 attribute(encoding_cardinality,E,N) :-
     attribute((encoding,binning),E,N).
+
+% @helper(mark_has_aggregate) Whether a mark has aggregate encoding.
+attribute(mark_has_aggregate,M) :-
+    entity(encoding,M,E),
+    attribute((encoding,aggregate),E,_).
