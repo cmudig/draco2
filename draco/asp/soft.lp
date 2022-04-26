@@ -91,7 +91,7 @@ preference(aggregate_group_by_raw,E) :-
 % @soft(aggregate_no_discrete) Aggregate should also have a discrete encoding to group by.
 preference(aggregate_no_discrete,M) :-
     attribute(mark_has_aggregate,M),
-    not attribute(mark_channel_discrete_or_binned,M,_).
+    not attribute(mark_encoding_discrete_or_binned,M,_).
 
 % @soft(x_y_raw) Prefer not to use plot with x and y discrete and no aggregate as it leads to occlusion.
 preference(x_y_raw,M) :-

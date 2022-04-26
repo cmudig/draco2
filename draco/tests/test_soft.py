@@ -971,9 +971,9 @@ def test_aggregate_group_by_raw():
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,x).
 
-    entity(scale,v,s2).
-    attribute((scale,channel),s2,x).
-    attribute((scale,type),s2,ordinal).
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
     """
         )
         == []
@@ -1008,16 +1008,16 @@ def test_aggregate_group_by_raw():
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,x).
 
-    entity(scale,v,s2).
-    attribute((scale,channel),s2,x).
-    attribute((scale,type),s2,linear).
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
     """
         )
         == [("aggregate_group_by_raw", "e2")]
     )
 
 
-def aggregate_no_discrete():
+def test_aggregate_no_discrete():
     b = soft.blocks["aggregate_no_discrete"]
     assert isinstance(b, Block)
 
@@ -1049,9 +1049,9 @@ def aggregate_no_discrete():
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,x).
 
-    entity(scale,v,s2).
-    attribute((scale,channel),s2,x).
-    attribute((scale,type),s2,ordinal).
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
     """
         )
         == []
@@ -1070,10 +1070,9 @@ def aggregate_no_discrete():
     attribute((encoding,channel),e2,x).
     attribute((encoding,aggregate),e2,max).
 
-    entity(scale,v,s2).
-    attribute((scale,channel),s2,x).
-    attribute((scale,type),s2,linear).
-
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
     """
         )
         == [("aggregate_no_discrete", "m1")]
@@ -1091,10 +1090,9 @@ def aggregate_no_discrete():
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,x).
 
-    entity(scale,v,s2).
-    attribute((scale,channel),s2,x).
-    attribute((scale,type),s2,linear).
-
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
     """
         )
         == [("aggregate_no_discrete", "m1")]
