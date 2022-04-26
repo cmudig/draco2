@@ -934,6 +934,393 @@ def test_non_pos_used_before_pos():
     )
 
 
+def test_only_y():
+    b = soft.blocks["only_y"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    """
+        )
+        == []
+    )
+
+    # 1 mark with channel y and size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,size).
+    """
+        )
+        == [("only_y", "m1")]
+    )
+
+    # 2 marks
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(mark,v,m2).
+    entity(encoding,m2,e2).
+    attribute((encoding,channel),e2,x).
+    """
+        )
+        == [("only_y", "m1")]
+    )
+
+
+def test_binned_orientation_not_x():
+    b = soft.blocks["binned_orientation_not_x"]
+    assert isinstance(b, Block)
+
+    # number
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperature,number).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,binning),e1,20).
+    attribute((encoding,channel),e1,x).
+    """
+        )
+        == []
+    )
+
+    # datetime
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),date,datetime).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,binning),e1,20).
+    attribute((encoding,channel),e1,y).
+    """
+        )
+        == [("binned_orientation_not_x", "e1")]
+    )
+
+
+def test_high_cardinality_ordinal():
+    b = soft.blocks["high_cardinality_ordinal"]
+    assert isinstance(b, Block)
+
+    # low cardinality: binning
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,1461).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,20).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # high cardinality: unique
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,1461).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("high_cardinality_ordinal", "e1")]
+    )
+
+
+def test_high_cardinality_categorical_grt10():
+    b = soft.blocks["high_cardinality_categorical_grt10"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),weather,5).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,weather).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),weather,15).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,weather).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == [("high_cardinality_categorical_grt10", "e1")]
+    )
+
+
+def test_high_cardinality_categorical_grt20():
+    b = soft.blocks["high_cardinality_categorical_grt20"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,1461).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,binning),e1,15).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,1461).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == [("high_cardinality_categorical_grt20", "e1")]
+    )
+
+
+def test_high_cardinality_shape():
+    b = soft.blocks["high_cardinality_shape"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,25).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,shape).
+    attribute((encoding,binning),e1,5).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),weather,15).
+    attribute((encoding,field),e1,weather).
+    attribute((encoding,channel),e1,shape).
+    """
+        )
+        == [("high_cardinality_shape", "e1")]
+    )
+
+
+def test_high_cardinality_size():
+    b = soft.blocks["high_cardinality_size"]
+    assert isinstance(b, Block)
+
+    # x is not continuous, binning
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,1461).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,binning),e1,20).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m,e2).
+    attribute((encoding,channel),e1,size).
+    """
+        )
+        == []
+    )
+
+    # x is not continuous, ordinal scale
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),weather,150).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,weather).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m,e2).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # y is continuous with high cardinality
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),temperature,150).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,temperature).
+    attribute((encoding,channel),e1,y).
+
+    entity(encoding,m,e2).
+    attribute((encoding,channel),e2,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("high_cardinality_size", "e1")]
+    )
+
+
+def test_horizontal_scrolling_x():
+    b = soft.blocks["horizontal_scrolling_x"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,1461).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,20).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,1461).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,x).
+    """
+        )
+        == [("horizontal_scrolling_x", "e1")]
+    )
+
+
+def test_horizontal_scrolling_col():
+    b = soft.blocks["horizontal_scrolling_col"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,1461).
+
+    entity(facet,v,f).
+    attribute((facet,field),f,date).
+    attribute((facet,channel),f,col).
+    attribute((facet,binning),f,5).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,1461).
+
+    entity(facet,v,f).
+    attribute((facet,field),f,date).
+    attribute((facet,channel),f,col).
+    """
+        )
+        == [("horizontal_scrolling_col", "f")]
+    )
+
+
 def test_linear_scale():
     b = soft.blocks["linear_scale"]
     assert isinstance(b, Block)

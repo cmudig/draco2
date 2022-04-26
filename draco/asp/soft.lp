@@ -81,6 +81,63 @@ preference(non_pos_used_before_pos,M) :-
     domain(non_positional,C),
     not attribute((mark,channel),M,(x;y)).
 
+% @soft(only_y) Prefer to use only x instead of only y.
+preference(only_y,M) :-
+    attribute((mark,channel),M,y),
+    not attribute((mark,channel),M,x).
+
+% @soft(binned_orientation_not_x) Prefer binned quantative on x axis.
+preference(binned_orientation_not_x,E) :-
+    attribute((field,type),F,(number;datetime)),
+    attribute((encoding,field),E,F),
+    attribute((encoding,binning),E,_),
+    not attribute((encoding,channel),E,x).
+
+% @soft(high_cardinality_ordinal) Prefer not to use ordinal for fields with high cardinality.
+preference(high_cardinality_ordinal,E) :-
+    attribute(encoding_cardinality,E,N),
+    attribute((encoding,scale_type),E,ordinal),
+    N > 30.
+
+% @soft(high_cardinality_categorical_grt10) Prefer not to use categorical (color) for fields with high cardinality.
+preference(high_cardinality_categorical_grt10,E) :-
+    attribute(encoding_cardinality,E,N),
+    attribute((encoding,scale_type),E,categorical),
+    N > 10.
+
+% @soft(high_cardinality_categorical_grt20) Prefer not to use categorical (color) for fields with high cardinality.
+preference(high_cardinality_categorical_grt20,E) :-
+    attribute(encoding_cardinality,E,N),
+    attribute((encoding,scale_type),E,categorical),
+    N > 20.
+
+% @soft(high_cardinality_shape) Prefer not to use high cardinality ordinal for shape.
+preference(high_cardinality_shape,E) :-
+    attribute(encoding_cardinality,E,N),
+    attribute((encoding,channel),E,shape),
+    N > 8.
+
+% @soft(high_cardinality_size) Prefer not to use size when the cardinality is large on x or y.
+preference(high_cardinality_size,E) :-
+    attribute((mark,channel),M,size),
+    entity(encoding,M,E),
+    attribute(encoding_cardinality,E,N),
+    attribute((encoding,channel),E,(x;y)),
+    not attribute(mark_encoding_discrete_or_binned,M,E),
+    N > 100.
+
+% @soft(horizontal_scrolling_x) Avoid high cardinality on x as it causes horizontal scrolling.
+preference(horizontal_scrolling_x,E) :-
+    attribute((encoding,channel),E,x),
+    attribute(encoding_cardinality,E,N),
+    N > 50.
+
+% @soft(horizontal_scrolling_col) Avoid high cardinality on column as it causes horizontal scrolling.
+preference(horizontal_scrolling_col,F) :-
+    attribute((facet,channel),F,col),
+    attribute(facet_cardinality,F,N),
+    N > 5.
+
 % @soft(linear_scale) linear scale.
 preference(linear_scale,E) :-
     attribute((encoding,scale_type),E,linear).

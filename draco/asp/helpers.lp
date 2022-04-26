@@ -60,6 +60,16 @@ attribute(mark_channel_discrete_or_binned,M,C) :-
     attribute((encoding,channel),E,C),
     attribute((encoding,binning),E,_).
 
+% @helper(mark_encoding_discrete_or_binned) Whether a mark has a discrete scale or binned encoding for an encoding.
+attribute(mark_encoding_discrete_or_binned,M,E) :-
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
+    attribute(mark_scale_channel,M,T,C),
+    domain(discrete_scale,T).
+attribute(mark_encoding_discrete_or_binned,M,E) :-
+    entity(encoding,M,E),
+    attribute((encoding,binning),E,_).
+
 % @helper(encoding_cardinality,E,N) The cardinality of an encoding.
 attribute(encoding_cardinality,E,N) :-
     attribute((field,unique),F,N),
@@ -67,3 +77,11 @@ attribute(encoding_cardinality,E,N) :-
     not attribute((encoding,binning),E,_).
 attribute(encoding_cardinality,E,N) :-
     attribute((encoding,binning),E,N).
+
+% @helper(facet_cardinality,Fa,N) The cardinality of a facet.
+attribute(facet_cardinality,Fa,N) :-
+    attribute((field,unique),Fi,N),
+    attribute((facet,field),Fa,Fi),
+    not attribute((facet,binning),Fa,_).
+attribute(facet_cardinality,Fa,N) :-
+    attribute((facet,binning),Fa,N).
