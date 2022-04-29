@@ -1,3 +1,4 @@
+import logging
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -24,7 +25,7 @@ class WeightsAssign:
 
 
 def get_weights_assigned(weight_path: Path) -> WeightsAssign:
-    """Reads the weights file and generates assign_weights.lp"""
+    """Reads the weights file and assigns the weights to the preferences."""
     with open(weight_path) as weight_constants:
         const_prog = weight_constants.read()
         const_dict = get_constants(const_prog)
@@ -34,6 +35,11 @@ def get_weights_assigned(weight_path: Path) -> WeightsAssign:
             match = re.search("(.*)_weight", name)
             if match:
                 assign_prog += f"preference_weight({match.group(1)},{name}).\n"
+            else:
+                logging.warning(
+                    f'Constant "{name}" doesn\'t end with "_weight", \
+                        so it\'s not assigned.'
+                )
 
     return WeightsAssign(const_prog, assign_prog, const_dict)
 
