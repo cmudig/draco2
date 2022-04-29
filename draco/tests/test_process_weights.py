@@ -35,7 +35,7 @@ def weight_file(tmpdir_factory):
 
 
 @pytest.fixture(scope="session")
-def invalid_weight_file(tmpdir_factory):
+def invalid_name_file(tmpdir_factory):
     filename = tmpdir_factory.mktemp("data").join("invalid.asp")
     with open(filename, "w") as f:
         f.write(INVALID)
@@ -52,9 +52,9 @@ def test_get_weights(weight_file):
     }
 
 
-def test_invalid_name(invalid_weight_file, caplog):
+def test_invalid_name(invalid_name_file, caplog):
     with caplog.at_level(logging.WARNING):
-        get_weights_assigned(invalid_weight_file)
+        get_weights_assigned(invalid_name_file)
     assert (
         'Constant "preference1" doesn\'t end with "_weight", \
                         so it\'s not assigned.'
