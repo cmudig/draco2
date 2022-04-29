@@ -83,14 +83,16 @@ preference(non_pos_used_before_pos,M) :-
 
 % @soft(aggregate_group_by_raw) Aggregate plots should not use raw continuous as group by.
 preference(aggregate_group_by_raw,E) :-
-    attribute(mark_has_aggregate,M),
+    entity(encoding,M,EA),
+    attribute((encoding,aggregate),EA,_),
     entity(encoding,M,E),
     not attribute(mark_encoding_discrete_or_binned,M,E),
     not attribute((encoding,aggregate),E,_).
 
 % @soft(aggregate_no_discrete) Aggregate should also have a discrete encoding to group by.
 preference(aggregate_no_discrete,M) :-
-    attribute(mark_has_aggregate,M),
+    entity(encoding,M,EA),
+    attribute((encoding,aggregate),EA,_),
     not attribute(mark_encoding_discrete_or_binned,M,_).
 
 % @soft(x_y_raw) Prefer not to use plot with x and y discrete and no aggregate as it leads to occlusion.

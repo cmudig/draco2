@@ -84,8 +84,3 @@ attribute(encoding_cardinality,E,N) :-
     not attribute((encoding,binning),E,_).
 attribute(encoding_cardinality,E,N) :-
     attribute((encoding,binning),E,N).
-
-% @helper(mark_has_aggregate) Whether a mark has aggregate encoding.
-attribute(mark_has_aggregate,M) :-
-    entity(encoding,M,E),
-    attribute((encoding,aggregate),E,_).
