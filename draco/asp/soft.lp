@@ -105,12 +105,6 @@ preference(high_cardinality_categorical_grt10,E) :-
     attribute((encoding,scale_type),E,categorical),
     N > 10.
 
-% @soft(high_cardinality_categorical_grt20) Prefer not to use categorical (color) for fields with high cardinality.
-preference(high_cardinality_categorical_grt20,E) :-
-    attribute(encoding_cardinality,E,N),
-    attribute((encoding,scale_type),E,categorical),
-    N > 20.
-
 % @soft(high_cardinality_shape) Prefer not to use high cardinality ordinal for shape.
 preference(high_cardinality_shape,E) :-
     attribute(encoding_cardinality,E,N),

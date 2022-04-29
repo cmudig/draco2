@@ -1106,50 +1106,6 @@ def test_high_cardinality_categorical_grt10():
     )
 
 
-def test_high_cardinality_categorical_grt20():
-    b = soft.blocks["high_cardinality_categorical_grt20"]
-    assert isinstance(b, Block)
-
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,unique),date,1461).
-
-    entity(mark,v,m).
-    entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
-    attribute((encoding,binning),e1,15).
-    attribute((encoding,channel),e1,color).
-
-    entity(scale,v,s1).
-    attribute((scale,channel),s1,color).
-    attribute((scale,type),s1,categorical).
-    """
-        )
-        == []
-    )
-
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,unique),date,1461).
-
-    entity(mark,v,m).
-    entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
-    attribute((encoding,channel),e1,color).
-
-    entity(scale,v,s1).
-    attribute((scale,channel),s1,color).
-    attribute((scale,type),s1,categorical).
-    """
-        )
-        == [("high_cardinality_categorical_grt20", "e1")]
-    )
-
-
 def test_high_cardinality_shape():
     b = soft.blocks["high_cardinality_shape"]
     assert isinstance(b, Block)
