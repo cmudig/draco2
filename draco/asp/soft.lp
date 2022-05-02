@@ -95,9 +95,10 @@ preference(aggregate_no_discrete,M) :-
     attribute((encoding,aggregate),EA,_),
     not attribute(mark_encoding_discrete_or_binned,M,_).
 
-% @soft(x_y_raw) Prefer not to use plot with x and y discrete and no aggregate as it leads to occlusion.
+% @soft(x_y_raw) Prefer not to use plot with both x and y discrete and no aggregate as it leads to occlusion.
 preference(x_y_raw,M) :-
-    attribute(mark_channel_discrete_or_binned,M,(x;y)),
+    attribute(mark_channel_discrete_or_binned,M,x),
+    attribute(mark_channel_discrete_or_binned,M,y),
     entity(encoding,M,E),
     not attribute(mark_encoding_discrete_or_binned,M,E),
     not attribute((encoding,aggregate),E,_).

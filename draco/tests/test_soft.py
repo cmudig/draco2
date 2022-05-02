@@ -1103,7 +1103,7 @@ def test_x_y_raw():
     b = soft.blocks["x_y_raw"]
     assert isinstance(b, Block)
 
-    # x discrete, but size is aggregate
+    # x discrete, color raw continuous
     assert (
         list_preferences(
             b.program
@@ -1113,15 +1113,14 @@ def test_x_y_raw():
     attribute((encoding,channel),e1,x).
 
     entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,size).
-    attribute((encoding,aggregate),e2,mean).
+    attribute((encoding,channel),e2,color).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
 
     entity(scale,v,s2).
-    attribute((scale,channel),s2,size).
+    attribute((scale,channel),s2,color).
     attribute((scale,type),s2,linear).
     """
         )
@@ -1160,7 +1159,7 @@ def test_x_y_raw():
         == []
     )
 
-    # x discrete, color raw continuous
+    # x discrete, y continuous, color raw continuous
     assert (
         list_preferences(
             b.program
@@ -1170,18 +1169,25 @@ def test_x_y_raw():
     attribute((encoding,channel),e1,x).
 
     entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,color).
+    attribute((encoding,channel),e2,y).
+
+    entity(encoding,m1,e3).
+    attribute((encoding,channel),e3,color).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
 
     entity(scale,v,s2).
-    attribute((scale,channel),s2,color).
+    attribute((scale,channel),s2,y).
     attribute((scale,type),s2,linear).
+
+    entity(scale,v,s3).
+    attribute((scale,channel),s3,color).
+    attribute((scale,type),s3,linear).
     """
         )
-        == [("x_y_raw", "m1")]
+        == []
     )
 
     # x, y discrete, color raw continuous
