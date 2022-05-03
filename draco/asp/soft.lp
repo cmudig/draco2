@@ -42,10 +42,10 @@ preference(count_grt1,M) :-
     { entity(encoding,M,E): attribute((encoding,aggregate),E,count) } > 1.
 
 % @soft(number_categorical) Should not use categorical scale for number field.
-preference(number_categorical,M,F,C) :-
+preference(number_categorical,E) :-
     attribute((field,type),F,number),
-    attribute(mark_channel_field,M,C,F),
-    attribute(mark_scale_channel,M,categorical,C).
+    attribute((encoding,field),E,F),
+    attribute((encoding,scale_type),E,categorical).
 
 % @soft(bin_low_unique) Binned field should not have too less unique values.
 preference(bin_low_unique,E) :-
@@ -74,6 +74,70 @@ preference(non_pos_used_before_pos,M) :-
     attribute((mark,channel),M,C),
     domain(non_positional,C),
     not attribute((mark,channel),M,(x;y)).
+
+% @soft(aggregate_group_by_raw) Aggregate plots should not use raw continuous as group by.
+preference(aggregate_group_by_raw,E) :-
+    entity(encoding,M,EA),
+    attribute((encoding,aggregate),EA,_),
+    entity(encoding,M,E),
+    not attribute(mark_encoding_discrete_or_binned,M,E),
+    not attribute((encoding,aggregate),E,_).
+
+% @soft(aggregate_no_discrete) Aggregate should also have a discrete encoding to group by.
+preference(aggregate_no_discrete,M) :-
+    entity(encoding,M,EA),
+    attribute((encoding,aggregate),EA,_),
+    not attribute(mark_encoding_discrete_or_binned,M,_).
+
+% @soft(x_y_raw) Prefer not to use plot with both x and y discrete and no aggregate as it leads to occlusion.
+preference(x_y_raw,M) :-
+    attribute(mark_channel_discrete_or_binned,M,x),
+    attribute(mark_channel_discrete_or_binned,M,y),
+    entity(encoding,M,E),
+    not attribute(mark_encoding_discrete_or_binned,M,E),
+    not attribute((encoding,aggregate),E,_).
+
+% @soft(continuous_not_zero) Prefer to include zero for continuous (binned doesn't need zero).
+preference(continuous_not_zero,E) :-
+    not attribute(mark_encoding_discrete_or_binned,M,E),
+    attribute(mark_encoding_scale,M,E,S),
+    not attribute((scale,zero),S,true).
+
+% @soft(size_not_zero) Prefer zero size (even when binned).
+preference(size_not_zero,E) :-
+    attribute((encoding,channel),E,size),
+    attribute(mark_encoding_scale,M,E,S),
+    not attribute((scale,zero),S,true).
+
+% @soft(continuous_pos_not_zero) Prefer zero continuous positional.
+preference(continuous_pos_not_zero,E) :-
+    attribute((encoding,channel),E,(x;y)),
+    not attribute(mark_encoding_discrete_or_binned,M,E),
+    attribute(mark_encoding_scale,M,E,S),
+    not attribute((scale,zero),S,true).
+
+% @soft(skew_zero) Prefer not to use zero when the difference between min and max is smaller than distance to 0.
+preference(skew_zero,E) :-
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
+    EXT = MAX - MIN,
+    |MAX| > EXT,
+    |MIN| > EXT,
+    entity(encoding,M,E),
+    attribute((encoding,field),E,F),
+    attribute(mark_encoding_scale,M,E,S),
+    attribute((scale,zero),S,true).
+
+% @soft(cross_zero) Prefer not to include zero as baseline when the range of data crosses zero.
+preference(cross_zero,E) :-
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
+    MAX > 0,
+    MIN < 0,
+    entity(encoding,M,E),
+    attribute((encoding,field),E,F),
+    attribute(mark_encoding_scale,M,E,S),
+    attribute((scale,zero),S,true).
 
 % @soft(only_y) Prefer to use only x instead of only y.
 preference(only_y,M) :-
@@ -126,6 +190,76 @@ preference(horizontal_scrolling_col,F) :-
     attribute((facet,channel),F,col),
     attribute(facet_cardinality,F,N),
     N > 5.
+
+% @soft(date_scale) Prefer to use linear/ordinal scale type with dates.
+preference(date_scale,E) :-
+    attribute((field,type),F,datetime),
+    attribute((encoding,field),E,F),
+    not attribute((encoding,scale_type),E,linear),
+    not attribute((encoding,scale_type),E,ordinal).
+
+% @soft(number_linear) Prefer use linear for numbers with high cardinality.
+preference(number_linear,E) :-
+    attribute((field,type),F,number),
+    attribute((field,unique),F,N),
+    N > 20,
+    attribute((encoding,field),E,F),
+    not attribute((encoding,binning),E,_),
+    not attribute((encoding,scale_type),E,linear).
+
+% @soft(value_agg) Prefer not to aggregate for value tasks.
+preference(value_agg,V) :-
+    attribute(task,root,value),
+    entity(mark,V,M),
+    entity(encoding,M,E),
+    attribute((encoding,aggregate),E,_).
+
+% @soft(summary_facet) Prefer not to use facet for summary tasks as it makes it difficult to compare.
+preference(summary_facet,V) :-
+    attribute(task,root,summary),
+    entity(facet,V,_).
+
+% @soft(c_d_col) Prefer not to use continuous on x, discrete on y, and column.
+preference(c_d_col,V) :-
+    entity(mark,V,M),
+    not attribute(mark_channel_discrete_or_binned,M,x),
+    attribute(mark_channel_discrete_or_binned,M,y),
+    entity(facet,V,F),
+    attribute((facet,channel),F,col).
+
+% @soft(date_not_x) Prefer datetime on x.
+preference(date_not_x,E) :-
+    attribute((field,type),F,datetime),
+    attribute((encoding,field),E,F),
+    not attribute((encoding,channel),E,x).
+
+% @soft(x_row) Positional interactions as suggested by Kim et al.
+preference(x_row,V) :-
+    entity(mark,V,M),
+    attribute((mark,channel),M,x),
+    entity(facet,V,F),
+    attribute((facet,channel),F,row).
+
+% @soft(y_row) Positional interactions as suggested by Kim et al.
+preference(y_row,V) :-
+    entity(mark,V,M),
+    attribute((mark,channel),M,y),
+    entity(facet,V,F),
+    attribute((facet,channel),F,row).
+
+% @soft(x_col) Positional interactions as suggested by Kim et al.
+preference(x_col,V) :-
+    entity(mark,V,M),
+    attribute((mark,channel),M,x),
+    entity(facet,V,F),
+    attribute((facet,channel),F,col).
+
+% @soft(y_col) Positional interactions as suggested by Kim et al.
+preference(y_col,V) :-
+    entity(mark,V,M),
+    attribute((mark,channel),M,y),
+    entity(facet,V,F),
+    attribute((facet,channel),F,col).
 
 % @soft(linear_scale) linear scale.
 preference(linear_scale,E) :-
