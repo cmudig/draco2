@@ -7,11 +7,14 @@ def list_preferences(program: str):
     try:
         model = next(run_clingo(helpers.program + define.program + program, 1))
 
-        return [
-            tuple(map(lambda x: x.name, symbol.arguments))
-            for symbol in model.answer_set
-            if symbol.name == "preference"
-        ]
+        return sorted(
+            [
+                tuple(map(lambda x: x.name, symbol.arguments))
+                for symbol in model.answer_set
+                if symbol.name == "preference"
+            ]
+        )
+
     except StopIteration:
         return None
 
@@ -300,7 +303,7 @@ def test_same_field():
     attribute((encoding,field),e4,date).
     """
         )
-        == [("same_field", "temperature"), ("same_field", "date")]
+        == [("same_field", "date"), ("same_field", "temperature")]
     )
 
     # use field temperature twice with mark m1, and field date with 2 different marks
@@ -927,6 +930,592 @@ def test_non_pos_used_before_pos():
     """
         )
         == [("non_pos_used_before_pos", "m1")]
+    )
+
+
+def test_aggregate_group_by_raw():
+    b = soft.blocks["aggregate_group_by_raw"]
+    assert isinstance(b, Block)
+
+    # discrete: bin
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,aggregate),e1,count).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == []
+    )
+
+    # discrete scale
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,aggregate),e1,count).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # aggregate, not raw continous
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,aggregate),e1,count).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,x).
+    attribute((encoding,aggregate),e2,max).
+    """
+        )
+        == []
+    )
+
+    # raw continous
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,aggregate),e1,count).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("aggregate_group_by_raw", "e2")]
+    )
+
+
+def test_aggregate_no_discrete():
+    b = soft.blocks["aggregate_no_discrete"]
+    assert isinstance(b, Block)
+
+    # discrete: bin
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,aggregate),e1,count).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == []
+    )
+
+    # discrete scale
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,aggregate),e1,count).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # aggregate continous
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,aggregate),e1,count).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,x).
+    attribute((encoding,aggregate),e2,max).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("aggregate_no_discrete", "m1")]
+    )
+
+    # raw continous
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,aggregate),e1,count).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("aggregate_no_discrete", "m1")]
+    )
+
+
+def test_x_y_raw():
+    b = soft.blocks["x_y_raw"]
+    assert isinstance(b, Block)
+
+    # x discrete, color raw continuous
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,color).
+    attribute((scale,type),s2,linear).
+    """
+        )
+        == []
+    )
+
+    # x, y discrete, but size is aggregate
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(encoding,m1,e3).
+    attribute((encoding,channel),e3,size).
+    attribute((encoding,aggregate),e3,mean).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,ordinal).
+
+    entity(scale,v,s3).
+    attribute((scale,channel),s3,size).
+    attribute((scale,type),s3,linear).
+    """
+        )
+        == []
+    )
+
+    # x discrete, y continuous, color raw continuous
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(encoding,m1,e3).
+    attribute((encoding,channel),e3,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,linear).
+
+    entity(scale,v,s3).
+    attribute((scale,channel),s3,color).
+    attribute((scale,type),s3,linear).
+    """
+        )
+        == []
+    )
+
+    # x, y discrete, color raw continuous
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(encoding,m1,e3).
+    attribute((encoding,channel),e3,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,ordinal).
+
+    entity(scale,v,s3).
+    attribute((scale,channel),s3,color).
+    attribute((scale,type),s3,linear).
+    """
+        )
+        == [("x_y_raw", "m1")]
+    )
+
+
+def test_continuous_not_zero():
+    b = soft.blocks["continuous_not_zero"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    attribute((scale,zero),s1,true).
+    """
+        )
+        == []
+    )
+
+    # bin no need to zero
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binnning),e1,10).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("continuous_not_zero", "e1")]
+    )
+
+
+def test_size_not_zero():
+    b = soft.blocks["size_not_zero"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    attribute((scale,zero),s1,true).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("size_not_zero", "e1")]
+    )
+
+    # even bin needs to zero
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+    attribute((encoding,binnning),e1,10).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("size_not_zero", "e1")]
+    )
+
+
+def test_continuous_pos_not_zero():
+    b = soft.blocks["continuous_pos_not_zero"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    attribute((scale,zero),s1,true).
+    """
+        )
+        == []
+    )
+
+    # bin no need to zero
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binnning),e1,10).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("continuous_pos_not_zero", "e1")]
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,linear).
+    """
+        )
+        == [("continuous_pos_not_zero", "e1"), ("continuous_pos_not_zero", "e2")]
+    )
+
+
+def test_skew_zero():
+    b = soft.blocks["skew_zero"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,min),temperature,5).
+    attribute((field,max),temperature,20).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e,temperature).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v,s).
+    attribute((scale,channel),s,y).
+    attribute((scale,zero),s,true).
+    """
+        )
+        == []
+    )
+
+    # both max and min are positive
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,min),temperature,800).
+    attribute((field,max),temperature,1000).
+
+    entity(mark,v,m).
+    entity(encoding,m,e).
+    attribute((encoding,field),e,temperature).
+    attribute((encoding,channel),e,y).
+
+    entity(scale,v,s).
+    attribute((scale,channel),s,y).
+    attribute((scale,zero),s,true).
+    """
+        )
+        == [("skew_zero", "e")]
+    )
+
+    # both max and min are negative
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,min),temperature,-500).
+    attribute((field,max),temperature,-700).
+
+    entity(mark,v,m).
+    entity(encoding,m,e).
+    attribute((encoding,field),e,temperature).
+    attribute((encoding,channel),e,y).
+
+    entity(scale,v,s).
+    attribute((scale,channel),s,y).
+    attribute((scale,zero),s,true).
+    """
+        )
+        == [("skew_zero", "e")]
+    )
+
+
+def test_cross_zero():
+    b = soft.blocks["cross_zero"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,min),temperature,0).
+    attribute((field,max),temperature,200).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e,temperature).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v,s).
+    attribute((scale,channel),s,y).
+    attribute((scale,zero),s,true).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,min),temperature,-200).
+    attribute((field,max),temperature,1000).
+
+    entity(mark,v,m).
+    entity(encoding,m,e).
+    attribute((encoding,field),e,temperature).
+    attribute((encoding,channel),e,y).
+
+    entity(scale,v,s).
+    attribute((scale,channel),s,y).
+    attribute((scale,zero),s,true).
+    """
+        )
+        == [("cross_zero", "e")]
     )
 
 
