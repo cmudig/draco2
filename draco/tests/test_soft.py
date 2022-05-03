@@ -503,65 +503,6 @@ def test_count_grt1():
     )
 
 
-def test_shape_high_cardinality():
-    b = soft.blocks["shape_high_cardinality"]
-    assert isinstance(b, Block)
-
-    # unique is low
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,unique),condition,5).
-    attribute((encoding,channel),e1,shape).
-    attribute((encoding,field),e1,condition).
-    """
-        )
-        == []
-    )
-
-    # unique is high, binning is low
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,unique),temperature,111).
-    attribute((encoding,channel),e1,shape).
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,binning),e1,5).
-    """
-        )
-        == []
-    )
-
-    # unique too high
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,unique),condition,15).
-    attribute((encoding,channel),e1,shape).
-    attribute((encoding,field),e1,condition).
-    """
-        )
-        == [("shape_high_cardinality", "e1")]
-    )
-
-    # binning too high
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,unique),temperature,111).
-    attribute((encoding,channel),e1,shape).
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,binning),e1,15).
-    """
-        )
-        == [("shape_high_cardinality", "e1")]
-    )
-
-
 def test_number_categorical():
     b = soft.blocks["number_categorical"]
     assert isinstance(b, Block)
@@ -1237,6 +1178,29 @@ def test_horizontal_scrolling_x():
     entity(encoding,m,e1).
     attribute((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,unique),date,1461).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
     """
         )
         == [("horizontal_scrolling_x", "e1")]
