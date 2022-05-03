@@ -606,7 +606,7 @@ def test_number_categorical():
     attribute((scale,type),s1,categorical).
     """
         )
-        == [("number_categorical", "m", "temperature", "x")]
+        == [("number_categorical", "e1")]
     )
 
     # two scales, categorical for number
@@ -624,13 +624,9 @@ def test_number_categorical():
     entity(scale,v1,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,categorical).
-
-    entity(scale,v2,s2).
-    attribute((scale,channel),s2,x).
-    attribute((scale,type),s2,linear).
     """
         )
-        == [("number_categorical", "m", "temperature", "x")]
+        == [("number_categorical", "e1")]
     )
 
     # number field used for two times (in same mark)
@@ -658,7 +654,7 @@ def test_number_categorical():
     attribute((scale,type),s2,categorical).
     """
         )
-        == [("number_categorical", "m1", "temperature", "color")]
+        == [("number_categorical", "e2")]
     )
 
 
@@ -1520,6 +1516,613 @@ def test_cross_zero():
     """
         )
         == [("cross_zero", "e")]
+    )
+
+
+def test_date_scale():
+    b = soft.blocks["date_scale"]
+    assert isinstance(b, Block)
+
+    # scale on view, linear
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),date,datetime).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root, ordinal
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),date,datetime).
+
+    entity(view,root,v).
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # scale on view, log
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),date,datetime).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("date_scale", "e1")]
+    )
+
+    # scale on root, categorical
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),date,datetime).
+
+    entity(view,root,v).
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == [("date_scale", "e1")]
+    )
+
+
+def test_number_linear():
+    b = soft.blocks["number_linear"]
+    assert isinstance(b, Block)
+
+    # scale on view, linear
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperture,number).
+    attribute((field,unique),temperture,111).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,temperture).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root, with binning, ordinal
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperture,number).
+    attribute((field,unique),temperture,111).
+
+    entity(view,root,v).
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,temperture).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,20).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # scale on view, ordinal
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperture,number).
+    attribute((field,unique),temperture,111).
+
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,temperture).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("number_linear", "e1")]
+    )
+
+    # scale on root, log
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperture,number).
+    attribute((field,unique),temperture,111).
+
+    entity(view,root,v).
+    entity(mark,v,m).
+    entity(encoding,m,e1).
+    attribute((encoding,field),e1,temperture).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("number_linear", "e1")]
+    )
+
+
+def test_value_agg():
+    b = soft.blocks["value_agg"]
+    assert isinstance(b, Block)
+
+    # value task, no agg
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,binning),e1,20).
+    """
+        )
+        == []
+    )
+
+    # summary task, v has agg
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,aggregate),e1,max).
+    """
+        )
+        == []
+    )
+
+    # value task, v1 has agg
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(view,root,v1).
+    entity(mark,v1,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,aggregate),e1,max).
+
+    entity(view,root,v2).
+    entity(mark,v2,m2).
+    entity(encoding,m2,e2).
+    attribute((encoding,binning),e2,20).
+    """
+        )
+        == [("value_agg", "v1")]
+    )
+
+
+def test_summary_facet():
+    b = soft.blocks["summary_facet"]
+    assert isinstance(b, Block)
+
+    # summary task, no facet
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,binning),e1,20).
+    """
+        )
+        == []
+    )
+
+    # value task, v has facet
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(view,root,v).
+    entity(facet,v,f).
+    """
+        )
+        == []
+    )
+
+    # summary task, v has facet
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(view,root,v1).
+    entity(facet,v1,f).
+
+    entity(view,root,v2).
+    entity(mark,v2,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,binning),e1,20).
+    """
+        )
+        == [("summary_facet", "v1")]
+    )
+
+
+def test_c_d_col():
+    b = soft.blocks["c_d_col"]
+    assert isinstance(b, Block)
+
+    # continuous x, discrete y (binning), row
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+
+    entity(facet,v,f).
+    attribute((facet,channel),f,row).
+    """
+        )
+        == []
+    )
+
+    # continuous y, discrete x (binning), column
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(facet,v,f).
+    attribute((facet,channel),f,col).
+    """
+        )
+        == []
+    )
+
+    # continuous x, discrete y (ordinal), column
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,ordinal).
+
+    entity(facet,v,f).
+    attribute((facet,channel),f,col).
+    """
+        )
+        == [("c_d_col", "v")]
+    )
+
+
+def test_date_not_x():
+    b = soft.blocks["date_not_x"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),date,datetime).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,x).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),date,datetime).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,date).
+    attribute((encoding,channel),e1,y).
+    """
+        )
+        == [("date_not_x", "e1")]
+    )
+
+
+def test_x_row():
+    b = soft.blocks["x_row"]
+    assert isinstance(b, Block)
+
+    # x and row not in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v1,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(facet,v2,f1).
+    attribute((facet,channel),f1,row).
+    """
+        )
+        == []
+    )
+
+    # x and col in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(facet,v,f1).
+    attribute((facet,channel),f1,col).
+    """
+        )
+        == []
+    )
+
+    # x and row in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(facet,v,f1).
+    attribute((facet,channel),f1,row).
+    """
+        )
+        == [("x_row", "v")]
+    )
+
+
+def test_y_row():
+    b = soft.blocks["y_row"]
+    assert isinstance(b, Block)
+
+    # y and row not in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v1,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(facet,v2,f1).
+    attribute((facet,channel),f1,row).
+    """
+        )
+        == []
+    )
+
+    # y and col in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(facet,v,f1).
+    attribute((facet,channel),f1,col).
+    """
+        )
+        == []
+    )
+
+    # y and row in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(facet,v,f1).
+    attribute((facet,channel),f1,row).
+    """
+        )
+        == [("y_row", "v")]
+    )
+
+
+def test_x_col():
+    b = soft.blocks["x_col"]
+    assert isinstance(b, Block)
+
+    # x and col not in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v1,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(facet,v2,f1).
+    attribute((facet,channel),f1,col).
+    """
+        )
+        == []
+    )
+
+    # x and row in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(facet,v,f1).
+    attribute((facet,channel),f1,row).
+    """
+        )
+        == []
+    )
+
+    # x and col in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(facet,v,f1).
+    attribute((facet,channel),f1,col).
+    """
+        )
+        == [("x_col", "v")]
+    )
+
+
+def test_y_col():
+    b = soft.blocks["y_col"]
+    assert isinstance(b, Block)
+
+    # y and col not in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v1,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(facet,v2,f1).
+    attribute((facet,channel),f1,col).
+    """
+        )
+        == []
+    )
+
+    # y and row in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(facet,v,f1).
+    attribute((facet,channel),f1,row).
+    """
+        )
+        == []
+    )
+
+    # y and col in the same view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(facet,v,f1).
+    attribute((facet,channel),f1,col).
+    """
+        )
+        == [("y_col", "v")]
     )
 
 
