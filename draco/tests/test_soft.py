@@ -7,15 +7,13 @@ def list_preferences(program: str):
     try:
         model = next(run_clingo(helpers.program + define.program + program, 1))
 
-        pref_list = [
-            tuple(map(lambda x: x.name, symbol.arguments))
-            for symbol in model.answer_set
-            if symbol.name == "preference"
-        ]
-
-        pref_list.sort(key=lambda x: x[1])
-
-        return pref_list
+        return sorted(
+            [
+                tuple(map(lambda x: x.name, symbol.arguments))
+                for symbol in model.answer_set
+                if symbol.name == "preference"
+            ]
+        )
 
     except StopIteration:
         return None
