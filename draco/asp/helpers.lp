@@ -84,3 +84,11 @@ attribute(encoding_cardinality,E,N) :-
     not attribute((encoding,binning),E,_).
 attribute(encoding_cardinality,E,N) :-
     attribute((encoding,binning),E,N).
+
+% @helper(facet_cardinality,Fa,N) The cardinality of a facet.
+attribute(facet_cardinality,Fa,N) :-
+    attribute((field,unique),Fi,N),
+    attribute((facet,field),Fa,Fi),
+    not attribute((facet,binning),Fa,_).
+attribute(facet_cardinality,Fa,N) :-
+    attribute((facet,binning),Fa,N).
