@@ -41,12 +41,6 @@ preference(count_grt1,M) :-
     entity(mark,_,M),
     { entity(encoding,M,E): attribute((encoding,aggregate),E,count) } > 1.
 
-% @soft(shape_high_cardinality) Shape channel should not have too high cardinality.
-preference(shape_high_cardinality,E) :-
-    attribute((encoding,channel),E,shape),
-    attribute(encoding_cardinality,E,N),
-    N > 5.
-
 % @soft(number_categorical) Should not use categorical scale for number field.
 preference(number_categorical,E) :-
     attribute((field,type),F,number),

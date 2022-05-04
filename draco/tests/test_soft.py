@@ -7,11 +7,14 @@ def list_preferences(program: str):
     try:
         model = next(run_clingo(helpers.program + define.program + program, 1))
 
-        return [
-            tuple(map(lambda x: x.name, symbol.arguments))
-            for symbol in model.answer_set
-            if symbol.name == "preference"
-        ]
+        return sorted(
+            [
+                tuple(map(lambda x: x.name, symbol.arguments))
+                for symbol in model.answer_set
+                if symbol.name == "preference"
+            ]
+        )
+
     except StopIteration:
         return None
 
@@ -300,7 +303,7 @@ def test_same_field():
     attribute((encoding,field),e4,date).
     """
         )
-        == [("same_field", "temperature"), ("same_field", "date")]
+        == [("same_field", "date"), ("same_field", "temperature")]
     )
 
     # use field temperature twice with mark m1, and field date with 2 different marks
@@ -500,65 +503,6 @@ def test_count_grt1():
     """
         )
         == [("count_grt1", "m")]
-    )
-
-
-def test_shape_high_cardinality():
-    b = soft.blocks["shape_high_cardinality"]
-    assert isinstance(b, Block)
-
-    # unique is low
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,unique),condition,5).
-    attribute((encoding,channel),e1,shape).
-    attribute((encoding,field),e1,condition).
-    """
-        )
-        == []
-    )
-
-    # unique is high, binning is low
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,unique),temperature,111).
-    attribute((encoding,channel),e1,shape).
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,binning),e1,5).
-    """
-        )
-        == []
-    )
-
-    # unique too high
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,unique),condition,15).
-    attribute((encoding,channel),e1,shape).
-    attribute((encoding,field),e1,condition).
-    """
-        )
-        == [("shape_high_cardinality", "e1")]
-    )
-
-    # binning too high
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute((field,unique),temperature,111).
-    attribute((encoding,channel),e1,shape).
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,binning),e1,15).
-    """
-        )
-        == [("shape_high_cardinality", "e1")]
     )
 
 
