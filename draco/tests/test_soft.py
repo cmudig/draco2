@@ -886,6 +886,7 @@ def test_aggregate_group_by_raw():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
+
     entity(encoding,m1,e2).
     attribute((encoding,binning),e2,10).
     """
@@ -901,8 +902,10 @@ def test_aggregate_group_by_raw():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
@@ -919,6 +922,7 @@ def test_aggregate_group_by_raw():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,x).
     attribute((encoding,aggregate),e2,max).
@@ -935,8 +939,10 @@ def test_aggregate_group_by_raw():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
@@ -958,6 +964,7 @@ def test_aggregate_no_discrete():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
+
     entity(encoding,m1,e2).
     attribute((encoding,binning),e2,10).
     """
@@ -973,8 +980,10 @@ def test_aggregate_no_discrete():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
@@ -991,9 +1000,11 @@ def test_aggregate_no_discrete():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,x).
     attribute((encoding,aggregate),e2,max).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
@@ -1010,8 +1021,10 @@ def test_aggregate_no_discrete():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
@@ -1033,11 +1046,14 @@ def test_x_y_raw():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,color).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
+
     entity(scale,v,s2).
     attribute((scale,channel),s2,color).
     attribute((scale,type),s2,linear).
@@ -1054,17 +1070,22 @@ def test_x_y_raw():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
+
     entity(encoding,m1,e3).
     attribute((encoding,channel),e3,size).
     attribute((encoding,aggregate),e3,mean).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
+
     entity(scale,v,s2).
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,ordinal).
+
     entity(scale,v,s3).
     attribute((scale,channel),s3,size).
     attribute((scale,type),s3,linear).
@@ -1081,16 +1102,21 @@ def test_x_y_raw():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
+
     entity(encoding,m1,e3).
     attribute((encoding,channel),e3,color).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
+
     entity(scale,v,s2).
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,linear).
+
     entity(scale,v,s3).
     attribute((scale,channel),s3,color).
     attribute((scale,type),s3,linear).
@@ -1107,16 +1133,21 @@ def test_x_y_raw():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
+
     entity(encoding,m1,e3).
     attribute((encoding,channel),e3,color).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
+
     entity(scale,v,s2).
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,ordinal).
+
     entity(scale,v,s3).
     attribute((scale,channel),s3,color).
     attribute((scale,type),s3,linear).
@@ -1137,6 +1168,7 @@ def test_continuous_not_zero():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
@@ -1155,6 +1187,7 @@ def test_continuous_not_zero():
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binnning),e1,10).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
@@ -1170,6 +1203,7 @@ def test_continuous_not_zero():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
@@ -1190,6 +1224,7 @@ def test_size_not_zero():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,linear).
@@ -1206,6 +1241,7 @@ def test_size_not_zero():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,linear).
@@ -1223,6 +1259,7 @@ def test_size_not_zero():
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
     attribute((encoding,binnning),e1,10).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,ordinal).
@@ -1243,6 +1280,7 @@ def test_continuous_pos_not_zero():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
@@ -1261,6 +1299,7 @@ def test_continuous_pos_not_zero():
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binnning),e1,10).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
@@ -1276,6 +1315,7 @@ def test_continuous_pos_not_zero():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
@@ -1291,11 +1331,14 @@ def test_continuous_pos_not_zero():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
+
     entity(scale,v,s2).
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,linear).
@@ -1315,10 +1358,12 @@ def test_skew_zero():
             + """
     attribute((field,min),temperature,5).
     attribute((field,max),temperature,20).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e,temperature).
     attribute((encoding,channel),e1,y).
+
     entity(scale,v,s).
     attribute((scale,channel),s,y).
     attribute((scale,zero),s,true).
@@ -1334,10 +1379,12 @@ def test_skew_zero():
             + """
     attribute((field,min),temperature,800).
     attribute((field,max),temperature,1000).
+
     entity(mark,v,m).
     entity(encoding,m,e).
     attribute((encoding,field),e,temperature).
     attribute((encoding,channel),e,y).
+
     entity(scale,v,s).
     attribute((scale,channel),s,y).
     attribute((scale,zero),s,true).
@@ -1353,10 +1400,12 @@ def test_skew_zero():
             + """
     attribute((field,min),temperature,-500).
     attribute((field,max),temperature,-700).
+
     entity(mark,v,m).
     entity(encoding,m,e).
     attribute((encoding,field),e,temperature).
     attribute((encoding,channel),e,y).
+
     entity(scale,v,s).
     attribute((scale,channel),s,y).
     attribute((scale,zero),s,true).
@@ -1376,10 +1425,12 @@ def test_cross_zero():
             + """
     attribute((field,min),temperature,0).
     attribute((field,max),temperature,200).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e,temperature).
     attribute((encoding,channel),e1,y).
+
     entity(scale,v,s).
     attribute((scale,channel),s,y).
     attribute((scale,zero),s,true).
@@ -1394,10 +1445,12 @@ def test_cross_zero():
             + """
     attribute((field,min),temperature,-200).
     attribute((field,max),temperature,1000).
+
     entity(mark,v,m).
     entity(encoding,m,e).
     attribute((encoding,field),e,temperature).
     attribute((encoding,channel),e,y).
+
     entity(scale,v,s).
     attribute((scale,channel),s,y).
     attribute((scale,zero),s,true).
@@ -1431,6 +1484,7 @@ def test_only_y():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
+
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,size).
     """
@@ -1446,6 +1500,7 @@ def test_only_y():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
+
     entity(mark,v,m2).
     entity(encoding,m2,e2).
     attribute((encoding,channel),e2,x).
@@ -1498,11 +1553,13 @@ def test_high_cardinality_ordinal():
             b.program
             + """
     attribute((field,unique),date,1461).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binning),e1,20).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
@@ -1517,10 +1574,12 @@ def test_high_cardinality_ordinal():
             b.program
             + """
     attribute((field,unique),date,1461).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
@@ -1539,10 +1598,12 @@ def test_high_cardinality_categorical_grt10():
             b.program
             + """
     attribute((field,unique),weather,5).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e1,weather).
     attribute((encoding,channel),e1,color).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,categorical).
@@ -1556,10 +1617,12 @@ def test_high_cardinality_categorical_grt10():
             b.program
             + """
     attribute((field,unique),weather,15).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e1,weather).
     attribute((encoding,channel),e1,color).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,categorical).
@@ -1609,11 +1672,13 @@ def test_high_cardinality_size():
             b.program
             + """
     attribute((field,unique),date,1461).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e1,date).
     attribute((encoding,binning),e1,20).
     attribute((encoding,channel),e1,x).
+
     entity(encoding,m,e2).
     attribute((encoding,channel),e1,size).
     """
@@ -1627,12 +1692,15 @@ def test_high_cardinality_size():
             b.program
             + """
     attribute((field,unique),weather,150).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e1,weather).
     attribute((encoding,channel),e1,x).
+
     entity(encoding,m,e2).
     attribute((encoding,channel),e1,size).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
@@ -1647,12 +1715,15 @@ def test_high_cardinality_size():
             b.program
             + """
     attribute((field,unique),temperature,150).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,y).
+
     entity(encoding,m,e2).
     attribute((encoding,channel),e2,size).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,y).
     attribute((scale,type),s1,linear).
@@ -1671,6 +1742,7 @@ def test_horizontal_scrolling_x():
             b.program
             + """
     attribute((field,unique),date,1461).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e1,date).
@@ -1686,10 +1758,12 @@ def test_horizontal_scrolling_x():
             b.program
             + """
     attribute((field,unique),date,1461).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
@@ -1703,10 +1777,12 @@ def test_horizontal_scrolling_x():
             b.program
             + """
     attribute((field,unique),date,1461).
+
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
+
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
@@ -1725,6 +1801,7 @@ def test_horizontal_scrolling_col():
             b.program
             + """
     attribute((field,unique),date,1461).
+
     entity(facet,v,f).
     attribute((facet,field),f,date).
     attribute((facet,channel),f,col).
@@ -1739,6 +1816,7 @@ def test_horizontal_scrolling_col():
             b.program
             + """
     attribute((field,unique),date,1461).
+
     entity(facet,v,f).
     attribute((facet,field),f,date).
     attribute((facet,channel),f,col).
