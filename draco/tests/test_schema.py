@@ -18,8 +18,9 @@ SIMPLE_SCHEMA = {
             "max": 2,
             "min": 1,
             "std": 0,
+            "entropy": 0.6931,
         },
-        {"name": "text", "type": "string", "unique": 1, "freq": 2},
+        {"name": "text", "type": "string", "unique": 1, "freq": 2, "entropy": 0},
     ],
 }
 
@@ -44,18 +45,11 @@ def test_load_df():
                 "max": 2,
                 "min": 1,
                 "std": 0,
+                "entropy": 0.6931,
             },
-            {"name": "text", "type": "string", "unique": 1, "freq": 2},
-            {
-                "name": "bools",
-                "type": "boolean",
-                "unique": 2,
-            },
-            {
-                "name": "dates",
-                "type": "datetime",
-                "unique": 2,
-            },
+            {"name": "text", "type": "string", "unique": 1, "freq": 2, "entropy": 0},
+            {"name": "bools", "type": "boolean", "unique": 2, "entropy": 0.6931},
+            {"name": "dates", "type": "datetime", "unique": 2, "entropy": 0.6931},
         ],
     }
 
