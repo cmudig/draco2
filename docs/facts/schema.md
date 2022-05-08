@@ -50,7 +50,7 @@ entity(field,root,f1).
 attribute((field,name),f1,date).
 attribute((field,type),f1,datetime).
 attribute((field,unique),f1,1461).
-attribute((field,entropy),f1,7.2869).
+attribute((field,entropy),f1,7).
 
 entity(field,root,f2).
 attribute((field,name),f2,precipitation).
@@ -59,12 +59,12 @@ attribute((field,unique),f2,111).
 attribute((field,min),f2,0).
 attribute((field,max),f2,55).
 attribute((field,std),f2,6).
-attribute((field,entropy),f1,2.4218).
+attribute((field,entropy),f1,2).
 
 entity(field,root,f3).
 attribute((field,name),f3,weather).
 attribute((field,type),f3,string).
 attribute((field,unique),f3,5).
 attribute((field,freq),f3,714).
-attribute((field,entropy),f1,1.2006).
+attribute((field,entropy),f1,1).
 ```
