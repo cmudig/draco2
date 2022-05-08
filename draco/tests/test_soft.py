@@ -2433,6 +2433,190 @@ def test_y_col():
     )
 
 
+def test_color_entropy_high():
+    b = soft.blocks["color_entropy_high"]
+    assert isinstance(b, Block)
+
+    # scale on view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,2).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,6).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("color_entropy_high", "e1")]
+    )
+
+
+def test_color_entropy_low():
+    b = soft.blocks["color_entropy_low"]
+    assert isinstance(b, Block)
+
+    # scale on view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,6).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,5).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("color_entropy_low", "e1")]
+    )
+
+
+def test_size_entropy_high():
+    b = soft.blocks["size_entropy_high"]
+    assert isinstance(b, Block)
+
+    # scale on view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,3).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,6).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("size_entropy_high", "e1")]
+    )
+
+
+def test_size_entropy_low():
+    b = soft.blocks["size_entropy_low"]
+    assert isinstance(b, Block)
+
+    # scale on view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,6).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,4).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("size_entropy_low", "e1")]
+    )
+
+
 def test_linear_scale():
     b = soft.blocks["linear_scale"]
     assert isinstance(b, Block)
@@ -2647,4 +2831,95 @@ def test_categorical_scale():
     """
         )
         == [("categorical_scale", "e1")]
+    )
+
+
+def test_stack_zero():
+    b = soft.blocks["stack_zero"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,stack),e1,zero).
+    """
+        )
+        == [("stack_zero", "e1")]
+    )
+
+
+def test_stack_center():
+    b = soft.blocks["stack_center"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,stack),e1,zero).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,stack),e1,center).
+    """
+        )
+        == [("stack_center", "e1")]
+    )
+
+
+def test_stack_normalize():
+    b = soft.blocks["stack_normalize"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,stack),e1,center).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,stack),e1,normalize).
+    """
+        )
+        == [("stack_normalize", "e1")]
     )
