@@ -2442,7 +2442,7 @@ def test_color_entropy_high():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,2).
+    attribute((field,entropy),precipitation,200).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -2462,7 +2462,7 @@ def test_color_entropy_high():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,6).
+    attribute((field,entropy),precipitation,6000).
 
     entity(view,root,v).
     entity(mark,v,m1).
@@ -2488,7 +2488,7 @@ def test_color_entropy_low():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,6).
+    attribute((field,entropy),precipitation,6000).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -2508,7 +2508,7 @@ def test_color_entropy_low():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,5).
+    attribute((field,entropy),precipitation,5000).
 
     entity(view,root,v).
     entity(mark,v,m1).
@@ -2534,7 +2534,7 @@ def test_size_entropy_high():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,3).
+    attribute((field,entropy),precipitation,3000).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -2554,7 +2554,7 @@ def test_size_entropy_high():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,6).
+    attribute((field,entropy),precipitation,6000).
 
     entity(view,root,v).
     entity(mark,v,m1).
@@ -2580,7 +2580,7 @@ def test_size_entropy_low():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,6).
+    attribute((field,entropy),precipitation,6000).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -2600,7 +2600,7 @@ def test_size_entropy_low():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,4).
+    attribute((field,entropy),precipitation,4000).
 
     entity(view,root,v).
     entity(mark,v,m1).
