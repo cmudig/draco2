@@ -44,7 +44,7 @@ def schema_from_dataframe(
 
         vc = pd.Series(column).value_counts(normalize=True, sort=False)
         entropy = -(vc * np.log(vc) / np.log(e)).sum()
-        entropy = round(entropy)
+        entropy = round(entropy * 1000)
 
         props = {"name": col, "type": data_type, "unique": unique, "entropy": entropy}
 
