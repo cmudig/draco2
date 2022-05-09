@@ -1,6 +1,8 @@
+from math import e
 from pathlib import Path
 from typing import Any, Dict
 
+import numpy as np
 import pandas as pd
 
 
@@ -40,7 +42,11 @@ def schema_from_dataframe(
         unique = pd.Series.nunique(column)
         data_type = parse_data_type(dtype)
 
-        props = {"name": col, "type": data_type, "unique": unique}
+        vc = pd.Series(column).value_counts(normalize=True, sort=False)
+        entropy = -(vc * np.log(vc) / np.log(e)).sum()
+        entropy = round(entropy * 1000)
+
+        props = {"name": col, "type": data_type, "unique": unique, "entropy": entropy}
 
         if data_type == "number":
             props["min"] = int(column.min())
