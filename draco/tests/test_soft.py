@@ -2433,6 +2433,190 @@ def test_y_col():
     )
 
 
+def test_color_entropy_high():
+    b = soft.blocks["color_entropy_high"]
+    assert isinstance(b, Block)
+
+    # scale on view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,200).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,6000).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("color_entropy_high", "e1")]
+    )
+
+
+def test_color_entropy_low():
+    b = soft.blocks["color_entropy_low"]
+    assert isinstance(b, Block)
+
+    # scale on view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,6000).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,5000).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("color_entropy_low", "e1")]
+    )
+
+
+def test_size_entropy_high():
+    b = soft.blocks["size_entropy_high"]
+    assert isinstance(b, Block)
+
+    # scale on view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,3000).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,6000).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("size_entropy_high", "e1")]
+    )
+
+
+def test_size_entropy_low():
+    b = soft.blocks["size_entropy_low"]
+    assert isinstance(b, Block)
+
+    # scale on view
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,6000).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,entropy),precipitation,4000).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("size_entropy_low", "e1")]
+    )
+
+
 def test_linear_scale():
     b = soft.blocks["linear_scale"]
     assert isinstance(b, Block)
@@ -2647,4 +2831,541 @@ def test_categorical_scale():
     """
         )
         == [("categorical_scale", "e1")]
+    )
+
+
+def test_stack_zero():
+    b = soft.blocks["stack_zero"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,stack),e1,zero).
+    """
+        )
+        == [("stack_zero", "e1")]
+    )
+
+
+def test_stack_center():
+    b = soft.blocks["stack_center"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,stack),e1,zero).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,stack),e1,center).
+    """
+        )
+        == [("stack_center", "e1")]
+    )
+
+
+def test_stack_normalize():
+    b = soft.blocks["stack_normalize"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,stack),e1,center).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    attribute((encoding,stack),e1,normalize).
+    """
+        )
+        == [("stack_normalize", "e1")]
+    )
+
+
+def test_value_point():
+    b = soft.blocks["value_point"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,line).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+    """
+        )
+        == [("value_point", "m1")]
+    )
+
+
+def test_value_bar():
+    b = soft.blocks["value_bar"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(mark,v,m2).
+    attribute((mark,type),m2,bar).
+    """
+        )
+        == [("value_bar", "m1"), ("value_bar", "m2")]
+    )
+
+
+def test_value_line():
+    b = soft.blocks["value_line"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,line).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,line).
+    """
+        )
+        == [("value_line", "m1")]
+    )
+
+
+def test_value_area():
+    b = soft.blocks["value_area"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,area).
+    """
+        )
+        == [("value_area", "m1")]
+    )
+
+
+def test_value_text():
+    b = soft.blocks["value_text"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,tick).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,text).
+    """
+        )
+        == [("value_text", "m1")]
+    )
+
+
+def test_value_tick():
+    b = soft.blocks["value_tick"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,tick).
+    """
+        )
+        == [("value_tick", "m1")]
+    )
+
+
+def test_value_rect():
+    b = soft.blocks["value_rect"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,area).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,rect).
+
+    entity(mark,v,m2).
+    attribute((mark,type),m2,rect).
+    """
+        )
+        == [("value_rect", "m1"), ("value_rect", "m2")]
+    )
+
+
+def test_summary_point():
+    b = soft.blocks["summary_point"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+    """
+        )
+        == [("summary_point", "m1")]
+    )
+
+
+def test_summary_bar():
+    b = soft.blocks["summary_bar"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(mark,v,m2).
+    attribute((mark,type),m2,bar).
+    """
+        )
+        == [("summary_bar", "m1"), ("summary_bar", "m2")]
+    )
+
+
+def test_summary_line():
+    b = soft.blocks["summary_line"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,line).
+    """
+        )
+        == [("summary_line", "m1")]
+    )
+
+
+def test_summary_area():
+    b = soft.blocks["summary_area"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,area).
+    """
+        )
+        == [("summary_area", "m1")]
+    )
+
+
+def test_summary_text():
+    b = soft.blocks["summary_text"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,tick).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,text).
+    """
+        )
+        == [("summary_text", "m1")]
+    )
+
+
+def test_summary_tick():
+    b = soft.blocks["summary_tick"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,tick).
+    """
+        )
+        == [("summary_tick", "m1")]
+    )
+
+
+def test_summary_rect():
+    b = soft.blocks["summary_rect"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,area).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,rect).
+
+    entity(mark,v,m2).
+    attribute((mark,type),m2,rect).
+    """
+        )
+        == [("summary_rect", "m1"), ("summary_rect", "m2")]
     )
