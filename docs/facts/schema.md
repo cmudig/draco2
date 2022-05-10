@@ -26,6 +26,9 @@ Draco can use information about the field type and field statistics. Each field 
 `(field,unique)`
 : The number of unique values.
 
+`(field,entropy)`
+: The entropy of the field. (To save a more accurate value, this field entropy value is 1000 times of the actual entropy).
+
 `(field,min)`
 : The minimum value. Only used for numbers.
 
@@ -47,6 +50,7 @@ entity(field,root,f1).
 attribute((field,name),f1,date).
 attribute((field,type),f1,datetime).
 attribute((field,unique),f1,1461).
+attribute((field,entropy),f1,7287).
 
 entity(field,root,f2).
 attribute((field,name),f2,precipitation).
@@ -55,10 +59,12 @@ attribute((field,unique),f2,111).
 attribute((field,min),f2,0).
 attribute((field,max),f2,55).
 attribute((field,std),f2,6).
+attribute((field,entropy),f1,2422).
 
 entity(field,root,f3).
 attribute((field,name),f3,weather).
 attribute((field,type),f3,string).
 attribute((field,unique),f3,5).
 attribute((field,freq),f3,714).
+attribute((field,entropy),f1,1201).
 ```
