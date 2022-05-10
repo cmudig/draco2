@@ -320,3 +320,73 @@ preference(stack_center,E) :-
 % @soft(stack_normalize) Normalize between groupbys as stack op.
 preference(stack_normalize,E) :-
     attribute((encoding,stack),E,normalize).
+
+% @soft(value_point) Point mark for value tasks.
+preference(value_point,M) :-
+    attribute(task,root,value),
+    attribute((mark,type),M,point).
+
+% @soft(value_bar) Bar mark for value tasks.
+preference(value_bar,M) :-
+    attribute(task,root,value),
+    attribute((mark,type),M,bar).
+
+% @soft(value_line) Line mark for value tasks.
+preference(value_line,M) :-
+    attribute(task,root,value),
+    attribute((mark,type),M,line).
+
+% @soft(value_area) Area mark for value tasks.
+preference(value_area,M) :-
+    attribute(task,root,value),
+    attribute((mark,type),M,area).
+
+% @soft(value_text) Text mark for value tasks.
+preference(value_text,M) :-
+    attribute(task,root,value),
+    attribute((mark,type),M,text).
+
+% @soft(value_tick) Tick mark for value tasks.
+preference(value_tick,M) :-
+    attribute(task,root,value),
+    attribute((mark,type),M,tick).
+
+% @soft(value_rect) Rect mark for value tasks.
+preference(value_rect,M) :-
+    attribute(task,root,value),
+    attribute((mark,type),M,rect).
+
+% @soft(summary_point) Point mark for summary tasks.
+preference(summary_point,M) :-
+    attribute(task,root,summary),
+    attribute((mark,type),M,point).
+
+% @soft(summary_bar) Bar mark for summary tasks.
+preference(summary_bar,M) :-
+    attribute(task,root,summary),
+    attribute((mark,type),M,bar).
+
+% @soft(summary_line) Line mark for summary tasks.
+preference(summary_line,M) :-
+    attribute(task,root,summary),
+    attribute((mark,type),M,line).
+
+% @soft(summary_area) Area mark for summary tasks.
+preference(summary_area,M) :-
+    attribute(task,root,summary),
+    attribute((mark,type),M,area).
+
+% @soft(summary_text) Text mark for summary tasks.
+preference(summary_text,M) :-
+    attribute(task,root,summary),
+    attribute((mark,type),M,text).
+
+% @soft(summary_tick) Tick mark for summary tasks.
+preference(summary_tick,M) :-
+    attribute(task,root,summary),
+    attribute((mark,type),M,tick).
+
+% @soft(summary_rect) Rect mark for summary tasks.
+preference(summary_rect,M) :-
+    attribute(task,root,summary),
+    attribute((mark,type),M,rect).
