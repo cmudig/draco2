@@ -261,6 +261,38 @@ preference(y_col,V) :-
     entity(facet,V,F),
     attribute((facet,channel),F,col).
 
+% @soft(color_entropy_high) Entropy, primary quantitaty interactions as suggested by Kim et al.
+preference(color_entropy_high,E) :-
+    attribute((field,entropy),F,EN),
+    attribute((encoding,field),E,F),
+    attribute((encoding,channel),E,color),
+    attribute((encoding,scale_type),E,linear),
+    EN > 5000.
+
+% @soft(color_entropy_low) Entropy, primary quantitaty interactions as suggested by Kim et al.
+preference(color_entropy_low,E) :-
+    attribute((field,entropy),F,EN),
+    attribute((encoding,field),E,F),
+    attribute((encoding,channel),E,color),
+    attribute((encoding,scale_type),E,linear),
+    EN <= 5000.
+
+% @soft(size_entropy_high) Entropy, primary quantitaty interactions as suggested by Kim et al.
+preference(size_entropy_high,E) :-
+    attribute((field,entropy),F,EN),
+    attribute((encoding,field),E,F),
+    attribute((encoding,channel),E,size),
+    attribute((encoding,scale_type),E,linear),
+    EN > 5000.
+
+% @soft(size_entropy_low) Entropy, primary quantitaty interactions as suggested by Kim et al.
+preference(size_entropy_low,E) :-
+    attribute((field,entropy),F,EN),
+    attribute((encoding,field),E,F),
+    attribute((encoding,channel),E,size),
+    attribute((encoding,scale_type),E,linear),
+    EN <= 5000.
+
 % @soft(linear_scale) linear scale.
 preference(linear_scale,E) :-
     attribute((encoding,scale_type),E,linear).
@@ -276,6 +308,18 @@ preference(ordinal_scale,E) :-
 % @soft(categorical_scale) categorical scale.
 preference(categorical_scale,E) :-
     attribute((encoding,scale_type),E,categorical).
+
+% @soft(stack_zero) Zero base for stack op.
+preference(stack_zero,E) :-
+    attribute((encoding,stack),E,zero).
+
+% @soft(stack_center) Center groupbys as stack op.
+preference(stack_center,E) :-
+    attribute((encoding,stack),E,center).
+
+% @soft(stack_normalize) Normalize between groupbys as stack op.
+preference(stack_normalize,E) :-
+    attribute((encoding,stack),E,normalize).
 
 % @soft(value_point) Point mark for value tasks.
 preference(value_point,M) :-
