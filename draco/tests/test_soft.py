@@ -2834,6 +2834,665 @@ def test_categorical_scale():
     )
 
 
+def test_c_c_point():
+    b = soft.blocks["c_c_point"]
+    assert isinstance(b, Block)
+
+    # only x encoding, continuous x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # continuous x, discrete y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == []
+    )
+
+    # continuous x, y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,log).
+    """
+        )
+        == [("c_c_point", "m1")]
+    )
+
+
+def test_c_c_line():
+    b = soft.blocks["c_c_line"]
+    assert isinstance(b, Block)
+
+    # continuous x, y, point mark
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # continuous x, y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,line).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,log).
+    """
+        )
+        == [("c_c_line", "m1")]
+    )
+
+
+def test_c_c_area():
+    b = soft.blocks["c_c_area"]
+    assert isinstance(b, Block)
+
+    # continuous y, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,area).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,20).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # continuous x, y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,area).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,log).
+    """
+        )
+        == [("c_c_area", "m1")]
+    )
+
+
+def test_c_c_text():
+    b = soft.blocks["c_c_text"]
+    assert isinstance(b, Block)
+
+    # discrete x, y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,text).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,20).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # continuous x, y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,text).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,linear).
+    """
+        )
+        == [("c_c_text", "m1")]
+    )
+
+
+def test_c_d_point():
+    b = soft.blocks["c_d_point"]
+    assert isinstance(b, Block)
+
+    # only x encoding, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+    """
+        )
+        == []
+    )
+
+    # continuous x, discrete y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == [("c_d_point", "m1")]
+    )
+
+
+def test_c_d_bar():
+    b = soft.blocks["c_d_bar"]
+    assert isinstance(b, Block)
+
+    # continuous x, y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # continuous y, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    """
+        )
+        == [("c_d_bar", "m1")]
+    )
+
+
+def test_c_d_line():
+    b = soft.blocks["c_d_line"]
+    assert isinstance(b, Block)
+
+    #  discrete x, continuous y, bar mark
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    """
+        )
+        == []
+    )
+
+    # continuous y, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,line).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    """
+        )
+        == [("c_d_line", "m1")]
+    )
+
+
+def test_c_d_area():
+    b = soft.blocks["c_d_area"]
+    assert isinstance(b, Block)
+
+    #  discrete x, y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,area).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == []
+    )
+
+    # continuous y, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,area).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,log).
+    """
+        )
+        == [("c_d_area", "m1")]
+    )
+
+
+def test_c_d_text():
+    b = soft.blocks["c_d_text"]
+    assert isinstance(b, Block)
+
+    #  only y, continuous y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,text).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == []
+    )
+
+    # continuous y, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,text).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,categorical).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,linear).
+    """
+        )
+        == [("c_d_text", "m1")]
+    )
+
+
+def test_c_d_tick():
+    b = soft.blocks["c_d_tick"]
+    assert isinstance(b, Block)
+
+    #  only y, discrete y, root scale
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    attribute((mark,type),m1,tick).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # continuous x, discrete y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,tick).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,ordinal).
+    """
+        )
+        == [("c_d_tick", "m1")]
+    )
+
+
+def test_d_d_point():
+    b = soft.blocks["d_d_point"]
+    assert isinstance(b, Block)
+
+    # only x encoding, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+    """
+        )
+        == []
+    )
+
+    # discrete x, y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == [("d_d_point", "m1")]
+    )
+
+
+def test_d_d_text():
+    b = soft.blocks["d_d_text"]
+    assert isinstance(b, Block)
+
+    # discrete x, y, point mark
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == []
+    )
+
+    # discrete x, y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,text).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("d_d_text", "m1")]
+    )
+
+
+def test_d_d_rect():
+    b = soft.blocks["d_d_rect"]
+    assert isinstance(b, Block)
+
+    # only y encoding, discrete y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,rect).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # discrete x, y, one root scale
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    attribute((mark,type),m1,rect).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,categorical).
+
+    entity(scale,root,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,ordinal).
+    """
+        )
+        == [("d_d_rect", "m1")]
+    )
+
+
 def test_stack_zero():
     b = soft.blocks["stack_zero"]
     assert isinstance(b, Block)

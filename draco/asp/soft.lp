@@ -309,6 +309,71 @@ preference(ordinal_scale,E) :-
 preference(categorical_scale,E) :-
     attribute((encoding,scale_type),E,categorical).
 
+% @soft(c_c_point) Continuous by continuous for point mark.
+preference(c_c_point,M) :-
+    attribute(is_c_c,M),
+    attribute((mark,type),M,point).
+
+% @soft(c_c_line) Continuous by continuous for line mark.
+preference(c_c_line,M) :-
+    attribute(is_c_c,M),
+    attribute((mark,type),M,line).
+
+% @soft(c_c_area) Continuous by continuous for area mark.
+preference(c_c_area,M) :-
+    attribute(is_c_c,M),
+    attribute((mark,type),M,area).
+
+% @soft(c_c_text) Continuous by continuous for text mark.
+preference(c_c_text,M) :-
+    attribute(is_c_c,M),
+    attribute((mark,type),M,text).
+
+% @soft(c_d_point) Continuous by discrete for point mark.
+preference(c_d_point,M) :-
+    attribute(is_c_d,M),
+    attribute((mark,type),M,point).
+
+% @soft(c_d_bar) Continuous by discrete for bar mark.
+preference(c_d_bar,M) :-
+    attribute(is_c_d,M),
+    attribute((mark,type),M,bar).
+
+% @soft(c_d_line) Continuous by discrete for line mark.
+preference(c_d_line,M) :-
+    attribute(is_c_d,M),
+    attribute((mark,type),M,line).
+
+% @soft(c_d_area) Continuous by discrete for area mark.
+preference(c_d_area,M) :-
+    attribute(is_c_d,M),
+    attribute((mark,type),M,area).
+
+% @soft(c_d_text) Continuous by discrete for text mark.
+preference(c_d_text,M) :-
+    attribute(is_c_d,M),
+    attribute((mark,type),M,text).
+
+% @soft(c_d_tick) Continuous by discrete for tick mark.
+preference(c_d_tick,M) :-
+    attribute(is_c_d,M),
+    attribute((mark,type),M,tick).
+
+% @soft(d_d_point) Discrete by discrete for point mark.
+preference(d_d_point,M) :-
+    attribute(is_d_d,M),
+    attribute((mark,type),M,point).
+
+% @soft(d_d_text) Discrete by discretee for text mark.
+preference(d_d_text,M) :-
+    attribute(is_d_d,M),
+    attribute((mark,type),M,text).
+
+% @soft(d_d_rect) Discrete by discrete for rect mark.
+preference(d_d_rect,M) :-
+    attribute(is_d_d,M),
+    attribute((mark,type),M,rect).
+
 % @soft(stack_zero) Zero base for stack op.
 preference(stack_zero,E) :-
     attribute((encoding,stack),E,zero).
