@@ -92,3 +92,33 @@ attribute(facet_cardinality,Fa,N) :-
     not attribute((facet,binning),Fa,_).
 attribute(facet_cardinality,Fa,N) :-
     attribute((facet,binning),Fa,N).
+
+% @helper(is_c_c) Continuous by continuous.
+attribute(is_c_c,M) :-
+    entity(mark,_,M),
+    attribute((mark,channel),M,x),
+    attribute((mark,channel),M,y),
+    not attribute(mark_channel_discrete_or_binned,M,x),
+    not attribute(mark_channel_discrete_or_binned,M,y).
+
+% @helper(is_c_d) Continuous by discrete.
+attribute(is_c_d,M) :-
+    entity(mark,_,M),
+    attribute((mark,channel),M,x),
+    attribute((mark,channel),M,y),
+    attribute(mark_channel_discrete_or_binned,M,x),
+    not attribute(mark_channel_discrete_or_binned,M,y).
+attribute(is_c_d,M) :-
+    entity(mark,_,M),
+    attribute((mark,channel),M,x),
+    attribute((mark,channel),M,y),
+    not attribute(mark_channel_discrete_or_binned,M,x),
+    attribute(mark_channel_discrete_or_binned,M,y).
+
+% @helper(is_d_d) Discrete by discrete.
+attribute(is_d_d,M) :-
+    entity(mark,_,M),
+    attribute((mark,channel),M,x),
+    attribute((mark,channel),M,y),
+    attribute(mark_channel_discrete_or_binned,M,x),
+    attribute(mark_channel_discrete_or_binned,M,y).
