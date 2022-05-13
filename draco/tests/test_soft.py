@@ -3493,6 +3493,718 @@ def test_d_d_rect():
     )
 
 
+def test_linear_x():
+    b = soft.blocks["linear_x"]
+    assert isinstance(b, Block)
+
+    # log x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("linear_x", "e1")]
+    )
+
+
+def test_linear_y():
+    b = soft.blocks["linear_y"]
+    assert isinstance(b, Block)
+
+    # linear x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("linear_y", "e1")]
+    )
+
+
+def test_linear_color():
+    b = soft.blocks["linear_color"]
+    assert isinstance(b, Block)
+
+    # ordinal color
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("linear_color", "e1")]
+    )
+
+
+def test_linear_size():
+    b = soft.blocks["linear_size"]
+    assert isinstance(b, Block)
+
+    # log size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("linear_size", "e1")]
+    )
+
+
+def test_linear_text():
+    b = soft.blocks["linear_text"]
+    assert isinstance(b, Block)
+
+    # log text
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,text).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,text).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("linear_text", "e1")]
+    )
+
+
+def test_log_x():
+    b = soft.blocks["log_x"]
+    assert isinstance(b, Block)
+
+    # linear x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("log_x", "e1")]
+    )
+
+
+def test_log_y():
+    b = soft.blocks["log_y"]
+    assert isinstance(b, Block)
+
+    # ordinal y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("log_y", "e1")]
+    )
+
+
+def test_log_color():
+    b = soft.blocks["log_color"]
+    assert isinstance(b, Block)
+
+    # linear color
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("log_color", "e1")]
+    )
+
+
+def test_log_size():
+    b = soft.blocks["log_size"]
+    assert isinstance(b, Block)
+
+    # log color
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("log_size", "e1")]
+    )
+
+
+def test_log_text():
+    b = soft.blocks["log_text"]
+    assert isinstance(b, Block)
+
+    # ordinal text
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,text).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,text).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("log_text", "e1")]
+    )
+
+
+def test_ordinal_x():
+    b = soft.blocks["ordinal_x"]
+    assert isinstance(b, Block)
+
+    # scale on root, linear x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("ordinal_x", "e1")]
+    )
+
+
+def test_ordinal_y():
+    b = soft.blocks["ordinal_y"]
+    assert isinstance(b, Block)
+
+    # scale on root, log y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("ordinal_y", "e1")]
+    )
+
+
+def test_ordinal_color():
+    b = soft.blocks["ordinal_color"]
+    assert isinstance(b, Block)
+
+    # scale on root, linear color
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("ordinal_color", "e1")]
+    )
+
+
+def test_ordinal_size():
+    b = soft.blocks["ordinal_size"]
+    assert isinstance(b, Block)
+
+    # scale on root, ordinal color
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("ordinal_size", "e1")]
+    )
+
+
+def test_ordinal_shape():
+    b = soft.blocks["ordinal_shape"]
+    assert isinstance(b, Block)
+
+    # scale on root, ordinal size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,shape).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,shape).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("ordinal_shape", "e1")]
+    )
+
+
+def test_ordinal_text():
+    b = soft.blocks["ordinal_text"]
+    assert isinstance(b, Block)
+
+    # scale on root, linear text
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,text).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,text).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("ordinal_text", "e1")]
+    )
+
+
+def test_ordinal_detail():
+    b = soft.blocks["ordinal_detail"]
+    assert isinstance(b, Block)
+
+    # scale on root, ordinal x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,detail).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,detail).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("ordinal_detail", "e1")]
+    )
+
+
+def test_categorical_color():
+    b = soft.blocks["categorical_color"]
+    assert isinstance(b, Block)
+
+    # scale on root, linear color
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == [("categorical_color", "e1")]
+    )
+
+
 def test_stack_zero():
     b = soft.blocks["stack_zero"]
     assert isinstance(b, Block)

@@ -374,6 +374,96 @@ preference(d_d_rect,M) :-
     attribute(is_d_d,M),
     attribute((mark,type),M,rect).
 
+% @soft(linear_x) Linear scale with x channel.
+preference(linear_x,E) :-
+    attribute((encoding,channel),E,x),
+    attribute((encoding,scale_type),E,linear).
+
+% @soft(linear_y) Linear scale with y channel.
+preference(linear_y,E) :-
+    attribute((encoding,channel),E,y),
+    attribute((encoding,scale_type),E,linear).
+
+% @soft(linear_color) Linear scale with color channel.
+preference(linear_color,E) :-
+    attribute((encoding,channel),E,color),
+    attribute((encoding,scale_type),E,linear).
+
+% @soft(linear_size) Linear scale with size channel.
+preference(linear_size,E) :-
+    attribute((encoding,channel),E,size),
+    attribute((encoding,scale_type),E,linear).
+
+% @soft(linear_text) Linear scale with text channel.
+preference(linear_text,E) :-
+    attribute((encoding,channel),E,text),
+    attribute((encoding,scale_type),E,linear).
+
+% @soft(log_x) Log scale with x channel.
+preference(log_x,E) :-
+    attribute((encoding,channel),E,x),
+    attribute((encoding,scale_type),E,log).
+
+% @soft(log_y) Log scale with y channel.
+preference(log_y,E) :-
+    attribute((encoding,channel),E,y),
+    attribute((encoding,scale_type),E,log).
+
+% @soft(log_color) Log scale with color channel.
+preference(log_color,E) :-
+    attribute((encoding,channel),E,color),
+    attribute((encoding,scale_type),E,log).
+
+% @soft(log_size) Log scale with size channel.
+preference(log_size,E) :-
+    attribute((encoding,channel),E,size),
+    attribute((encoding,scale_type),E,log).
+
+% @soft(log_text) Log scale with text channel.
+preference(log_text,E) :-
+    attribute((encoding,channel),E,text),
+    attribute((encoding,scale_type),E,log).
+
+% @soft(ordinal_x) Ordinal scale with x channel.
+preference(ordinal_x,E) :-
+    attribute((encoding,channel),E,x),
+    attribute((encoding,scale_type),E,ordinal).
+
+% @soft(ordinal_y) Ordinal scale with y channel.
+preference(ordinal_y,E) :-
+    attribute((encoding,channel),E,y),
+    attribute((encoding,scale_type),E,ordinal).
+
+% @soft(ordinal_color) Ordinal scale with color channel.
+preference(ordinal_color,E) :-
+    attribute((encoding,channel),E,color),
+    attribute((encoding,scale_type),E,ordinal).
+
+% @soft(ordinal_size) Ordinal scale with size channel.
+preference(ordinal_size,E) :-
+    attribute((encoding,channel),E,size),
+    attribute((encoding,scale_type),E,ordinal).
+
+% @soft(ordinal_shape) Ordinal scale with shape channel.
+preference(ordinal_shape,E) :-
+    attribute((encoding,channel),E,shape),
+    attribute((encoding,scale_type),E,ordinal).
+
+% @soft(ordinal_text) Ordinal scale with text channel.
+preference(ordinal_text,E) :-
+    attribute((encoding,channel),E,text),
+    attribute((encoding,scale_type),E,ordinal).
+
+% @soft(ordinal_detail) Ordinal scale with detail channel.
+preference(ordinal_detail,E) :-
+    attribute((encoding,channel),E,detail),
+    attribute((encoding,scale_type),E,ordinal).
+
+% @soft(categorical_color) Categorical scale with color channel.
+preference(categorical_color,E) :-
+    attribute((encoding,channel),E,color),
+    attribute((encoding,scale_type),E,categorical).
+
 % @soft(stack_zero) Zero base for stack op.
 preference(stack_zero,E) :-
     attribute((encoding,stack),E,zero).
