@@ -374,6 +374,34 @@ preference(d_d_rect,M) :-
     attribute(is_d_d,M),
     attribute((mark,type),M,rect).
 
+% @soft(aggregate_count) Count as aggregate op.
+preference(aggregate_count,E) :-
+    attribute((encoding,aggregate),E,count).
+
+% @soft(aggregate_mean) Mean as aggregate op.
+preference(aggregate_mean,E) :-
+    attribute((encoding,aggregate),E,mean).
+
+% @soft(aggregate_median) Median as aggregate op.
+preference(aggregate_median,E) :-
+    attribute((encoding,aggregate),E,median).
+
+% @soft(aggregate_min) Min as aggregate op.
+preference(aggregate_min,E) :-
+    attribute((encoding,aggregate),E,min).
+
+% @soft(aggregate_max) Max as aggregate op.
+preference(aggregate_max,E) :-
+    attribute((encoding,aggregate),E,max).
+
+% @soft(aggregate_stdev) Stdev as aggregate op.
+preference(aggregate_stdev,E) :-
+    attribute((encoding,aggregate),E,stdev).
+
+% @soft(aggregate_sum) Sum as aggregate op.
+preference(aggregate_sum,E) :-
+    attribute((encoding,aggregate),E,sum).
+
 % @soft(stack_zero) Zero base for stack op.
 preference(stack_zero,E) :-
     attribute((encoding,stack),E,zero).
