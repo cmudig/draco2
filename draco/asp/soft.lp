@@ -483,3 +483,148 @@ preference(summary_tick,M) :-
 preference(summary_rect,M) :-
     attribute(task,root,summary),
     attribute((mark,type),M,rect).
+
+% @soft(value_continuous_x) Continuous x for value tasks.
+preference(value_continuous_x,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,x),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_continuous_y) Continuous y for value tasks.
+preference(value_continuous_y,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,y),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_continuous_color) Continuous color for value tasks.
+preference(value_continuous_color,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,color),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_continuous_size) Continuous size for value tasks.
+preference(value_continuous_size,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,size),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_continuous_text) Continuous text for value tasks.
+preference(value_continuous_text,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,text),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_discrete_x) Discrete x for value tasks.
+preference(value_discrete_x,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,x),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_discrete_y) Discrete y for value tasks.
+preference(value_discrete_y,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,y),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_discrete_color) Discrete color for value tasks.
+preference(value_discrete_color,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,color),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_discrete_size) Discrete size for value tasks.
+preference(value_discrete_size,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,size),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_discrete_shape) Discrete shape for value tasks.
+preference(value_discrete_shape,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,shape),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_discrete_text) Discrete text for value tasks.
+preference(value_discrete_text,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,text),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_discrete_detail) Discrete detail for value tasks.
+preference(value_discrete_detail,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,detail),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_continuous_x) Continuous x for summary tasks.
+preference(summary_continuous_x,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,x),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_continuous_y) Continuous y for summary tasks.
+preference(summary_continuous_y,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,y),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_continuous_color) Continuous color for summary tasks.
+preference(summary_continuous_color,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,color),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_continuous_size) Continuous size for summary tasks.
+preference(summary_continuous_size,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,size),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_continuous_text) Continuous text for summary tasks.
+preference(summary_continuous_text,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,text),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_discrete_x) Discrete x for summary tasks.
+preference(summary_discrete_x,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,x),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_discrete_y) Discrete y for summary tasks.
+preference(summary_discrete_y,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,y),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_discrete_color) Discrete color for summary tasks.
+preference(summary_discrete_color,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,color),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_discrete_size) Discrete size for summary tasks.
+preference(summary_discrete_size,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,size),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_discrete_shape) Discrete shape for summary tasks.
+preference(summary_discrete_shape,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,shape),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_discrete_text) Discrete text for summary tasks.
+preference(summary_discrete_text,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,text),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_discrete_detail) Discrete detail for summary tasks.
+preference(summary_discrete_detail,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,detail),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+    
