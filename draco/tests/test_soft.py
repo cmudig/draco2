@@ -3493,6 +3493,208 @@ def test_d_d_rect():
     )
 
 
+def test_aggregate_count():
+    b = soft.blocks["aggregate_count"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    """
+        )
+        == [("aggregate_count", "e1")]
+    )
+
+
+def test_aggregate_mean():
+    b = soft.blocks["aggregate_mean"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,mean).
+    """
+        )
+        == [("aggregate_mean", "e1")]
+    )
+
+
+def test_aggregate_median():
+    b = soft.blocks["aggregate_median"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,min).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,median).
+    """
+        )
+        == [("aggregate_median", "e1")]
+    )
+
+
+def test_aggregate_min():
+    b = soft.blocks["aggregate_min"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,max).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,min).
+    """
+        )
+        == [("aggregate_min", "e1")]
+    )
+
+
+def test_aggregate_max():
+    b = soft.blocks["aggregate_max"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,min).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,max).
+    """
+        )
+        == [("aggregate_max", "e1")]
+    )
+
+
+def test_aggregate_stdev():
+    b = soft.blocks["aggregate_stdev"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,mean).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,stdev).
+    """
+        )
+        == [("aggregate_stdev", "e1")]
+    )
+
+
+def test_aggregate_sum():
+    b = soft.blocks["aggregate_sum"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,count).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,aggregate),e1,sum).
+    """
+        )
+        == [("aggregate_sum", "e1")]
+    )
+
+
 def test_stack_zero():
     b = soft.blocks["stack_zero"]
     assert isinstance(b, Block)
