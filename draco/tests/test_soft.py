@@ -4230,3 +4230,977 @@ def test_summary_rect():
         )
         == [("summary_rect", "m1"), ("summary_rect", "m2")]
     )
+
+
+def test_value_continuous_x():
+    b = soft.blocks["value_continuous_x"]
+    assert isinstance(b, Block)
+
+    # discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+    """
+        )
+        == []
+    )
+
+    # continuous x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("value_continuous_x", "e1")]
+    )
+
+
+def test_value_continuous_y():
+    b = soft.blocks["value_continuous_y"]
+    assert isinstance(b, Block)
+
+    # discrete y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,binning),e1,10).
+    """
+        )
+        == []
+    )
+
+    # continuous y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("value_continuous_y", "e1")]
+    )
+
+
+def test_value_continuous_color():
+    b = soft.blocks["value_continuous_color"]
+    assert isinstance(b, Block)
+
+    # discrete color, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == []
+    )
+
+    # continuous color
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("value_continuous_color", "e1")]
+    )
+
+
+def test_value_continuous_size():
+    b = soft.blocks["value_continuous_size"]
+    assert isinstance(b, Block)
+
+    # discrete size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+    attribute((encoding,binning),e1,10).
+    """
+        )
+        == []
+    )
+
+    # continuous size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("value_continuous_size", "e1")]
+    )
+
+
+def test_value_continuous_text():
+    b = soft.blocks["value_continuous_text"]
+    assert isinstance(b, Block)
+
+    # continuous text, summary task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+    """
+        )
+        == []
+    )
+
+    # continuous text
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,text).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("value_continuous_text", "e1")]
+    )
+
+
+def test_value_discrete_x():
+    b = soft.blocks["value_discrete_x"]
+    assert isinstance(b, Block)
+
+    # continuous x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    """
+        )
+        == []
+    )
+
+    # discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,20).
+    """
+        )
+        == [("value_discrete_x", "e1")]
+    )
+
+
+def test_value_discrete_y():
+    b = soft.blocks["value_discrete_y"]
+    assert isinstance(b, Block)
+
+    # continuous y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    """
+        )
+        == []
+    )
+
+    # discrete y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,binning),e1,20).
+    """
+        )
+        == [("value_discrete_y", "e1")]
+    )
+
+
+def test_value_discrete_color():
+    b = soft.blocks["value_discrete_color"]
+    assert isinstance(b, Block)
+
+    # discrete color, summary task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == []
+    )
+
+    # discrete color, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("value_discrete_color", "e1")]
+    )
+
+
+def test_value_discrete_size():
+    b = soft.blocks["value_discrete_size"]
+    assert isinstance(b, Block)
+
+    # continuous size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # discrete color, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("value_discrete_size", "e1")]
+    )
+
+
+def test_value_discrete_shape():
+    b = soft.blocks["value_discrete_shape"]
+    assert isinstance(b, Block)
+
+    # discrete shape, summary task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,shape).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,shape).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # discrete shape, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,shape).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,shape).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("value_discrete_shape", "e1")]
+    )
+
+
+def test_value_discrete_text():
+    b = soft.blocks["value_discrete_text"]
+    assert isinstance(b, Block)
+
+    # continuous text
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+    """
+        )
+        == []
+    )
+
+    # discrete text
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+    attribute((encoding,binning),e1,10).
+    """
+        )
+        == [("value_discrete_text", "e1")]
+    )
+
+
+def test_value_discrete_detail():
+    b = soft.blocks["value_discrete_detail"]
+    assert isinstance(b, Block)
+
+    # discrete detail, summary task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,detail).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,detail).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # discrete detail, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,detail).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,detail).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("value_discrete_detail", "e1")]
+    )
+
+
+def test_summary_continuous_x():
+    b = soft.blocks["summary_continuous_x"]
+    assert isinstance(b, Block)
+
+    # discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+    """
+        )
+        == []
+    )
+
+    # continuous x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("summary_continuous_x", "e1")]
+    )
+
+
+def test_summary_continuous_y():
+    b = soft.blocks["summary_continuous_y"]
+    assert isinstance(b, Block)
+
+    # discrete y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,binning),e1,10).
+    """
+        )
+        == []
+    )
+
+    # continuous y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("summary_continuous_y", "e1")]
+    )
+
+
+def test_summary_continuous_color():
+    b = soft.blocks["summary_continuous_color"]
+    assert isinstance(b, Block)
+
+    # discrete color, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == []
+    )
+
+    # continuous color
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("summary_continuous_color", "e1")]
+    )
+
+
+def test_summary_continuous_size():
+    b = soft.blocks["summary_continuous_size"]
+    assert isinstance(b, Block)
+
+    # discrete size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+    attribute((encoding,binning),e1,10).
+    """
+        )
+        == []
+    )
+
+    # continuous size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("summary_continuous_size", "e1")]
+    )
+
+
+def test_summary_continuous_text():
+    b = soft.blocks["summary_continuous_text"]
+    assert isinstance(b, Block)
+
+    # continuous text, value task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+    """
+        )
+        == []
+    )
+
+    # continuous text
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,text).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("summary_continuous_text", "e1")]
+    )
+
+
+def test_summary_discrete_x():
+    b = soft.blocks["summary_discrete_x"]
+    assert isinstance(b, Block)
+
+    # continuous x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    """
+        )
+        == []
+    )
+
+    # discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,20).
+    """
+        )
+        == [("summary_discrete_x", "e1")]
+    )
+
+
+def test_summary_discrete_y():
+    b = soft.blocks["summary_discrete_y"]
+    assert isinstance(b, Block)
+
+    # continuous y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    """
+        )
+        == []
+    )
+
+    # discrete y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,binning),e1,20).
+    """
+        )
+        == [("summary_discrete_y", "e1")]
+    )
+
+
+def test_summary_discrete_color():
+    b = soft.blocks["summary_discrete_color"]
+    assert isinstance(b, Block)
+
+    # discrete color, value task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,categorical).
+    """
+        )
+        == []
+    )
+
+    # discrete color, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,color).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("summary_discrete_color", "e1")]
+    )
+
+
+def test_summary_discrete_size():
+    b = soft.blocks["summary_discrete_size"]
+    assert isinstance(b, Block)
+
+    # continuous size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    # discrete color, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,size).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,size).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("summary_discrete_size", "e1")]
+    )
+
+
+def test_summary_discrete_shape():
+    b = soft.blocks["summary_discrete_shape"]
+    assert isinstance(b, Block)
+
+    # discrete shape, value task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,shape).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,shape).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # discrete shape, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,shape).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,shape).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("summary_discrete_shape", "e1")]
+    )
+
+
+def test_summary_discrete_text():
+    b = soft.blocks["summary_discrete_text"]
+    assert isinstance(b, Block)
+
+    # continuous text
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+    """
+        )
+        == []
+    )
+
+    # discrete text
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,text).
+    attribute((encoding,binning),e1,10).
+    """
+        )
+        == [("summary_discrete_text", "e1")]
+    )
+
+
+def test_summary_discrete_detail():
+    b = soft.blocks["summary_discrete_detail"]
+    assert isinstance(b, Block)
+
+    # discrete detail, value task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,detail).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,detail).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # discrete detail, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,detail).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,detail).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("summary_discrete_detail", "e1")]
+    )
