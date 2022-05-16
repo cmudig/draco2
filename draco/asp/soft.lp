@@ -599,3 +599,4 @@ preference(summary_discrete_detail,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,detail),
     attribute(mark_encoding_discrete_or_binned,_,E).
+    
