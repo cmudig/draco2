@@ -42,8 +42,101 @@
 #const y_row_weight = 1.
 #const x_col_weight = 1.
 #const y_col_weight = 1.
+#const color_entropy_high_weight = 0.
+#const color_entropy_low_weight = 0.
+#const size_entropy_high_weight = 0.
+#const size_entropy_low_weight = 0.
 
 #const linear_scale_weight = 0.
 #const log_scale_weight = 1.
 #const ordinal_scale_weight = 2.
 #const categorical_scale_weight = 3.
+
+#const c_c_point_weight = 0.
+#const c_c_line_weight = 20.
+#const c_c_area_weight = 20.
+#const c_c_text_weight = 2.
+
+#const c_d_point_weight = 10.
+#const c_d_bar_weight = 20.
+#const c_d_line_weight = 20.
+#const c_d_area_weight = 20.
+#const c_d_text_weight = 50.
+#const c_d_tick_weight = 0.
+
+#const d_d_point_weight = 0.
+#const d_d_text_weight = 1.
+#const d_d_rect_weight = 0.
+
+#const linear_x_weight = 0.
+#const linear_y_weight = 0.
+#const linear_color_weight = 10.
+#const linear_size_weight = 1.
+#const linear_text_weight = 20.
+
+#const log_x_weight = 0.
+#const log_y_weight = 0.
+#const log_color_weight = 10.
+#const log_size_weight = 1.
+#const log_text_weight = 20.
+
+#const ordinal_x_weight = 1.
+#const ordinal_y_weight = 0.
+#const ordinal_color_weight = 8.
+#const ordinal_size_weight = 10.
+#const ordinal_shape_weight = 11.
+#const ordinal_text_weight = 32.
+#const ordinal_detail_weight = 20.
+#const categorical_color_weight = 10.
+
+#const aggregate_count_weight = 0.
+#const aggregate_mean_weight = 1.
+#const aggregate_median_weight = 3.
+#const aggregate_min_weight = 4.
+#const aggregate_max_weight = 4.
+#const aggregate_stdev_weight = 5.
+#const aggregate_sum_weight = 2.
+
+#const stack_zero_weight = 0.
+#const stack_center_weight = 1.
+#const stack_normalize_weight = 1.
+
+#const value_point_weight = 0.
+#const value_bar_weight = 0.
+#const value_line_weight = 0.
+#const value_area_weight = 0.
+#const value_text_weight = 0.
+#const value_tick_weight = 0.
+#const value_rect_weight = 0.
+#const summary_point_weight = 0.
+#const summary_bar_weight = 0.
+#const summary_line_weight = 0.
+#const summary_area_weight = 0.
+#const summary_text_weight = 0.
+#const summary_tick_weight = 0.
+#const summary_rect_weight = 0.
+
+#const value_continuous_x_weight = 0.
+#const value_continuous_y_weight = 0.
+#const value_continuous_color_weight = 0.
+#const value_continuous_size_weight = 0.
+#const value_continuous_text_weight = 0.
+#const value_discrete_x_weight = 0.
+#const value_discrete_y_weight = 0.
+#const value_discrete_color_weight = 0.
+#const value_discrete_size_weight = 0.
+#const value_discrete_shape_weight = 0.
+#const value_discrete_text_weight = 0.
+#const value_discrete_detail_weight = 0.
+#const summary_continuous_x_weight = 0.
+#const summary_continuous_y_weight = 0.
+#const summary_continuous_color_weight = 0.
+#const summary_continuous_size_weight = 0.
+#const summary_continuous_text_weight = 0.
+#const summary_discrete_x_weight = 0.
+#const summary_discrete_y_weight = 0.
+#const summary_discrete_color_weight = 0.
+#const summary_discrete_size_weight = 0.
+#const summary_discrete_shape_weight = 0.
+#const summary_discrete_text_weight = 0.
+#const summary_discrete_detail_weight = 0.
