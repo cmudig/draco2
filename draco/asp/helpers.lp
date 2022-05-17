@@ -25,6 +25,13 @@ attribute(mark_scale_channel,M,T,C) :-
     attribute((scale,channel),S,C),
     attribute((scale,type),S,T).
 
+% @helper(mark_encoding_scale) Link mark, encoding, and scale togther.
+attribute(mark_encoding_scale,M,E,S) :-
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
+    attribute((mark,scale),M,S),
+    attribute((scale,channel),S,C).
+
 % @helper(encoding_type) Whether an encoding has a channel for a scale type.
 attribute((encoding,scale_type),E,T) :-
     entity(encoding,M,E),
@@ -59,3 +66,59 @@ attribute(mark_channel_discrete_or_binned,M,C) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     attribute((encoding,binning),E,_).
+
+% @helper(mark_encoding_discrete_or_binned) Whether a mark has a discrete scale or binned encoding for an encoding.
+attribute(mark_encoding_discrete_or_binned,M,E) :-
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
+    attribute(mark_scale_channel,M,T,C),
+    domain(discrete_scale,T).
+attribute(mark_encoding_discrete_or_binned,M,E) :-
+    entity(encoding,M,E),
+    attribute((encoding,binning),E,_).
+
+% @helper(encoding_cardinality,E,N) The cardinality of an encoding.
+attribute(encoding_cardinality,E,N) :-
+    attribute((field,unique),F,N),
+    attribute((encoding,field),E,F),
+    not attribute((encoding,binning),E,_).
+attribute(encoding_cardinality,E,N) :-
+    attribute((encoding,binning),E,N).
+
+% @helper(facet_cardinality,Fa,N) The cardinality of a facet.
+attribute(facet_cardinality,Fa,N) :-
+    attribute((field,unique),Fi,N),
+    attribute((facet,field),Fa,Fi),
+    not attribute((facet,binning),Fa,_).
+attribute(facet_cardinality,Fa,N) :-
+    attribute((facet,binning),Fa,N).
+
+% @helper(is_c_c) Continuous by continuous.
+attribute(is_c_c,M) :-
+    entity(mark,_,M),
+    attribute((mark,channel),M,x),
+    attribute((mark,channel),M,y),
+    not attribute(mark_channel_discrete_or_binned,M,x),
+    not attribute(mark_channel_discrete_or_binned,M,y).
+
+% @helper(is_c_d) Continuous by discrete.
+attribute(is_c_d,M) :-
+    entity(mark,_,M),
+    attribute((mark,channel),M,x),
+    attribute((mark,channel),M,y),
+    attribute(mark_channel_discrete_or_binned,M,x),
+    not attribute(mark_channel_discrete_or_binned,M,y).
+attribute(is_c_d,M) :-
+    entity(mark,_,M),
+    attribute((mark,channel),M,x),
+    attribute((mark,channel),M,y),
+    not attribute(mark_channel_discrete_or_binned,M,x),
+    attribute(mark_channel_discrete_or_binned,M,y).
+
+% @helper(is_d_d) Discrete by discrete.
+attribute(is_d_d,M) :-
+    entity(mark,_,M),
+    attribute((mark,channel),M,x),
+    attribute((mark,channel),M,y),
+    attribute(mark_channel_discrete_or_binned,M,x),
+    attribute(mark_channel_discrete_or_binned,M,y).
