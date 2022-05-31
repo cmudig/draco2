@@ -11,7 +11,5 @@ entity(mark,(v,0),(m,0)).
 entity(encoding,(m,0),(e,0)).
 attribute((encoding,field),(e,0),(f,0)).
 
-entity(encoding,(m,0),(e,1)).
-
 #show entity/3.
 #show attribute/3.
