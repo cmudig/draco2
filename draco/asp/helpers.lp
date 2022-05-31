@@ -77,6 +77,11 @@ attribute(mark_encoding_discrete_or_binned,M,E) :-
     entity(encoding,M,E),
     attribute((encoding,binning),E,_).
 
+% @helper(mark_encoding_cont) Whether a mark has a continuous for an encoding.
+attribute(mark_encoding_cont,M,E) :-
+    entity(encoding,M,E),
+    not attribute(mark_encoding_discrete_or_binned,M,E).
+
 % @helper(encoding_cardinality,E,N) The cardinality of an encoding.
 attribute(encoding_cardinality,E,N) :-
     attribute((field,unique),F,N),
