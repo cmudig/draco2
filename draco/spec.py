@@ -28,7 +28,7 @@ def count_preferences(spec: Union[str, Iterable[str]]):
     violates the preference. Returns None if the problem is not satisfiable.
 
     Internally, Draco checks against the definitions, constraints, helpers,
-    and hard constraints.
+    hard constraints, and soft constraints.
 
     :param spec: The specification to check
     """
@@ -62,8 +62,8 @@ def get_violations(spec: Union[str, Iterable[str]]):
     """Get the list of violations for a given specification. Returns None if the
     problem is not satisfiable.
 
-    Internally, Draco checks against the definitions, constraints, helpers,
-    and hard constraints.
+    Internally, Draco checks against the definitions, constraints (without the
+    constraint that disallows violations), helpers, and hard constraints.
 
     :param spec: The specification to check
     """
