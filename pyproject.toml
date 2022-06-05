@@ -57,5 +57,5 @@ build-backend = "poetry.core.masonry.api"
 include = ["draco"]
 
 [tool.black]
-exclude = "docs/conf.py"
+exclude = "docs/conf.py|docs/_build|.pytype"
 
