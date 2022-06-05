@@ -4,12 +4,14 @@ entity(field,root,(f,0)).
 attribute((field,name),(f,0),temperature).
 attribute((field,type),(f,0),number).
 
-entity(mark,root,(m,0)).
+entity(view,root,(v,0)).
+
+entity(mark,(v,0),(m,0)).
 attribute((mark,type),(m,0),bar).
 
 entity(encoding,(m,0),(e,0)).
 attribute((encoding,channel),(e,0),x).
-attribute((encoding,field),(e,0),temperature).
+attribute((encoding,field),(e,0),(f,0)).
 attribute((encoding,binning),(e,0),10).
 
 entity(encoding,(m,0),(e,1)).
