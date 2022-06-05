@@ -2,12 +2,11 @@ import logging
 from pathlib import Path
 
 import pytest
-
-from draco.process_weights import get_weights_assigned, weights
+from draco.programs import soft
+from draco.weights import read_weights, weights
 
 
 def test_has_weights():
-    assert len(weights.weights_program)
     assert len(weights.assign_program)
     assert len(weights.weights)
 
@@ -44,7 +43,7 @@ def invalid_name_file(tmpdir_factory):
 
 
 def test_get_weights(weight_file):
-    weights = get_weights_assigned(weight_file)
+    weights = read_weights(weight_file)
 
     assert weights.weights == {
         "preference1_weight": 1,
@@ -55,9 +54,17 @@ def test_get_weights(weight_file):
 
 def test_invalid_name(invalid_name_file, caplog):
     with caplog.at_level(logging.WARNING):
-        get_weights_assigned(invalid_name_file)
+        read_weights(invalid_name_file)
     assert (
-        'Constant "preference1" doesn\'t end with "_weight", \
-                        so it\'s not assigned.'
+        'Constant "preference1" doesn\'t end with "_weight", so it\'s not assigned.'
         in caplog.text
     )
+
+
+def test_complete_weights():
+    soft_constraints = set(soft.blocks.keys())
+    soft_constraints.remove("__preamble__")
+
+    weight_keys = set(s[: -len("_weight")] for s in weights.weights.keys())
+
+    assert soft_constraints == weight_keys

@@ -1,6 +1,8 @@
-from draco import check_spec, get_violations
+import pytest
+from draco import Draco
 from draco.fact_utils import dict_to_facts
-from draco.spec import count_preferences
+
+default_draco = Draco()
 
 
 def test_check_spec():
@@ -18,7 +20,7 @@ def test_check_spec():
             "scale": [{"channel": "x", "type": "linear"}],
         }
     )
-    assert check_spec(prog_valid)
+    assert default_draco.check_spec(prog_valid)
 
     prog_invalid = dict_to_facts(
         {
@@ -35,7 +37,15 @@ def test_check_spec():
             "scale": [{"channel": "x", "type": "linear"}],
         }
     )
-    assert not check_spec(prog_invalid)
+    assert not default_draco.check_spec(prog_invalid)
+
+
+def test_check_spec_custom_draco():
+    d = Draco(hard="violation(no_point) :- attribute((mark,type),_,point),")
+
+    prog_valid = dict_to_facts({"mark": [{"type": "point"}]})
+    assert not default_draco.check_spec(prog_valid)
+    assert d.check_spec(prog_valid)
 
 
 def test_get_violations():
@@ -54,16 +64,16 @@ def test_get_violations():
             "scale": [{"channel": "x", "type": "linear"}],
         }
     )
-    assert get_violations(prog) == ["invalid_domain"]
+    assert default_draco.get_violations(prog) == ["invalid_domain"]
 
 
 def test_get_violations_satisfiable():
-    assert get_violations("") == []
+    assert default_draco.get_violations("") == []
 
 
 def test_get_violations_unsatisfiable():
     prog = ":- a. :- not a."
-    assert get_violations(prog) is None
+    assert default_draco.get_violations(prog) is None
 
 
 def test_count_preferences():
@@ -89,7 +99,7 @@ def test_count_preferences():
         }
     )
 
-    assert count_preferences(prog) == {
+    assert default_draco.count_preferences(prog) == {
         "c_d_point": 1,
         "continuous_not_zero": 1,
         "continuous_pos_not_zero": 1,
@@ -103,9 +113,14 @@ def test_count_preferences():
 
 
 def test_count_preferences_satisfiable():
-    assert count_preferences("") == {}
+    assert default_draco.count_preferences("") == {}
 
 
 def test_count_preferences_unsatisfiable():
     prog = ":- a. :- not a."
-    assert count_preferences(prog) is None
+    assert default_draco.count_preferences(prog) is None
+
+
+def test_weight_mismatch():
+    with pytest.raises(AssertionError):
+        Draco(weights={})
