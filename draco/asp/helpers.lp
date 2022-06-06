@@ -82,13 +82,18 @@ attribute(mark_encoding_cont,M,E) :-
     entity(encoding,M,E),
     not attribute(mark_encoding_discrete_or_binned,M,E).
 
-% @helper(encoding_cardinality,E,N) The cardinality of an encoding.
+% @helper(encoding_cardinality) The cardinality of an encoding.
 attribute(encoding_cardinality,E,N) :-
     attribute((field,unique),F,N),
     attribute((encoding,field),E,F),
     not attribute((encoding,binning),E,_).
 attribute(encoding_cardinality,E,N) :-
     attribute((encoding,binning),E,N).
+
+% @helper(discrete_cardinality) The cardinality of a discrete encoding.
+attribute(discrete_cardinality,M,E,N) :-
+    attribute(encoding_cardinality,E,N),
+    attribute(mark_encoding_discrete_or_binned,M,E).
 
 % @helper(facet_cardinality,Fa,N) The cardinality of a facet.
 attribute(facet_cardinality,Fa,N) :-
@@ -127,3 +132,80 @@ attribute(is_d_d,M) :-
     attribute((mark,channel),M,y),
     attribute(mark_channel_discrete_or_binned,M,x),
     attribute(mark_channel_discrete_or_binned,M,y).
+
+% @helper(non_pos_unaggregated) Non-positional channels are unaggregated.
+attribute(non_pos_unaggregated,M) :-
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,C),
+    domain(non_positional,C),
+    not attribute((encoding,aggregate),E,_).
+
+% @helper(no_overlap) The continuous variable is a measure (it is aggregated) and all other non-positional channels are aggregated, or we use stack.
+attribute(no_overlap,M) :-
+    attribute(is_c_d,M),
+    attribute(mark_encoding_cont,M,E),
+    attribute((encoding,channel),E,(x;y)),
+    attribute((encoding,aggregate),E,_),
+    not attribute(non_pos_unaggregated,M).
+attribute(no_overlap,M) :-
+    attribute(is_c_d,M),
+    entity(encoding,M,E),
+    attribute((encoding,stack),E,_).
+attribute(no_overlap,M) :-
+    attribute(is_c_d,M),
+    attribute(number_rows,root,N),
+    attribute(discrete_size,M,N).
+attribute(no_overlap,M) :-
+    attribute(is_d_d,M),
+    not attribute(non_pos_unaggregated,M).
+attribute(no_overlap,M) :-
+    attribute(is_d_d,M),
+    attribute(number_rows,root,N1),
+    attribute(discrete_size,M,N2),
+    N1 <= N2.
+
+% @helper(overlap) We definitely overlap if the data size > discrete size.
+attribute(overlap,M) :-
+    attribute(is_c_d,M),
+    not attribute(no_overlap,M),
+    attribute(number_rows,root,N1),
+    attribute(discrete_size,M,N2),
+    N1 > N2.
+attribute(overlap,M) :-
+    entity(mark,V,M),
+    attribute(is_d_d,M),
+    not attribute(no_overlap,M),
+    not entity(facet,V,_),
+    attribute(number_rows,root,N1),
+    attribute(discrete_size,M,N2),
+    N1 > N2.
+
+% @helper(discrete_size) The size of the discrete positional encoding.
+attribute(discrete_size,M,N) :-
+    attribute(is_c_d,M),
+    attribute(x_y_cardinality,M,_,N).
+attribute(discrete_size,M,1) :-
+    attribute(is_c_d,M),
+    attribute(mark_encoding_cont,M,E),
+    attribute((encoding,channel),E,x),
+    not attribute((mark,channel),M,y).
+attribute(discrete_size,M,1) :-
+    attribute(is_c_d,M),
+    attribute(mark_encoding_cont,M,E),
+    attribute((encoding,channel),E,y),
+    not attribute((mark,channel),M,x).
+attribute(discrete_size,M,N) :-
+    attribute(is_d_d,M),
+    attribute(x_y_cardinality,M,x,NX),
+    attribute(x_y_cardinality,M,y,NY),
+    N = NX*NY.
+
+% @helper(x_y_cardinality) to go from quadratic to linear number of grounding
+attribute(x_y_cardinality,M,x,N) :-
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,x),
+    attribute(discrete_cardinality,M,E,N).
+attribute(x_y_cardinality,M,y,N) :-
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,y),
+    attribute(discrete_cardinality,M,E,N).

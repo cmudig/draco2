@@ -3108,6 +3108,109 @@ def test_c_d_point():
         == []
     )
 
+    # continuous and aggregated x, discrete y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,aggregate),e1,mean).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == []
+    )
+
+    # continuous x, discrete y, data size > discrete size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(number_rows,root,100).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,50).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,field),e1,wind).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == [("c_d_point", "m1")]
+    )
+
+
+def test_c_d_no_overlap_point():
+    b = soft.blocks["c_d_no_overlap_point"]
+    assert isinstance(b, Block)
+
+    # continuous x, discrete y, data size > discrete size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(number_rows,root,100).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,50).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,field),e1,wind).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == []
+    )
+
+    # continuous x, discrete y, data size == discrete size
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(number_rows,root,10).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,10).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,field),e1,wind).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == [("c_d_no_overlap_point", "m1")]
+    )
+
     # continuous x, discrete y
     assert (
         list_preferences(
@@ -3122,9 +3225,11 @@ def test_c_d_point():
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
     attribute((encoding,binning),e2,10).
+
+    attribute(no_overlap,m1).
     """
         )
-        == [("c_d_point", "m1")]
+        == [("c_d_no_overlap_point", "m1")]
     )
 
 
@@ -3132,7 +3237,7 @@ def test_c_d_bar():
     b = soft.blocks["c_d_bar"]
     assert isinstance(b, Block)
 
-    # continuous x, y
+    # continuous and aggregated y, discrete x
     assert (
         list_preferences(
             b.program
@@ -3142,6 +3247,81 @@ def test_c_d_bar():
 
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,aggregate),e2,count).
+    """
+        )
+        == []
+    )
+
+    # continuous y, discrete x, no overlap
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("c_d_bar", "m1")]
+    )
+
+    # continuous y, discrete x, non-positional channel color not aggregated
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(encoding,m1,e3).
+    attribute((encoding,channel),e3,color).
+    """
+        )
+        == [("c_d_bar", "m1")]
+    )
+
+
+def test_c_d_no_overlap_bar():
+    b = soft.blocks["c_d_no_overlap_bar"]
+    assert isinstance(b, Block)
+
+    # continuous y, discrete x, no overlap
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
 
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
@@ -3158,7 +3338,7 @@ def test_c_d_bar():
         == []
     )
 
-    # continuous y, discrete x
+    # continuous y, discrete x, stacked
     assert (
         list_preferences(
             b.program
@@ -3172,9 +3352,10 @@ def test_c_d_bar():
 
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
+    attribute((encoding,stack),e2,zero).
     """
         )
-        == [("c_d_bar", "m1")]
+        == [("c_d_no_overlap_bar", "m1")]
     )
 
 
@@ -3326,17 +3507,24 @@ def test_c_d_tick():
     b = soft.blocks["c_d_tick"]
     assert isinstance(b, Block)
 
-    #  only y, discrete y, root scale
+    #  only y, discrete y, data size > deiscrete size(1)
     assert (
         list_preferences(
             b.program
             + """
+    attribute(number_rows,root,100).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,100).
+
     entity(view,root,v).
     entity(mark,v,m1).
     attribute((mark,type),m1,tick).
 
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
+    attribute((encoding,field),e1,wind).
 
     entity(scale,root,s1).
     attribute((scale,channel),s1,y).
@@ -3370,6 +3558,129 @@ def test_c_d_tick():
     """
         )
         == [("c_d_tick", "m1")]
+    )
+
+
+def test_c_d_no_overlap_tick():
+    b = soft.blocks["c_d_no_overlap_tick"]
+    assert isinstance(b, Block)
+
+    # continuous aggregated y, discrete x, no overlap
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,tick).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,aggregate),e2,count).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("c_d_no_overlap_tick", "m1")]
+    )
+
+
+def test_d_d_overlap():
+    b = soft.blocks["d_d_overlap"]
+    assert isinstance(b, Block)
+
+    # discrete x, y; number_rows == D*D
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(number_rows,root,90).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,100).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == []
+    )
+
+    # discrete x, y; color channel is aggregated
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(number_rows,root,100).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,10).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+
+    entity(encoding,m1,e3).
+    attribute((encoding,channel),e2,color).
+    attribute((encoding,aggregate),e3,count).
+    """
+        )
+        == []
+    )
+
+    # discrete x, y; number_rows > D*D
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(number_rows,root,1000).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,10).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+
+    entity(encoding,m1,e3).
+    attribute((encoding,channel),e2,color).
+    """
+        )
+        == [("d_d_overlap", "m1")]
     )
 
 
