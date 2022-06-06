@@ -116,7 +116,7 @@ def run_clingo(
 
 
 def is_satisfiable(program: Union[str, Iterable[str]]) -> bool:
-    """Checks whether the program is satisfiable
+    """Checks whether the program is satisfiable.
 
     :param program: Program as a string or iterable of strings that will be
         concatenated.

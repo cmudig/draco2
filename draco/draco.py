@@ -10,21 +10,7 @@ from draco.weights import weights as draco_weights
 
 
 class Draco:
-    """A class for holding all the programs used by Draco. You can override the
-    default programs by passing them to the constructor.
-
-    Attributes:
-        :define: The program for defining variables.
-        :constraints: The program for defining constraints.
-        :helpers: The program for defining helper functions.
-        :hard: The program for defining hard constraints.
-        :soft: The program for defining soft constraints.
-        :optimize: The program for optimizing soft constraints.
-
-        :assign_weights: The program for assigning weights to soft constraints.
-        :soft_constraint_names: The names of the soft constraints
-            which can be used as features for ML.
-    """
+    """A class for holding all the programs used by Draco."""
 
     def __init__(
         self,
@@ -36,6 +22,23 @@ class Draco:
         optimize: Union[Program, str] = programs.optimize,
         weights: Union[Weights, dict] = draco_weights,
     ):
+        """Create a Draco helper class. If no programs are passed in, the default
+        Draco programs are used.
+
+        Parameters:
+            :param define: The program for defining variables.
+            :param constraints: The program for defining constraints.
+            :param helpers: The program for defining helper functions.
+            :param hard: The program for defining hard constraints.
+            :param soft: The program for defining soft constraints.
+            :param optimize: The program for optimizing soft constraints.
+
+            :param assign_weights: The program for assigning weights to soft
+                constraints.
+            :param soft_constraint_names: The names of the soft constraints
+                which can be used as features for ML.
+        """
+
         def to_string(prog: Union[Program, str]):
             if isinstance(prog, Program):
                 return prog.program
