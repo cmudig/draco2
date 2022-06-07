@@ -62,7 +62,9 @@ preference(bin_not_linear,E) :-
 
 % @soft(only_discrete) Only discrete encoding channels are used in a mark.
 preference(only_discrete,M) :-
-    attribute(mark_channel_discrete_or_binned,M,_).
+    entity(mark,_,M),
+    not attribute(mark_encoding_cont,M,_).
+
 
 % @soft(multi_non_pos) Prefer not to use multiple non-positional encoding channels.
 preference(multi_non_pos,M) :-
