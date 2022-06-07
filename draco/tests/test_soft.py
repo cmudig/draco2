@@ -3108,6 +3108,32 @@ def test_c_d_point():
         == []
     )
 
+    # only x encoding, continuous x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(number_rows,root,10).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,2).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,field),e1,wind).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("c_d_point", "m1")]
+    )
+
     # continuous and aggregated x, discrete y
     assert (
         list_preferences(
@@ -3473,7 +3499,7 @@ def test_c_d_text():
     attribute((scale,type),s1,log).
     """
         )
-        == []
+        == [("c_d_text", "m1")]
     )
 
     # continuous y, discrete x

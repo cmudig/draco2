@@ -82,6 +82,11 @@ attribute(mark_encoding_cont,M,E) :-
     entity(encoding,M,E),
     not attribute(mark_encoding_discrete_or_binned,M,E).
 
+% @helper(mark_channel_cont) Whether a mark has a continuous scale for a channel.
+attribute(mark_channel_cont,M,C) :-
+    attribute((mark,channel),M,C),
+    not attribute(mark_channel_discrete_or_binned,M,C).
+
 % @helper(encoding_cardinality) The cardinality of an encoding.
 attribute(encoding_cardinality,E,N) :-
     attribute((field,unique),F,N),
@@ -111,23 +116,18 @@ attribute(is_c_c,M) :-
     not attribute(mark_channel_discrete_or_binned,M,x),
     not attribute(mark_channel_discrete_or_binned,M,y).
 
-% @helper(is_c_d) Continuous by discrete.
+% @helper(is_c_d) Continuous by discrete (or only one continuous).
 attribute(is_c_d,M) :-
     entity(mark,_,M),
-    attribute((mark,channel),M,x),
-    attribute((mark,channel),M,y),
-    attribute(mark_channel_discrete_or_binned,M,x),
-    not attribute(mark_channel_discrete_or_binned,M,y).
+    attribute(mark_channel_cont,M,x),
+    not attribute(mark_channel_cont,M,y).
 attribute(is_c_d,M) :-
     entity(mark,_,M),
-    attribute((mark,channel),M,x),
-    attribute((mark,channel),M,y),
-    not attribute(mark_channel_discrete_or_binned,M,x),
-    attribute(mark_channel_discrete_or_binned,M,y).
+    not attribute(mark_channel_cont,M,x),
+    attribute(mark_channel_cont,M,y).
 
 % @helper(is_d_d) Discrete by discrete.
 attribute(is_d_d,M) :-
-    entity(mark,_,M),
     attribute((mark,channel),M,x),
     attribute((mark,channel),M,y),
     attribute(mark_channel_discrete_or_binned,M,x),
