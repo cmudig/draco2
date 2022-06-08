@@ -1757,9 +1757,10 @@ def test_bar_tick_area_line_without_continuous_x_y():
     )
 
     # only binned x
-    assert list_violations(
-        b.program
-        + """
+    assert (
+        list_violations(
+            b.program
+            + """
     entity(mark,0,1).
     attribute((mark,type),1,tick).
 
@@ -1771,7 +1772,9 @@ def test_bar_tick_area_line_without_continuous_x_y():
     attribute((scale,channel),4,x).
     attribute((scale,type),4,linear).
     """
-    ) == ["bar_tick_area_line_without_continuous_x_y"]
+        )
+        == ["bar_tick_area_line_without_continuous_x_y"]
+    )
 
     # x is continuous and binned, and y is discrete
     assert (
