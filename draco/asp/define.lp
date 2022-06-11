@@ -6,7 +6,7 @@ domain((mark,type),(point;bar;line;area;text;tick;rect)).
 % @definition(field_type) Basic types of the data.
 domain((field,type),(string;number;boolean;datetime)).
 
-% @definition(field_names) Basic types of the data.
+% @definition(field_names) Names of the data.
 domain((field,name),F) :- attribute((field,name),_,F).
 
 % @definition(field_ids)

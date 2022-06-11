@@ -29,6 +29,8 @@ classifiers = [
 clingo = "^5.5.2"
 pandas = "^1.4.2"
 python = ">=3.8.0,<3.10"
+matplotlib = "^3.5.2"
+scikit-learn = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 black = {extras = ["jupyter"], version = "^22.3.0"}
@@ -55,5 +57,5 @@ build-backend = "poetry.core.masonry.api"
 include = ["draco"]
 
 [tool.black]
-exclude = "docs/conf.py"
+exclude = "docs/conf.py|docs/_build|.pytype"
 
