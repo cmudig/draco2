@@ -3,10 +3,11 @@ from typing import DefaultDict, Iterable, Union
 
 import draco.programs as programs
 from draco.asp_utils import blocks_to_program, parse_blocks
-from draco.programs import Program
 from draco.run import is_satisfiable, run_clingo
 from draco.weights import Weights, assign_program
 from draco.weights import weights as draco_weights
+
+Program = programs.Program
 
 
 class Draco:
