@@ -183,7 +183,10 @@ attribute(overlap,M) :-
 % @helper(discrete_size) The size of the discrete positional encoding.
 attribute(discrete_size,M,N) :-
     attribute(is_c_d,M),
-    attribute(x_y_cardinality,M,_,N).
+    attribute(x_cardinality,M,N).
+attribute(discrete_size,M,N) :-
+    attribute(is_c_d,M),
+    attribute(y_cardinality,M,N).
 attribute(discrete_size,M,1) :-
     attribute(is_c_d,M),
     attribute(mark_encoding_cont,M,E),
@@ -196,16 +199,18 @@ attribute(discrete_size,M,1) :-
     not attribute((mark,channel),M,x).
 attribute(discrete_size,M,N) :-
     attribute(is_d_d,M),
-    attribute(x_y_cardinality,M,x,NX),
-    attribute(x_y_cardinality,M,y,NY),
+    attribute(x_cardinality,M,NX),
+    attribute(y_cardinality,M,NY),
     N = NX*NY.
 
-% @helper(x_y_cardinality) to go from quadratic to linear number of grounding
-attribute(x_y_cardinality,M,x,N) :-
+% @helper(x_cardinality) Cardinality of discrete x. Helps to go from quadratic to linear number of grounding.
+attribute(x_cardinality,M,N) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,x),
     attribute(discrete_cardinality,M,E,N).
-attribute(x_y_cardinality,M,y,N) :-
+
+% @helper(x_cardinality) Cardinality of discrete x. Helps to go from quadratic to linear number of grounding.
+attribute(y_cardinality,M,N) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,y),
     attribute(discrete_cardinality,M,E,N).
