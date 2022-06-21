@@ -15,8 +15,8 @@ parts:
   - caption: API
     chapters:
       - file: api/intro
+      - file: api/draco
       - file: api/schema
-      - file: api/spec
       - file: api/run
       - file: api/facts
       - file: api/programs

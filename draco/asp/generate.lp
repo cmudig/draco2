@@ -42,6 +42,7 @@ not_required((encoding,stack)).
 attribute((scale,channel),(s,S),C) :- attribute((encoding,channel),(e,S),C).
 
 required((scale,type)).
+not_required((scale,zero)).
 
 % generator(facet) Each specification can have at most both row and col facet.
 facet_id(0..1).
