@@ -103,16 +103,14 @@ class Draco:
         violates the preference. Returns None if the problem is not satisfiable.
 
         Internally, Draco checks against the definitions, constraints, helpers,
-        hard constraints, and soft constraints.
+        and soft constraints.
 
         :param spec: The specification to check
         """
         if not isinstance(spec, str):
             spec = "\n".join(spec)
 
-        program = (
-            self.define + self.constraints + self.helpers + self.hard + self.soft + spec
-        )
+        program = self.define + self.constraints + self.helpers + self.soft + spec
 
         try:
             result: DefaultDict[str, int] = defaultdict(int)
