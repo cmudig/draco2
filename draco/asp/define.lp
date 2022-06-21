@@ -1,7 +1,7 @@
 % ====== Definitions of valid function domains ======
 
 % @definition(mark_type) Types of marks to encode data.
-domain((mark,type),(point;bar;line;area;text;tick;rect)).
+domain((mark,type),(point;bar;line;area;text;tick;rect;arc)).
 
 % @definition(field_type) Basic types of the data.
 domain((field,type),(string;number;boolean;datetime)).
@@ -22,7 +22,7 @@ domain((encoding,binning),N) :- domain(binCount,N).
 
 % @definition(channel) Encoding channels.
 domain(positional,(x;y)).
-domain(non_positional,(color;size;shape;text;detail)).
+domain(non_positional,(color;size;shape;text;detail;theta)).
 domain(single_channel,C) :- domain(positional,C).
 domain(single_channel,C) :- domain(non_positional,C).
 domain(multi_channel,detail).
