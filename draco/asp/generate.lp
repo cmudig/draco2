@@ -38,8 +38,8 @@ not_required((encoding,field)).
 not_required((encoding,stack)).
 
 % generator(scale) generate scales such that their ids and channels corresponde to the encodings in each view.
-{ entity(scale,V,(s,E)) } = 1 :- entity(mark,V,M), entity(encoding,M,(e,E)), attribute((encoding,channel),(e,E),C).
-attribute((scale,channel),(s,S),C) :- attribute((encoding,channel),(e,S),C).
+{ entity(scale,V,E) } = 1 :- entity(mark,V,M), entity(encoding,M,E), attribute((encoding,channel),E,C).
+attribute((scale,channel),S,C) :- entity(scale,V,S), attribute((encoding,channel),S,C).
 
 required((scale,type)).
 not_required((scale,zero)).
