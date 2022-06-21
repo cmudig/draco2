@@ -3650,6 +3650,40 @@ def test_d_d_overlap():
         == []
     )
 
+    # discrete x, y; number_rows > D*D
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(number_rows,root,1000).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,10).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("d_d_overlap", "m1")]
+    )
+
     # discrete x, y; color channel is aggregated
     assert (
         list_preferences(
@@ -3709,6 +3743,31 @@ def test_d_d_overlap():
         == [("d_d_overlap", "m1")]
     )
 
+    # only discrete x; number_rows > D
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(number_rows,root,1000).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,1000).
+
+    entity(view,root,v).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,point).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+    attribute((encoding,field),e1,wind).
+    """
+        )
+        == [("d_d_overlap", "m1")]
+    )
+
 
 def test_d_d_point():
     b = soft.blocks["d_d_point"]
@@ -3727,7 +3786,7 @@ def test_d_d_point():
     attribute((encoding,binning),e1,10).
     """
         )
-        == []
+        == [("d_d_point", "m1")]
     )
 
     # discrete x, y
@@ -3819,7 +3878,7 @@ def test_d_d_rect():
     attribute((scale,type),s1,ordinal).
     """
         )
-        == []
+        == [("d_d_rect", "m1")]
     )
 
     # discrete x, y, one root scale

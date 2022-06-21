@@ -132,6 +132,14 @@ attribute(is_d_d,M) :-
     attribute((mark,channel),M,y),
     attribute(mark_channel_discrete_or_binned,M,x),
     attribute(mark_channel_discrete_or_binned,M,y).
+attribute(is_d_d,M) :-
+    attribute((mark,channel),M,x),
+    attribute(mark_channel_discrete_or_binned,M,x),
+    not attribute((mark,channel),M,y).
+attribute(is_d_d,M) :-
+    attribute((mark,channel),M,y),
+    attribute(mark_channel_discrete_or_binned,M,y),
+    not attribute((mark,channel),M,x).
 
 % @helper(non_pos_unaggregated) Non-positional channels are unaggregated.
 attribute(non_pos_unaggregated,M) :-
@@ -157,6 +165,8 @@ attribute(no_overlap,M) :-
     attribute(discrete_size,M,N).
 attribute(no_overlap,M) :-
     attribute(is_d_d,M),
+    attribute((mark,channel),M,C),
+    domain(non_positional,C),
     not attribute(non_pos_unaggregated,M).
 attribute(no_overlap,M) :-
     attribute(is_d_d,M),
@@ -208,9 +218,15 @@ attribute(x_cardinality,M,N) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,x),
     attribute(discrete_cardinality,M,E,N).
+attribute(x_cardinality,M,1) :-
+    entity(mark,_,M),
+    not attribute((mark,channel),M,x).
 
-% @helper(x_cardinality) Cardinality of discrete x. Helps to go from quadratic to linear number of grounding.
+% @helper(y_cardinality) Cardinality of discrete x. Helps to go from quadratic to linear number of grounding.
 attribute(y_cardinality,M,N) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,y),
     attribute(discrete_cardinality,M,E,N).
+attribute(y_cardinality,M,1) :-
+    entity(mark,_,M),
+    not attribute((mark,channel),M,y).
