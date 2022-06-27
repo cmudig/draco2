@@ -1320,11 +1320,16 @@ test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
 
 [[package]]
 name = "pandas-stubs"
-version = "1.2.0.61"
-description = "Type annotations for Pandas"
+version = "1.4.2.220626"
+description = "Type annotations for pandas"
 category = "dev"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8,<3.11"
+
+[package.dependencies]
+matplotlib = ">=3.3.2"
+pandas = "1.4.2"
+typing-extensions = ">=4.2.0"
 
 [[package]]
 name = "pandocfilters"
@@ -2419,7 +2424,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.10"
-content-hash = "93e06be26fa7fbb710d74cde6ab2a6584e36b37aaca72c5fdd26ab2c5e9d4f59"
+content-hash = "bb593e05e722b88dc50e7b3f17fe538469738b66bef01d8f8284ace5acde4411"
 
 [metadata.files]
 alabaster = [
@@ -3229,8 +3234,7 @@ pandas = [
     {file = "pandas-1.4.2.tar.gz", hash = "sha256:92bc1fc585f1463ca827b45535957815b7deb218c549b7c18402c322c7549a12"},
 ]
 pandas-stubs = [
-    {file = "pandas-stubs-1.2.0.61.tar.gz", hash = "sha256:3f2f59da7333b3fb2b216155f0ec26fefda7684d77bd35a096fb0bbdcb938f38"},
-    {file = "pandas_stubs-1.2.0.61-py3-none-any.whl", hash = "sha256:afb6a8d3876af775b8627d8681e9a80bb9c60b6497e75df0329bde41104a91c9"},
+    {file = "pandas_stubs-1.4.2.220626-py3-none-any.whl", hash = "sha256:c0037457dfaff8434cac0fb63fd261fac296abf003c931a8546d2c0c8369eac2"},
 ]
 pandocfilters = [
     {file = "pandocfilters-1.5.0-py2.py3-none-any.whl", hash = "sha256:33aae3f25fd1a026079f5d27bdd52496f0e0803b3469282162bafdcbdf6ef14f"},
