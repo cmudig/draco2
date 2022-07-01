@@ -19,16 +19,16 @@ class Program:
     blocks: Blocks
 
 
-def get_program(file_path: Path) -> Program:
+def read_program(file_path: Path) -> Program:
     with open(file_path) as f:
         prog = f.read()
         return Program(prog, parse_blocks(prog))
 
 
-define = get_program(asp_path / "define.lp")
-constraints = get_program(asp_path / "constraints.lp")
-generate = get_program(asp_path / "generate.lp")
-hard = get_program(asp_path / "hard.lp")
-helpers = get_program(asp_path / "helpers.lp")
-soft = get_program(asp_path / "soft.lp")
-optimize = get_program(asp_path / "optimize.lp")
+define = read_program(asp_path / "define.lp")
+constraints = read_program(asp_path / "constraints.lp")
+generate = read_program(asp_path / "generate.lp")
+hard = read_program(asp_path / "hard.lp")
+helpers = read_program(asp_path / "helpers.lp")
+soft = read_program(asp_path / "soft.lp")
+optimize = read_program(asp_path / "optimize.lp")
