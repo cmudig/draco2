@@ -20,10 +20,10 @@ mark_id(V,M) :- entity(view,_,(v,V)), N = 0..max_marks-1, M = ((max_marks) * V) 
 :- entity(mark,_,(m,ID)), not entity(mark,_,(m,ID-1)), ID\max_marks > 0.
 
 % maximum number for total encoding channels
-#const max_extra_encs = 4.
-encoding_id(M,E) :- entity(mark,_,(m,M)), N = 0..max_extra_encs-1, E = ((max_extra_encs) * M) + N.
+#const max_encs = 4.
+encoding_id(M,E) :- entity(mark,_,(m,M)), N = 0..max_encs-1, E = ((max_encs) * M) + N.
 { entity(encoding,(m,M),(e,E)) : entity(mark,_,(m,M)), encoding_id(M,E) }.
-:- entity(encoding,_,(e,ID)), not entity(encoding,_,(e,ID-1)), ID\max_extra_encs > 0.
+:- entity(encoding,_,(e,ID)), not entity(encoding,_,(e,ID-1)), ID\max_encs > 0.
 
 % @generate(encoding_channel) Each encoding requires a channel.
 required((encoding,channel)).
