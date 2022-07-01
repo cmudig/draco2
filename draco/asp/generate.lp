@@ -8,21 +8,22 @@
 % single view v0 on the root
 { entity(view,root,(v,0)) } = 1.
 
-% maximum number of non-layered views.
+% % maximum number of non-layered views.
 #const max_views = 1.
 { entity(view,root,(v,0..max_views-1)) }.
 :- entity(view,root,(v,ID)), not entity(view,root,(v,ID-1)), ID > 1.
 
-% maximum number of marks for each view
+% maximum number of additional marks for each view
 #const max_marks = 2.
-{ entity(mark,(v,V),(m,V,0..max_marks-1)) : entity(view,_,(v,V)) }.
-:- entity(mark,(v,V),(m,V,ID)), not entity(mark,(v,V),(m,V,ID-1)), ID > 1.
+mark_id(V,M) :- entity(view,_,(v,V)), N = 0..max_marks-1, M = ((max_marks) * V) + N.
+{ entity(mark,(v,V),(m,M)) : entity(view,_,(v,V)), mark_id(V,M) }.
+:- entity(mark,_,(m,ID)), not entity(mark,_,(m,ID-1)), ID\max_marks > 0.
 
 % maximum number for total encoding channels
-#const max_encs = 4.
-{ entity(encoding,(m,V,M),(e,V,M,0..max_encs-1)) : entity(mark,(v,V),(m,V,M)) }.
-:- entity(encoding,(m,V,M),(e,V,M,ID)), not entity(encoding,(m,V,M),(e,V,M,ID-1)), ID > 1.
-
+#const max_extra_encs = 4.
+encoding_id(M,E) :- entity(mark,_,(m,M)), N = 0..max_extra_encs-1, E = ((max_extra_encs) * M) + N.
+{ entity(encoding,(m,M),(e,E)) : entity(mark,_,(m,M)), encoding_id(M,E) }.
+:- entity(encoding,_,(e,ID)), not entity(encoding,_,(e,ID-1)), ID\max_extra_encs > 0.
 
 % @generate(encoding_channel) Each encoding requires a channel.
 required((encoding,channel)).
