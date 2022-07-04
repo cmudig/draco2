@@ -8,7 +8,7 @@
 % single view v0 on the root
 { entity(view,root,(v,0)) } = 1.
 
-% % maximum number of non-layered views.
+% maximum number of non-layered views.
 #const max_views = 1.
 { entity(view,root,(v,0..max_views-1)) }.
 :- entity(view,root,(v,ID)), not entity(view,root,(v,ID-1)), ID > 1.
