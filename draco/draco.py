@@ -18,6 +18,7 @@ class Draco:
         define: Union[Program, str] = programs.define,
         constraints: Union[Program, str] = programs.constraints,
         helpers: Union[Program, str] = programs.helpers,
+        generate: Union[Program, str] = programs.generate,
         hard: Union[Program, str] = programs.hard,
         soft: Union[Program, str] = programs.soft,
         optimize: Union[Program, str] = programs.optimize,
@@ -30,11 +31,11 @@ class Draco:
             :param define: The program for defining variables.
             :param constraints: The program for defining constraints.
             :param helpers: The program for defining helper functions.
+            :param generate: The program for generating facts.
             :param hard: The program for defining hard constraints.
             :param soft: The program for defining soft constraints.
             :param optimize: The program for optimizing soft constraints.
-
-            :param assign_weights: The program for assigning weights to soft
+            :param weights: The program for assigning weights to soft
                 constraints.
             :param soft_constraint_names: The names of the soft constraints
                 which can be used as features for ML.
@@ -49,6 +50,7 @@ class Draco:
         self.define = to_string(define)
         self.constraints = to_string(constraints)
         self.helpers = to_string(helpers)
+        self.generate = to_string(generate)
         self.hard = to_string(hard)
         self.soft = to_string(soft)
         self.optimize = to_string(optimize)
@@ -97,6 +99,32 @@ class Draco:
 
         program = self.define + self.constraints + self.helpers + self.hard + spec
         return is_satisfiable(program)
+
+    def complete_spec(self, spec: Union[str, Iterable[str]], models=1):
+        """Get optimal completions for the [partial input specification.
+
+        :param spec: The partial specification to complete.
+        :param models: The number of completetions to return, defaults to 1
+        """
+        if not isinstance(spec, str):
+            spec = "\n".join(spec)
+
+        program = (
+            self.define
+            + self.generate
+            + self.constraints
+            + self.helpers
+            + self.hard
+            + self.soft
+            + self.assign_weights
+            + self.optimize
+            + spec
+        )
+
+        # pass the weights as constrant to Clingo
+        args = [f"-c {w}={v}" for w, v in self.weights.items()]
+
+        return run_clingo(program, models, True, args)
 
     def count_preferences(self, spec: Union[str, Iterable[str]]):
         """Get a dictionary from preferences to how often a given specification

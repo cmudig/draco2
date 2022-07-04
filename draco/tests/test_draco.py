@@ -1,7 +1,6 @@
 import pytest
-
 from draco import Draco
-from draco.fact_utils import dict_to_facts
+from draco.fact_utils import answer_set_to_dict, dict_to_facts
 
 default_draco = Draco()
 
@@ -125,3 +124,31 @@ def test_count_preferences_unsatisfiable():
 def test_weight_mismatch():
     with pytest.raises(AssertionError):
         Draco(weights={})
+
+
+def test_complete_histogram():
+    partial_spec = """
+    attribute(number_rows,root,100).
+
+    entity(field,root,(f,0)).
+    attribute((field,name),(f,0),temperature).
+    attribute((field,type),(f,0),number).
+    attribute((field,unique),(f,0),100).
+
+    entity(view,root,(v,0)).
+
+    entity(mark,(v,0),(m,0)).
+    entity(encoding,(m,0),(e,0)).
+    attribute((encoding,field),(e,0),(f,0)).
+    attribute((encoding,binning),(e,0),10).
+    """.split()
+
+    model = next(default_draco.complete_spec(partial_spec))
+    assert model.number == 1
+
+    spec = answer_set_to_dict(model.answer_set)
+    mark = spec["view"][0]["mark"][0]
+    encodings = mark["encoding"]
+
+    assert len(encodings) == 2
+    assert mark["type"] == "bar"
