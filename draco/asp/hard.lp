@@ -149,10 +149,7 @@ violation(line_area_with_discrete) :-
 % @hard(bar_tick_continuous_x_y) Bar and tick cannot have both x and y continuous.
 violation(bar_tick_continuous_x_y) :-
     attribute((mark,type),M,(tick;bar)),
-    attribute(mark_channel_scale,M,T1,x),
-    attribute(mark_channel_scale,M,T2,y),
-    domain(continuous_scale,T1),
-    domain(continuous_scale,T2).
+    attribute(is_c_c,M).
 
 % @hard(view_scale_conflict) A view cannot have a scale definition that conflicts with a shared scale for the same channel.
 violation(view_scale_conflict) :-
@@ -223,8 +220,7 @@ violation(detail_not_ordinal) :-
 % @hard(bar_tick_area_line_without_continuous_x_y) Bar, tick, line, area require some continuous variable on x or y.
 violation(bar_tick_area_line_without_continuous_x_y) :-
     attribute((mark,type),M,(bar;tick;area;line)),
-    attribute(mark_channel_discrete_or_binned,M,x),
-    attribute(mark_channel_discrete_or_binned,M,y).
+    { attribute(mark_channel_cont,M,x);attribute(mark_channel_cont,M,y) } <= 0.
 
 % @hard(zero_d_n) Can only use zero with datetime or number.
 violation(zero_d_n) :-
