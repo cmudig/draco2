@@ -34,6 +34,11 @@ def test_run_clingo_list():
     next(run_clingo(["a.", "b."]))
 
 
+def test_model_string():
+    m = next(run_clingo(["a.", "b."]))
+    assert str(m) == "a.\nb."
+
+
 def test_run_clingo_top_k():
     models = list(
         run_clingo(
