@@ -2705,3 +2705,98 @@ def test_invalid_non_string_freq():
         )
         == ["invalid_non_string_freq"]
     )
+
+
+def test_arc_mark_without_theta_channel():
+    b = hard.blocks["arc_mark_without_theta_channel"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((mark,type),m1,arc).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+    """
+    )
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((mark,type),m1,arc).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,color).
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,theta).
+    """
+    )
+
+    # no encoding
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((mark,type),m1,arc).
+    """
+        )
+        == ["arc_mark_without_theta_channel"]
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((mark,type),m1,arc).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    """
+        )
+        == ["arc_mark_without_theta_channel"]
+    )
+
+    # text encoding for a different mark
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((mark,type),m1,arc).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    attribute((mark,type),m2,point).
+    entity(encoding,m2,e3).
+    attribute((encoding,channel),e3,theta).
+    """
+        )
+        == ["arc_mark_without_theta_channel"]
+    )
+
+
+def test_theta_channel_without_arc_mark():
+    b = hard.blocks["theta_channel_without_arc_mark"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((mark,type),m1,arc).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((mark,type),m1,bar).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+    """
+        )
+        == ["theta_channel_without_arc_mark"]
+    )

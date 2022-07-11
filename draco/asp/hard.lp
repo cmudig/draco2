@@ -127,6 +127,16 @@ violation(text_channel_without_text_mark) :-
     attribute((mark,channel),M,text),
     not attribute((mark,type),M,text).
 
+% @hard(arc_mark_without_theta_channel) Arc mark requires theta encoding.
+violation(arc_mark_without_theta_channel) :-
+    attribute((mark,type),M,arc),
+    not attribute((mark,channel),M,theta).
+
+% @hard(theta_channel_without_arc_mark) Theta channel requires arc mark.
+violation(theta_channel_without_arc_mark) :-
+    attribute((mark,channel),M,theta),
+    not attribute((mark,type),M,arc).
+
 % @hard(point_tick_bar_without_x_or_y) Point, tick, and bar require x or y channel.
 violation(point_tick_bar_without_x_or_y) :-
     attribute((mark,type),M,(point;tick;bar)),
