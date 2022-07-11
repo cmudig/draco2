@@ -19,7 +19,7 @@ Install Conda (we use [miniforge](https://github.com/conda-forge/miniforge) but 
 To create a virtual environment named `draco`, you can run
 
 ```sh
-conda create -n draco python=3.8
+conda create -n draco python=3.9
 conda activate draco
 poetry install
 ```

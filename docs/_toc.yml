@@ -20,6 +20,9 @@ parts:
       - file: api/run
       - file: api/facts
       - file: api/programs
+  - caption: Applications
+    chapters:
+      - file: applications/recommendation
   - caption: Guide
     chapters:
       - file: guide
