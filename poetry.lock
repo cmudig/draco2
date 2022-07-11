@@ -1411,7 +1411,7 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pre-commit"
-version = "2.19.0"
+version = "2.20.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 category = "dev"
 optional = false
@@ -2420,7 +2420,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.10"
-content-hash = "bc71946eba3a54fca93c5a0e08f98f8f0e2a9756afff6ee925b2901ad6189458"
+content-hash = "60543d575ceff003cf8fe7320ba0d9f9fdce0fe2b18c4db104a1fc6b31ce1525"
 
 [metadata.files]
 alabaster = []
