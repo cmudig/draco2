@@ -13,16 +13,17 @@
 { entity(view,root,(v,0..max_views-1)) }.
 :- entity(view,root,(v,ID)), not entity(view,root,(v,ID-1)), ID > 1.
 
-% maximum number of marks for each view
+% maximum number of additional marks for each view
 #const max_marks = 2.
-{ entity(mark,(v,V),(m,V,0..max_marks-1)) : entity(view,_,(v,V)) }.
-:- entity(mark,(v,V),(m,V,ID)), not entity(mark,(v,V),(m,V,ID-1)), ID > 1.
+mark_id(V,M) :- entity(view,_,(v,V)), N = 0..max_marks-1, M = ((max_marks) * V) + N.
+{ entity(mark,(v,V),(m,M)) : entity(view,_,(v,V)), mark_id(V,M) }.
+:- entity(mark,_,(m,ID)), not entity(mark,_,(m,ID-1)), ID\max_marks > 0.
 
 % maximum number for total encoding channels
 #const max_encs = 4.
-{ entity(encoding,(m,V,M),(e,V,M,0..max_encs-1)) : entity(mark,(v,V),(m,V,M)) }.
-:- entity(encoding,(m,V,M),(e,V,M,ID)), not entity(encoding,(m,V,M),(e,V,M,ID-1)), ID > 1.
-
+encoding_id(M,E) :- entity(mark,_,(m,M)), N = 0..max_encs-1, E = ((max_encs) * M) + N.
+{ entity(encoding,(m,M),(e,E)) : entity(mark,_,(m,M)), encoding_id(M,E) }.
+:- entity(encoding,_,(e,ID)), not entity(encoding,_,(e,ID-1)), ID\max_encs > 0.
 
 % @generate(encoding_channel) Each encoding requires a channel.
 required((encoding,channel)).
@@ -38,8 +39,8 @@ not_required((encoding,field)).
 not_required((encoding,stack)).
 
 % generator(scale) generate scales such that their ids and channels corresponde to the encodings in each view.
-{ entity(scale,V,(s,E)) } = 1 :- entity(mark,V,M), entity(encoding,M,(e,E)), attribute((encoding,channel),(e,E),C).
-attribute((scale,channel),(s,S),C) :- attribute((encoding,channel),(e,S),C).
+{ entity(scale,V,E) } = 1 :- entity(mark,V,M), entity(encoding,M,E), attribute((encoding,channel),E,C).
+attribute((scale,channel),S,C) :- entity(scale,V,S), attribute((encoding,channel),S,C).
 
 required((scale,type)).
 not_required((scale,zero)).
