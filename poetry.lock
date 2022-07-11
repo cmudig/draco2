@@ -1320,7 +1320,7 @@ test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
 
 [[package]]
 name = "pandas-stubs"
-version = "1.4.3.220703"
+version = "1.4.3.220710"
 description = "Type annotations for pandas"
 category = "dev"
 optional = false
