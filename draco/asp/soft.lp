@@ -448,6 +448,11 @@ preference(linear_text,E) :-
     attribute((encoding,channel),E,text),
     attribute((encoding,scale_type),E,linear).
 
+% @soft(linear_theta) Linear scale with theta channel.
+preference(linear_theta,E) :-
+    attribute((encoding,channel),E,theta),
+    attribute((encoding,scale_type),E,linear).
+
 % @soft(log_x) Log scale with x channel.
 preference(log_x,E) :-
     attribute((encoding,channel),E,x),
@@ -471,6 +476,11 @@ preference(log_size,E) :-
 % @soft(log_text) Log scale with text channel.
 preference(log_text,E) :-
     attribute((encoding,channel),E,text),
+    attribute((encoding,scale_type),E,log).
+
+% @soft(log_theta) Log scale with theta channel.
+preference(log_theta,E) :-
+    attribute((encoding,channel),E,theta),
     attribute((encoding,scale_type),E,log).
 
 % @soft(ordinal_x) Ordinal scale with x channel.
@@ -506,6 +516,11 @@ preference(ordinal_text,E) :-
 % @soft(ordinal_detail) Ordinal scale with detail channel.
 preference(ordinal_detail,E) :-
     attribute((encoding,channel),E,detail),
+    attribute((encoding,scale_type),E,ordinal).
+
+% @soft(ordinal_theta) Ordinal scale with theta channel.
+preference(ordinal_theta,E) :-
+    attribute((encoding,channel),E,theta),
     attribute((encoding,scale_type),E,ordinal).
 
 % @soft(categorical_color) Categorical scale with color channel.
@@ -588,6 +603,11 @@ preference(value_rect,M) :-
     attribute(task,root,value),
     attribute((mark,type),M,rect).
 
+% @soft(value_arc) Arc mark for value tasks.
+preference(value_arc,M) :-
+    attribute(task,root,value),
+    attribute((mark,type),M,arc).
+
 % @soft(summary_point) Point mark for summary tasks.
 preference(summary_point,M) :-
     attribute(task,root,summary),
@@ -623,6 +643,11 @@ preference(summary_rect,M) :-
     attribute(task,root,summary),
     attribute((mark,type),M,rect).
 
+% @soft(summary_arc) Arc mark for summary tasks.
+preference(summary_arc,M) :-
+    attribute(task,root,summary),
+    attribute((mark,type),M,arc).
+
 % @soft(value_continuous_x) Continuous x for value tasks.
 preference(value_continuous_x,E) :-
     attribute(task,root,value),
@@ -651,6 +676,12 @@ preference(value_continuous_size,E) :-
 preference(value_continuous_text,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,text),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(value_continuous_theta) Continuous theta for value tasks.
+preference(value_continuous_theta,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,theta),
     not attribute(mark_encoding_discrete_or_binned,_,E).
 
 % @soft(value_discrete_x) Discrete x for value tasks.
@@ -695,6 +726,12 @@ preference(value_discrete_detail,E) :-
     attribute((encoding,channel),E,detail),
     attribute(mark_encoding_discrete_or_binned,_,E).
 
+% @soft(value_discrete_theta) Discrete theta for value tasks.
+preference(value_discrete_theta,E) :-
+    attribute(task,root,value),
+    attribute((encoding,channel),E,theta),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
 % @soft(summary_continuous_x) Continuous x for summary tasks.
 preference(summary_continuous_x,E) :-
     attribute(task,root,summary),
@@ -717,6 +754,12 @@ preference(summary_continuous_color,E) :-
 preference(summary_continuous_size,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,size),
+    not attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_continuous_theta) Continuous theta for summary tasks.
+preference(summary_continuous_theta,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,theta),
     not attribute(mark_encoding_discrete_or_binned,_,E).
 
 % @soft(summary_continuous_text) Continuous text for summary tasks.
@@ -765,4 +808,10 @@ preference(summary_discrete_text,E) :-
 preference(summary_discrete_detail,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,detail),
+    attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(summary_discrete_theta) Discrete theta for summary tasks.
+preference(summary_discrete_theta,E) :-
+    attribute(task,root,summary),
+    attribute((encoding,channel),E,theta),
     attribute(mark_encoding_discrete_or_binned,_,E).

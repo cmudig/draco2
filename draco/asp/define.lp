@@ -68,6 +68,3 @@ domain((scale,zero),true).
 domain((facet,field),F) :- entity(field,_,F).
 domain((facet,channel),(row;col)).
 domain((facet,binning),N) :- domain(binCount,N).
-
-% @definition(encoding,inner_radius) Only for theta encoding
-domain((encoding,inner_radius),(10;25;50)).

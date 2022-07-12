@@ -357,3 +357,8 @@ violation(invalid_extent_order) :-
 violation(invalid_non_string_freq) :-
     attribute((field,freq),F,_),
     not attribute((field,type),F,string).
+
+% @hard(arc_invalid_channels) Arc mark cannot work with x, y, size, shape, text channels
+violation(arc_invalid_channels) :-
+    attribute((mark,type),M,arc),
+    attribute((mark,channel),M,(x;y;size;shape;text)).

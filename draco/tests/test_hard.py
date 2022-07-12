@@ -2800,3 +2800,52 @@ def test_theta_channel_without_arc_mark():
         )
         == ["theta_channel_without_arc_mark"]
     )
+
+
+def test_arc_invalid_channels():
+    b = hard.blocks["arc_invalid_channels"]
+    assert isinstance(b, Block)
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((mark,type),m1,arc).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+    """
+    )
+
+    assert no_violations(
+        b.program
+        + """
+    attribute((mark,type),m1,arc).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,detail).
+    """
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((mark,type),m1,arc).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    """
+        )
+        == ["arc_invalid_channels"]
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    attribute((mark,type),m1,arc).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,shape).
+    """
+        )
+        == ["arc_invalid_channels"]
+    )

@@ -4109,6 +4109,46 @@ def test_linear_text():
     )
 
 
+def test_linear_theta():
+    b = soft.blocks["linear_theta"]
+    assert isinstance(b, Block)
+
+    # log theta
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,theta).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,theta).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("linear_theta", "e1")]
+    )
+
+
 def test_log_x():
     b = soft.blocks["log_x"]
     assert isinstance(b, Block)
@@ -4306,6 +4346,46 @@ def test_log_text():
     """
         )
         == [("log_text", "e1")]
+    )
+
+
+def test_log_theta():
+    b = soft.blocks["log_theta"]
+    assert isinstance(b, Block)
+
+    # ordinal theta
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,theta).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,theta).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("log_theta", "e1")]
     )
 
 
@@ -4579,6 +4659,45 @@ def test_ordinal_detail():
     """
         )
         == [("ordinal_detail", "e1")]
+    )
+
+
+def test_ordinal_theta():
+    b = soft.blocks["ordinal_theta"]
+    assert isinstance(b, Block)
+
+    # scale on root, linear theta
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,theta).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,theta).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("ordinal_theta", "e1")]
     )
 
 
@@ -5137,6 +5256,37 @@ def test_value_rect():
     )
 
 
+def test_value_arc():
+    b = soft.blocks["value_arc"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,text).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,arc).
+    """
+        )
+        == [("value_arc", "m1")]
+    )
+
+
 def test_summary_point():
     b = soft.blocks["summary_point"]
     assert isinstance(b, Block)
@@ -5360,6 +5510,37 @@ def test_summary_rect():
     )
 
 
+def test_summary_arc():
+    b = soft.blocks["summary_arc"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,arc).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    attribute((mark,type),m1,arc).
+    """
+        )
+        == [("summary_arc", "m1")]
+    )
+
+
 def test_value_continuous_x():
     b = soft.blocks["value_continuous_x"]
     assert isinstance(b, Block)
@@ -5560,6 +5741,45 @@ def test_value_continuous_text():
     """
         )
         == [("value_continuous_text", "e1")]
+    )
+
+
+def test_value_continuous_theta():
+    b = soft.blocks["value_continuous_theta"]
+    assert isinstance(b, Block)
+
+    # continuous theta, summary task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+    """
+        )
+        == []
+    )
+
+    # continuous theta
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,theta).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("value_continuous_theta", "e1")]
     )
 
 
@@ -5847,6 +6067,47 @@ def test_value_discrete_detail():
     )
 
 
+def test_value_discrete_theta():
+    b = soft.blocks["value_discrete_theta"]
+    assert isinstance(b, Block)
+
+    # discrete theta, summary task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+    attribute((encoding,binning),e1,15).
+    """
+        )
+        == []
+    )
+
+    # discrete theta, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,theta).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("value_discrete_theta", "e1")]
+    )
+
+
 def test_summary_continuous_x():
     b = soft.blocks["summary_continuous_x"]
     assert isinstance(b, Block)
@@ -6047,6 +6308,45 @@ def test_summary_continuous_text():
     """
         )
         == [("summary_continuous_text", "e1")]
+    )
+
+
+def test_summary_continuous_theta():
+    b = soft.blocks["summary_continuous_theta"]
+    assert isinstance(b, Block)
+
+    # continuous theta, value task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+    """
+        )
+        == []
+    )
+
+    # continuous theta
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,theta).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("summary_continuous_theta", "e1")]
     )
 
 
@@ -6331,4 +6631,45 @@ def test_summary_discrete_detail():
     """
         )
         == [("summary_discrete_detail", "e1")]
+    )
+
+
+def test_summary_discrete_theta():
+    b = soft.blocks["summary_discrete_theta"]
+    assert isinstance(b, Block)
+
+    # discrete theta, value task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+    attribute((encoding,binning),e1,15).
+    """
+        )
+        == []
+    )
+
+    # discrete theta, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,summary).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,theta).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,theta).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == [("summary_discrete_theta", "e1")]
     )
