@@ -12,13 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
       - name: Install Poetry
         uses: snok/install-poetry@v1.3
       - name: Cache Poetry virtualenv
-        uses: actions/cache@v3.0.3
+        uses: actions/cache@v3.0.4
         id: cache
         with:
           path: ~/.virtualenvs
