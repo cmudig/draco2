@@ -4,8 +4,7 @@ from typing import DefaultDict, Iterable, Union
 import draco.programs as programs
 from draco.asp_utils import blocks_to_program, parse_blocks
 from draco.run import is_satisfiable, run_clingo
-from draco.weights import Weights, assign_program
-from draco.weights import weights as draco_weights
+from draco.weights import assign_program, Weights, weights as draco_weights
 
 Program = programs.Program
 
@@ -101,7 +100,7 @@ class Draco:
         return is_satisfiable(program)
 
     def complete_spec(self, spec: Union[str, Iterable[str]], models=1):
-        """Get optimal completions for the [partial input specification.
+        """Get optimal completions for the partial input specification.
 
         :param spec: The partial specification to complete.
         :param models: The number of completetions to return, defaults to 1
@@ -121,10 +120,7 @@ class Draco:
             + spec
         )
 
-        # pass the weights as constrant to Clingo
-        args = [f"-c {w}={v}" for w, v in self.weights.items()]
-
-        return run_clingo(program, models, True, args)
+        return run_clingo(program, models, True)
 
     def count_preferences(self, spec: Union[str, Iterable[str]]):
         """Get a dictionary from preferences to how often a given specification
