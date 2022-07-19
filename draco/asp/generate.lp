@@ -5,25 +5,23 @@
 { attribute((N,A),E,V): domain((N,A),V) } = 1 :- entity(N,_,E), required((N,A)).
 0 { attribute((N,A),E,V): domain((N,A),V) } 1 :- entity(N,_,E), not_required((N,A)).
 
-% single view v0 on the root
-{ entity(view,root,(v,0)) } = 1.
-
 % maximum number of non-layered views.
 #const max_views = 1.
 { entity(view,root,(v,0..max_views-1)) }.
-:- entity(view,root,(v,ID)), not entity(view,root,(v,ID-1)), ID > 1.
+:- { entity(view,root,_) } > max_views.
+:- entity(view,root,(v,ID)), not entity(view,root,(v,ID-1)), ID > 0.
 
-% maximum number of additional marks for each view
+% maximum number of additional marks for each view.
 #const max_marks = 2.
-mark_id(V,M) :- entity(view,_,(v,V)), N = 0..max_marks-1, M = ((max_marks) * V) + N.
-{ entity(mark,(v,V),(m,M)) : entity(view,_,(v,V)), mark_id(V,M) }.
-:- entity(mark,_,(m,ID)), not entity(mark,_,(m,ID-1)), ID\max_marks > 0.
+{ mark_id(V,0..max_marks-1) } :- entity(view,root,V).
+:- mark_id(V,ID), not mark_id(V,ID-1), ID > 0.
+{ entity(mark,V,(V,M)) } :- mark_id(V,M).
 
-% maximum number for total encoding channels
+% maximum number for additional encoding channels.
 #const max_encs = 4.
-encoding_id(M,E) :- entity(mark,_,(m,M)), N = 0..max_encs-1, E = ((max_encs) * M) + N.
-{ entity(encoding,(m,M),(e,E)) : entity(mark,_,(m,M)), encoding_id(M,E) }.
-:- entity(encoding,_,(e,ID)), not entity(encoding,_,(e,ID-1)), ID\max_encs > 0.
+{ enc_id(M,0..max_encs-1) } :- entity(mark,V,M).
+:- enc_id(M,ID), not mark_id(M,ID-1), ID > 0.
+{ entity(encoding,M,(M,E)) } :- enc_id(M,E).
 
 % @generate(encoding_channel) Each encoding requires a channel.
 required((encoding,channel)).
@@ -38,12 +36,12 @@ not_required((encoding,aggregate)).
 not_required((encoding,field)).
 not_required((encoding,stack)).
 
-% @generator(scale) generate scales such that their ids and channels corresponde to the encodings in each view.
-scale_id((v,V),(s,S)) :- S = (C + 1) * V + N, N = 0..C, count_channels((v,V),C).
-{ entity(scale,V,S) : scale_id(V,S) }.
-:- entity(scale,V,(s,ID)), not entity(scale,V,(s,ID-1)), count_channels(V,C), ID > 0, ID != C.
+% @generator(scale) generate scales for all encoding channels from each view.
 % count the total number of channels of the marks in the same view.
 count_channels(V,N) :- N = #count{ C : domain(encoding_channel,V,C) }, entity(view,_,V).
+scale_id(V,0..C-1) :- count_channels(V,C).
+{ entity(scale,V,(s,V,S)) : scale_id(V,S) }.
+:- entity(scale,V,(s,V,ID)), not entity(scale,V,(s,V,ID-1)), ID > 0.
 
 required((scale,channel)).
 required((scale,type)).
