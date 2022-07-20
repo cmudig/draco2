@@ -130,4 +130,6 @@ dmypy.json
 
 # temporary files
 **/_tmp/*
+
+# Jupyter book file
 docs/conf.py
