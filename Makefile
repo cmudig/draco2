@@ -13,7 +13,8 @@ cover:
 .PHONY: lint
 lint:
 	@echo "==> 👕 Linting"
-	@poetry run ufmt format .
+	@poetry run black .
+	@poetry run isort .
 	@poetry run flake8 draco --statistics
 
 .PHONY: typecheck
