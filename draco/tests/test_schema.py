@@ -5,7 +5,6 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
-
 from draco import schema
 
 SIMPLE_SCHEMA = {
