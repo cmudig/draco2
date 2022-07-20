@@ -1,9 +1,15 @@
 repos:
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+
   - repo: https://github.com/psf/black
-    rev: 22.1.0
+    rev: 22.3.0
     hooks:
       - id: black
-        language_version: python3
+        language_version: python3.9
+
   - repo: https://gitlab.com/pycqa/flake8.git
     rev: 4.0.1
     hooks:
@@ -12,8 +18,3 @@ repos:
           - flake8-black>=0.2.4
         language_version: python3
         exclude: docs/conf.py
-  - repo: https://github.com/executablebooks/jupyter-book
-    rev: 04fdc37fc246d44a53c6b231c3d8566d2b0f305e
-    hooks:
-      - id: jb-to-sphinx
-        args: ["./docs"]

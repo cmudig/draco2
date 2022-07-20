@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 
 import pytest
+
 from draco.programs import soft
 from draco.weights import read_weights, weights
 

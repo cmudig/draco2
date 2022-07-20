@@ -27,15 +27,16 @@ classifiers = [
 
 [tool.poetry.dependencies]
 clingo = "^5.5.2"
+matplotlib = "^3.5.2"
 pandas = "^1.4.2"
 python = ">=3.8.0,<3.10"
-matplotlib = "^3.5.2"
 scikit-learn = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 black = {extras = ["jupyter"], version = "^22.3.0"}
 flake8 = "^4.0.1"
 flake8-black = "^0.3.3"
+isort = "^5.10.1"
 jupyter-book = "^0.13.0"
 jupyterlab = "^3.4.3"
 mypy = "^0.961"
@@ -46,7 +47,6 @@ pytest-cov = "^3.0.0"
 pytype = "^2022.6.14"
 sphinx-autodoc-typehints = "^1.18.3"
 types-pkg-resources = "^0.1.2"
-usort = "^1.0.2"
 vega-datasets = "^0.9.0"
 
 [build-system]
@@ -59,3 +59,5 @@ include = ["draco"]
 [tool.black]
 exclude = "docs/conf.py|docs/_build|.pytype"
 
+[tool.isort]
+profile = "black"
