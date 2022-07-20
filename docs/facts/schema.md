@@ -4,7 +4,7 @@ In Draco, you can describe what you know about the dataset and the fields in the
 
 Besides general statistics about the whole dataset, the schema has information about field types and field statistics.
 
-You can use Draco's [data schema API](../api/schema.ipynb) to generate a schema description from a file or Pandas dataframe.
+You can use Draco's [data schema API](../api/schema.ipynb) to generate a schema description from a file or [Pandas dataframe](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html).
 
 ## Dataset Properties
 
@@ -15,7 +15,7 @@ General properties of the dataset that are not specific to a field are propertie
 
 ## Field Properties
 
-Draco can use information about the field type and field statistics. Each field entity is associated with a field. The facts therefore have the form of e.g. `attribute((field,type),foo,number).` (read as _the type of the foo field is number_). For each field, there should be a entity fact `entity` that tells Draco that the field exists on the root (e.g. `entity(field,root,foo).`).
+Draco can use information about the field type and field statistics. Each field entity is associated with a field. The facts therefore have the form of e.g. `attribute((field,type),foo,number).` (read as _the type of the foo field is number_). For each field, there should be an entity fact `entity` that tells Draco that the field exists on the root (e.g. `entity(field,root,foo).`).
 
 `(field,name)`
 : The name of the field.

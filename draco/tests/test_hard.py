@@ -1052,7 +1052,7 @@ def test_bar_tick_continuous_x_y():
     """
     )
 
-    # both x and y are continous, and x is binned
+    # both x and y are continuous, and x is binned
     assert no_violations(
         b.program
         + """
@@ -1076,7 +1076,7 @@ def test_bar_tick_continuous_x_y():
     """
     )
 
-    # both x and y are continous and binned
+    # both x and y are continuous and binned
     assert no_violations(
         b.program
         + """
@@ -1732,7 +1732,7 @@ def test_bar_tick_area_line_without_continuous_x_y():
     """
     )
 
-    # both x and y are continous, and x is binned
+    # both x and y are continuous, and x is binned
     assert no_violations(
         b.program
         + """
@@ -2424,7 +2424,7 @@ def test_stack_with_non_positional_non_agg():
     """
     )
 
-    # cannot use non positional continuous with stack unless it is aggregated.
+    # cannot use non-positional continuous with stack unless it is aggregated.
     assert (
         list_violations(
             p
