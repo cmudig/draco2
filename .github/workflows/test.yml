@@ -18,8 +18,8 @@ jobs:
         run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
-          cache: 'poetry'
+          python-version-file: ".python-version"
+          cache: "poetry"
       - run: poetry install
 
       - name: Run tests
@@ -41,6 +41,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
+        with:
+          python-version-file: ".python-version"
       - uses: psf/black@stable
         with:
           version: "22.3.0"
