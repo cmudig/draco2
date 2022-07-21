@@ -36,12 +36,9 @@ not_required((encoding,aggregate)).
 not_required((encoding,field)).
 not_required((encoding,stack)).
 
-% @generator(scale) generate scales for all encoding channels from each view.
-% count the total number of channels of the marks in the same view.
-count_channels(V,N) :- N = #count{ C : domain(encoding_channel,V,C) }, entity(view,_,V).
-scale_id(V,0..C-1) :- count_channels(V,C).
-{ entity(scale,V,(s,V,S)) : scale_id(V,S) }.
-:- entity(scale,V,(s,V,ID)), not entity(scale,V,(s,V,ID-1)), ID > 0.
+% generator(scale) generate scales such that their ids and channels corresponde to the encodings in each view.
+{ entity(scale,V,(s,E)) } :- entity(mark,V,M), entity(encoding,M,E), attribute((encoding,channel),E,C).
+attribute((scale,channel),(s,E),C) :- entity(scale,V,(s,E)), attribute((encoding,channel),E,C).
 
 required((scale,channel)).
 required((scale,type)).
