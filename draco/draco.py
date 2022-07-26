@@ -121,7 +121,7 @@ class Draco:
             + spec
         )
 
-        # pass the weights as constrant to Clingo
+        # pass the weights as constraint to Clingo
         args = [f"-c {w}={v}" for w, v in self.weights.items()]
 
         return run_clingo(program, models, True, args)
