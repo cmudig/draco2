@@ -35,6 +35,9 @@ sphinx:
   extra_extensions:
     - "sphinx.ext.autodoc"
     - "sphinx_autodoc_typehints"
+  config:
+    # Possible `autodoc` configs: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration
+    autodoc_preserve_defaults: True
 
 bibtex_bibfiles:
   - references.bib

@@ -2,14 +2,10 @@
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
   "python.linting.mypyEnabled": false,
-  "python.testing.nosetestsEnabled": false,
   "python.testing.pytestArgs": ["draco"],
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": true
-  },
   "files.trimTrailingWhitespace": true,
   "files.exclude": {
     ".mypy_cache": true,

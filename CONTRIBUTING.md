@@ -26,6 +26,10 @@ poetry install
 
 Next time you want to work on Draco, you can just run `conda activate draco`.
 
+## Install the pre-commit hooks
+
+Install [pre-commit](https://pre-commit.com) and then install the hooks with `pre-commit install`. These hooks will automally format code before making a new commit.
+
 ## Make commands
 
 You can run various test and lint commands via make. For example, run `make test` to run the tests. Or just `make` to run tests, lint, and type checks.
