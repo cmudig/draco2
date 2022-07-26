@@ -4,11 +4,11 @@ To express knowledge about visualizations, we first need a language to describe 
 
 ## Draco has a Generic Specification Format
 
-The constraint solver Clingo reasons about the facts that describe a visualization. The specific format we use to describe facts to the solver is as a _function_ of the name `entity` or `attribute`.
+The constraint solver [Clingo](https://potassco.org/clingo/) reasons about the facts that describe a visualization. The specific format we use to describe facts to the solver is as a _function_ of the name `entity` or `attribute`.
 
 ### Entities
 
-Entities describe objects. The facts `entity` describes what other entities are associates with an entity. If an entity has no parents, we use a special identifier `root`. For example, `entity(view,root,v1).` says that there is a view v1 on the root.
+Entities describe objects. The facts `entity` describes what other entities associate with an entity. If an entity has no parents, we use a special identifier `root`. For example, `entity(view,root,v1).` says that there is a view v1 on the root.
 
 ### Attributes
 

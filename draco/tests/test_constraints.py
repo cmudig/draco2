@@ -21,7 +21,7 @@ def test_domain_valid():
     assert is_satisfiable(BASE_PROGRAMS + ["attribute(task,root,summary)."])
 
 
-def test_domain_invlid():
+def test_domain_invalid():
     assert not is_satisfiable(BASE_PROGRAMS + ["attribute((mark,type),0,invalid)."])
     assert not is_satisfiable(BASE_PROGRAMS + ["attribute((scale,type),0,invalid)."])
     assert not is_satisfiable(BASE_PROGRAMS + ["attribute((scale,channel),0,invalid)."])

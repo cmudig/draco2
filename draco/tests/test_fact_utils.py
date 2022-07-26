@@ -2,7 +2,7 @@ import itertools
 
 import pytest
 
-from draco.fact_utils import answer_set_to_dict, dict_to_facts, FactKind, make_fact
+from draco.fact_utils import FactKind, answer_set_to_dict, dict_to_facts, make_fact
 from draco.run import run_clingo
 
 

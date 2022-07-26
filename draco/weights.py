@@ -15,7 +15,7 @@ class Weights:
 
     Attributes:
         :assign_program: The weight assigning functions in the program.
-        :weights: The weight constants as a dictionaty.
+        :weights: The weight constants as a dictionary.
     """
 
     assign_program: str

@@ -56,7 +56,7 @@ def run_clingo(
     if not isinstance(program, str):
         program = "\n".join(program)
 
-    # single-shot solving is often faster but we cannot change the program
+    # single-shot solving is often faster, but we cannot change the program
     ctl = clingo.Control(["--single-shot"] + arguments if not topK else arguments)
     config: Any = ctl.configuration
 

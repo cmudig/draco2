@@ -934,7 +934,7 @@ def test_aggregate_group_by_raw():
         == []
     )
 
-    # aggregate, not raw continous
+    # aggregate, not raw continuous
     assert (
         list_preferences(
             b.program
@@ -951,7 +951,7 @@ def test_aggregate_group_by_raw():
         == []
     )
 
-    # raw continous
+    # raw continuous
     assert (
         list_preferences(
             b.program
@@ -1012,7 +1012,7 @@ def test_aggregate_no_discrete():
         == []
     )
 
-    # aggregate continous
+    # aggregate continuous
     assert (
         list_preferences(
             b.program
@@ -1033,7 +1033,7 @@ def test_aggregate_no_discrete():
         == [("aggregate_no_discrete", "m1")]
     )
 
-    # raw continous
+    # raw continuous
     assert (
         list_preferences(
             b.program
@@ -1206,7 +1206,7 @@ def test_continuous_not_zero():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,binnning),e1,10).
+    attribute((encoding,binning),e1,10).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
@@ -1278,7 +1278,7 @@ def test_size_not_zero():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
-    attribute((encoding,binnning),e1,10).
+    attribute((encoding,binning),e1,10).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,size).
@@ -1318,7 +1318,7 @@ def test_continuous_pos_not_zero():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,binnning),e1,10).
+    attribute((encoding,binning),e1,10).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
@@ -1942,12 +1942,12 @@ def test_number_linear():
         list_preferences(
             b.program
             + """
-    attribute((field,type),temperture,number).
-    attribute((field,unique),temperture,111).
+    attribute((field,type),temperature,number).
+    attribute((field,unique),temperature,111).
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperture).
+    attribute((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v,s1).
@@ -1963,13 +1963,13 @@ def test_number_linear():
         list_preferences(
             b.program
             + """
-    attribute((field,type),temperture,number).
-    attribute((field,unique),temperture,111).
+    attribute((field,type),temperature,number).
+    attribute((field,unique),temperature,111).
 
     entity(view,root,v).
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperture).
+    attribute((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binning),e1,20).
 
@@ -1986,12 +1986,12 @@ def test_number_linear():
         list_preferences(
             b.program
             + """
-    attribute((field,type),temperture,number).
-    attribute((field,unique),temperture,111).
+    attribute((field,type),temperature,number).
+    attribute((field,unique),temperature,111).
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperture).
+    attribute((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v,s1).
@@ -2007,13 +2007,13 @@ def test_number_linear():
         list_preferences(
             b.program
             + """
-    attribute((field,type),temperture,number).
-    attribute((field,unique),temperture,111).
+    attribute((field,type),temperature,number).
+    attribute((field,unique),temperature,111).
 
     entity(view,root,v).
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperture).
+    attribute((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
 
     entity(scale,root,s1).
@@ -3533,7 +3533,7 @@ def test_c_d_tick():
     b = soft.blocks["c_d_tick"]
     assert isinstance(b, Block)
 
-    #  only y, discrete y, data size > deiscrete size(1)
+    #  only y, discrete y, data size > discrete size(1)
     assert (
         list_preferences(
             b.program
