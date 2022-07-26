@@ -29,6 +29,8 @@ required((encoding,channel)).
 required((mark,type)).
 % @generator(task) Each root requires a task.
 root_required(task).
+% @generator(coordinate) Each view requires coordinate.
+required((view,coordinate)).
 
 % @generator(encoding_attribute) Encoding with binning, aggregate, field or stack.
 not_required((encoding,binning)).
