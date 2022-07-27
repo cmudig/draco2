@@ -11,6 +11,9 @@
 :- { entity(view,root,_) } > max_views.
 :- entity(view,root,(v,ID)), not entity(view,root,(v,ID-1)), ID > 0.
 
+% @generator(coordinate) Each view requires coordinate.
+required((view,coordinate)).
+
 % maximum number of additional marks for each view.
 #const max_marks = 2.
 { mark_id(V,0..max_marks-1) } :- entity(view,root,V).
@@ -29,8 +32,6 @@ required((encoding,channel)).
 required((mark,type)).
 % @generator(task) Each root requires a task.
 root_required(task).
-% @generator(coordinate) Each view requires coordinate.
-required((view,coordinate)).
 
 % @generator(encoding_attribute) Encoding with binning, aggregate, field or stack.
 not_required((encoding,binning)).
