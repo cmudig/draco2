@@ -65,7 +65,6 @@ preference(only_discrete,M) :-
     entity(mark,_,M),
     not attribute(mark_encoding_cont,M,_).
 
-
 % @soft(multi_non_pos) Prefer not to use multiple non-positional encoding channels.
 preference(multi_non_pos,M) :-
     entity(mark,_,M),
@@ -766,3 +765,11 @@ preference(summary_discrete_detail,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,detail),
     attribute(mark_encoding_discrete_or_binned,_,E).
+
+% @soft(cartesian_coordinate) Cartesian coordinate.
+preference(cartesian_coordinate,V) :-
+    attribute((view,coordinate),V,cartesian).
+
+% @soft(polar_coordinate) Polar coordinate.
+preference(polar_coordinate,V) :-
+    attribute((view,coordinate),V,polar).
