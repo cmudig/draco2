@@ -3252,7 +3252,7 @@ def test_c_d_no_overlap_point():
     attribute((encoding,channel),e2,y).
     attribute((encoding,binning),e2,10).
 
-    attribute(no_overlap,m1).
+    helper(no_overlap,m1).
     """
         )
         == [("c_d_no_overlap_point", "m1")]
