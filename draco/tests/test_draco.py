@@ -1,4 +1,5 @@
 import pytest
+
 from draco import Draco
 from draco.fact_utils import answer_set_to_dict, dict_to_facts
 
