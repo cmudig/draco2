@@ -11,7 +11,8 @@ asp_path = Path(__file__).resolve().parent / "asp"
 
 @dataclass(frozen=True)
 class Weights:
-    """Class for weights and assigning weights in an Answer Set Programming (ASP) program.
+    """Class for weights and assigning weights in an Answer Set Programming (ASP)
+    program.
 
     Attributes:
         :assign_program: The weight assigning functions in the program.
