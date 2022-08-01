@@ -48,6 +48,7 @@ pytype = "^2022.7.26"
 sphinx-autodoc-typehints = "^1.19.1"
 types-pkg-resources = "^0.1.2"
 vega-datasets = "^0.9.0"
+python-semantic-release = "^7.31.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
