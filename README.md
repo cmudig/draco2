@@ -1,6 +1,10 @@
 <p align="center">
-   <a href="https://uwdata.github.io/draco/">
-      <img src="docs/logo-dark.png" width=260></img>
+   <a href="https://github.com/cmudig/draco2">
+      <picture>
+         <source media="(prefers-color-scheme: dark)" srcset="https://github.com/cmudig/draco2/raw/main/docs/logo-light.png">
+         <source media="(prefers-color-scheme: light)" srcset="https://github.com/cmudig/draco2/raw/main/docs/logo-dark.png">
+         <img alt="The Draco logo. A set of circles connected by lines depicting the draco star constellation." src="https://github.com/cmudig/draco2/raw/main/docs/logo-light.png" width=260>
+      </picture>
    </a>
 </p>
 
@@ -13,11 +17,18 @@
 
 **Work in Progress**
 
-Experimental/modular version of [Draco](https://github.com/uwdata/draco).
+Draco is a formal framework for representing design knowledge about effective visualization design as a collection of constraints. You can use Draco to find effective visualization visual designs or validate visualization designs. Draco's constraints are implemented in based on Answer Set Programming (ASP) and solved with the Clingo constraint solver. We also implemented a way to learn weights for the recommendation system directly from the results of graphical perception experiment. Draco v2 is a much imprived version of the first iteration of [Draco](https://github.com/uwdata/draco).
 
 ## Documentation
 
-Read about Draco in the online book at https://dig.cmu.edu/draco2/.
+Read about Draco in the online book at https://dig.cmu.edu/draco2/. In the documentation, we just refer to _Draco_ without a version.
+
+## What's different from [Draco v1](https://github.com/uwdata/draco)?
+
+- Draco v2 is completely written in Python. No more need to run both Python and Node. We still use ASP for the knowledge base.
+- Generalized and extended chart specification format. The new format is more extensible with custom properties.
+- Suport for multiple views and view compostion.
+- High test-coverage, documentation, and updated development tooling.
 
 ## Contributing
 
