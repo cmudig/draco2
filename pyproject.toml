@@ -14,7 +14,7 @@ keywords = ["constraints", "visualization", "design", "charts"]
 exclude = ["draco/tests/*"]
 readme = "README.md"
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Environment :: Console",
     "Environment :: MacOS X",
     "License :: OSI Approved :: MIT License",
@@ -48,6 +48,7 @@ pytype = "^2022.7.26"
 sphinx-autodoc-typehints = "^1.19.1"
 types-pkg-resources = "^0.1.2"
 vega-datasets = "^0.9.0"
+python-semantic-release = "^7.31.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -61,3 +62,7 @@ exclude = "docs/conf.py|docs/_build|.pytype"
 
 [tool.isort]
 profile = "black"
+
+[tool.semantic_release]
+version_toml = "pyproject.toml:tool.poetry.version"
+build_command = "poetry build"
