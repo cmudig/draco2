@@ -5,6 +5,8 @@ description = "Visualization recommendation using constraints"
 authors = [
     "Dominik Moritz <domoritz@cmu.edu>",
     "Chenglong Wang <clwang@cs.washington.edu>",
+    "JunranY <junran@cs.washington.edu>",
+    "Zehua Zeng <zhzeng@umd.edu>"
 ]
 license = "MIT"
 homepage = "https://github.com/cmudig/draco2"
