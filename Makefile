@@ -73,6 +73,7 @@ clean:
 	@jupyter-book clean docs
 	@rm -rf .coverage
 	@rm -rf dist
+	@find . -type d -name '.pytype' -exec rm -rf {} +
 	@find . -type d -name '.mypy_cache' -exec rm -rf {} +
 	@find . -type d -name '__pycache__' -exec rm -rf {} +
 	@find . -type d -name '*pytest_cache*' -exec rm -rf {} +
