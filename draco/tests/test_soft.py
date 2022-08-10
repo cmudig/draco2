@@ -6343,7 +6343,7 @@ def test_cartesian_coordinate():
             b.program
             + """
     entity(view,root,v).
-    attribute((view,coordinate),v,polar).
+    attribute((view,coordinates),v,polar).
     """
         )
         == []
@@ -6354,7 +6354,7 @@ def test_cartesian_coordinate():
             b.program
             + """
     entity(view,root,v).
-    attribute((view,coordinate),v,cartesian).
+    attribute((view,coordinates),v,cartesian).
     """
         )
         == [("cartesian_coordinate", "v")]
@@ -6365,10 +6365,10 @@ def test_cartesian_coordinate():
             b.program
             + """
     entity(view,root,v1).
-    attribute((view,coordinate),v1,cartesian).
+    attribute((view,coordinates),v1,cartesian).
 
     entity(view,root,v2).
-    attribute((view,coordinate),v2,cartesian).
+    attribute((view,coordinates),v2,cartesian).
     """
         )
         == [("cartesian_coordinate", "v1"), ("cartesian_coordinate", "v2")]
@@ -6384,7 +6384,7 @@ def test_polar_coordinate():
             b.program
             + """
     entity(view,root,v).
-    attribute((view,coordinate),v,cartesian).
+    attribute((view,coordinates),v,cartesian).
     """
         )
         == []
@@ -6395,7 +6395,7 @@ def test_polar_coordinate():
             b.program
             + """
     entity(view,root,v).
-    attribute((view,coordinate),v,polar).
+    attribute((view,coordinates),v,polar).
     """
         )
         == [("polar_coordinate", "v")]
@@ -6406,10 +6406,10 @@ def test_polar_coordinate():
             b.program
             + """
     entity(view,root,v1).
-    attribute((view,coordinate),v1,polar).
+    attribute((view,coordinates),v1,polar).
 
     entity(view,root,v2).
-    attribute((view,coordinate),v2,polar).
+    attribute((view,coordinates),v2,polar).
     """
         )
         == [("polar_coordinate", "v1"), ("polar_coordinate", "v2")]

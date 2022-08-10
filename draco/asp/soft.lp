@@ -766,10 +766,10 @@ preference(summary_discrete_detail,E) :-
     attribute((encoding,channel),E,detail),
     helper(mark_encoding_discrete_or_binned,_,E).
 
-% @soft(cartesian_coordinate) Cartesian coordinate.
+% @soft(cartesian_coordinate) Cartesian coordinates.
 preference(cartesian_coordinate,V) :-
-    attribute((view,coordinate),V,cartesian).
+    attribute((view,coordinates),V,cartesian).
 
-% @soft(polar_coordinate) Polar coordinate.
+% @soft(polar_coordinate) Polar coordinates.
 preference(polar_coordinate,V) :-
-    attribute((view,coordinate),V,polar).
+    attribute((view,coordinates),V,polar).
