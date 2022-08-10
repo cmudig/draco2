@@ -6332,3 +6332,85 @@ def test_summary_discrete_detail():
         )
         == [("summary_discrete_detail", "e1")]
     )
+
+
+def test_cartesian_coordinate():
+    b = soft.blocks["cartesian_coordinate"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    attribute((view,coordinates),v,polar).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    attribute((view,coordinates),v,cartesian).
+    """
+        )
+        == [("cartesian_coordinate", "v")]
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v1).
+    attribute((view,coordinates),v1,cartesian).
+
+    entity(view,root,v2).
+    attribute((view,coordinates),v2,cartesian).
+    """
+        )
+        == [("cartesian_coordinate", "v1"), ("cartesian_coordinate", "v2")]
+    )
+
+
+def test_polar_coordinate():
+    b = soft.blocks["polar_coordinate"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    attribute((view,coordinates),v,cartesian).
+    """
+        )
+        == []
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v).
+    attribute((view,coordinates),v,polar).
+    """
+        )
+        == [("polar_coordinate", "v")]
+    )
+
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(view,root,v1).
+    attribute((view,coordinates),v1,polar).
+
+    entity(view,root,v2).
+    attribute((view,coordinates),v2,polar).
+    """
+        )
+        == [("polar_coordinate", "v1"), ("polar_coordinate", "v2")]
+    )

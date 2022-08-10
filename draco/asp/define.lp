@@ -3,6 +3,9 @@
 % @definition(mark_type) Types of marks to encode data.
 domain((mark,type),(point;bar;line;area;text;tick;rect)).
 
+% @definition(view_coordinate) Types of coordinates.
+domain((view,coordinates),(cartesian;polar)).
+
 % @definition(field_type) Basic types of the data.
 domain((field,type),(string;number;boolean;datetime)).
 

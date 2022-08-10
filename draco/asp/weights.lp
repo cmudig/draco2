@@ -149,3 +149,6 @@
 #const summary_discrete_shape_weight = 0.
 #const summary_discrete_text_weight = 0.
 #const summary_discrete_detail_weight = 0.
+
+#const cartesian_coordinate_weight = 0.
+#const polar_coordinate_weight = 10.
