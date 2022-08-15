@@ -36,6 +36,7 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -43,5 +44,21 @@ jobs:
           python-version-file: ".python-version"
       - uses: psf/black@stable
         with:
-          version: "22.3.0"
+          version: "22.6.0"
       - uses: py-actions/flake8@v2
+
+  automerge:
+    needs:
+      - test
+      - lint
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v3.2.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          target: minor
