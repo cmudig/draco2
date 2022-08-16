@@ -6,7 +6,8 @@ If a view has multiple marks, Draco assumes that the marks are layered (i.e. the
 
 ## View Properties
 
-By default, views don't have any properties.
+`(view,coordinates)`
+: The coordinates system of the view. Can be one of `cartesian`, or `polar`.
 
 ## Example
 
@@ -14,6 +15,7 @@ Here, we define a single view `v` of a tick plot.
 
 ```prolog
 entity(view,root,v).
+attribute((view,coordinates),v,cartesian).
 
 entity(mark,v,m).
 attribute((mark,type),m,tick).

@@ -11,6 +11,9 @@
 :- { entity(view,root,_) } > max_views.
 :- entity(view,root,(v,ID)), not entity(view,root,(v,ID-1)), ID > 0.
 
+% @generator(coordinates) Each view requires coordinates.
+required((view,coordinates)).
+
 % maximum number of additional marks for each view.
 #const max_marks = 2.
 { mark_id(V,0..max_marks-1) } :- entity(view,root,V).
