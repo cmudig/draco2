@@ -40,7 +40,7 @@ black = {extras = ["jupyter"], version = "^22.3.0"}
 flake8 = "^5.0.4"
 flake8-black = "^0.3.3"
 isort = "^5.10.1"
-jupyter-book = "^0.13.0"
+jupyter-book = "^0.13.1"
 jupyterlab = "^3.4.5"
 mypy = "^0.971"
 pandas-stubs = "^1.4.3"
