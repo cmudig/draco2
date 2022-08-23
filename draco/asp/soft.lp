@@ -330,38 +330,38 @@ preference(c_c_text,M) :-
     helper(is_c_c,M),
     attribute((mark,type),M,text).
 
-% @soft(c_d_point) Continuous by discrete for point mark.
-preference(c_d_point,M) :-
+% @soft(c_d_overlap_point) Continuous by discrete for point mark.
+preference(c_d_overlap_point,M) :-
     helper(is_c_d,M),
     not helper(no_overlap,M),
     attribute((mark,type),M,point).
 
-% @soft(c_d_bar) Continuous by discrete for bar mark.
-preference(c_d_bar,M) :-
+% @soft(c_d_overlap_bar) Continuous by discrete for bar mark.
+preference(c_d_overlap_bar,M) :-
     helper(is_c_d,M),
     not helper(no_overlap,M),
     attribute((mark,type),M,bar).
 
-% @soft(c_d_line) Continuous by discrete for line mark.
-preference(c_d_line,M) :-
+% @soft(c_d_overlap_line) Continuous by discrete for line mark.
+preference(c_d_overlap_line,M) :-
     helper(is_c_d,M),
     not helper(no_overlap,M),
     attribute((mark,type),M,line).
 
-% @soft(c_d_area) Continuous by discrete for area mark.
-preference(c_d_area,M) :-
+% @soft(c_d_overlap_area) Continuous by discrete for area mark.
+preference(c_d_overlap_area,M) :-
     helper(is_c_d,M),
     not helper(no_overlap,M),
     attribute((mark,type),M,area).
 
-% @soft(c_d_text) Continuous by discrete for text mark.
-preference(c_d_text,M) :-
+% @soft(c_d_overlap_text) Continuous by discrete for text mark.
+preference(c_d_overlap_text,M) :-
     helper(is_c_d,M),
     not helper(no_overlap,M),
     attribute((mark,type),M,text).
 
-% @soft(c_d_tick) Continuous by discrete for tick mark.
-preference(c_d_tick,M) :-
+% @soft(c_d_overlap_tick) Continuous by discrete for tick mark.
+preference(c_d_overlap_tick,M) :-
     helper(is_c_d,M),
     not helper(no_overlap,M),
     attribute((mark,type),M,tick).
