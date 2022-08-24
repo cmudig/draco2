@@ -57,12 +57,12 @@
 #const c_c_area_weight = 20.
 #const c_c_text_weight = 2.
 
-#const c_d_point_weight = 10.
-#const c_d_bar_weight = 20.
-#const c_d_line_weight = 20.
-#const c_d_area_weight = 20.
-#const c_d_text_weight = 50.
-#const c_d_tick_weight = 0.
+#const c_d_overlap_point_weight = 10.
+#const c_d_overlap_bar_weight = 20.
+#const c_d_overlap_line_weight = 20.
+#const c_d_overlap_area_weight = 20.
+#const c_d_overlap_text_weight = 50.
+#const c_d_overlap_tick_weight = 0.
 
 #const c_d_no_overlap_point_weight = 20.
 #const c_d_no_overlap_bar_weight = 0.

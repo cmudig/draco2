@@ -44,18 +44,6 @@ helper(mark_channel_field,M,C,F) :-
     attribute((encoding,channel),E,C),
     attribute((encoding,field),E,F).
 
-% % @helper(mark_channel_scale) whether a mark has a scale type for a channel(with or without binned encoding).
-% helper(mark_channel_scale,M,T,C,B) :-
-%     entity(encoding,M,E),
-%     attribute((encoding,channel),E,C),
-%     helper(mark_scale_channel,M,T,C),
-%     attribute((encoding,binning),E,B).
-% helper(mark_channel_scale,M,T,C) :-
-%     entity(encoding,M,E),
-%     attribute((encoding,channel),E,C),
-%     helper(mark_scale_channel,M,T,C),
-%     not attribute((encoding,binning),E,_).
-
 % @helper(mark_channel_discrete_or_binned) Whether a mark has a discrete scale or binned encoding for a channel.
 helper(mark_channel_discrete_or_binned,M,C) :-
     entity(encoding,M,E),

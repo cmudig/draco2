@@ -101,7 +101,7 @@ def test_count_preferences():
     )
 
     assert default_draco.count_preferences(prog) == {
-        "c_d_point": 1,
+        "c_d_overlap_point": 1,
         "continuous_not_zero": 1,
         "continuous_pos_not_zero": 1,
         "encoding": 2,
