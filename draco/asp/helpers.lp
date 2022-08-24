@@ -230,3 +230,11 @@ attribute(y_cardinality,M,N) :-
 attribute(y_cardinality,M,1) :-
     entity(mark,_,M),
     not attribute((mark,channel),M,y).
+
+% @helper(enc_interesting)
+attribute(enc_interesting,E) :-
+    attribute((encoding,field),E,F),
+    attribute((field,interesting),F,true).
+attribute(enc_interesting,E) :-
+    attribute((facet,field),E,F),
+    attribute((field,interesting),F,true).

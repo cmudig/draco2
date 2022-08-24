@@ -64,7 +64,10 @@ domain((encoding,stack),(zero;center;normalize)).
 % @definition(scale_zero) Scale start with 0.
 domain((scale,zero),true).
 
-% @definition(facets) Definition for facets
+% @definition(facets) Definition for facets.
 domain((facet,field),F) :- entity(field,_,F).
 domain((facet,channel),(row;col)).
 domain((facet,binning),N) :- domain(binCount,N).
+
+% @definition(interesting) .
+domain((field,interesting),true).

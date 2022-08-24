@@ -209,6 +209,17 @@ preference(number_linear,E) :-
     not attribute((encoding,binning),E,_),
     not attribute((encoding,scale_type),E,linear).
 
+% @soft(position_entropy) Overplotting. Prefer not to use x and y for continuous with high cardinality and low entropy without aggregation because the points will overplot.
+preference(position_entropy,E) :-
+    attribute((encoding,channel),E,(x;y)),
+    attribute(encoding_cardinality,E,N),
+    N > 100,
+    attribute((field,entropy),F,EN),
+    attribute((encoding,field),E,F),
+    EN <= 12000,
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    not attribute((encoding,aggregate),E,_).
+
 % @soft(value_agg) Prefer not to aggregate for value tasks.
 preference(value_agg,V) :-
     attribute(task,root,value),
@@ -269,7 +280,8 @@ preference(color_entropy_high,E) :-
     attribute((encoding,field),E,F),
     attribute((encoding,channel),E,color),
     attribute((encoding,scale_type),E,linear),
-    EN > 5000.
+    attribute(enc_interesting,E),
+    EN > 12000.
 
 % @soft(color_entropy_low) Entropy, primary quantitaty interactions as suggested by Kim et al.
 preference(color_entropy_low,E) :-
@@ -277,7 +289,8 @@ preference(color_entropy_low,E) :-
     attribute((encoding,field),E,F),
     attribute((encoding,channel),E,color),
     attribute((encoding,scale_type),E,linear),
-    EN <= 5000.
+    attribute(enc_interesting,E),
+    EN <= 12000.
 
 % @soft(size_entropy_high) Entropy, primary quantitaty interactions as suggested by Kim et al.
 preference(size_entropy_high,E) :-
@@ -285,7 +298,8 @@ preference(size_entropy_high,E) :-
     attribute((encoding,field),E,F),
     attribute((encoding,channel),E,size),
     attribute((encoding,scale_type),E,linear),
-    EN > 5000.
+    attribute(enc_interesting,E),
+    EN > 12000.
 
 % @soft(size_entropy_low) Entropy, primary quantitaty interactions as suggested by Kim et al.
 preference(size_entropy_low,E) :-
@@ -293,7 +307,8 @@ preference(size_entropy_low,E) :-
     attribute((encoding,field),E,F),
     attribute((encoding,channel),E,size),
     attribute((encoding,scale_type),E,linear),
-    EN <= 5000.
+    attribute(enc_interesting,E),
+    EN <= 12000.
 
 % @soft(linear_scale) linear scale.
 preference(linear_scale,E) :-
@@ -627,142 +642,211 @@ preference(summary_rect,M) :-
 preference(value_continuous_x,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,x),
-    not attribute(mark_encoding_discrete_or_binned,_,E).
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_continuous_y) Continuous y for value tasks.
 preference(value_continuous_y,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,y),
-    not attribute(mark_encoding_discrete_or_binned,_,E).
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_continuous_color) Continuous color for value tasks.
 preference(value_continuous_color,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,color),
-    not attribute(mark_encoding_discrete_or_binned,_,E).
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_continuous_size) Continuous size for value tasks.
 preference(value_continuous_size,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,size),
-    not attribute(mark_encoding_discrete_or_binned,_,E).
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_continuous_text) Continuous text for value tasks.
 preference(value_continuous_text,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,text),
-    not attribute(mark_encoding_discrete_or_binned,_,E).
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_discrete_x) Discrete x for value tasks.
 preference(value_discrete_x,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,x),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_discrete_y) Discrete y for value tasks.
 preference(value_discrete_y,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,y),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_discrete_color) Discrete color for value tasks.
 preference(value_discrete_color,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,color),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_discrete_size) Discrete size for value tasks.
 preference(value_discrete_size,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,size),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_discrete_shape) Discrete shape for value tasks.
 preference(value_discrete_shape,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,shape),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_discrete_text) Discrete text for value tasks.
 preference(value_discrete_text,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,text),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(value_discrete_detail) Discrete detail for value tasks.
 preference(value_discrete_detail,E) :-
     attribute(task,root,value),
     attribute((encoding,channel),E,detail),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_continuous_x) Continuous x for summary tasks.
 preference(summary_continuous_x,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,x),
-    not attribute(mark_encoding_discrete_or_binned,_,E).
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_continuous_y) Continuous y for summary tasks.
 preference(summary_continuous_y,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,y),
-    not attribute(mark_encoding_discrete_or_binned,_,E).
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_continuous_color) Continuous color for summary tasks.
 preference(summary_continuous_color,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,color),
-    not attribute(mark_encoding_discrete_or_binned,_,E).
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_continuous_size) Continuous size for summary tasks.
 preference(summary_continuous_size,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,size),
-    not attribute(mark_encoding_discrete_or_binned,_,E).
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_continuous_text) Continuous text for summary tasks.
 preference(summary_continuous_text,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,text),
-    not attribute(mark_encoding_discrete_or_binned,_,E).
+    not attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_discrete_x) Discrete x for summary tasks.
 preference(summary_discrete_x,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,x),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_discrete_y) Discrete y for summary tasks.
 preference(summary_discrete_y,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,y),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_discrete_color) Discrete color for summary tasks.
 preference(summary_discrete_color,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,color),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_discrete_size) Discrete size for summary tasks.
 preference(summary_discrete_size,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,size),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_discrete_shape) Discrete shape for summary tasks.
 preference(summary_discrete_shape,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,shape),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_discrete_text) Discrete text for summary tasks.
 preference(summary_discrete_text,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,text),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
 
 % @soft(summary_discrete_detail) Discrete detail for summary tasks.
 preference(summary_discrete_detail,E) :-
     attribute(task,root,summary),
     attribute((encoding,channel),E,detail),
-    attribute(mark_encoding_discrete_or_binned,_,E).
+    attribute(mark_encoding_discrete_or_binned,_,E),
+    attribute(enc_interesting,E).
+
+% @soft(interesting_x) Interesting on x channel.
+preference(interesting_x,E) :-
+    attribute((encoding,channel),E,x),
+    attribute(enc_interesting,E).
+
+% @soft(interesting_y) Interesting on y channel.
+preference(interesting_y,E) :-
+    attribute((encoding,channel),E,y),
+    attribute(enc_interesting,E).
+
+% @soft(interesting_color) Interesting on color channel.
+preference(interesting_color,E) :-
+    attribute((encoding,channel),E,color),
+    attribute(enc_interesting,E).
+
+% @soft(interesting_size) Interesting on size channel.
+preference(interesting_size,E) :-
+    attribute((encoding,channel),E,size),
+    attribute(enc_interesting,E).
+
+% @soft(interesting_shape) Interesting on shape channel.
+preference(interesting_shape,E) :-
+    attribute((encoding,channel),E,shape),
+    attribute(enc_interesting,E).
+
+% @soft(interesting_text) Interesting on text channel.
+preference(interesting_text,E) :-
+    attribute((encoding,channel),E,text),
+    attribute(enc_interesting,E).
+
+% @soft(interesting_row) Interesting on row channel.
+preference(interesting_row,E) :-
+    attribute((facet,channel),E,row),
+    attribute(enc_interesting,E).
+
+% @soft(interesting_column) Interesting on column channel.
+preference(interesting_column,E) :-
+    attribute((facet,channel),E,col),
+    attribute(enc_interesting,E).
+
+% @soft(interesting_detail) Interesting on detail channel.
+preference(interesting_detail,E) :-
+    attribute((encoding,channel),E,detail),
+    attribute(enc_interesting,E).

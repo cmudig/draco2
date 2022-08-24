@@ -149,3 +149,15 @@
 #const summary_discrete_shape_weight = 0.
 #const summary_discrete_text_weight = 0.
 #const summary_discrete_detail_weight = 0.
+
+#const interesting_x_weight = 0.
+#const interesting_y_weight = 1.
+#const interesting_color_weight = 2.
+#const interesting_size_weight = 2.
+#const interesting_shape_weight = 3.
+#const interesting_text_weight = 6.
+#const interesting_row_weight = 6.
+#const interesting_column_weight = 7.
+#const interesting_detail_weight = 20.
+
+#const position_entropy_weight = 2.
