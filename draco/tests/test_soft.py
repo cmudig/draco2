@@ -2463,6 +2463,7 @@ def test_color_entropy_high():
             b.program
             + """
     attribute((field,entropy),precipitation,200).
+    attribute((field,interesting),precipitation,true).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -2482,7 +2483,8 @@ def test_color_entropy_high():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,6000).
+    attribute((field,entropy),precipitation,60000).
+    attribute((field,interesting),precipitation,true).
 
     entity(view,root,v).
     entity(mark,v,m1).
@@ -2508,7 +2510,8 @@ def test_color_entropy_low():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,6000).
+    attribute((field,entropy),precipitation,60000).
+    attribute((field,interesting),precipitation,true).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -2529,6 +2532,7 @@ def test_color_entropy_low():
             b.program
             + """
     attribute((field,entropy),precipitation,5000).
+    attribute((field,interesting),precipitation,true).
 
     entity(view,root,v).
     entity(mark,v,m1).
@@ -2555,6 +2559,7 @@ def test_size_entropy_high():
             b.program
             + """
     attribute((field,entropy),precipitation,3000).
+    attribute((field,interesting),precipitation,true).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -2574,7 +2579,8 @@ def test_size_entropy_high():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,6000).
+    attribute((field,entropy),precipitation,60000).
+    attribute((field,interesting),precipitation,true).
 
     entity(view,root,v).
     entity(mark,v,m1).
@@ -2600,7 +2606,8 @@ def test_size_entropy_low():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,6000).
+    attribute((field,entropy),precipitation,60000).
+    attribute((field,interesting),precipitation,true).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -2621,6 +2628,7 @@ def test_size_entropy_low():
             b.program
             + """
     attribute((field,entropy),precipitation,4000).
+    attribute((field,interesting),precipitation,true).
 
     entity(view,root,v).
     entity(mark,v,m1).
@@ -5369,12 +5377,14 @@ def test_value_continuous_x():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binning),e1,10).
+    attribute((encoding,field),e1,precipitation).
     """
         )
         == []
@@ -5385,11 +5395,13 @@ def test_value_continuous_x():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+    attribute((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
@@ -5409,10 +5421,12 @@ def test_value_continuous_y():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,y).
     attribute((encoding,binning),e1,10).
     """
@@ -5425,11 +5439,13 @@ def test_value_continuous_y():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
+    attribute((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,y).
@@ -5449,12 +5465,14 @@ def test_value_continuous_color():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
+    attribute((encoding,field),e1,precipitation).
 
     entity(scale,root,s1).
     attribute((scale,channel),s1,color).
@@ -5469,11 +5487,13 @@ def test_value_continuous_color():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
+    attribute((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,color).
@@ -5493,11 +5513,13 @@ def test_value_continuous_size():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,10).
     """
         )
@@ -5509,10 +5531,12 @@ def test_value_continuous_size():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,v,s1).
@@ -5533,10 +5557,12 @@ def test_value_continuous_text():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
     """
         )
@@ -5548,10 +5574,12 @@ def test_value_continuous_text():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
 
     entity(scale,v,s1).
@@ -5572,10 +5600,12 @@ def test_value_discrete_x():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,x).
     """
         )
@@ -5587,11 +5617,13 @@ def test_value_discrete_x():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
         )
@@ -5608,10 +5640,12 @@ def test_value_discrete_y():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,y).
     """
         )
@@ -5623,11 +5657,13 @@ def test_value_discrete_y():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
         )
@@ -5644,10 +5680,12 @@ def test_value_discrete_color():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,v,s1).
@@ -5663,11 +5701,13 @@ def test_value_discrete_color():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,root,s1).
@@ -5688,10 +5728,12 @@ def test_value_discrete_size():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,v,s1).
@@ -5707,12 +5749,14 @@ def test_value_discrete_size():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
+    attribute((encoding,field),e1,precipitation).
 
     entity(scale,root,s1).
     attribute((scale,channel),s1,size).
@@ -5732,10 +5776,12 @@ def test_value_discrete_shape():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,shape).
 
     entity(scale,v,s1).
@@ -5751,11 +5797,13 @@ def test_value_discrete_shape():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,shape).
 
     entity(scale,root,s1).
@@ -5776,10 +5824,12 @@ def test_value_discrete_text():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
     """
         )
@@ -5791,11 +5841,13 @@ def test_value_discrete_text():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,text).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,10).
     """
         )
@@ -5812,11 +5864,13 @@ def test_value_discrete_detail():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,detail).
+    attribute((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,detail).
@@ -5831,10 +5885,12 @@ def test_value_discrete_detail():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(view,root,v).
     entity(mark,v,m1).
+    attribute((encoding,field),e1,precipitation).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,detail).
 
@@ -5856,11 +5912,13 @@ def test_summary_continuous_x():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,10).
     """
         )
@@ -5872,11 +5930,13 @@ def test_summary_continuous_x():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+    attribute((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
@@ -5896,10 +5956,12 @@ def test_summary_continuous_y():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,y).
     attribute((encoding,binning),e1,10).
     """
@@ -5912,10 +5974,12 @@ def test_summary_continuous_y():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,y).
 
     entity(scale,v,s1).
@@ -5936,12 +6000,14 @@ def test_summary_continuous_color():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
+    attribute((encoding,field),e1,precipitation).
 
     entity(scale,root,s1).
     attribute((scale,channel),s1,color).
@@ -5956,9 +6022,11 @@ def test_summary_continuous_color():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
+    attribute((encoding,field),e1,precipitation).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
 
@@ -5980,10 +6048,12 @@ def test_summary_continuous_size():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
     attribute((encoding,binning),e1,10).
     """
@@ -5996,10 +6066,12 @@ def test_summary_continuous_size():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,v,s1).
@@ -6020,10 +6092,12 @@ def test_summary_continuous_text():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
     """
         )
@@ -6035,10 +6109,12 @@ def test_summary_continuous_text():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
 
     entity(scale,v,s1).
@@ -6059,10 +6135,12 @@ def test_summary_discrete_x():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,x).
     """
         )
@@ -6074,11 +6152,13 @@ def test_summary_discrete_x():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
         )
@@ -6095,10 +6175,12 @@ def test_summary_discrete_y():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,y).
     """
         )
@@ -6110,11 +6192,13 @@ def test_summary_discrete_y():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
         )
@@ -6131,10 +6215,12 @@ def test_summary_discrete_color():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,v,s1).
@@ -6150,11 +6236,13 @@ def test_summary_discrete_color():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,root,s1).
@@ -6175,11 +6263,13 @@ def test_summary_discrete_size():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
+    attribute((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,size).
@@ -6194,11 +6284,13 @@ def test_summary_discrete_size():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,root,s1).
@@ -6219,10 +6311,12 @@ def test_summary_discrete_shape():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,shape).
 
     entity(scale,v,s1).
@@ -6238,11 +6332,13 @@ def test_summary_discrete_shape():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,shape).
 
     entity(scale,root,s1).
@@ -6263,10 +6359,12 @@ def test_summary_discrete_text():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
     """
         )
@@ -6278,11 +6376,13 @@ def test_summary_discrete_text():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,text).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,10).
     """
         )
@@ -6299,10 +6399,12 @@ def test_summary_discrete_detail():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,detail).
 
     entity(scale,v,s1).
@@ -6318,11 +6420,13 @@ def test_summary_discrete_detail():
         list_preferences(
             b.program
             + """
+    attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,detail).
 
     entity(scale,root,s1).
@@ -6331,4 +6435,83 @@ def test_summary_discrete_detail():
     """
         )
         == [("summary_discrete_detail", "e1")]
+    )
+
+
+def test_interesting_x():
+    b = soft.blocks["interesting_x"]
+    assert isinstance(b, Block)
+
+    # discrete detail, value task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,x).
+    """
+        )
+        == []
+    )
+
+    # discrete detail, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,interesting),precipitation,true).
+    attribute(task,root,summary).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    entity(encoding,m1,e1).
+    attribute((encoding,field),e1,precipitation).
+    attribute((encoding,channel),e1,x).
+    """
+        )
+        == [("interesting_x", "e1")]
+    )
+
+
+def test_interesting_column():
+    b = soft.blocks["interesting_column"]
+    assert isinstance(b, Block)
+
+    # discrete detail, value task
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(task,root,value).
+
+    entity(mark,v,m1).
+    entity(facet,v,f).
+    attribute((facet,field),f,precipitation).
+    attribute((facet,channel),f,col).
+    """
+        )
+        == []
+    )
+
+    # discrete detail, scale on root
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,interesting),precipitation,true).
+    attribute(task,root,summary).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+
+    entity(facet,v,f).
+    attribute((facet,field),f,precipitation).
+    attribute((facet,channel),f,col).
+    """
+        )
+        == [("interesting_column", "f")]
     )
