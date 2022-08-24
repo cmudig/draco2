@@ -4,14 +4,14 @@
 violation(scale_type_data_type) :-
     attribute((field,type),F,(string;boolean)),
     attribute((encoding,field),E,F),
-    attribute((encoding,scale_type),E,T),
+    helper((encoding,scale_type),E,T),
     domain(continuous_scale,T).
 
 % @hard(log_non_positive) Cannot use log if the data is negative or zero.
 violation(log_non_positive) :-
     attribute((field,min),F,MIN),
     attribute((encoding,field),E,F),
-    attribute((encoding,scale_type),E,log),
+    helper((encoding,scale_type),E,log),
     MIN <= 0.
 
 % @hard(bin_and_aggregate) Cannot bin and aggregate.
@@ -50,12 +50,12 @@ violation(aggregate_detail) :-
 % @hard(count_without_q) Count has to have a continuous scale.
 violation(count_without_q) :-
     attribute((encoding,aggregate),E,count),
-    attribute((encoding,scale_type),E,T),
+    helper((encoding,scale_type),E,T),
     domain(discrete_scale,T).
 
 % @hard(shape_not_ordinal) Shape requires discrete and ordinal (ordinal/categorical doesn't matter as scale types, so we use oridnal only here).
 violation(shape_not_ordinal) :-
-    attribute(mark_scale_channel,_,T,shape),
+    helper(mark_scale_channel,_,T,shape),
     T != ordinal.
 
 % @hard(categorical_not_color) Categorical only works with color channel.
@@ -91,7 +91,7 @@ violation(scale_repeat_channel) :-
 % @hard(encoding_channel_without_scale) Encoding channel doesn't have a corresponding scale channel.
 violation(encoding_channel_without_scale) :-
     entity(mark,V,M),
-    attribute((mark,channel),M,C),
+    helper((mark,channel),M,C),
     not domain(scale_channel,V,C).
 
 % @hard(scale_channel_without_encoding) Scale channel doesn't have a corresponding encoding channel.
@@ -120,36 +120,36 @@ violation(count_with_field) :-
 % @hard(text_mark_without_text_channel) Text mark requires text encoding.
 violation(text_mark_without_text_channel) :-
     attribute((mark,type),M,text),
-    not attribute((mark,channel),M,text).
+    not helper((mark,channel),M,text).
 
 % @hard(text_channel_without_text_mark) Text channel requires text mark.
 violation(text_channel_without_text_mark) :-
-    attribute((mark,channel),M,text),
+    helper((mark,channel),M,text),
     not attribute((mark,type),M,text).
 
 % @hard(point_tick_bar_without_x_or_y) Point, tick, and bar require x or y channel.
 violation(point_tick_bar_without_x_or_y) :-
     attribute((mark,type),M,(point;tick;bar)),
-    not attribute((mark,channel),M,x),
-    not attribute((mark,channel),M,y).
+    not helper((mark,channel),M,x),
+    not helper((mark,channel),M,y).
 
 % @hard(line_area_without_x_y) Line and area require x and y channel.
 violation(line_area_without_x_y) :-
     attribute((mark,type),M,(line;area)),
-    { attribute((mark,channel),M,x);attribute((mark,channel),M,y) } <= 1.
+    { helper((mark,channel),M,x);helper((mark,channel),M,y) } <= 1.
 
 % @hard(line_area_with_discrete) Line and area cannot have both x and y discrete.
 violation(line_area_with_discrete) :-
     attribute((mark,type),M,(line;area)),
-    attribute(mark_scale_channel,M,T1,x),
-    attribute(mark_scale_channel,M,T2,y),
+    helper(mark_scale_channel,M,T1,x),
+    helper(mark_scale_channel,M,T2,y),
     domain(discrete_scale,T1),
     domain(discrete_scale,T2).
 
 % @hard(bar_tick_continuous_x_y) Bar and tick cannot have both x and y continuous.
 violation(bar_tick_continuous_x_y) :-
     attribute((mark,type),M,(tick;bar)),
-    attribute(is_c_c,M).
+    helper(is_c_c,M).
 
 % @hard(view_scale_conflict) A view cannot have a scale definition that conflicts with a shared scale for the same channel.
 violation(view_scale_conflict) :-
@@ -161,12 +161,12 @@ violation(view_scale_conflict) :-
 
 % @hard(shape_without_point) Shape channel requires point mark.
 violation(shape_without_point) :-
-    attribute((mark,channel),M,shape),
+    helper((mark,channel),M,shape),
     not attribute((mark,type),M,point).
 
 % @hard(size_without_point_text) Size only works with some marks.
 violation(size_without_point_text) :-
-    attribute((mark,channel),M,size),
+    helper((mark,channel),M,size),
     not attribute((mark,type),M,text),
     not attribute((mark,type),M,point).
 
@@ -181,18 +181,18 @@ violation(detail_without_agg) :-
 % @hard(area_bar_with_log) Do not use log for bar or area mark as they are often misleading. We may remove this rule in the future.
 violation(area_bar_with_log) :-
     attribute((mark,type),M,(bar;area)),
-    attribute(mark_scale_channel,M,log,(x;y)).
+    helper(mark_scale_channel,M,log,(x;y)).
 
 % @hard(rect_without_d_d) Rect mark needs discrete x and y.
 violation(rect_without_d_d) :-
     attribute((mark,type),M,rect),
-    attribute(mark_scale_channel,M,T,(x;y)),
+    helper(mark_scale_channel,M,T,(x;y)),
     domain(continuous_scale,T).
 
 % @hard(same_field_x_and_y) Don't use the same field on x and y.
 violation(same_field_x_and_y) :-
-    attribute(mark_channel_field,M,x,F),
-    attribute(mark_channel_field,M,y,F),
+    helper(mark_channel_field,M,x,F),
+    helper(mark_channel_field,M,y,F),
     entity(field,root,F),
     entity(mark,_,M).
 
@@ -207,7 +207,7 @@ violation(aggregate_not_all_continuous):-
     entity(encoding,M,E1),
     entity(encoding,M,E2),
     E1 > E2,
-    attribute((encoding,scale_type),E2,T),
+    helper((encoding,scale_type),E2,T),
     domain(continuous_scale,T),
     not attribute((encoding,binning),E2,_),
     not attribute((encoding,aggregate),E2,_).
@@ -220,11 +220,11 @@ violation(detail_not_ordinal) :-
 % @hard(bar_tick_area_line_without_continuous_x_y) Bar, tick, line, area require some continuous variable on x or y.
 violation(bar_tick_area_line_without_continuous_x_y) :-
     attribute((mark,type),M,(bar;tick;area;line)),
-    { attribute(mark_channel_cont,M,x);attribute(mark_channel_cont,M,y) } <= 0.
+    { helper(mark_channel_cont,M,x);helper(mark_channel_cont,M,y) } <= 0.
 
 % @hard(zero_d_n) Can only use zero with datetime or number.
 violation(zero_d_n) :-
-    attribute((mark,scale),M,S),
+    helper((mark,scale),M,S),
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     attribute((scale,zero),S,_),
@@ -240,7 +240,7 @@ violation(bar_area_without_zero) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     not attribute((encoding,binning),E,_),
-    attribute((mark,scale),M,S),
+    helper((mark,scale),M,S),
     attribute((scale,channel),S,C),
     attribute((scale,type),S,T),
     domain(continuous_scale,T),
@@ -252,18 +252,18 @@ violation(row_no_y) :-
     entity(facet,V,F),
     attribute((facet,channel),F,row),
     entity(mark,V,M),
-    not attribute((mark,channel),M,y).
+    not helper((mark,channel),M,y).
 
 % @hard(col_no_x) Don't use column without x. Just using x is simpler.
 violation(col_no_x) :-
     entity(facet,V,F),
     attribute((facet,channel),F,col),
     entity(mark,V,M),
-    not attribute((mark,channel),M,x).
+    not helper((mark,channel),M,x).
 
 % @hard(stack_without_bar_area) Only use stacking for bar and area.
 violation(stack_without_bar_area) :-
-    attribute(mark_with_stack,M),
+    helper(mark_with_stack,M),
     not attribute((mark,type),M,bar),
     not attribute((mark,type),M,area).
 
@@ -276,15 +276,15 @@ violation(stack_without_summative_agg) :-
 
 % @hard(no_stack_with_bar_area_discrete_color) Need to stack if we use bar, area with discrete color.
 violation(no_stack_with_bar_area_discrete_color) :-
-    attribute(mark_channel_discrete_or_binned,M,color),
+    helper(mark_channel_discrete_or_binned,M,color),
     attribute((mark,type),M,(bar;area)),
-    not attribute(mark_with_stack,M).
+    not helper(mark_with_stack,M).
 
 % @hard(stack_without_discrete_color_or_detail) Can only use stack if we also use discrete color, or detail.
 violation(stack_without_discrete_color_or_detail) :-
-    attribute(mark_with_stack,M),
-    not attribute(mark_channel_discrete_or_binned,M,color),
-    not attribute((mark,channel),M,detail).
+    helper(mark_with_stack,M),
+    not helper(mark_channel_discrete_or_binned,M,color),
+    not helper((mark,channel),M,detail).
 
 % @hard(stack_without_x_y) Stack can only be on x or y.
 violation(stack_without_x_y) :-
@@ -296,16 +296,16 @@ violation(stack_without_x_y) :-
 violation(stack_discrete) :-
     attribute((encoding,channel),E,C),
     attribute((encoding,stack),E,_),
-    attribute(mark_channel_discrete_or_binned,_,C).
+    helper(mark_channel_discrete_or_binned,_,C).
 
 % @hard(stack_with_non_positional_non_agg) Cannot use non positional continuous with stack unless it's aggregated.
 violation(stack_with_non_positional_non_agg) :-
-    attribute(mark_with_stack,M),
+    helper(mark_with_stack,M),
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
     domain(non_positional,C),
     not attribute((encoding,aggregate),E,_),
-    not attribute(mark_channel_discrete_or_binned,M,C).
+    not helper(mark_channel_discrete_or_binned,M,C).
 
 % @hard(invalid_bin) Check bin type.
 violation(invalid_bin) :-

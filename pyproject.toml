@@ -1,10 +1,12 @@
 [tool.poetry]
 name = "draco"
-version = "2.0.0-alpha.0"
+version = "2.0.0-beta.2"
 description = "Visualization recommendation using constraints"
 authors = [
     "Dominik Moritz <domoritz@cmu.edu>",
     "Chenglong Wang <clwang@cs.washington.edu>",
+    "JunranY <junran@cs.washington.edu>",
+    "Zehua Zeng <zhzeng@umd.edu>"
 ]
 license = "MIT"
 homepage = "https://github.com/cmudig/draco2"
@@ -14,7 +16,7 @@ keywords = ["constraints", "visualization", "design", "charts"]
 exclude = ["draco/tests/*"]
 readme = "README.md"
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Environment :: Console",
     "Environment :: MacOS X",
     "License :: OSI Approved :: MIT License",
@@ -23,29 +25,30 @@ classifiers = [
     "Operating System :: MacOS :: MacOS X",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
 ]
 
 [tool.poetry.dependencies]
 clingo = "^5.5.2"
 matplotlib = "^3.5.2"
 pandas = "^1.4.2"
-python = ">=3.8.0,<3.10"
+python = ">=3.8.0,<3.11"
 scikit-learn = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 black = {extras = ["jupyter"], version = "^22.3.0"}
-flake8 = "^4.0.1"
+flake8 = "^5.0.4"
 flake8-black = "^0.3.3"
 isort = "^5.10.1"
-jupyter-book = "^0.13.0"
-jupyterlab = "^3.4.4"
+jupyter-book = "^0.13.1"
+jupyterlab = "^3.4.5"
 mypy = "^0.971"
 pandas-stubs = "^1.4.3"
 pre-commit = "^2.20.0"
 pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
-pytype = "^2022.6.14"
-sphinx-autodoc-typehints = "^1.18.3"
+pytype = "^2022.8.17"
+sphinx-autodoc-typehints = "^1.19.1"
 types-pkg-resources = "^0.1.2"
 vega-datasets = "^0.9.0"
 
@@ -55,9 +58,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pyright]
 include = ["draco"]
-
-[tool.black]
-exclude = "docs/conf.py|docs/_build|.pytype"
 
 [tool.isort]
 profile = "black"
