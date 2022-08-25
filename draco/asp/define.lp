@@ -72,5 +72,5 @@ domain((facet,field),F) :- entity(field,_,F).
 domain((facet,channel),(row;col)).
 domain((facet,binning),N) :- domain(binCount,N).
 
-% @definition(interesting) .
+% @definition(interesting) Definition for fields that are relevant to the task.
 domain((field,interesting),true).
