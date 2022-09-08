@@ -3088,8 +3088,8 @@ def test_c_c_text():
     )
 
 
-def test_c_d_point():
-    b = soft.blocks["c_d_point"]
+def test_c_d_overlap_point():
+    b = soft.blocks["c_d_overlap_point"]
     assert isinstance(b, Block)
 
     # only x encoding, discrete x
@@ -3131,7 +3131,7 @@ def test_c_d_point():
     attribute((scale,type),s1,linear).
     """
         )
-        == [("c_d_point", "m1")]
+        == [("c_d_overlap_point", "m1")]
     )
 
     # continuous and aggregated x, discrete y
@@ -3177,7 +3177,283 @@ def test_c_d_point():
     attribute((encoding,binning),e2,10).
     """
         )
-        == [("c_d_point", "m1")]
+        == [("c_d_overlap_point", "m1")]
+    )
+
+
+def test_c_d_overlap_bar():
+    b = soft.blocks["c_d_overlap_bar"]
+    assert isinstance(b, Block)
+
+    # continuous and aggregated y, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,aggregate),e2,count).
+    """
+        )
+        == []
+    )
+
+    # continuous y, discrete x, no overlap
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s1,linear).
+    """
+        )
+        == [("c_d_overlap_bar", "m1")]
+    )
+
+    # continuous y, discrete x, non-positional channel color not aggregated
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(encoding,m1,e3).
+    attribute((encoding,channel),e3,color).
+    """
+        )
+        == [("c_d_overlap_bar", "m1")]
+    )
+
+
+def test_c_d_overlap_line():
+    b = soft.blocks["c_d_overlap_line"]
+    assert isinstance(b, Block)
+
+    #  discrete x, continuous y, bar mark
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,bar).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    """
+        )
+        == []
+    )
+
+    # continuous y, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,line).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    """
+        )
+        == [("c_d_overlap_line", "m1")]
+    )
+
+
+def test_c_d_overlap_area():
+    b = soft.blocks["c_d_overlap_area"]
+    assert isinstance(b, Block)
+
+    #  discrete x, y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,area).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+    attribute((encoding,binning),e1,10).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+    attribute((encoding,binning),e2,10).
+    """
+        )
+        == []
+    )
+
+    # continuous y, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,area).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,ordinal).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,log).
+    """
+        )
+        == [("c_d_overlap_area", "m1")]
+    )
+
+
+def test_c_d_overlap_text():
+    b = soft.blocks["c_d_overlap_text"]
+    assert isinstance(b, Block)
+
+    #  only y, continuous y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,text).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,log).
+    """
+        )
+        == [("c_d_overlap_text", "m1")]
+    )
+
+    # continuous y, discrete x
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,text).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,categorical).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,linear).
+    """
+        )
+        == [("c_d_overlap_text", "m1")]
+    )
+
+
+def test_c_d_overlap_tick():
+    b = soft.blocks["c_d_overlap_tick"]
+    assert isinstance(b, Block)
+
+    #  only y, discrete y, data size > discrete size(1)
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute(number_rows,root,100).
+    entity(field,root,wind).
+    attribute((field,name),wind,wind).
+    attribute((field,type),wind,number).
+    attribute((field,unique),wind,100).
+
+    entity(view,root,v).
+    entity(mark,v,m1).
+    attribute((mark,type),m1,tick).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,y).
+    attribute((encoding,field),e1,wind).
+
+    entity(scale,root,s1).
+    attribute((scale,channel),s1,y).
+    attribute((scale,type),s1,ordinal).
+    """
+        )
+        == []
+    )
+
+    # continuous x, discrete y
+    assert (
+        list_preferences(
+            b.program
+            + """
+    entity(mark,v,m1).
+    attribute((mark,type),m1,tick).
+
+    entity(encoding,m1,e1).
+    attribute((encoding,channel),e1,x).
+
+    entity(encoding,m1,e2).
+    attribute((encoding,channel),e2,y).
+
+    entity(scale,v,s1).
+    attribute((scale,channel),s1,x).
+    attribute((scale,type),s1,linear).
+
+    entity(scale,v,s2).
+    attribute((scale,channel),s2,y).
+    attribute((scale,type),s2,ordinal).
+    """
+        )
+        == [("c_d_overlap_tick", "m1")]
     )
 
 
@@ -3259,80 +3535,6 @@ def test_c_d_no_overlap_point():
     )
 
 
-def test_c_d_bar():
-    b = soft.blocks["c_d_bar"]
-    assert isinstance(b, Block)
-
-    # continuous and aggregated y, discrete x
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(mark,v,m1).
-    attribute((mark,type),m1,bar).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,x).
-    attribute((encoding,binning),e1,10).
-
-    entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,y).
-    attribute((encoding,aggregate),e2,count).
-    """
-        )
-        == []
-    )
-
-    # continuous y, discrete x, no overlap
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(mark,v,m1).
-    attribute((mark,type),m1,bar).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,x).
-    attribute((encoding,binning),e1,10).
-
-    entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,y).
-
-    entity(scale,v,s1).
-    attribute((scale,channel),s1,x).
-    attribute((scale,type),s1,linear).
-
-    entity(scale,v,s2).
-    attribute((scale,channel),s2,y).
-    attribute((scale,type),s1,linear).
-    """
-        )
-        == [("c_d_bar", "m1")]
-    )
-
-    # continuous y, discrete x, non-positional channel color not aggregated
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(mark,v,m1).
-    attribute((mark,type),m1,bar).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,x).
-    attribute((encoding,binning),e1,10).
-
-    entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,y).
-
-    entity(encoding,m1,e3).
-    attribute((encoding,channel),e3,color).
-    """
-        )
-        == [("c_d_bar", "m1")]
-    )
-
-
 def test_c_d_no_overlap_bar():
     b = soft.blocks["c_d_no_overlap_bar"]
     assert isinstance(b, Block)
@@ -3382,208 +3584,6 @@ def test_c_d_no_overlap_bar():
     """
         )
         == [("c_d_no_overlap_bar", "m1")]
-    )
-
-
-def test_c_d_line():
-    b = soft.blocks["c_d_line"]
-    assert isinstance(b, Block)
-
-    #  discrete x, continuous y, bar mark
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(mark,v,m1).
-    attribute((mark,type),m1,bar).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,x).
-    attribute((encoding,binning),e1,10).
-
-    entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,y).
-    """
-        )
-        == []
-    )
-
-    # continuous y, discrete x
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(mark,v,m1).
-    attribute((mark,type),m1,line).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,x).
-    attribute((encoding,binning),e1,10).
-
-    entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,y).
-    """
-        )
-        == [("c_d_line", "m1")]
-    )
-
-
-def test_c_d_area():
-    b = soft.blocks["c_d_area"]
-    assert isinstance(b, Block)
-
-    #  discrete x, y
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(mark,v,m1).
-    attribute((mark,type),m1,area).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,x).
-    attribute((encoding,binning),e1,10).
-
-    entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,y).
-    attribute((encoding,binning),e2,10).
-    """
-        )
-        == []
-    )
-
-    # continuous y, discrete x
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(mark,v,m1).
-    attribute((mark,type),m1,area).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,x).
-
-    entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,y).
-
-    entity(scale,v,s1).
-    attribute((scale,channel),s1,x).
-    attribute((scale,type),s1,ordinal).
-
-    entity(scale,v,s2).
-    attribute((scale,channel),s2,y).
-    attribute((scale,type),s2,log).
-    """
-        )
-        == [("c_d_area", "m1")]
-    )
-
-
-def test_c_d_text():
-    b = soft.blocks["c_d_text"]
-    assert isinstance(b, Block)
-
-    #  only y, continuous y
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(mark,v,m1).
-    attribute((mark,type),m1,text).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,y).
-
-    entity(scale,v,s1).
-    attribute((scale,channel),s1,y).
-    attribute((scale,type),s1,log).
-    """
-        )
-        == [("c_d_text", "m1")]
-    )
-
-    # continuous y, discrete x
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(mark,v,m1).
-    attribute((mark,type),m1,text).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,x).
-
-    entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,y).
-
-    entity(scale,v,s1).
-    attribute((scale,channel),s1,x).
-    attribute((scale,type),s1,categorical).
-
-    entity(scale,v,s2).
-    attribute((scale,channel),s2,y).
-    attribute((scale,type),s2,linear).
-    """
-        )
-        == [("c_d_text", "m1")]
-    )
-
-
-def test_c_d_tick():
-    b = soft.blocks["c_d_tick"]
-    assert isinstance(b, Block)
-
-    #  only y, discrete y, data size > discrete size(1)
-    assert (
-        list_preferences(
-            b.program
-            + """
-    attribute(number_rows,root,100).
-    entity(field,root,wind).
-    attribute((field,name),wind,wind).
-    attribute((field,type),wind,number).
-    attribute((field,unique),wind,100).
-
-    entity(view,root,v).
-    entity(mark,v,m1).
-    attribute((mark,type),m1,tick).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,y).
-    attribute((encoding,field),e1,wind).
-
-    entity(scale,root,s1).
-    attribute((scale,channel),s1,y).
-    attribute((scale,type),s1,ordinal).
-    """
-        )
-        == []
-    )
-
-    # continuous x, discrete y
-    assert (
-        list_preferences(
-            b.program
-            + """
-    entity(mark,v,m1).
-    attribute((mark,type),m1,tick).
-
-    entity(encoding,m1,e1).
-    attribute((encoding,channel),e1,x).
-
-    entity(encoding,m1,e2).
-    attribute((encoding,channel),e2,y).
-
-    entity(scale,v,s1).
-    attribute((scale,channel),s1,x).
-    attribute((scale,type),s1,linear).
-
-    entity(scale,v,s2).
-    attribute((scale,channel),s2,y).
-    attribute((scale,type),s2,ordinal).
-    """
-        )
-        == [("c_d_tick", "m1")]
     )
 
 
