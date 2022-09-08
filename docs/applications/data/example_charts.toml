@@ -1,5 +1,4 @@
-{
-  "tick_plot": [
+tick_plot = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -13,8 +12,8 @@
     "entity(scale,0,3).",
     "attribute((scale,channel),3,x).",
     "attribute((scale,type),3,linear)."
-  ],
-  "tick_plot_log": [
+]
+tick_plot_log = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -28,8 +27,8 @@
     "entity(scale,0,3).",
     "attribute((scale,channel),3,x).",
     "attribute((scale,type),3,log)."
-  ],
-  "bar_chart": [
+]
+bar_chart = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -55,8 +54,8 @@
     "attribute((scale,channel),5,y).",
     "attribute((scale,type),5,linear).",
     "attribute((scale,zero),5,true)."
-  ],
-  "radial_chart": [
+]
+radial_chart = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -82,8 +81,8 @@
     "attribute((scale,channel),5,y).",
     "attribute((scale,type),5,linear).",
     "attribute((scale,zero),5,true)."
-  ],
-  "histogram": [
+]
+histogram = [
     "attribute(number_rows,root,100).",
     "entity(field,root,condition).",
     "attribute((field,name),condition,condition).",
@@ -104,8 +103,8 @@
     "attribute((scale,channel),5,y).",
     "attribute((scale,type),5,linear).",
     "attribute((scale,zero),5,true)."
-  ],
-  "binned_histogram": [
+]
+binned_histogram = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -127,8 +126,8 @@
     "attribute((scale,channel),5,y).",
     "attribute((scale,type),5,linear).",
     "attribute((scale,zero),5,true)."
-  ],
-  "scatterplot": [
+]
+scatterplot = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -151,8 +150,8 @@
     "entity(scale,0,5).",
     "attribute((scale,channel),5,y).",
     "attribute((scale,type),5,linear)."
-  ],
-  "colored_scatterplot": [
+]
+colored_scatterplot = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -184,8 +183,8 @@
     "entity(scale,0,7).",
     "attribute((scale,channel),7,color).",
     "attribute((scale,type),7,categorical)."
-  ],
-  "bubble_chart": [
+]
+bubble_chart = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -217,8 +216,8 @@
     "entity(scale,0,7).",
     "attribute((scale,channel),7,size).",
     "attribute((scale,type),7,linear)."
-  ],
-  "pie_chart": [
+]
+pie_chart = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -244,8 +243,8 @@
     "entity(scale,0,5).",
     "attribute((scale,channel),5,color).",
     "attribute((scale,type),5,categorical)."
-  ],
-  "stacked_bar_chart": [
+]
+stacked_bar_chart = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -277,8 +276,8 @@
     "entity(scale,0,7).",
     "attribute((scale,channel),7,color).",
     "attribute((scale,type),7,categorical)."
-  ],
-  "normalized_stacked_bar_chart": [
+]
+normalized_stacked_bar_chart = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -310,8 +309,8 @@
     "entity(scale,0,7).",
     "attribute((scale,channel),7,color).",
     "attribute((scale,type),7,categorical)."
-  ],
-  "bar_with_tick_chart": [
+]
+bar_with_tick_chart = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -332,8 +331,8 @@
     "attribute((scale,channel),5,x).",
     "attribute((scale,type),5,linear).",
     "attribute((scale,zero),5,true)."
-  ],
-  "facet_scatterplot": [
+]
+facet_scatterplot = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -362,8 +361,8 @@
     "entity(facet,0,6).",
     "attribute((facet,channel),6,col).",
     "attribute((facet,field),6,condition)."
-  ],
-  "facet_scatterplot_binned": [
+]
+facet_scatterplot_binned = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -393,8 +392,8 @@
     "attribute((facet,channel),6,col).",
     "attribute((facet,field),6,temperature).",
     "attribute((facet,binning),6,10)."
-  ],
-  "tick_with_histogram": [
+]
+tick_with_histogram = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -428,8 +427,8 @@
     "attribute((scale,channel),9,y).",
     "attribute((scale,type),9,linear).",
     "attribute((scale,zero),9,true)."
-  ],
-  "tick_with_histogram_shared_y": [
+]
+tick_with_histogram_shared_y = [
     "attribute(number_rows,root,100).",
     "entity(field,root,temperature).",
     "attribute((field,name),temperature,temperature).",
@@ -460,5 +459,4 @@
     "attribute((scale,channel),8,y).",
     "attribute((scale,type),8,linear).",
     "attribute((scale,zero),8,true)."
-  ]
-}
+]
