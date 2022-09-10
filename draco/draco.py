@@ -127,7 +127,7 @@ class Draco:
         return run_clingo(program, models, True, args)
 
     def count_preferences(self, spec: Union[str, Iterable[str]]):
-        """Get a dictionary from preferences to how often a given specification
+        """Get a dictionary from preferences to show how often a given specification
         violates the preference. Returns None if the problem is not satisfiable.
 
         Internally, Draco checks against the definitions, constraints, helpers,
