@@ -5,8 +5,6 @@ from typing import Any, List, Literal, TypedDict, Union
 import numpy as np
 import pandas as pd
 
-from draco.utils import dict_union
-
 # Field types recognized by a Draco schema.
 FieldType = Literal["number", "string", "boolean", "datetime"]
 
@@ -80,29 +78,39 @@ def schema_from_dataframe(
         entropy = -(vc * np.log(vc) / np.log(e)).sum()
         entropy = round(entropy * 1000)
 
-        props: FieldProps = {
-            "name": col,
-            "type": data_type,
-            "unique": unique,
-            "entropy": entropy,
-        }
-        if data_type == "number":
-            props: NumberFieldProps = dict_union(
-                props,
-                {
-                    "min": int(column.min()),
-                    "max": int(column.max()),
-                    "std": int(column.std()),
-                },
-            )
-
-        elif data_type == "string":
-            objcounts = column.value_counts()
-            props: StringFieldProps = dict_union(props, {"freq": objcounts.iloc[0]})
-
+        props: FieldProps = _construct_field_props(
+            col, data_type, unique, entropy, column
+        )
         schema["field"].append(props)
 
     return schema
+
+
+def _construct_field_props(
+    name: str,
+    ty: FieldType,
+    unique: int,
+    entropy: float,
+    column: pd.Series,
+) -> FieldProps:
+    """Construct a `FieldProps` object."""
+    if ty == "number":
+        return NumberFieldProps(
+            name=name,
+            type=ty,
+            unique=unique,
+            entropy=entropy,
+            min=int(column.min()),
+            max=int(column.max()),
+            std=int(column.std()),
+        )
+    elif ty == "string":
+        objcounts = column.value_counts()
+        return StringFieldProps(
+            name=name, type=ty, unique=unique, entropy=entropy, freq=objcounts.iloc[0]
+        )
+
+    return BaseFieldProps(name=name, type=ty, unique=unique, entropy=entropy)
 
 
 def schema_from_file(file_path: Path, parse_data_type=dtype_to_field_type) -> Schema:
