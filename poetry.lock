@@ -185,7 +185,7 @@ dev = ["build (==0.8.0)", "flake8 (==4.0.1)", "hashin (==0.17.0)", "pip-tools (=
 
 [[package]]
 name = "certifi"
-version = "2022.6.15"
+version = "2022.6.15.1"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "dev"
 optional = false
@@ -234,7 +234,7 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
 name = "clingo"
-version = "5.5.2"
+version = "5.6.0"
 description = "CFFI-based bindings to the clingo solver."
 category = "main"
 optional = false
@@ -1327,7 +1327,7 @@ test = ["pytest-console-scripts", "pytest-tornasync", "pytest"]
 
 [[package]]
 name = "numpy"
-version = "1.23.2"
+version = "1.23.3"
 description = "NumPy is the fundamental package for array computing with Python."
 category = "main"
 optional = false
@@ -2452,7 +2452,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.11"
-content-hash = "e0374a0448c7f27946bfbe89abca01388e735e2fb92ec8e55490bf2fff30b102"
+content-hash = "c09a360c3780a4521a7639ac3d713162328c8f2e7131c4dc4ede156c54a5242d"
 
 [metadata.files]
 alabaster = []
