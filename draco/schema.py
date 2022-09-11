@@ -5,7 +5,7 @@ from typing import Any, List, Literal, TypedDict, Union
 import numpy as np
 import pandas as pd
 
-from draco import dict_union
+from draco.utils import dict_union
 
 # Field types recognized by a Draco schema.
 FieldType = Literal["number", "string", "boolean", "datetime"]
