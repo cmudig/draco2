@@ -40,6 +40,7 @@ altair = "^4.2.0"
 black = {extras = ["jupyter"], version = "^22.8.0"}
 flake8 = "^5.0.4"
 flake8-black = "^0.3.3"
+ipywidgets = "^7.7.2"
 isort = "^5.10.1"
 jupyter-book = "^0.13.1"
 jupyterlab = "^3.4.6"
