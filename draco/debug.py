@@ -68,20 +68,6 @@ class DracoDebug:
         )
 
     @staticmethod
-    def __construct_weight_dict(
-        feature_names: set[str],
-        custom_weights: dict[str, int],
-        default_weights: dict[str, int],
-    ) -> dict[str, int]:
-        default_weight = 0
-        result: dict[str, int] = {}
-        for feature_name in feature_names:
-            key = f"{feature_name}_weight"
-            value = custom_weights.get(key, default_weights.get(key, default_weight))
-            result[key] = value
-        return result
-
-    @staticmethod
     def __full_pref_count_dict(
         draco: Draco, spec: str | Iterable[str], feature_names: set[str]
     ) -> dict[str, int]:
