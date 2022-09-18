@@ -9,42 +9,29 @@ from .draco import Draco
 
 class DracoDebug:
     __DEFAULT_DRACO__ = Draco()
-    __DEFAULT_FEATURE_NAMES__ = set(__DEFAULT_DRACO__.soft_constraint_names)
-    __DEFAULT_WEIGHTS__ = __DEFAULT_DRACO__.weights
 
     def __init__(
         self,
         specs: dict[str, Iterable[str] | str],
-        draco: Draco | None = None,
-        feature_names: set[str] | None = None,
-        weights: dict[str, int] | None = None,
+        draco: Draco = __DEFAULT_DRACO__,
     ):
         """
         Initializes a new debugging instance.
 
         :param specs: ``dict`` of specifications to analyze, keys representing
                        the spec name and values the corresponding ASP declarations.
-        :param draco: The ``Draco`` instance to be debugged
-        :param feature_names: A set of the constraints' names which should be debugged
-        :param weights: A ``dict`` associating weights with feature (constraint) names.
-                        Keys of this ``dict`` are expected to be of the form
-                        ``"{feature_name}_weight"``. If the supplied ``feature_names``
-                        set contains a feature name for which no entry is present in
-                        this ``dict``, the default weight of the feature will be used.
+        :param draco: The ``Draco`` instance to be debugged.
         """
         self.specs = specs
-        cls = DracoDebug
-        if feature_names is None:
-            feature_names = cls.__DEFAULT_FEATURE_NAMES__
-        if draco is None:
-            draco = cls.__DEFAULT_DRACO__
         self.draco = draco
-        self.feature_names = feature_names
-        self.weights = cls.__construct_weight_dict(
-            feature_names=self.feature_names,
-            custom_weights=weights or cls.__DEFAULT_WEIGHTS__,
-            default_weights=cls.__DEFAULT_WEIGHTS__,
-        )
+
+    @cached_property
+    def feature_names(self) -> set[str]:
+        """
+        :return: a set of the names of the features (constraints)
+                 of the underlying Draco instance
+        """
+        return set(self.draco.soft_constraint_names)
 
     @cached_property
     def chart_preferences(self) -> pd.DataFrame:
@@ -73,7 +60,7 @@ class DracoDebug:
         # Flattened preference counts
         pref_tuples = self.__unnest_pref_count_dict(pref_count_dict)
         pref_tuples_with_weights = self.__pref_tuples_extended_with_weights(
-            pref_tuples, self.weights
+            pref_tuples, self.draco.weights
         )
         return pd.DataFrame(
             data=pref_tuples_with_weights,
@@ -140,8 +127,8 @@ class DracoDebug:
 
 class ChartConfig(NamedTuple):
     title: str
-    sort_x: alt.Sort | str
-    sort_y: alt.Sort | str
+    sort_x: alt.Sort | str | None
+    sort_y: alt.Sort | str | None
 
 
 class DracoDebugPlotter:
@@ -156,7 +143,7 @@ class DracoDebugPlotter:
         ),
     ]
     # width, height
-    __DEFAULT_PLOT_SIZE__: tuple[float, float] = 1200, 300
+    __DEFAULT_PLOT_SIZE__: tuple[float, float] = 1200, 400
 
     def __init__(
         self,
@@ -175,6 +162,16 @@ class DracoDebugPlotter:
         self.plot_size = plot_size
 
     def create_chart(self, cfg: ChartConfig | None = None) -> alt.VConcatChart:
+        """
+        Creates a vertically concatenated chart made up of
+        an aligned bar chart visualizing feature weights
+        and a heatmap visualizing the number of times each spec violates each feature.
+
+        :param cfg: the configuration based on which the chart title and sorting is set.
+                    A default configuration will be used of this is not specified,
+                    featuring an alphabetical sort by feature name and spec name.
+        :return: the above-described Altair chart
+        """
         if cfg is None:
             cfg = self.__DEFAULT_CONFIGS__[0]
         width, height = self.plot_size
@@ -197,7 +194,7 @@ class DracoDebugPlotter:
                 y=alt.Y(field="weight", type="quantitative"),
                 tooltip=["pref_name", "weight"],
             )
-            .properties(width=width, height=height / 3, title=cfg.title)
+            .properties(width=width, height=height / 4)
         )
         pref_rect = (
             alt.Chart(chart_preferences)
@@ -213,6 +210,8 @@ class DracoDebugPlotter:
                 ),
                 tooltip=chart_preferences.columns.tolist(),
             )
-            .properties(width=width, height=height)
+            .properties(width=width, height=3 * height / 4)
         )
-        return alt.VConcatChart(vconcat=[weight_bar, pref_rect], spacing=0)
+        return alt.VConcatChart(
+            vconcat=[weight_bar, pref_rect], spacing=0, title=cfg.title
+        )
