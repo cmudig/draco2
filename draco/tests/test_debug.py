@@ -134,9 +134,9 @@ def test_plotter_create_chart_title(instance: DracoDebugPlotter, config: ChartCo
 def __mark_as_str(mark: str | alt.MarkDef) -> str:
     if type(mark) is str:
         return mark
-    elif type(mark) is alt.MarkDef:
-        return mark.type  # type: ignore
-    raise TypeError(f"Unexpected type for mark: {type(mark)}")
+    else:
+        mark_def: alt.MarkDef = mark
+        return mark_def.type
 
 
 @pytest.mark.parametrize(
