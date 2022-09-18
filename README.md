@@ -15,6 +15,7 @@
 [![code style black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/cmudig/draco2/branch/main/graph/badge.svg)](https://codecov.io/gh/cmudig/draco2)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/cmudig/draco2.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/cmudig/draco2/context:python)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cmudig/draco2/HEAD)
 
 **Work in Progress**
 
