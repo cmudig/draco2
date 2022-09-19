@@ -1,5 +1,6 @@
 from typing import Any, DefaultDict, Dict, Generator, List, Optional
 
+import draco.server.exceptions as exceptions
 import draco.server.models as models
 from draco import Draco
 from draco.run import Model
@@ -12,7 +13,13 @@ def draco_from_payload(payload: models.DracoInitDTO) -> Draco:
 def get_properties(
     names: List[models.DracoProperty], draco: Draco
 ) -> Dict[models.DracoProperty, Any]:
-    return {name: getattr(draco, name) for name in names}
+    result = {}
+    for name in names:
+        try:
+            result[name] = getattr(draco, name)
+        except AttributeError:
+            raise exceptions.UnknownDracoPropertyError(name)
+    return result
 
 
 def check_spec(spec: models.Specification, draco: Draco) -> bool:
