@@ -79,3 +79,8 @@ clean:
 	@find . -type d -name '*pytest_cache*' -exec rm -rf {} +
 	@find . -type f -name "*.py[co]" -exec rm -rf {} +
 	@find . -type d -name '*.ipynb_checkpoints' -exec rm -r {} +
+
+.PHONY: serve
+serve:
+	@echo "==> 📡 Serve"
+	@poetry run uvicorn draco.server.main:app --reload
