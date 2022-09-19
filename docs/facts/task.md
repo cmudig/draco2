@@ -1,11 +1,11 @@
 # Tasks
 
-The task that the user tries to complete when looking at a visualization helps Draco find the most appropriate visualization.
+The task that the user tries to complete when looking at a visualization helps Draco find the most appropriate
+visualization.
 
 ## Task Properties
 
-`task`
-: The task type. Can be one of `value` and `summary`.
+`task` : The task type. Can be one of `value` and `summary`.
 
 ## Example
 

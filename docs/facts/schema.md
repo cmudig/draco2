@@ -1,45 +1,43 @@
 # Data and Schema
 
-In Draco, you can describe what you know about the dataset and the fields in the data. There can be only one dataset in a Draco program.
+In Draco, you can describe what you know about the dataset and the fields in the data. There can be only one dataset in
+a Draco program.
 
 Besides general statistics about the whole dataset, the schema has information about field types and field statistics.
 
-You can use Draco's [data schema API](../api/schema.ipynb) to generate a schema description from a file or [Pandas dataframe](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html).
+You can use Draco's [data schema API](../api/schema.ipynb) to generate a schema description from a file or
+[Pandas dataframe](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html).
 
 ## Dataset Properties
 
 General properties of the dataset that are not specific to a field are properties of the root.
 
-`number_rows`
-: The number of rows in the dataset. Draco can use this fact about the data to recommend chart design that scale to the size of the dataset.
+`number_rows` : The number of rows in the dataset. Draco can use this fact about the data to recommend chart design that
+scale to the size of the dataset.
 
 ## Field Properties
 
-Draco can use information about the field type and field statistics. Each field entity is associated with a field. The facts therefore have the form of e.g. `attribute((field,type),foo,number).` (read as _the type of the foo field is number_). For each field, there should be an entity fact `entity` that tells Draco that the field exists on the root (e.g. `entity(field,root,foo).`).
+Draco can use information about the field type and field statistics. Each field entity is associated with a field. The
+facts therefore have the form of e.g. `attribute((field,type),foo,number).` (read as _the type of the foo field is
+number_). For each field, there should be an entity fact `entity` that tells Draco that the field exists on the root
+(e.g. `entity(field,root,foo).`).
 
-`(field,name)`
-: The name of the field.
+`(field,name)` : The name of the field.
 
-`(field,type)`
-: The type of the data in the column for this field. One of `number`, `string`, `boolean`, or `datetime`.
+`(field,type)` : The type of the data in the column for this field. One of `number`, `string`, `boolean`, or `datetime`.
 
-`(field,unique)`
-: The number of unique values.
+`(field,unique)` : The number of unique values.
 
-`(field,entropy)`
-: The entropy of the field. (To save a more accurate value, this field entropy value is 1000 times of the actual entropy).
+`(field,entropy)` : The entropy of the field. (To save a more accurate value, this field entropy value is 1000 times of
+the actual entropy).
 
-`(field,min)`
-: The minimum value. Only used for numbers.
+`(field,min)` : The minimum value. Only used for numbers.
 
-`(field,max)`
-: The maximum value. Only used for numbers.
+`(field,max)` : The maximum value. Only used for numbers.
 
-`(field,std)`
-: The standard deviation. Only used for numbers.
+`(field,std)` : The standard deviation. Only used for numbers.
 
-`(field,freq)`
-: The frequency of the most common value. Only used for strings.
+`(field,freq)` : The frequency of the most common value. Only used for strings.
 
 ## Example
 

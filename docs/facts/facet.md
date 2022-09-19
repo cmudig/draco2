@@ -1,17 +1,15 @@
 # Facets
 
-With the facet operator, we can partition a dataset by a field and create a view for each field. The resulting chart is often called a small multiples chart.
+With the facet operator, we can partition a dataset by a field and create a view for each field. The resulting chart is
+often called a small multiples chart.
 
 ## Facet Properties
 
-`(facet,channel)`
-: The facet channel. Can be one of `col` and `row`.
+`(facet,channel)` : The facet channel. Can be one of `col` and `row`.
 
-`(facet,field)`
-: The facet field.
+`(facet,field)` : The facet field.
 
-`(facet,binning)`
-: Binning a numeric field for faceting.
+`(facet,binning)` : Binning a numeric field for faceting.
 
 ## Example
 

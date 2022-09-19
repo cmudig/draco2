@@ -23,8 +23,8 @@ Draco is a formal framework for representing design knowledge about effective vi
 constraints. You can use Draco to find effective visualization visual designs or validate visualization designs. Draco's
 constraints are based on Answer Set Programming (ASP) and solved with the [Clingo](https://github.com/potassco/clingo)
 constraint solver. We also implemented a way to learn weights for the recommendation system directly from the results of
-graphical perception experiment. Draco v2 is a much improved version of the first iteration
-of [Draco](https://github.com/uwdata/draco).
+graphical perception experiment. Draco v2 is a much improved version of the first iteration of
+[Draco](https://github.com/uwdata/draco).
 
 ## Documentation
 
