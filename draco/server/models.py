@@ -34,7 +34,7 @@ DracoProperty = Literal[
 ]
 
 
-class PropertyDTO(BaseModel):
+class PropertyDTO(BaseModel):  # pytype: disable=base-class-error
     """
     Data Transfer Object to access public properties
     of a Draco instance via ``getattr``.
@@ -46,7 +46,7 @@ class PropertyDTO(BaseModel):
 GetPropertiesReturn = Dict[DracoProperty, Any]
 
 
-class DracoInitDTO(BaseModel):
+class DracoInitDTO(BaseModel):  # pytype: disable=base-class-error
     """Data Transfer Object to construct a Draco instance via ``Draco.__init__``."""
 
     define: Union[Program, str] = programs.define
@@ -62,7 +62,7 @@ class DracoInitDTO(BaseModel):
 Specification = Union[str, Iterable[str]]
 
 
-class CheckSpecDTO(BaseModel):
+class CheckSpecDTO(BaseModel):  # pytype: disable=base-class-error
     """Data Transfer Object to check a specification via ``Draco.check_spec``."""
 
     spec: Specification
@@ -71,7 +71,7 @@ class CheckSpecDTO(BaseModel):
 CheckSpecReturn = bool
 
 
-class CompleteSpecDTO(BaseModel):
+class CompleteSpecDTO(BaseModel):  # pytype: disable=base-class-error
     """Data Transfer Object to complete a specification via ``Draco.complete_spec``."""
 
     spec: Specification
@@ -81,7 +81,7 @@ class CompleteSpecDTO(BaseModel):
 CompleteSpecReturn = Generator[Model, None, None]
 
 
-class CountPreferencesDTO(BaseModel):
+class CountPreferencesDTO(BaseModel):  # pytype: disable=base-class-error
     """Data Transfer Object to count preferences via ``Draco.count_preferences``."""
 
     spec: Specification
@@ -90,7 +90,7 @@ class CountPreferencesDTO(BaseModel):
 CountPreferencesReturn = Optional[DefaultDict[str, int]]
 
 
-class GetViolationsDTO(BaseModel):
+class GetViolationsDTO(BaseModel):  # pytype: disable=base-class-error
     """Data Transfer Object to get violations via ``Draco.get_violations``."""
 
     spec: Specification
