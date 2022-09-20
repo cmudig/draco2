@@ -2531,7 +2531,7 @@ def test_color_entropy_low():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,5000).
+    attribute((field,entropy),precipitation,2000).
     attribute((field,interesting),precipitation,true).
 
     entity(view,root,v).
@@ -2579,7 +2579,7 @@ def test_size_entropy_high():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,60000).
+    attribute((field,entropy),precipitation,4000).
     attribute((field,interesting),precipitation,true).
 
     entity(view,root,v).
@@ -2627,7 +2627,7 @@ def test_size_entropy_low():
         list_preferences(
             b.program
             + """
-    attribute((field,entropy),precipitation,4000).
+    attribute((field,entropy),precipitation,2000).
     attribute((field,interesting),precipitation,true).
 
     entity(view,root,v).
