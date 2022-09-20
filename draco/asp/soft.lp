@@ -215,7 +215,7 @@ preference(position_entropy,E) :-
     N > 100,
     attribute((field,entropy),F,EN),
     attribute((encoding,field),E,F),
-    EN <= 12000,
+    EN <= 3000,
     not helper(mark_encoding_discrete_or_binned,_,E),
     not attribute((encoding,aggregate),E,_).
 
@@ -280,7 +280,7 @@ preference(color_entropy_high,E) :-
     attribute((encoding,channel),E,color),
     helper((encoding,scale_type),E,linear),
     helper(enc_interesting,E),
-    EN > 12000.
+    EN > 3000.
 
 % @soft(color_entropy_low) Entropy, primary quantive interactions as suggested by Kim et al.
 preference(color_entropy_low,E) :-
@@ -289,7 +289,7 @@ preference(color_entropy_low,E) :-
     attribute((encoding,channel),E,color),
     helper((encoding,scale_type),E,linear),
     helper(enc_interesting,E),
-    EN <= 12000.
+    EN <= 3000.
 
 % @soft(size_entropy_high) Entropy, primary quantive interactions as suggested by Kim et al.
 preference(size_entropy_high,E) :-
@@ -298,7 +298,7 @@ preference(size_entropy_high,E) :-
     attribute((encoding,channel),E,size),
     helper((encoding,scale_type),E,linear),
     helper(enc_interesting,E),
-    EN > 12000.
+    EN > 3000.
 
 % @soft(size_entropy_low) Entropy, primary quantive interactions as suggested by Kim et al.
 preference(size_entropy_low,E) :-
@@ -307,7 +307,7 @@ preference(size_entropy_low,E) :-
     attribute((encoding,channel),E,size),
     helper((encoding,scale_type),E,linear),
     helper(enc_interesting,E),
-    EN <= 12000.
+    EN <= 3000.
 
 % @soft(linear_scale) linear scale.
 preference(linear_scale,E) :-

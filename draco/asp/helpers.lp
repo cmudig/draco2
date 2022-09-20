@@ -219,7 +219,7 @@ helper(y_cardinality,M,1) :-
     entity(mark,_,M),
     not helper((mark,channel),M,y).
 
-% @helper(enc_interesting)
+% @helper(enc_interesting) The field relevant to the task is mapped to the encoding E.
 helper(enc_interesting,E) :-
     attribute((encoding,field),E,F),
     attribute((field,interesting),F,true).

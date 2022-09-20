@@ -41,6 +41,9 @@ Draco can use information about the field type and field statistics. Each field 
 `(field,freq)`
 : The frequency of the most common value. Only used for strings.
 
+`(field,interesting)`
+: When the [`task`](task.md) regards specific fields, fields can be marked as relevant to the task with interesting. 
+
 ## Example
 
 ```prolog
@@ -51,6 +54,7 @@ attribute((field,name),f1,date).
 attribute((field,type),f1,datetime).
 attribute((field,unique),f1,1461).
 attribute((field,entropy),f1,7287).
+attribute((field,interesting),f1,true).
 
 entity(field,root,f2).
 attribute((field,name),f2,precipitation).
