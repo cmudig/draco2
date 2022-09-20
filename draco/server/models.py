@@ -1,14 +1,4 @@
-from typing import (
-    Any,
-    DefaultDict,
-    Dict,
-    Generator,
-    Iterable,
-    List,
-    Literal,
-    Optional,
-    Union,
-)
+from typing import Any, DefaultDict, Dict, Iterable, List, Literal, Optional, Union
 
 from pydantic import BaseModel
 
@@ -78,7 +68,7 @@ class CompleteSpecDTO(BaseModel):  # pytype: disable=base-class-error
     models: int = 1
 
 
-CompleteSpecReturn = Generator[Model, None, None]
+CompleteSpecReturn = List[Model]
 
 
 class CountPreferencesDTO(BaseModel):  # pytype: disable=base-class-error
@@ -97,3 +87,15 @@ class GetViolationsDTO(BaseModel):  # pytype: disable=base-class-error
 
 
 GetViolationsReturn = Optional[List[str]]
+
+
+class RunClingoDTO(BaseModel):  # pytype: disable=base-class-error
+    """Data Transfer Object to run clingo via ``draco.run.run_clingo``."""
+
+    program: Union[str, Iterable[str]]
+    models: int = 0
+    topK: bool = False
+    arguments: List[str] = []
+
+
+RunClingoReturn = List[Model]

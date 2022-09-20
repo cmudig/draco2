@@ -1,9 +1,10 @@
-from typing import Any, DefaultDict, Dict, Generator, List, Optional
+from typing import Any, DefaultDict, Dict, Generator, Iterable, List, Optional, Union
 
 import draco.server.exceptions as exceptions
 import draco.server.models as models
 from draco import Draco
 from draco.run import Model
+from draco.run import run_clingo as run_clingo_internal
 
 
 def draco_from_payload(payload: models.DracoInitDTO) -> Draco:
@@ -40,3 +41,12 @@ def count_preferences(
 
 def get_violations(spec: models.Specification, draco: Draco) -> Optional[List[str]]:
     return draco.get_violations(spec)
+
+
+def run_clingo(
+    program: Union[str, Iterable[str]],
+    num_models: int,
+    topK,
+    arguments: List[str],
+):
+    return run_clingo_internal(program, num_models, topK, arguments)

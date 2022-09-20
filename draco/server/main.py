@@ -29,11 +29,12 @@ def check_spec(
 def complete_spec(
     payload: models.CompleteSpecDTO, draco: models.DracoInitDTO = models.DracoInitDTO()
 ) -> models.CompleteSpecReturn:
-    return service.complete_spec(
+    generator = service.complete_spec(
         spec=payload.spec,
         num_models=payload.models,
         draco=service.draco_from_payload(draco),
     )
+    return list(generator)
 
 
 @app.post("/count-preferences")
@@ -53,3 +54,14 @@ def get_violations(
     return service.get_violations(
         spec=payload.spec, draco=service.draco_from_payload(draco)
     )
+
+
+@app.post("/run-clingo")
+def run_clingo(payload: models.RunClingoDTO) -> models.RunClingoReturn:
+    generator = service.run_clingo(
+        program=payload.program,
+        num_models=payload.models,
+        topK=payload.topK,
+        arguments=payload.arguments,
+    )
+    return list(generator)
