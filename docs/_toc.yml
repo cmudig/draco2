@@ -24,6 +24,7 @@ parts:
     chapters:
       - file: applications/recommendation
       - file: applications/draco_learn
+      - file: applications/debug_draco
   - caption: Guide
     chapters:
       - file: guide
