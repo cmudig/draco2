@@ -23,8 +23,6 @@ classifiers = [
     "Natural Language :: English",
     "Operating System :: POSIX :: Linux",
     "Operating System :: MacOS :: MacOS X",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
 ]
 
@@ -32,7 +30,7 @@ classifiers = [
 clingo = "^5.5.2"
 matplotlib = "^3.5.2"
 pandas = "^1.4.2"
-python = ">=3.8.0,<3.11"
+python = ">=3.10.0,<3.11"
 scikit-learn = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
