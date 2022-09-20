@@ -83,4 +83,4 @@ clean:
 .PHONY: serve
 serve:
 	@echo "==> 📡 Serve"
-	@poetry run uvicorn draco.server.main:app --reload
+	@poetry run uvicorn draco.server.controller:app --reload
