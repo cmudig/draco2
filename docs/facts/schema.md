@@ -39,8 +39,7 @@ the actual entropy).
 
 `(field,freq)` : The frequency of the most common value. Only used for strings.
 
-`(field,interesting)` : When the [`task`](task.md) regards specific fields, fields can be marked as relevant to the task
-with interesting.
+`(field,interesting)` : When the [`task`](task.md) regards specific fields, fields can be marked as relevant to the task.
 
 ## Example
 
