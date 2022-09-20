@@ -1,9 +1,18 @@
-from typing import Any, DefaultDict, Dict, Iterable, List, Literal, Optional, Union
+from typing import (
+    Any,
+    DefaultDict,
+    Dict,
+    Iterable,
+    List,
+    Literal,
+    Optional,
+    TypedDict,
+    Union,
+)
 
 from pydantic import BaseModel
 
 import draco.programs as programs
-from draco.run import Model
 from draco.weights import Weights
 from draco.weights import weights as draco_weights
 
@@ -68,7 +77,20 @@ class CompleteSpecDTO(BaseModel):  # pytype: disable=base-class-error
     models: int = 1
 
 
-CompleteSpecReturn = List[Model]
+class ClingoSymbol(TypedDict):
+    """JSON-serializable clingo symbol"""
+
+    type: str
+    value: str
+
+
+class ClingoModel(TypedDict):
+    answer_set: Iterable[ClingoSymbol]
+    cost: List[int]
+    number: int
+
+
+CompleteSpecReturn = List[ClingoModel]
 
 
 class CountPreferencesDTO(BaseModel):  # pytype: disable=base-class-error
@@ -98,4 +120,4 @@ class RunClingoDTO(BaseModel):  # pytype: disable=base-class-error
     arguments: List[str] = []
 
 
-RunClingoReturn = List[Model]
+RunClingoReturn = List[ClingoModel]

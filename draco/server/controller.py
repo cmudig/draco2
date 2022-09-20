@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 import draco.server.models as models
 import draco.server.service as service
+import draco.server.utils as utils
 
 app = FastAPI()
 
@@ -34,7 +35,7 @@ def complete_spec(
         num_models=payload.models,
         draco=service.draco_from_payload(draco),
     )
-    return list(generator)
+    return list(map(utils.model_to_jsonable_model, generator))
 
 
 @app.post("/count-preferences")
@@ -64,4 +65,4 @@ def run_clingo(payload: models.RunClingoDTO) -> models.RunClingoReturn:
         topK=payload.topK,
         arguments=payload.arguments,
     )
-    return list(generator)
+    return list(map(utils.model_to_jsonable_model, generator))
