@@ -7,6 +7,7 @@ import draco.server.exceptions as exceptions
 import draco.server.models as models
 import draco.server.service as service
 from draco import Draco
+from draco.run import run_clingo
 from draco.weights import Weights
 
 Program = programs.Program
@@ -133,3 +134,16 @@ def test_get_violations(spec: models.Specification, default_draco: Draco):
     res = service.get_violations(spec, default_draco)
     assert res is not None
     assert res == default_draco.get_violations(spec)
+
+
+def test_run_clingo():
+    res = list(
+        service.run_clingo("fact(a,42).", num_models=0, topK=False, arguments=[])
+    )
+    expected = list(run_clingo("fact(a,42).", models=0, topK=False, arguments=[]))
+    assert res is not None
+    assert len(res) == len(expected)
+    for res_item, expected_item in zip(res, expected):
+        assert res_item.cost == expected_item.cost
+        assert res_item.number == expected_item.number
+        assert list(res_item.answer_set) == list(expected_item.answer_set)
