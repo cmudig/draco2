@@ -1,13 +1,13 @@
 from math import e
 from pathlib import Path
-from typing import Any, Callable, List, Literal, TypedDict, Union
+from typing import Any, Callable, Literal, TypeAlias, TypedDict
 
 import numpy as np
 import pandas as pd
 from pandas._typing import DtypeObj
 
 # Field types recognized by a Draco schema.
-FieldType = Literal["number", "string", "boolean", "datetime"]
+FieldType: TypeAlias = Literal["number", "string", "boolean", "datetime"]
 
 
 class BaseFieldProps(TypedDict):
@@ -34,14 +34,14 @@ class StringFieldProps(BaseFieldProps):
 
 
 # Union of supported field properties.
-FieldProps = Union[NumberFieldProps, StringFieldProps, BaseFieldProps]
+FieldProps = NumberFieldProps | StringFieldProps | BaseFieldProps
 
 
 class Schema(TypedDict):
     """Representation of a data schema including data and field properties."""
 
     number_rows: int
-    field: List[FieldProps]
+    field: list[FieldProps]
 
 
 def dtype_to_field_type(ty: DtypeObj) -> FieldType:

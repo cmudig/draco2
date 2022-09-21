@@ -2,7 +2,6 @@ import logging
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict
 
 from draco.asp_utils import get_constants
 
@@ -20,10 +19,10 @@ class Weights:
     """
 
     assign_program: str
-    weights: Dict[str, int]
+    weights: dict[str, int]
 
 
-def assign_program(weights: Dict[str, int]) -> str:
+def assign_program(weights: dict[str, int]) -> str:
     assign_prog = ""
 
     for name in weights:

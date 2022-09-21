@@ -1,9 +1,10 @@
 from collections import defaultdict
-from typing import DefaultDict, Iterable, Union
+from typing import DefaultDict
 
 import draco.programs as programs
 from draco.asp_utils import blocks_to_program, parse_blocks
 from draco.run import is_satisfiable, run_clingo
+from draco.types import Specification
 from draco.weights import Weights, assign_program
 from draco.weights import weights as draco_weights
 
@@ -15,14 +16,14 @@ class Draco:
 
     def __init__(
         self,
-        define: Union[Program, str] = programs.define,
-        constraints: Union[Program, str] = programs.constraints,
-        helpers: Union[Program, str] = programs.helpers,
-        generate: Union[Program, str] = programs.generate,
-        hard: Union[Program, str] = programs.hard,
-        soft: Union[Program, str] = programs.soft,
-        optimize: Union[Program, str] = programs.optimize,
-        weights: Union[Weights, dict] = draco_weights,
+        define: Program | str = programs.define,
+        constraints: Program | str = programs.constraints,
+        helpers: Program | str = programs.helpers,
+        generate: Program | str = programs.generate,
+        hard: Program | str = programs.hard,
+        soft: Program | str = programs.soft,
+        optimize: Program | str = programs.optimize,
+        weights: Weights | dict = draco_weights,
     ):
         """Create a Draco helper class. If no programs are passed in, the default
         Draco programs are used.
@@ -41,7 +42,7 @@ class Draco:
                 which can be used as features for ML.
         """
 
-        def to_string(prog: Union[Program, str]):
+        def to_string(prog: Program | str):
             if isinstance(prog, Program):
                 return prog.program
             else:
@@ -86,7 +87,7 @@ class Draco:
                 soft_constraints == weight_keys
             ), "Weights dictionary does not match soft constraints"
 
-    def check_spec(self, spec: Union[str, Iterable[str]]) -> bool:
+    def check_spec(self, spec: Specification) -> bool:
         """Checks the spec against the hard constraints.
 
         Internally, Draco checks against the definitions, constraints, helpers,
@@ -100,11 +101,11 @@ class Draco:
         program = self.define + self.constraints + self.helpers + self.hard + spec
         return is_satisfiable(program)
 
-    def complete_spec(self, spec: Union[str, Iterable[str]], models=1):
-        """Get optimal completions for the partial input specification.
+    def complete_spec(self, spec: Specification, models=1):
+        """Get optimal completions for the [partial input specification.
 
         :param spec: The partial specification to complete.
-        :param models: The number of completions to return, defaults to 1
+        :param models: The number of completetions to return, defaults to 1
         """
         if not isinstance(spec, str):
             spec = "\n".join(spec)
@@ -126,7 +127,7 @@ class Draco:
 
         return run_clingo(program, models, True, args)
 
-    def count_preferences(self, spec: Union[str, Iterable[str]]):
+    def count_preferences(self, spec: Specification):
         """Get a dictionary from preferences to show how often a given specification
         violates the preference. Returns None if the problem is not satisfiable.
 
@@ -153,7 +154,7 @@ class Draco:
         except StopIteration:
             return None
 
-    def get_violations(self, spec: Union[str, Iterable[str]]):
+    def get_violations(self, spec: Specification):
         """Get the list of violations for a given specification. Returns None if the
         problem is not satisfiable.
 
