@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import Any, Generator, Iterable, List, Sequence, Tuple, Union, cast
+from typing import Any, Generator, Iterable, Sequence, cast
 
 # Clingo Python API is documented at https://potassco.org/clingo/python-api/current/
 import clingo
@@ -18,7 +18,7 @@ class Model:
     """
 
     answer_set: Iterable[clingo.Symbol]
-    cost: List[int]
+    cost: list[int]
     number: int
 
     def __str__(self):
@@ -27,17 +27,17 @@ class Model:
 
 class Observer(clingo.backend.Observer):
     def __init__(self):
-        self.minimize_literals: Sequence[Tuple[int, int]] = []
+        self.minimize_literals: Sequence[tuple[int, int]] = []
 
-    def minimize(self, priority: int, literals: Sequence[Tuple[int, int]]):
+    def minimize(self, priority: int, literals: Sequence[tuple[int, int]]):
         self.minimize_literals = literals
 
 
 def run_clingo(
-    program: Union[str, Iterable[str]],
+    program: str | Iterable[str],
     models: int = 0,
     topK=False,
-    arguments: List[str] = [],
+    arguments: list[str] = [],
 ) -> Generator[Model, None, None]:
     """Run the solver and yield the models.
 
@@ -118,7 +118,7 @@ def run_clingo(
                 yield Model(answer_set, model.cost, model.number)
 
 
-def is_satisfiable(program: Union[str, Iterable[str]]) -> bool:
+def is_satisfiable(program: str | Iterable[str]) -> bool:
     """Checks whether the program is satisfiable.
 
     :param program: Program as a string or iterable of strings that will be

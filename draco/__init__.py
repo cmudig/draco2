@@ -1,4 +1,4 @@
-import pkg_resources
+from importlib.metadata import version
 
 from draco import programs
 
@@ -9,7 +9,7 @@ from .schema import schema_from_dataframe, schema_from_file
 from .utils import dict_union
 from .weights import weights
 
-__version__ = pkg_resources.get_distribution("draco").version
+__version__ = version("draco")
 
 __all__ = [
     "programs",

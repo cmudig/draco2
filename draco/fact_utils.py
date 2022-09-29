@@ -1,7 +1,7 @@
 import itertools
 from collections import defaultdict
 from enum import Enum, unique
-from typing import Generator, Iterable, Iterator, List, Mapping, Optional, Tuple, Union
+from typing import Generator, Iterable, Iterator, Mapping
 
 from clingo import Symbol
 from clingo.symbol import SymbolType
@@ -43,11 +43,11 @@ def make_fact(kind: FactKind, values: Iterable = []) -> str:
 
 
 def dict_to_facts(
-    data: Union[Mapping, List, str],
-    path: Tuple = (),
-    parent: Union[str, int] = ROOT,
-    id_generator: Optional[Iterator[int]] = None,
-) -> List[str]:
+    data: Mapping | list | str,
+    path: tuple = (),
+    parent: str | int = ROOT,
+    id_generator: Iterator[int] | None = None,
+) -> list[str]:
     """A generic encoder for dictionaries as answer set programming facts.
 
     The encoder can convert dictionaries as well as lists (generating
@@ -59,10 +59,10 @@ def dict_to_facts(
 
 
 def _dict_to_facts(
-    data: Union[Mapping, List, str],
-    path: Tuple = (),
-    parent: Union[str, int] = ROOT,
-    id_generator: Optional[Iterator[int]] = None,
+    data: Mapping | list | str,
+    path: tuple = (),
+    parent: str | int = ROOT,
+    id_generator: Iterator[int] | None = None,
 ) -> Generator[str, None, None]:
     if id_generator is None:
         id_generator = itertools.count()
@@ -73,7 +73,7 @@ def _dict_to_facts(
     else:
         if isinstance(data, list):
             for obj in data:
-                entity_id: Union[str, int] = 0
+                entity_id: str | int = 0
                 if "__id__" in obj:
                     entity_id = obj["__id__"]
                 else:

@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass
 from io import StringIO
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, TextIO, Union
+from typing import Iterable, TextIO
 
 from clingo.ast import AST, ASTType, parse_string
 
@@ -24,10 +24,10 @@ class Block:
 
 METADATA_PREFIX = "% @"
 
-Blocks = Dict[Optional[str], Union[Block, str]]
+Blocks = dict[str | None, Block | str]
 
 
-def parse_blocks(program: Union[str, Path]) -> Blocks:
+def parse_blocks(program: str | Path) -> Blocks:
     """Parses definitions, constraints, or other blocks from ASP files.
     In an ASP file, a block is denoted with a comment of the form:
 
@@ -86,8 +86,8 @@ def _parse_blocks(f: TextIO) -> Blocks:
 
 
 def blocks_to_program(
-    blocks: Blocks, keys: Optional[Iterable[Union[str, None]]] = None
-) -> List[str]:
+    blocks: Blocks, keys: Iterable[str | None] | None = None
+) -> list[str]:
     return [
         block.program
         for name, block in blocks.items()
@@ -95,7 +95,7 @@ def blocks_to_program(
     ]
 
 
-def get_constants(program: Union[str, Iterable[str]]) -> Dict:
+def get_constants(program: str | Iterable[str]) -> dict[str, int]:
     if isinstance(program, str):
         program = program.split("\n")
 

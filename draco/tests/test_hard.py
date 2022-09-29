@@ -1,4 +1,4 @@
-from typing import Iterable, Union
+from typing import Iterable
 
 from draco import dict_to_facts
 from draco.asp_utils import Block
@@ -6,7 +6,7 @@ from draco.programs import define, hard, helpers
 from draco.run import is_satisfiable, run_clingo
 
 
-def list_violations(program: Union[str, Iterable[str]]):
+def list_violations(program: str | Iterable[str]):
     if not isinstance(program, str):
         program = "\n".join(program)
 
@@ -22,7 +22,7 @@ def list_violations(program: Union[str, Iterable[str]]):
         return None
 
 
-def no_violations(program: Union[str, Iterable[str]]):
+def no_violations(program: str | Iterable[str]):
     if not isinstance(program, str):
         program = "\n".join(program)
 
