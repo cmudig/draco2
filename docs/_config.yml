@@ -30,6 +30,7 @@ parse:
   myst_enable_extensions:
     - linkify
     - substitution
+    - dollarmath
 
 sphinx:
   extra_extensions:
