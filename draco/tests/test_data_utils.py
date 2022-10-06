@@ -1,6 +1,7 @@
 import json
 
 import pandas as pd
+from pathlib import Path
 
 from draco import Draco
 from draco.data_utils import count_preferences_memoized, pairs_to_vec, run_in_parallel
@@ -8,7 +9,9 @@ from draco.data_utils import count_preferences_memoized, pairs_to_vec, run_in_pa
 draco = Draco()
 learn_data = {}
 
-with open("./docs/applications/data/saket2018_draco2.json") as file:
+root_path = Path(__file__).resolve().parents[2]
+learn_data = {}
+with open(root_path / "docs/applications/data/saket2018_draco2.json") as file:
     i = 0
     json_data = json.load(file)
 
