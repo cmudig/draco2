@@ -1,7 +1,7 @@
 import json
+from pathlib import Path
 
 import pandas as pd
-from pathlib import Path
 
 from draco import Draco
 from draco.data_utils import count_preferences_memoized, pairs_to_vec, run_in_parallel
