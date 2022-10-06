@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Dict
 
 import pandas as pd
 
@@ -7,7 +8,7 @@ from draco import Draco
 from draco.data_utils import count_preferences_memoized, pairs_to_vec, run_in_parallel
 
 draco = Draco()
-learn_data = {}
+learn_data: Dict[str, Dict] = {}
 
 root_path = Path(__file__).resolve().parents[2]
 learn_data = {}
