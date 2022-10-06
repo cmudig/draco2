@@ -1,7 +1,7 @@
 import logging
 import math
 from multiprocessing import Manager, cpu_count
-from typing import Any, DefaultDict, Dict, Iterable, List, Tuple
+from typing import Any, DefaultDict, Dict, Iterable, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -15,13 +15,15 @@ logger = logging.getLogger(__name__)
 draco = Draco()
 
 
-def get_nested_index(fields: Tuple[str, str]=None):
+def get_nested_index(fields: Optional[Tuple[str, str]] = None):
     """
     Gives you a nested pandas index that we apply to the data when creating a dataframe.
     """
     feature_names: List[str] = draco.soft_constraint_names
     iterables: List[List | Tuple] = [fields or ["negative", "positive"], feature_names]
-    index: pd.MultiIndex = pd.MultiIndex.from_product(iterables, names=["category", "feature"])
+    index: pd.MultiIndex = pd.MultiIndex.from_product(
+        iterables, names=["category", "feature"]
+    )
     index = index.append(pd.MultiIndex.from_arrays([["source", "task"], ["", ""]]))
     return index
 
@@ -110,7 +112,10 @@ def count_preferences_memoized(
     key: str,
     spec: str | Iterable[str],
 ) -> DefaultDict[str, int]:
-    """count preferences if the example's violations hasn't been counted by other processes."""
+    """
+    count preferences if the example's violations hasn't been counted
+    by other processes.
+    """
 
     if key not in processed_specs:
         violations = draco.count_preferences(spec)
@@ -123,17 +128,19 @@ def pairs_to_vec(
     specs: Dict[str, Dict], fields: Tuple[str, str] = ("negative", "positive")
 ) -> pd.DataFrame:
     """
-    Given pairs of positive and negative draco specification, count the number of times each preference is violated.
-    The input pairs are partitioned so that ``count_preferences_memoized`` can run parallelly by multiple processes.
+    Given pairs of positive and negative draco specification, count the number of times
+    each preference is violated. The input pairs are partitioned so that
+    ``count_preferences_memoized`` can run parallelly by multiple processes.
 
     :return: A Dataframe indexed by the pair ids that can be used to train draco-learn.
             It can have the following columns:
 
-            * ``source``: The collection that the pair is from.
-            * ``task``: What task does the pair perform.
-            * ``(field, feature)``: the ``field`` indicates if it's the positive or negative example of the pair,
-                                    and the feature refers to the preference.
-                                    The value is the count of preference violations.
+    * ``source``: The collection that the pair is from.
+    * ``task``: What task does the pair perform.
+    * ``(field, feature)``: the ``field`` indicates if it's the positive or negative
+                            example of the pair, and the ``feature``
+                            refers to the preference.
+                            The value is the count of preference violations.
     """
 
     return run_in_parallel(pair_partition_to_vec, list(specs.values()), fields)
