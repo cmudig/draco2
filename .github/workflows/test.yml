@@ -30,7 +30,7 @@ jobs:
         run: make grounding-size
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3.1.0
+        uses: codecov/codecov-action@v3.1.1
         with:
           fail_ci_if_error: true
 
@@ -58,7 +58,7 @@ jobs:
       contents: write
 
     steps:
-      - uses: fastify/github-action-merge-dependabot@v3.2.4
+      - uses: fastify/github-action-merge-dependabot@v3.3.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           target: minor
