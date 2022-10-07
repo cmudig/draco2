@@ -1,7 +1,7 @@
 import logging
 import math
 from multiprocessing import Manager, cpu_count
-from typing import Any, DefaultDict, Dict, Iterable, List, Optional, Tuple
+from typing import Any, DefaultDict, Dict, Iterable, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 draco = Draco()
 
 
-def get_nested_index(fields: Optional[Tuple[str, str]] = ["negative", "positive"]):
+def get_nested_index(fields: Tuple[str, str] = ("negative", "positive")):
     """
     Gives you a nested pandas index that we apply to the data when creating a dataframe.
     """
