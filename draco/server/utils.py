@@ -2,7 +2,7 @@ import clingo
 
 from draco.run import Model
 
-from .models import ClingoModel, ClingoSymbol
+from .models.shared import ClingoModel, ClingoSymbol
 
 
 def clingo_symbol_to_jsonable_symbol(symbol: clingo.Symbol) -> ClingoSymbol:
