@@ -1,6 +1,7 @@
 [
   {
-    "data": [
+    "task": "summary",
+    "positive": [
       "attribute(task,root,summary).",
       "attribute(number_rows,root,407).",
       "entity(field,root,n).",
@@ -14,13 +15,9 @@
       "entity(field,root,q2).",
       "attribute((field,name),q2,q2).",
       "attribute((field,type),q2,number).",
-      "attribute((field,unqiue),q2,407)."
-    ],
-    "task": "summary",
-    "significant": "completion",
-    "pvalue": 0.00693,
-    "positive": [
+      "attribute((field,unqiue),q2,407).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,line).",
       "entity(encoding,m,e1).",
@@ -39,7 +36,22 @@
       "attribute((scale,zero),s2,true)."
     ],
     "negative": [
+      "attribute(task,root,summary).",
+      "attribute(number_rows,root,407).",
+      "entity(field,root,n).",
+      "attribute((field,name),n,n).",
+      "attribute((field,type),n,string).",
+      "attribute((field,unqiue),n,9).",
+      "entity(field,root,q1).",
+      "attribute((field,name),q1,q1).",
+      "attribute((field,type),q1,number).",
+      "attribute((field,unqiue),q1,25).",
+      "entity(field,root,q2).",
+      "attribute((field,name),q2,q2).",
+      "attribute((field,type),q2,number).",
+      "attribute((field,unqiue),q2,407).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,point).",
       "entity(encoding,m,e1).",
@@ -56,10 +68,12 @@
       "attribute((scale,channel),s2,y).",
       "attribute((scale,type),s2,linear).",
       "attribute((scale,zero),s2,true)."
-    ]
+    ],
+    "significant": "completion"
   },
   {
-    "data": [
+    "task": "summary",
+    "positive": [
       "attribute(task,root,summary).",
       "attribute(number_rows,root,335).",
       "entity(field,root,n).",
@@ -73,13 +87,9 @@
       "entity(field,root,q2).",
       "attribute((field,name),q2,q2).",
       "attribute((field,type),q2,number).",
-      "attribute((field,unqiue),q2,335)."
-    ],
-    "task": "summary",
-    "significant": "accuracy",
-    "pvalue": 0.002989,
-    "positive": [
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,bar).",
       "entity(encoding,m,e1).",
@@ -98,7 +108,22 @@
       "attribute((scale,zero),s2,true)."
     ],
     "negative": [
+      "attribute(task,root,summary).",
+      "attribute(number_rows,root,335).",
+      "entity(field,root,n).",
+      "attribute((field,name),n,n).",
+      "attribute((field,type),n,string).",
+      "attribute((field,unqiue),n,9).",
+      "entity(field,root,q1).",
+      "attribute((field,name),q1,q1).",
+      "attribute((field,type),q1,number).",
+      "attribute((field,unqiue),q1,25).",
+      "entity(field,root,q2).",
+      "attribute((field,name),q2,q2).",
+      "attribute((field,type),q2,number).",
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,line).",
       "entity(encoding,m,e1).",
@@ -115,10 +140,12 @@
       "attribute((scale,channel),s2,y).",
       "attribute((scale,type),s2,linear).",
       "attribute((scale,zero),s2,true)."
-    ]
+    ],
+    "significant": "accuracy"
   },
   {
-    "data": [
+    "task": "summary",
+    "positive": [
       "attribute(task,root,summary).",
       "attribute(number_rows,root,407).",
       "entity(field,root,n).",
@@ -132,13 +159,9 @@
       "entity(field,root,q2).",
       "attribute((field,name),q2,q2).",
       "attribute((field,type),q2,number).",
-      "attribute((field,unqiue),q2,407)."
-    ],
-    "task": "summary",
-    "significant": "accuracy",
-    "pvalue": 1e-06,
-    "positive": [
+      "attribute((field,unqiue),q2,407).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,bar).",
       "entity(encoding,m,e1).",
@@ -157,7 +180,22 @@
       "attribute((scale,zero),s2,true)."
     ],
     "negative": [
+      "attribute(task,root,summary).",
+      "attribute(number_rows,root,407).",
+      "entity(field,root,n).",
+      "attribute((field,name),n,n).",
+      "attribute((field,type),n,string).",
+      "attribute((field,unqiue),n,9).",
+      "entity(field,root,q1).",
+      "attribute((field,name),q1,q1).",
+      "attribute((field,type),q1,number).",
+      "attribute((field,unqiue),q1,25).",
+      "entity(field,root,q2).",
+      "attribute((field,name),q2,q2).",
+      "attribute((field,type),q2,number).",
+      "attribute((field,unqiue),q2,407).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,line).",
       "entity(encoding,m,e1).",
@@ -174,10 +212,12 @@
       "attribute((scale,channel),s2,y).",
       "attribute((scale,type),s2,linear).",
       "attribute((scale,zero),s2,true)."
-    ]
+    ],
+    "significant": "accuracy"
   },
   {
-    "data": [
+    "task": "summary",
+    "positive": [
       "attribute(task,root,summary).",
       "attribute(number_rows,root,407).",
       "entity(field,root,n).",
@@ -191,13 +231,9 @@
       "entity(field,root,q2).",
       "attribute((field,name),q2,q2).",
       "attribute((field,type),q2,number).",
-      "attribute((field,unqiue),q2,407)."
-    ],
-    "task": "summary",
-    "significant": "accuracy",
-    "pvalue": 0.002024,
-    "positive": [
+      "attribute((field,unqiue),q2,407).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,point).",
       "entity(encoding,m,e1).",
@@ -216,7 +252,22 @@
       "attribute((scale,zero),s2,true)."
     ],
     "negative": [
+      "attribute(task,root,summary).",
+      "attribute(number_rows,root,407).",
+      "entity(field,root,n).",
+      "attribute((field,name),n,n).",
+      "attribute((field,type),n,string).",
+      "attribute((field,unqiue),n,9).",
+      "entity(field,root,q1).",
+      "attribute((field,name),q1,q1).",
+      "attribute((field,type),q1,number).",
+      "attribute((field,unqiue),q1,25).",
+      "entity(field,root,q2).",
+      "attribute((field,name),q2,q2).",
+      "attribute((field,type),q2,number).",
+      "attribute((field,unqiue),q2,407).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,line).",
       "entity(encoding,m,e1).",
@@ -233,10 +284,12 @@
       "attribute((scale,channel),s2,y).",
       "attribute((scale,type),s2,linear).",
       "attribute((scale,zero),s2,true)."
-    ]
+    ],
+    "significant": "accuracy"
   },
   {
-    "data": [
+    "task": "summary",
+    "positive": [
       "attribute(task,root,summary).",
       "attribute(number_rows,root,335).",
       "entity(field,root,n).",
@@ -250,13 +303,9 @@
       "entity(field,root,q2).",
       "attribute((field,name),q2,q2).",
       "attribute((field,type),q2,number).",
-      "attribute((field,unqiue),q2,335)."
-    ],
-    "task": "summary",
-    "significant": "accuracy",
-    "pvalue": 0.001467,
-    "positive": [
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,bar).",
       "entity(encoding,m,e1).",
@@ -275,7 +324,22 @@
       "attribute((scale,zero),s2,true)."
     ],
     "negative": [
+      "attribute(task,root,summary).",
+      "attribute(number_rows,root,335).",
+      "entity(field,root,n).",
+      "attribute((field,name),n,n).",
+      "attribute((field,type),n,string).",
+      "attribute((field,unqiue),n,9).",
+      "entity(field,root,q1).",
+      "attribute((field,name),q1,q1).",
+      "attribute((field,type),q1,number).",
+      "attribute((field,unqiue),q1,25).",
+      "entity(field,root,q2).",
+      "attribute((field,name),q2,q2).",
+      "attribute((field,type),q2,number).",
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,line).",
       "entity(encoding,m,e1).",
@@ -292,10 +356,12 @@
       "attribute((scale,channel),s2,y).",
       "attribute((scale,type),s2,linear).",
       "attribute((scale,zero),s2,true)."
-    ]
+    ],
+    "significant": "accuracy"
   },
   {
-    "data": [
+    "task": "value",
+    "positive": [
       "attribute(task,root,value).",
       "attribute(number_rows,root,335).",
       "entity(field,root,n).",
@@ -309,13 +375,9 @@
       "entity(field,root,q2).",
       "attribute((field,name),q2,q2).",
       "attribute((field,type),q2,number).",
-      "attribute((field,unqiue),q2,335)."
-    ],
-    "task": "value",
-    "significant": "completion",
-    "pvalue": 0.006602,
-    "positive": [
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,line).",
       "entity(encoding,m,e1).",
@@ -334,7 +396,22 @@
       "attribute((scale,zero),s2,true)."
     ],
     "negative": [
+      "attribute(task,root,value).",
+      "attribute(number_rows,root,335).",
+      "entity(field,root,n).",
+      "attribute((field,name),n,n).",
+      "attribute((field,type),n,string).",
+      "attribute((field,unqiue),n,9).",
+      "entity(field,root,q1).",
+      "attribute((field,name),q1,q1).",
+      "attribute((field,type),q1,number).",
+      "attribute((field,unqiue),q1,25).",
+      "entity(field,root,q2).",
+      "attribute((field,name),q2,q2).",
+      "attribute((field,type),q2,number).",
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,bar).",
       "entity(encoding,m,e1).",
@@ -351,10 +428,12 @@
       "attribute((scale,channel),s2,y).",
       "attribute((scale,type),s2,linear).",
       "attribute((scale,zero),s2,true)."
-    ]
+    ],
+    "significant": "completion"
   },
   {
-    "data": [
+    "task": "value",
+    "positive": [
       "attribute(task,root,value).",
       "attribute(number_rows,root,335).",
       "entity(field,root,n).",
@@ -368,13 +447,9 @@
       "entity(field,root,q2).",
       "attribute((field,name),q2,q2).",
       "attribute((field,type),q2,number).",
-      "attribute((field,unqiue),q2,335)."
-    ],
-    "task": "value",
-    "significant": "accuracy",
-    "pvalue": 0.000645,
-    "positive": [
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,bar).",
       "entity(encoding,m,e1).",
@@ -393,7 +468,22 @@
       "attribute((scale,zero),s2,true)."
     ],
     "negative": [
+      "attribute(task,root,value).",
+      "attribute(number_rows,root,335).",
+      "entity(field,root,n).",
+      "attribute((field,name),n,n).",
+      "attribute((field,type),n,string).",
+      "attribute((field,unqiue),n,9).",
+      "entity(field,root,q1).",
+      "attribute((field,name),q1,q1).",
+      "attribute((field,type),q1,number).",
+      "attribute((field,unqiue),q1,25).",
+      "entity(field,root,q2).",
+      "attribute((field,name),q2,q2).",
+      "attribute((field,type),q2,number).",
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,line).",
       "entity(encoding,m,e1).",
@@ -410,10 +500,12 @@
       "attribute((scale,channel),s2,y).",
       "attribute((scale,type),s2,linear).",
       "attribute((scale,zero),s2,true)."
-    ]
+    ],
+    "significant": "accuracy"
   },
   {
-    "data": [
+    "task": "value",
+    "positive": [
       "attribute(task,root,value).",
       "attribute(number_rows,root,335).",
       "entity(field,root,n).",
@@ -427,13 +519,9 @@
       "entity(field,root,q2).",
       "attribute((field,name),q2,q2).",
       "attribute((field,type),q2,number).",
-      "attribute((field,unqiue),q2,335)."
-    ],
-    "task": "value",
-    "significant": "accuracy",
-    "pvalue": 0.00504,
-    "positive": [
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,bar).",
       "entity(encoding,m,e1).",
@@ -452,7 +540,22 @@
       "attribute((scale,zero),s2,true)."
     ],
     "negative": [
+      "attribute(task,root,value).",
+      "attribute(number_rows,root,335).",
+      "entity(field,root,n).",
+      "attribute((field,name),n,n).",
+      "attribute((field,type),n,string).",
+      "attribute((field,unqiue),n,9).",
+      "entity(field,root,q1).",
+      "attribute((field,name),q1,q1).",
+      "attribute((field,type),q1,number).",
+      "attribute((field,unqiue),q1,25).",
+      "entity(field,root,q2).",
+      "attribute((field,name),q2,q2).",
+      "attribute((field,type),q2,number).",
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,point).",
       "entity(encoding,m,e1).",
@@ -469,10 +572,12 @@
       "attribute((scale,channel),s2,y).",
       "attribute((scale,type),s2,linear).",
       "attribute((scale,zero),s2,true)."
-    ]
+    ],
+    "significant": "accuracy"
   },
   {
-    "data": [
+    "task": "value",
+    "positive": [
       "attribute(task,root,value).",
       "attribute(number_rows,root,407).",
       "entity(field,root,n).",
@@ -486,13 +591,9 @@
       "entity(field,root,q2).",
       "attribute((field,name),q2,q2).",
       "attribute((field,type),q2,number).",
-      "attribute((field,unqiue),q2,407)."
-    ],
-    "task": "value",
-    "significant": "accuracy",
-    "pvalue": 0.001245,
-    "positive": [
+      "attribute((field,unqiue),q2,407).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,bar).",
       "entity(encoding,m,e1).",
@@ -511,7 +612,22 @@
       "attribute((scale,zero),s2,true)."
     ],
     "negative": [
+      "attribute(task,root,value).",
+      "attribute(number_rows,root,407).",
+      "entity(field,root,n).",
+      "attribute((field,name),n,n).",
+      "attribute((field,type),n,string).",
+      "attribute((field,unqiue),n,9).",
+      "entity(field,root,q1).",
+      "attribute((field,name),q1,q1).",
+      "attribute((field,type),q1,number).",
+      "attribute((field,unqiue),q1,25).",
+      "entity(field,root,q2).",
+      "attribute((field,name),q2,q2).",
+      "attribute((field,type),q2,number).",
+      "attribute((field,unqiue),q2,407).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,line).",
       "entity(encoding,m,e1).",
@@ -528,10 +644,12 @@
       "attribute((scale,channel),s2,y).",
       "attribute((scale,type),s2,linear).",
       "attribute((scale,zero),s2,true)."
-    ]
+    ],
+    "significant": "accuracy"
   },
   {
-    "data": [
+    "task": "value",
+    "positive": [
       "attribute(task,root,value).",
       "attribute(number_rows,root,335).",
       "entity(field,root,n).",
@@ -545,13 +663,9 @@
       "entity(field,root,q2).",
       "attribute((field,name),q2,q2).",
       "attribute((field,type),q2,number).",
-      "attribute((field,unqiue),q2,335)."
-    ],
-    "task": "value",
-    "significant": "completion",
-    "pvalue": 0.002807,
-    "positive": [
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,line).",
       "entity(encoding,m,e1).",
@@ -570,7 +684,22 @@
       "attribute((scale,zero),s2,true)."
     ],
     "negative": [
+      "attribute(task,root,value).",
+      "attribute(number_rows,root,335).",
+      "entity(field,root,n).",
+      "attribute((field,name),n,n).",
+      "attribute((field,type),n,string).",
+      "attribute((field,unqiue),n,9).",
+      "entity(field,root,q1).",
+      "attribute((field,name),q1,q1).",
+      "attribute((field,type),q1,number).",
+      "attribute((field,unqiue),q1,25).",
+      "entity(field,root,q2).",
+      "attribute((field,name),q2,q2).",
+      "attribute((field,type),q2,number).",
+      "attribute((field,unqiue),q2,335).",
       "entity(view,root,v).",
+      "attribute((view,coordinates),v,cartesian).",
       "entity(mark,v,m).",
       "attribute((mark,type),m,bar).",
       "entity(encoding,m,e1).",
@@ -587,6 +716,7 @@
       "attribute((scale,channel),s2,y).",
       "attribute((scale,type),s2,linear).",
       "attribute((scale,zero),s2,true)."
-    ]
+    ],
+    "significant": "completion"
   }
 ]
