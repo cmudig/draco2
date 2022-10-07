@@ -15,12 +15,12 @@ logger = logging.getLogger(__name__)
 draco = Draco()
 
 
-def get_nested_index(fields: Optional[Tuple[str, str]] = None):
+def get_nested_index(fields: Optional[Tuple[str, str]] = ["negative", "positive"]):
     """
     Gives you a nested pandas index that we apply to the data when creating a dataframe.
     """
     feature_names: List[str] = draco.soft_constraint_names
-    iterables: List[List | Tuple] = [fields or ["negative", "positive"], feature_names]
+    iterables: List[List | Tuple] = [fields, feature_names]
     index: pd.MultiIndex = pd.MultiIndex.from_product(
         iterables, names=["category", "feature"]
     )
