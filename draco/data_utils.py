@@ -128,7 +128,7 @@ def pairs_to_vec(
     specs: Dict[str, Dict], fields: Tuple[str, str] = ("negative", "positive")
 ) -> pd.DataFrame:
     """
-    Given pairs of positive and negative draco specification, count the number of times
+    Given pairs of positive and negative Draco specifications, count the number of times
     each preference is violated. The input pairs are partitioned so that
     ``count_preferences_memoized`` can run parallelly by multiple processes.
 
