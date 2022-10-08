@@ -179,3 +179,45 @@ def test_utility_dict_to_facts(client: TestClient, json: dict[str, Any]):
 def test_utility_answer_set_to_dict(client: TestClient, json: dict[str, Any]):
     response = client.post("/utility/answer-set-to-dict", json=json)
     assert response.ok
+
+
+@pytest.fixture
+def custom_routers(default_draco: Draco) -> list[routers.BaseDracoRouter]:
+    return [
+        routers.DracoRouter(default_draco, prefix="/custom/draco"),
+        routers.ClingoRouter(default_draco, prefix="/custom/clingo"),
+    ]
+
+
+@pytest.fixture
+def custom_draco_api(
+    default_draco: Draco, custom_routers: list[routers.BaseDracoRouter]
+) -> DracoAPI:
+    return DracoAPI(default_draco, base_routers=custom_routers)
+
+
+@pytest.fixture
+def custom_draco_api_client(custom_draco_api: DracoAPI) -> TestClient:
+    return TestClient(custom_draco_api.app)
+
+
+@pytest.mark.parametrize(
+    "route,json",
+    [
+        (
+            "/custom/draco/check-spec",
+            {"spec": dict_to_facts({"mark": [{"type": "point"}]})},
+        ),
+        ("/custom/clingo/run", {"program": "fact(a,42)."}),
+    ],
+)
+def test_custom_api_endpoints(
+    custom_draco_api_client: TestClient, route: str, json: dict[str, Any]
+):
+    response = custom_draco_api_client.post(route, json=json)
+    assert response.ok
+
+
+def test_draco_api_needs_at_least_one_router():
+    with pytest.raises(ValueError):
+        DracoAPI(Draco(), base_routers=[])
