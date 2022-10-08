@@ -14,4 +14,6 @@ class ClingoRouter(BaseDracoRouter):
     def _register(router: "BaseDracoRouter"):
         @router.post("/run")
         def run(dto: endpoint_models.RunClingoDTO) -> endpoint_models.RunClingoReturn:
-            return service.run_clingo(dto.program, dto.models, dto.topK, dto.arguments)
+            return service.run_clingo(
+                dto.program, dto.models, dto.topK, dto.arguments
+            )  # pragma: no cover

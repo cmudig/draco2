@@ -38,7 +38,7 @@ class BaseDracoRouter(APIRouter, ABC):
 
         :param router: the router instance to be used to declare the endpoints.
         """
-        pass
+        raise NotImplementedError  # pragma: no cover
 
     def register(self):
         """
