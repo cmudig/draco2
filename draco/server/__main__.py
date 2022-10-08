@@ -16,5 +16,5 @@ app: FastAPI = draco_api.app
 if __name__ == "__main__":
     nsp = server_main.DracoServerArgs()
     parser = server_main.argument_parser()
-    parser.parse_args(namespace=nsp)
+    parser.parse_known_args(namespace=nsp)
     server_main.main(draco_api=draco_api, args=nsp)
