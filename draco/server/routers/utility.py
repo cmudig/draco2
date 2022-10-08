@@ -14,10 +14,10 @@ class UtilityRouter(BaseDracoRouter):
         def dict_to_facts(
             dto: endpoint_models.DictToFactsDTO,
         ) -> endpoint_models.DictToFactsReturn:
-            return service.dict_to_facts(dto.data, dto.path, dto.parent)
+            return service.dict_to_facts(dto.data)
 
         @router.post("/answer-set-to-dict")
         def answer_set_to_dict(
             dto: endpoint_models.AnswerSetToDictDTO,
         ) -> endpoint_models.AnswerSetToDictReturn:
-            return service.answer_set_to_dict(dto.answer_set, dto.root)
+            return service.answer_set_to_dict(dto.answer_set)
