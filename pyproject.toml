@@ -35,7 +35,7 @@ scikit-learn = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 altair = "^4.2.0"
-black = {extras = ["jupyter"], version = "^22.8.0"}
+black = {extras = ["jupyter"], version = "^22.10.0"}
 flake8 = "^5.0.4"
 flake8-black = "^0.3.3"
 ipywidgets = "^7.7.2"
