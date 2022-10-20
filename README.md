@@ -20,23 +20,24 @@
 **Work in Progress**
 
 Draco is a formal framework for representing design knowledge about effective visualization design as a collection of
-constraints. You can use Draco to find effective visualization visual designs or validate visualization designs. Draco's
-constraints are based on Answer Set Programming (ASP) and solved with the [Clingo](https://github.com/potassco/clingo)
-constraint solver. We also implemented a way to learn weights for the recommendation system directly from the results of
-graphical perception experiment. Draco v2 is a much improved version of the first iteration of
+constraints. You can use Draco to find effective visualization designs or validate existing ones. Draco's constraints
+are based on Answer Set Programming (ASP) and solved with the [Clingo](https://github.com/potassco/clingo) constraint
+solver. We also implemented a way to learn weights for the recommendation system directly from the results of graphical
+perception experiment. Draco v2 is a much improved version of the first iteration of
 [Draco](https://github.com/uwdata/draco).
 
 ## Documentation
 
-Read about Draco in the online book at https://dig.cmu.edu/draco2/. In the documentation, we just refer to _Draco_
-without a version.
+Read about Draco in the online book at [https://dig.cmu.edu/draco2/](https://dig.cmu.edu/draco2/) or launch it in
+interactive mode using [Binder](https://mybinder.org/v2/gh/cmudig/draco2/HEAD). In the documentation, we just refer to
+_Draco_ without a version.
 
 ## What's different from [Draco v1](https://github.com/uwdata/draco)?
 
 - Draco v2 is completely written in Python. No more need to run both Python and Node. We still use ASP for the knowledge
   base.
 - Generalized and extended chart specification format. The new format is more extensible with custom properties.
-- Suport for multiple views and view compostion.
+- Support for multiple views and view composition.
 - High test-coverage, documentation, and updated development tooling.
 
 ## Contributing
