@@ -20,11 +20,13 @@ parts:
       - file: api/run
       - file: api/facts
       - file: api/programs
+      - file: api/server
   - caption: Applications
     chapters:
       - file: applications/recommendation
       - file: applications/draco_learn
       - file: applications/debug_draco
+      - file: applications/server
   - caption: Guide
     chapters:
       - file: guide
