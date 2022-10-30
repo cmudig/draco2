@@ -1,0 +1,19 @@
+# General Python Cache
+__pycache__
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# pytest
+.pytest_cache
+
+# Pyre type checker
+.pyre/
+
+# Pytype type checker
+.pytype
+
+# temporary files
+**/_tmp/*
