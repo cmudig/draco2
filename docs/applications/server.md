@@ -1,6 +1,6 @@
 # Server
 
-If you wish to make use of Draco in an environment other than Python, you can access its capabilities through a
+If you want to use Draco in an environment other than Python, you can access its capabilities through a
 dedicated REST API, built with [FastAPI](https://fastapi.tiangolo.com/).
 
 ## Starting the Server
