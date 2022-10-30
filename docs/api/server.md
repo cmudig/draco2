@@ -8,7 +8,7 @@ template for declaring groups of API endpoints which might use a [Draco](./draco
 instance and to allow for customization of the API.
 
 You can learn more on applications of the server module in the [applications](../applications/server.md) section
-featuring hands-on examples.
+which includes examples.
 
 ## `BaseDracoRouter`
 
