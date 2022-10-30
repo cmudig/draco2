@@ -18,11 +18,13 @@ RUN python -m pip install --upgrade pip &&  \
 COPY pyproject.toml poetry.lock ./
 # Purposely not using --no-dev here to install dev dependencies needed for Jupyter Notebooks
 RUN poetry config virtualenvs.create false && \
-    poetry install && \
-    pip install git+https://github.com/cmudig/draco2.git#egg=draco  # Install Draco2 from git, needed for notebooks
+    poetry install
 
 # Copy the project source code
 COPY . .
+
+# Install Draco2 from local sources, needed for notebooks
+RUN pip install -e .
 
 # Grant permissions to the notebook user
 RUN chown -R ${NB_USER} ${HOME}
