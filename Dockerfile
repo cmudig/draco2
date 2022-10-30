@@ -10,7 +10,7 @@ RUN adduser --disabled-password \
     --gecos "Default user" \
     --uid ${NB_UID} \
     ${NB_USER}
-WORKDIR ${HOME}
+WORKDIR ${HOME}/app
 
 # Install dependencies using Poetry
 RUN python -m pip install --upgrade pip &&  \
