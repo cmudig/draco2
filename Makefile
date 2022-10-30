@@ -38,6 +38,14 @@ book:
 	@echo "==> 📕 Book"
 	@poetry run jupyter-book build docs
 
+# This command does NOT support hot-reloading,
+# but it is useful to quickly get a preview of how the deployed docs would look like.
+# Especially useful for previewing `{eval-rst}` blocks.
+.PHONY: book-serve
+book-serve: book
+	@echo "==> 📡 Serving Book at http://localhost:5000"
+	@poetry run python -m http.server --directory docs/_build/html 5000
+
 .PHONY: book-strict
 book-strict:
 	@poetry run jupyter-book build -W -n --keep-going docs

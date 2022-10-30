@@ -7,7 +7,7 @@ from draco import Draco
 class DracoAPI:
     """
     A class responsible for conveniently creating a FastAPI server
-    exposing the capabilities of Draco.Provides sensible defaults
+    exposing the capabilities of Draco. Provides sensible defaults
     while allowing for customization of the underlying FastAPI instance
     as well as the routers used to expose the Draco features in a granular way.
     """
@@ -72,13 +72,9 @@ class DracoAPI:
 
         # Creating the base routers if none were passed in
         if base_routers is None:
-            draco_router = routers.DracoRouter(draco, prefix="/draco", tags=["Draco"])
-            clingo_router = routers.ClingoRouter(
-                draco, prefix="/clingo", tags=["Clingo"]
-            )
-            utility_router = routers.UtilityRouter(
-                draco, prefix="/utility", tags=["Utility"]
-            )
+            draco_router = routers.DracoRouter(draco)
+            clingo_router = routers.ClingoRouter(draco)
+            utility_router = routers.UtilityRouter(draco)
             self.base_routers = [clingo_router, draco_router, utility_router]
         else:
             self.base_routers = base_routers

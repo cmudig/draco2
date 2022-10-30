@@ -5,10 +5,22 @@ from .base import BaseDracoRouter
 
 
 class ClingoRouter(BaseDracoRouter):
-    """Router exposing clingo functionality through REST endpoints."""
+    """
+    Router exposing `Clingo <https://potassco.org/clingo/>`_
+    functionality through REST endpoints.
+    """
 
-    def __init__(self, draco, *args, **kwargs):
-        super().__init__(draco, *args, **kwargs)
+    __DEFAULT_PREFIX__ = "/clingo"
+    __DEFAULT_TAGS__ = ["Clingo"]
+
+    def __init__(self, draco, **kwargs):
+        c = ClingoRouter
+        super().__init__(
+            draco,
+            prefix=kwargs.pop("prefix", c.__DEFAULT_PREFIX__),
+            tags=kwargs.pop("tags", c.__DEFAULT_TAGS__),
+            **kwargs
+        )
 
     @staticmethod
     def _register(router: "BaseDracoRouter"):

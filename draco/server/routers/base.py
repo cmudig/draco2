@@ -15,16 +15,14 @@ class BaseDracoRouter(APIRouter, ABC):
     <https://fastapi.tiangolo.com/advanced/custom-request-and-route/?h=apiroute>`_
     """
 
-    def __init__(self, draco: Draco, *args, **kwargs):
+    def __init__(self, draco: Draco, **kwargs):
         """
         :param draco: the underlying :code:`Draco` instance
                       to be used by the router endpoints.
-        :param args: regular arguments to be passed
-                     to the :code:`APIRouter` constructor.
         :param kwargs: keyword arguments to be passed
                        to the :code:`APIRouter` constructor.
         """
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
         self.draco = draco
 
     @staticmethod
