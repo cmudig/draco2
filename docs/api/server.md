@@ -7,8 +7,8 @@ template for declaring groups of API endpoints which might use a [Draco](./draco
 [DracoAPI](#dracoapi) class to handle registering the actual endpoints to a [FastAPI](https://fastapi.tiangolo.com/)
 instance and to allow for customization of the API.
 
-You can learn more on applications of the server module in the [applications](../applications/server.md) section
-which includes examples.
+You can learn more on applications of the server module in the [applications](../applications/server.md) section which
+includes examples.
 
 ## `BaseDracoRouter`
 
