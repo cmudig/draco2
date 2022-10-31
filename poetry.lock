@@ -1412,7 +1412,7 @@ test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
 
 [[package]]
 name = "pandas-stubs"
-version = "1.5.0.221012"
+version = "1.5.1.221024"
 description = "Type annotations for pandas"
 category = "dev"
 optional = false
@@ -2572,7 +2572,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.10.0,<3.11"
-content-hash = "09a7c752e3ef96b6961e76e855ba9188e52d764a42bf9fe39fcff1b109b485b5"
+content-hash = "48f384ffa4501414b93f568a427830002a73fef6fed3ffe7c5cfdec0ad64c505"
 
 [metadata.files]
 alabaster = [
@@ -3650,8 +3650,8 @@ pandas = [
     {file = "pandas-1.5.1.tar.gz", hash = "sha256:249cec5f2a5b22096440bd85c33106b6102e0672204abd2d5c014106459804ee"},
 ]
 pandas-stubs = [
-    {file = "pandas-stubs-1.5.0.221012.tar.gz", hash = "sha256:e8e7b03e2def55519b0c3c90d92703feccb9717044bb1de8d5f178bc56acb34b"},
-    {file = "pandas_stubs-1.5.0.221012-py3-none-any.whl", hash = "sha256:642d8c60da07aa2cd2b3f61becda571b343eae7120a85460a6d0e4f0825379b1"},
+    {file = "pandas-stubs-1.5.1.221024.tar.gz", hash = "sha256:a756ea4c7f2f973b9f9dfd64d724ba911e82e8ffa2e0188f56fadfdd9345771a"},
+    {file = "pandas_stubs-1.5.1.221024-py3-none-any.whl", hash = "sha256:363e3833137375aebd6ab272fe89d94e88a443891a48d536c905e16ce2800cf6"},
 ]
 pandocfilters = [
     {file = "pandocfilters-1.5.0-py2.py3-none-any.whl", hash = "sha256:33aae3f25fd1a026079f5d27bdd52496f0e0803b3469282162bafdcbdf6ef14f"},
