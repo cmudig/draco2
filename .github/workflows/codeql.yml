@@ -2,9 +2,9 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "main", "gh-pages" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
   schedule:
     - cron: "6 20 * * 2"
 
