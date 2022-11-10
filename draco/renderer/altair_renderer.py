@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import TypeVar
+from typing import Generic, TypeVar
 
 import altair as alt
 from pandas import DataFrame
@@ -10,69 +10,83 @@ from ..types import (
     Field,
     FieldName,
     Mark,
+    Scale,
     SpecificationDict,
     View,
 )
 from .base_renderer import BaseRenderer
 
-VegaLiteChart = TypeVar("VegaLiteChart", alt.VConcatChart, alt.HConcatChart, alt.Chart)
+VegaLiteChart = TypeVar(
+    "VegaLiteChart", alt.VConcatChart, alt.HConcatChart, alt.FacetChart, alt.Chart
+)
 
 
 @dataclass(frozen=True)
-class VisitorContext:
+class RootContext(Generic[VegaLiteChart]):
     spec: SpecificationDict
-    product: VegaLiteChart
-    views: list[View] | None = None
-    view: View | None = None
-    mark: Mark | None = None
-    encoding: Encoding | None = None
+    chart: VegaLiteChart
+    chart_views: list[VegaLiteChart]
+
+
+@dataclass(frozen=True)
+class ViewContext(RootContext):
+    view: View
+
+
+@dataclass(frozen=True)
+class MarkContext(ViewContext):
+    mark: Mark
+
+
+@dataclass(frozen=True)
+class EncodingContext(MarkContext):
+    encoding: Encoding
 
 
 class AltairRenderer(BaseRenderer[VegaLiteChart]):
     def build(self, spec: SpecificationDict, data: DataFrame) -> VegaLiteChart:
         chart = alt.Chart(data)
-        views = []
+        chart_views: list[VegaLiteChart] = []
         for v in spec.view:
             for m in v.mark:
                 chart = self.__visit_mark(
-                    ctx=VisitorContext(
-                        spec=spec, product=chart, views=views, view=v, mark=m
+                    ctx=MarkContext(
+                        spec=spec, chart=chart, chart_views=chart_views, view=v, mark=m
                     )
                 )
                 for e in m.encoding:
                     chart = self.__visit_encoding(
-                        ctx=VisitorContext(
+                        ctx=EncodingContext(
                             spec=spec,
-                            product=chart,
-                            views=views,
+                            chart=chart,
+                            chart_views=chart_views,
                             view=v,
                             mark=m,
                             encoding=e,
                         )
                     )
             chart = self.__visit_view(
-                ctx=VisitorContext(spec=spec, product=chart, views=views, view=v)
+                ctx=ViewContext(spec=spec, chart=chart, chart_views=chart_views, view=v)
             )
-            views.append(chart)
+            chart_views.append(chart)
         return self.__visit_root(
-            ctx=VisitorContext(spec=spec, product=chart, views=views)
+            ctx=RootContext(spec=spec, chart=chart, chart_views=chart_views)
         )
 
     def display(self, product: VegaLiteChart) -> None:
         pass
 
-    def __visit_root(self, ctx: VisitorContext) -> VegaLiteChart:
-        views = ctx.views
+    def __visit_root(self, ctx: RootContext) -> VegaLiteChart:
+        views = ctx.chart_views
         chart = len(views) > 1 and alt.vconcat(*views) or views[0]
-        has_shared_scale = ctx.spec.scale is not None
-        if has_shared_scale:
+        if ctx.spec.scale is not None:
             channels = [s.channel for s in ctx.spec.scale]
             resolve_scale_args = {c: "shared" for c in channels}
             chart = chart.resolve_scale(**resolve_scale_args)
         return chart
 
-    def __visit_view(self, ctx: VisitorContext) -> VegaLiteChart:
-        view, chart = (ctx.view, ctx.product)
+    def __visit_view(self, ctx: ViewContext) -> VegaLiteChart:
+        view, chart = (ctx.view, ctx.chart)
         if view.facet is not None:
             for f in view.facet:
                 channel = f.channel
@@ -91,8 +105,8 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                         raise ValueError(f"Unknown facet channel: {channel}")
         return chart
 
-    def __visit_mark(self, ctx: VisitorContext) -> VegaLiteChart:
-        chart, mark_type = (ctx.product, ctx.mark.type)
+    def __visit_mark(self, ctx: MarkContext) -> VegaLiteChart:
+        chart, mark_type = (ctx.chart, ctx.mark.type)
         match mark_type:
             case "point":
                 return chart.mark_point()
@@ -111,8 +125,8 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             case _:
                 raise ValueError(f"Unknown mark type: {mark_type}")
 
-    def __visit_encoding(self, ctx: VisitorContext) -> VegaLiteChart:
-        spec, chart, view, encoding = (ctx.spec, ctx.product, ctx.view, ctx.encoding)
+    def __visit_encoding(self, ctx: EncodingContext) -> VegaLiteChart:
+        spec, chart, view, encoding = (ctx.spec, ctx.chart, ctx.view, ctx.encoding)
 
         custom_args = {}
         if encoding.field is not None:
@@ -122,7 +136,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             custom_args["bin"] = alt.BinParams(maxbins=encoding.binning)
 
         if view.scale is not None:
-            scale_or_none = self.__get_scale_for_encoding(encoding.channel, view)
+            scale_or_none = self.__get_scale_for_encoding(encoding.channel, view.scale)
             if scale_or_none is not None:
                 custom_args["scale"] = scale_or_none
 
@@ -160,12 +174,12 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         return renames[field_by_name[0].type]
 
     def __get_scale_for_encoding(
-        self, channel: EncodingChannel, view: View
+        self, channel: EncodingChannel, scales: list[Scale]
     ) -> alt.Scale | None:
         renames = {
             "categorical": "ordinal",
         }
-        for scale in view.scale:
+        for scale in scales:
             if scale.channel == channel:
                 scale_args = scale.dict(exclude_none=True, exclude={"channel"})
                 scale_args["type"] = renames.get(scale.type, scale.type)

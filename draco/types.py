@@ -1,13 +1,18 @@
 from typing import Iterable, Literal, TypeAlias
 
-import pydantic
+# granular imports to satisfy `pyright`
+import pydantic.class_validators as pydantic_validators
+import pydantic.config as pydantic_config
+import pydantic.fields as pydantic_fields
+import pydantic.main as pydantic_main
+import pydantic.types as pydantic_types
 
 Specification: TypeAlias = Iterable[str] | str
 
 """
 The number of rows in the dataset.
 """
-DatasetNumberRows = pydantic.PositiveInt
+DatasetNumberRows = pydantic_types.PositiveInt
 
 """
 The name of a data field.
@@ -26,13 +31,13 @@ FieldType = Literal["number", "string", "boolean", "datetime"]
 The number of unique values.
 Described as `(field,unique)`
 """
-FieldUnique = pydantic.PositiveInt
+FieldUnique = pydantic_types.PositiveInt
 
 """
 The entropy of the field.
 Described as `(field,entropy)`
 """
-FieldEntropy = pydantic.PositiveFloat
+FieldEntropy = pydantic_types.PositiveFloat
 
 """
 The minimum value. Only used for numbers.
@@ -50,13 +55,13 @@ FieldMax = float
 The standard deviation. Only used for numbers.
 Described as `(field,std)`
 """
-FieldStd = pydantic.confloat(ge=0)
+FieldStd = float
 
 """
 The frequency of the most common value. Only used for strings.
 Described as `(field,freq)`
 """
-FieldFreq = pydantic.PositiveInt
+FieldFreq = pydantic_types.PositiveInt
 
 """
 When the task regards specific fields, fields can be marked as relevant to the task.
@@ -99,7 +104,7 @@ EncodingAggregate = Literal["count", "mean", "median", "min", "max", "stdev", "s
 How the data is binned into N bins. Positive integer.
 Described as `(encoding,binning)`
 """
-EncodingBinning = pydantic.PositiveInt
+EncodingBinning = pydantic_types.PositiveInt
 
 """
 Stacking strategy. One of zero, center, or normalize.
@@ -145,9 +150,9 @@ Described as `(facet,binning)`.
 FacetBinning = EncodingBinning
 
 
-class SchemaBase(pydantic.BaseModel):
+class SchemaBase(pydantic_main.BaseModel):
     class Config:
-        extra = pydantic.Extra.forbid
+        extra = pydantic_config.Extra.forbid
 
 
 class Encoding(SchemaBase):
@@ -157,7 +162,7 @@ class Encoding(SchemaBase):
     binning: EncodingBinning | None = None
     stack: EncodingStack | None = None
 
-    @pydantic.root_validator(pre=True)
+    @pydantic_validators.root_validator(pre=True)
     def check_field_is_present_unless_agg_count(cls, values: dict):
         if values.get("aggregate", None) != "count" and "field" not in values:
             raise ValueError("field must be present unless aggregate is count")
@@ -171,7 +176,7 @@ class Mark(SchemaBase):
 
 class Scale(SchemaBase):
     channel: ScaleChannel
-    type: ScaleType = pydantic.Field(default="linear")
+    type: ScaleType = pydantic_fields.Field(default="linear")
     zero: ScaleZero | None = None
 
 
@@ -182,7 +187,7 @@ class Facet(SchemaBase):
 
 
 class View(SchemaBase):
-    coordinates: ViewCoordinate = pydantic.Field(default="cartesian")
+    coordinates: ViewCoordinate = pydantic_fields.Field(default="cartesian")
     mark: list[Mark]
     scale: list[Scale] | None = None
     facet: list[Facet] | None = None
@@ -202,7 +207,7 @@ class Field(SchemaBase):
     __STRING_ONLY_FIELDS__ = {"freq"}
     __NUMBER_ONLY_FIELDS__ = {"min", "max", "std"}
 
-    @pydantic.root_validator(pre=True)
+    @pydantic_validators.root_validator(pre=True)
     def check_no_string_attributes_on_number_type(cls, values: dict):
         if values["type"] == "number":
             for field in cls.__STRING_ONLY_FIELDS__:
@@ -212,7 +217,7 @@ class Field(SchemaBase):
                     )
         return values
 
-    @pydantic.root_validator(pre=True)
+    @pydantic_validators.root_validator(pre=True)
     def check_no_number_attributes_on_string_type(cls, values: dict):
         if values["type"] == "string":
             for field in cls.__NUMBER_ONLY_FIELDS__:
