@@ -24,4 +24,4 @@ class BaseRenderer(ABC, Generic[T]):
         :param data: Data to render.
         :return: Produced visualization object of type `T`.
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
