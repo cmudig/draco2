@@ -1,3 +1,230 @@
-from typing import Iterable, TypeAlias
+from typing import Iterable, Literal, TypeAlias
+
+import pydantic
 
 Specification: TypeAlias = Iterable[str] | str
+
+"""
+The number of rows in the dataset.
+"""
+DatasetNumberRows = pydantic.PositiveInt
+
+"""
+The name of a data field.
+Described as `(field,name)`
+"""
+FieldName = str
+
+"""
+The type of the data in the column for this field.
+One of number, string, boolean, or datetime.
+Described as `(field,type)`
+"""
+FieldType = Literal["number", "string", "boolean", "datetime"]
+
+"""
+The number of unique values.
+Described as `(field,unique)`
+"""
+FieldUnique = pydantic.PositiveInt
+
+"""
+The entropy of the field.
+Described as `(field,entropy)`
+"""
+FieldEntropy = pydantic.PositiveFloat
+
+"""
+The minimum value. Only used for numbers.
+Described as `(field,min)`
+"""
+FieldMin = float
+
+"""
+The maximum value. Only used for numbers.
+Described as `(field,max)`
+"""
+FieldMax = float
+
+"""
+The standard deviation. Only used for numbers.
+Described as `(field,std)`
+"""
+FieldStd = pydantic.confloat(ge=0)
+
+"""
+The frequency of the most common value. Only used for strings.
+Described as `(field,freq)`
+"""
+FieldFreq = pydantic.PositiveInt
+
+"""
+When the task regards specific fields, fields can be marked as relevant to the task.
+Described as `(field,interesting)`
+"""
+FieldInteresting = bool
+
+"""
+The coordinates system of the view. Can be one of cartesian, or polar.
+Described as `(view,coordinates)`.
+"""
+ViewCoordinate = Literal["cartesian", "polar"]
+
+"""
+The mark type. One of point, bar, line, area, text, tick, or rect.
+Described as `(mark,type)`.
+"""
+MarkType = Literal["point", "bar", "line", "area", "text", "tick", "rect"]
+
+"""
+The visual channel. One of x, y, color, size, shape, or text.
+Same as `ScaleChannel`.
+Described as `(encoding,channel)`.
+"""
+EncodingChannel = Literal["x", "y", "color", "size", "shape", "text"]
+
+"""
+The field that maps to the visual property of the mark. Arbitrary string.
+Described as `(encoding,field)`.
+"""
+EncodingField = FieldName
+
+"""
+How the data is aggregated. One of count, mean, median, min, max, stdev, or sum.
+Described as `(encoding,aggregate)`.
+"""
+EncodingAggregate = Literal["count", "mean", "median", "min", "max", "stdev", "sum"]
+
+"""
+How the data is binned into N bins. Positive integer.
+Described as `(encoding,binning)`
+"""
+EncodingBinning = pydantic.PositiveInt
+
+"""
+Stacking strategy. One of zero, center, or normalize.
+Described as `(encoding,stack)`.
+"""
+EncodingStack = Literal["zero", "center", "normalize"]
+
+"""
+The scale channel. One of x, y, color, size, shape, or text.
+Same as `EncodingChannel`.
+Described as `(scale,channel)`.
+"""
+ScaleChannel = EncodingChannel
+
+"""
+The scale type. One of linear, log, ordinal, or categorical.
+Described as `(scale,type)`.
+"""
+ScaleType = Literal["linear", "log", "ordinal", "categorical"]
+
+"""
+Whether to include zero in the scale domain.
+Described as `(scale,zero)`.
+"""
+ScaleZero = bool
+
+"""
+The facet channel. Can be one of col and row.
+Described as `(facet,channel)`.
+"""
+FacetChannel = Literal["col", "row"]
+
+"""
+The facet field. Arbitrary string.
+Described as `(facet,field)`.
+"""
+FacetField = FieldName
+
+"""
+Binning a numeric field for faceting. Positive integer.
+Described as `(facet,binning)`.
+"""
+FacetBinning = EncodingBinning
+
+
+class SchemaBase(pydantic.BaseModel):
+    class Config:
+        extra = pydantic.Extra.forbid
+
+
+class Encoding(SchemaBase):
+    channel: EncodingChannel
+    field: EncodingField | None = None
+    aggregate: EncodingAggregate | None = None
+    binning: EncodingBinning | None = None
+    stack: EncodingStack | None = None
+
+    @pydantic.root_validator(pre=True)
+    def check_field_is_present_unless_agg_count(cls, values: dict):
+        if values.get("aggregate", None) != "count" and "field" not in values:
+            raise ValueError("field must be present unless aggregate is count")
+        return values
+
+
+class Mark(SchemaBase):
+    type: MarkType
+    encoding: list[Encoding]
+
+
+class Scale(SchemaBase):
+    channel: ScaleChannel
+    type: ScaleType = pydantic.Field(default="linear")
+    zero: ScaleZero | None = None
+
+
+class Facet(SchemaBase):
+    channel: FacetChannel
+    field: FacetField
+    binning: FacetBinning | None = None
+
+
+class View(SchemaBase):
+    coordinates: ViewCoordinate = pydantic.Field(default="cartesian")
+    mark: list[Mark]
+    scale: list[Scale] | None = None
+    facet: list[Facet] | None = None
+
+
+class Field(SchemaBase):
+    name: FieldName
+    type: FieldType
+    unique: FieldUnique | None = None
+    entropy: FieldEntropy | None = None
+    min: FieldMin | None = None
+    max: FieldMax | None = None
+    std: FieldStd | None = None
+    freq: FieldFreq | None = None
+    interesting: FieldInteresting | None = None
+
+    __STRING_ONLY_FIELDS__ = {"freq"}
+    __NUMBER_ONLY_FIELDS__ = {"min", "max", "std"}
+
+    @pydantic.root_validator(pre=True)
+    def check_no_string_attributes_on_number_type(cls, values: dict):
+        if values["type"] == "number":
+            for field in cls.__STRING_ONLY_FIELDS__:
+                if field in values:
+                    raise ValueError(
+                        f"{field} is not a valid attribute for a number field"
+                    )
+        return values
+
+    @pydantic.root_validator(pre=True)
+    def check_no_number_attributes_on_string_type(cls, values: dict):
+        if values["type"] == "string":
+            for field in cls.__NUMBER_ONLY_FIELDS__:
+                if field in values:
+                    raise ValueError(
+                        f"{field} is not a valid attribute for a string field"
+                    )
+        return values
+
+
+class SpecificationDict(SchemaBase):
+    number_rows: DatasetNumberRows
+    field: list[Field]
+    view: list[View]
+    scale: list[Scale] | None = None
