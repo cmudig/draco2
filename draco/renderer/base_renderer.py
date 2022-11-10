@@ -9,14 +9,19 @@ T = TypeVar("T")
 
 
 class BaseRenderer(ABC, Generic[T]):
-    @abstractmethod
-    def build(self, spec: SpecificationDict, data: DataFrame) -> T:
-        raise NotImplementedError
+    """
+    Base class for all renderers.
+    Should handle the creation of a visualization
+    represented as an object of type `T`.
+    """
 
     @abstractmethod
-    def display(self, product: T) -> None:
-        raise NotImplementedError
+    def render(self, spec: SpecificationDict, data: DataFrame) -> T:
+        """
+        Render a visualization from a dictionary-based specification and data.
 
-    def render(self, spec: SpecificationDict, data: DataFrame) -> None:
-        product = self.build(spec, data)
-        self.display(product)
+        :param spec: Specification of the visualization.
+        :param data: Data to render.
+        :return: Produced visualization object of type `T`.
+        """
+        raise NotImplementedError

@@ -16,6 +16,10 @@ from ..types import (
 )
 from .base_renderer import BaseRenderer
 
+"""
+Generic parameter for the type of the produced visualization object.
+Used to abstract away the final type of the produced visualization object.
+"""
 VegaLiteChart = TypeVar(
     "VegaLiteChart", alt.VConcatChart, alt.HConcatChart, alt.FacetChart, alt.Chart
 )
@@ -23,6 +27,11 @@ VegaLiteChart = TypeVar(
 
 @dataclass(frozen=True)
 class RootContext(Generic[VegaLiteChart]):
+    """
+    Visitor callback context available when processing
+    the dictionary-based specification at the root level.
+    """
+
     spec: SpecificationDict
     chart: VegaLiteChart
     chart_views: list[VegaLiteChart]
@@ -30,23 +39,46 @@ class RootContext(Generic[VegaLiteChart]):
 
 @dataclass(frozen=True)
 class ViewContext(RootContext):
+    """
+    Visitor callback context available when processing
+    the dictionary-based specification at the `View` level.
+    """
+
     view: View
 
 
 @dataclass(frozen=True)
 class MarkContext(ViewContext):
+    """
+    Visitor callback context available when processing
+    the dictionary-based specification at the `Mark` level.
+    """
+
     mark: Mark
 
 
 @dataclass(frozen=True)
 class EncodingContext(MarkContext):
+    """
+    Visitor callback context available when processing
+    the dictionary-based specification at the `Encoding` level.
+    """
+
     encoding: Encoding
 
 
 class AltairRenderer(BaseRenderer[VegaLiteChart]):
-    def build(self, spec: SpecificationDict, data: DataFrame) -> VegaLiteChart:
+    """
+    Produces a `Vega-Lite <https://vega.github.io/vega-lite/>`_ visualization
+    represented as an `Altair <https://altair-viz.github.io/>`_ chart object.
+    """
+
+    def render(self, spec: SpecificationDict, data: DataFrame) -> VegaLiteChart:
+        # initial chart to be mutated by the visitor callbacks
         chart = alt.Chart(data)
         chart_views: list[VegaLiteChart] = []
+
+        # Traverse the specification dict and invoke the appropriate visitor
         for v in spec.view:
             for m in v.mark:
                 chart = self.__visit_mark(
@@ -73,10 +105,14 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             ctx=RootContext(spec=spec, chart=chart, chart_views=chart_views)
         )
 
-    def display(self, product: VegaLiteChart) -> None:
-        pass
-
     def __visit_root(self, ctx: RootContext) -> VegaLiteChart:
+        """
+        Handles root-level configuration.
+        Responsible for chart concatenation and resolution of shared axes.
+
+        :param ctx: The current visitor context.
+        :return: The chart with the root configuration applied.
+        """
         views = ctx.chart_views
         chart = len(views) > 1 and alt.vconcat(*views) or views[0]
         if ctx.spec.scale is not None:
@@ -86,6 +122,14 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         return chart
 
     def __visit_view(self, ctx: ViewContext) -> VegaLiteChart:
+        """
+        Handles view-specific configuration.
+        Responsible for faceting and concatenation.
+
+        :param ctx: The current visitor context.
+        :return: The chart with the view applied.
+        :raises ValueError: if the facet channel is not supported
+        """
         view, chart = (ctx.view, ctx.chart)
         if view.facet is not None:
             for f in view.facet:
@@ -106,6 +150,14 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         return chart
 
     def __visit_mark(self, ctx: MarkContext) -> VegaLiteChart:
+        """
+        Handles mark-specific configuration.
+        Responsible for applying the mark type to the chart.
+
+        :param ctx: The current visitor context.
+        :return: The chart with the mark applied.
+        :raises ValueError: if the mark type is not supported
+        """
         chart, mark_type = (ctx.chart, ctx.mark.type)
         match mark_type:
             case "point":
@@ -126,6 +178,14 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 raise ValueError(f"Unknown mark type: {mark_type}")
 
     def __visit_encoding(self, ctx: EncodingContext) -> VegaLiteChart:
+        """
+        Handles encoding-specific configuration.
+        Responsible for applying the encoding to the chart.
+
+        :param ctx: The current visitor context.
+        :return: The updated chart.
+        :raises ValueError: If an unknown encoding channel is encountered.
+        """
         spec, chart, view, encoding = (ctx.spec, ctx.chart, ctx.view, ctx.encoding)
 
         custom_args = {}
@@ -162,6 +222,15 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 raise ValueError(f"Unknown channel: {encoding.channel}")
 
     def __get_field_type(self, fields: list[Field], field_name: FieldName) -> str:
+        """
+        Returns the type of the field with the given name.
+        Needed to map from Draco-spec data types to Vega-Lite data types.
+
+        :param fields: list of fields in the specification
+        :param field_name: name of the field to look up
+        :return: the type of the field
+        :raises ValueError: if the field is not found
+        """
         renames = {
             "number": "quantitative",
             "string": "nominal",
@@ -176,6 +245,13 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
     def __get_scale_for_encoding(
         self, channel: EncodingChannel, scales: list[Scale]
     ) -> alt.Scale | None:
+        """
+        Returns the scale for the given encoding channel, if any.
+
+        :param channel: the channel for which to look up a scale
+        :param scales: the list of scales in the view
+        :return: the scale for the given channel, or None if no scale is found
+        """
         renames = {
             "categorical": "ordinal",
         }
