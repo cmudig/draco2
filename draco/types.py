@@ -7,6 +7,9 @@ import pydantic.fields as pydantic_fields
 import pydantic.main as pydantic_main
 import pydantic.types as pydantic_types
 
+"""
+ASP-based fact representation of a visualization specification.
+"""
 Specification: TypeAlias = Iterable[str] | str
 
 """
@@ -151,11 +154,21 @@ FacetBinning = EncodingBinning
 
 
 class SchemaBase(pydantic_main.BaseModel):
+    """Base class for all schema classes."""
+
     class Config:
+        # Do not allow fields that are not defined in the schema explicitly.
         extra = pydantic_config.Extra.forbid
 
 
 class Encoding(SchemaBase):
+    """
+    Encoding schema.
+    Encodings define how data fields map to visual properties (channel) of the mark.
+
+    `Read More <https://dig.cmu.edu/draco2/facts/encoding.html>`_.
+    """
+
     channel: EncodingChannel
     field: EncodingField | None = None
     aggregate: EncodingAggregate | None = None
@@ -170,23 +183,54 @@ class Encoding(SchemaBase):
 
 
 class Mark(SchemaBase):
+    """
+    Mark schema.
+    A mark represents the graphical mark of the visualization.
+
+    `Read More <https://dig.cmu.edu/draco2/facts/mark.html>`_.
+    """
+
     type: MarkType
     encoding: list[Encoding]
 
 
 class Scale(SchemaBase):
+    """
+    Scale schema.
+    Scales map abstract values such as time or temperature to
+    a visual value such as x- or y-position or color.
+
+    `Read More <https://dig.cmu.edu/draco2/facts/scale.html>`_.
+    """
+
     channel: ScaleChannel
     type: ScaleType = pydantic_fields.Field(default="linear")
     zero: ScaleZero | None = None
 
 
 class Facet(SchemaBase):
+    """
+    Facet schema.
+    With the facet operator, we can partition a dataset by a field
+    and create a view for each field.
+    The resulting chart is often called a small multiples chart.
+
+    `Read More <https://dig.cmu.edu/draco2/facts/facet.html>`_.
+    """
+
     channel: FacetChannel
     field: FacetField
     binning: FacetBinning | None = None
 
 
 class View(SchemaBase):
+    """
+    View schema.
+    A view can group marks and scales together.
+
+    `Read More <https://dig.cmu.edu/draco2/facts/view.html>`_.
+    """
+
     coordinates: ViewCoordinate = pydantic_fields.Field(default="cartesian")
     mark: list[Mark]
     scale: list[Scale] | None = None
@@ -194,6 +238,14 @@ class View(SchemaBase):
 
 
 class Field(SchemaBase):
+    """
+    Field schema.
+    Represents a column in the dataset.
+    Draco can use information about the field type and field statistics.
+
+    `Read More <https://dig.cmu.edu/draco2/facts/schema.html#field-properties>`_.
+    """
+
     name: FieldName
     type: FieldType
     unique: FieldUnique | None = None
@@ -229,6 +281,11 @@ class Field(SchemaBase):
 
 
 class SpecificationDict(SchemaBase):
+    """
+    Specification schema.
+    Describes a visualization completely.
+    """
+
     number_rows: DatasetNumberRows
     field: list[Field]
     view: list[View]
