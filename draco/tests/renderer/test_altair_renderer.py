@@ -2,6 +2,7 @@ import random
 
 import pandas as pd
 import pytest
+from deepdiff import DeepDiff
 
 from draco.renderer import AltairRenderer
 from draco.types import SpecificationDict
@@ -41,11 +42,14 @@ def renderer():
 
 
 def vl_specs_equal(a: dict, b: dict) -> bool:
-    keys_to_remove = {"config", "datasets", "data", "$schema"}
-    for key in keys_to_remove:
-        a.pop(key, None)
-        b.pop(key, None)
-    return a == b
+    exclude_from_comparison = {"config", "datasets", "data", "$schema"}
+    diff = DeepDiff(
+        a,
+        b,
+        exclude_paths=exclude_from_comparison,
+        ignore_order=True,
+    )
+    return not diff
 
 
 def build_spec(*args):
@@ -183,9 +187,7 @@ histogram_spec_vl = {
         "x": {"field": "condition", "scale": {"type": "ordinal"}, "type": "nominal"},
         "y": {
             "aggregate": "count",
-            "field": "condition",
             "scale": {"type": "linear", "zero": True},
-            "type": "nominal",
         },
     },
     "mark": "bar",
@@ -198,7 +200,7 @@ histogram_spec_vl = {
         (tick_spec_d, tick_spec_vl),
         (tick_log_spec_d, tick_log_spec_vl),
         (bar_spec_d, bar_spec_vl),
-        # (histogram_spec_d, histogram_spec_vl),
+        (histogram_spec_d, histogram_spec_vl),
     ],
 )
 def test_single_view_single_mark(
