@@ -379,3 +379,122 @@ def test_single_view_single_mark(
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
+
+
+stacked_bar_spec_d = build_spec(
+    data(["temperature", "condition"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "bar",
+                        "encoding": [
+                            {"channel": "x", "field": "temperature", "binning": 10},
+                            {"channel": "y", "aggregate": "count", "stack": "zero"},
+                            {"channel": "color", "field": "condition"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {
+                        "channel": "x",
+                        "type": "linear",
+                    },
+                    {"channel": "y", "type": "linear", "zero": "true"},
+                    {"channel": "color", "type": "categorical"},
+                ],
+            }
+        ]
+    },
+)
+
+stacked_bar_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "encoding": {
+        "color": {
+            "field": "condition",
+            "type": "nominal",
+            "scale": {"type": "ordinal"},
+        },
+        "x": {
+            "bin": {"maxbins": 10},
+            "field": "temperature",
+            "scale": {"type": "linear"},
+            "type": "quantitative",
+        },
+        "y": {
+            "aggregate": "count",
+            "scale": {"type": "linear", "zero": True},
+            "stack": "zero",
+        },
+    },
+    "mark": "bar",
+}
+
+normalized_stacked_bar_spec_d = build_spec(
+    data(["temperature", "condition"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "bar",
+                        "encoding": [
+                            {
+                                "channel": "x",
+                                "aggregate": "count",
+                                "stack": "normalize",
+                            },
+                            {"channel": "y", "field": "temperature", "binning": 10},
+                            {"channel": "color", "field": "condition"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "x", "type": "linear", "zero": "true"},
+                    {"channel": "y", "type": "linear"},
+                    {"channel": "color", "type": "categorical"},
+                ],
+            }
+        ]
+    },
+)
+
+normalized_stacked_bar_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "encoding": {
+        "color": {
+            "field": "condition",
+            "type": "nominal",
+            "scale": {"type": "ordinal"},
+        },
+        "x": {
+            "aggregate": "count",
+            "scale": {"type": "linear", "zero": True},
+            "stack": "normalize",
+        },
+        "y": {
+            "bin": {"maxbins": 10},
+            "field": "temperature",
+            "scale": {"type": "linear"},
+            "type": "quantitative",
+        },
+    },
+    "mark": "bar",
+}
+
+
+@pytest.mark.parametrize(
+    "spec, expected_vl",
+    [
+        (stacked_bar_spec_d, stacked_bar_spec_vl),
+        (normalized_stacked_bar_spec_d, normalized_stacked_bar_spec_vl),
+    ],
+)
+def test_stacked(spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer):
+    chart = renderer.render(spec, df)
+    vl = chart.to_dict()
+    assert vl_specs_equal(vl, expected_vl)
