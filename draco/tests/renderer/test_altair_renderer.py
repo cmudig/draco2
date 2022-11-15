@@ -814,3 +814,24 @@ def test_multiple_views(
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
+
+
+def test_unknown_field_raises_value_error(renderer: AltairRenderer):
+    spec = build_spec(
+        data(["temperature"]),
+        {
+            "view": [
+                {
+                    "mark": [
+                        {
+                            "type": "tick",
+                            "encoding": [{"channel": "x", "field": "not-temperature"}],
+                        }
+                    ],
+                    "scale": [{"channel": "x", "type": "linear"}],
+                }
+            ]
+        },
+    )
+    with pytest.raises(ValueError):
+        renderer.render(spec, df)
