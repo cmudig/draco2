@@ -76,7 +76,7 @@ def test_register_router(default_draco: Draco, cls: Type[routers.BaseDracoRouter
 )
 def test_clingo_run(client: TestClient, json: dict[str, Any]):
     response = client.post("/clingo/run", json=json)
-    assert response.ok
+    assert response.is_success
 
 
 @pytest.mark.parametrize(
@@ -87,7 +87,7 @@ def test_clingo_run(client: TestClient, json: dict[str, Any]):
 )
 def test_draco_check_spec(client: TestClient, json: dict[str, Any]):
     response = client.post("/draco/check-spec", json=json)
-    assert response.ok
+    assert response.is_success
 
 
 @pytest.mark.parametrize(
@@ -101,7 +101,7 @@ def test_draco_check_spec(client: TestClient, json: dict[str, Any]):
 )
 def test_draco_complete_spec(client: TestClient, json: dict[str, Any]):
     response = client.post("/draco/complete-spec", json=json)
-    assert response.ok
+    assert response.is_success
 
 
 @pytest.mark.parametrize(
@@ -110,7 +110,7 @@ def test_draco_complete_spec(client: TestClient, json: dict[str, Any]):
 )
 def test_draco_count_preferences(client: TestClient, json: dict[str, Any]):
     response = client.post("/draco/count-preferences", json=json)
-    assert response.ok
+    assert response.is_success
 
 
 @pytest.mark.parametrize(
@@ -121,7 +121,7 @@ def test_draco_count_preferences(client: TestClient, json: dict[str, Any]):
 )
 def test_draco_get_violations(client: TestClient, json: dict[str, Any]):
     response = client.post("/draco/get-violations", json=json)
-    assert response.ok
+    assert response.is_success
 
 
 @pytest.mark.parametrize(
@@ -144,7 +144,7 @@ def test_draco_get_violations(client: TestClient, json: dict[str, Any]):
 )
 def test_utility_dict_to_facts(client: TestClient, json: dict[str, Any]):
     response = client.post("/utility/dict-to-facts", json=json)
-    assert response.ok
+    assert response.is_success
 
 
 @pytest.mark.parametrize(
@@ -178,7 +178,7 @@ def test_utility_dict_to_facts(client: TestClient, json: dict[str, Any]):
 )
 def test_utility_answer_set_to_dict(client: TestClient, json: dict[str, Any]):
     response = client.post("/utility/answer-set-to-dict", json=json)
-    assert response.ok
+    assert response.is_success
 
 
 @pytest.fixture
@@ -215,7 +215,7 @@ def test_custom_api_endpoints(
     custom_draco_api_client: TestClient, route: str, json: dict[str, Any]
 ):
     response = custom_draco_api_client.post(route, json=json)
-    assert response.ok
+    assert response.is_success
 
 
 def test_draco_api_needs_at_least_one_router():
