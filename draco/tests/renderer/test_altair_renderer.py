@@ -674,3 +674,143 @@ def test_facets(spec: SpecificationDict, expected_vl: dict, renderer: AltairRend
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
+
+
+tick_plot_and_histogram_spec_d = build_spec(
+    data(["temperature", "condition"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "tick",
+                        "encoding": [{"channel": "y", "field": "temperature"}],
+                    }
+                ],
+                "scale": [{"channel": "y", "type": "linear", "zero": "true"}],
+            },
+            {
+                "mark": [
+                    {
+                        "type": "bar",
+                        "encoding": [
+                            {"channel": "x", "field": "condition"},
+                            {"channel": "y", "aggregate": "count"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "x", "type": "ordinal"},
+                    {"channel": "y", "type": "linear", "zero": "true"},
+                ],
+            },
+        ]
+    },
+)
+tick_plot_and_histogram_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    # TODO adjust `hconcat` / `vconcat` after handling it properly in the renderer
+    "vconcat": [
+        {
+            "encoding": {
+                "y": {
+                    "field": "temperature",
+                    "scale": {"type": "linear", "zero": True},
+                    "type": "quantitative",
+                }
+            },
+            "mark": "tick",
+        },
+        {
+            "encoding": {
+                "x": {
+                    "field": "condition",
+                    "scale": {"type": "ordinal"},
+                    "type": "nominal",
+                },
+                "y": {"aggregate": "count", "scale": {"type": "linear", "zero": True}},
+            },
+            "mark": "bar",
+        },
+    ],
+}
+
+tick_plot_and_histogram_shared_scale_spec_d = build_spec(
+    data(["temperature", "condition"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "tick",
+                        "encoding": [{"channel": "y", "field": "temperature"}],
+                    }
+                ],
+            },
+            {
+                "mark": [
+                    {
+                        "type": "bar",
+                        "encoding": [
+                            {
+                                "channel": "y",
+                                "field": "temperature",
+                                "aggregate": "mean",
+                            },
+                            {"channel": "x", "field": "condition"},
+                        ],
+                    }
+                ],
+                "scale": [{"channel": "x", "type": "ordinal"}],
+            },
+        ],
+        "scale": [{"channel": "y", "type": "linear", "zero": "true"}],
+    },
+)
+
+tick_plot_and_histogram_shared_scale_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    # TODO adjust `hconcat` / `vconcat` after handling it properly in the renderer
+    "vconcat": [
+        {
+            "encoding": {"y": {"field": "temperature", "type": "quantitative"}},
+            "mark": "tick",
+        },
+        {
+            "encoding": {
+                "x": {
+                    "field": "condition",
+                    "type": "nominal",
+                    "scale": {"type": "ordinal"},
+                },
+                "y": {
+                    "aggregate": "mean",
+                    "field": "temperature",
+                    "type": "quantitative",
+                },
+            },
+            "mark": "bar",
+        },
+    ],
+    "resolve": {"scale": {"y": "shared"}},
+}
+
+
+@pytest.mark.parametrize(
+    "spec, expected_vl",
+    [
+        (tick_plot_and_histogram_spec_d, tick_plot_and_histogram_spec_vl),
+        (
+            tick_plot_and_histogram_shared_scale_spec_d,
+            tick_plot_and_histogram_shared_scale_spec_vl,
+        ),
+    ],
+)
+def test_multiple_views(
+    spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer
+):
+    chart = renderer.render(spec, df)
+    vl = chart.to_dict()
+    assert vl_specs_equal(vl, expected_vl)
