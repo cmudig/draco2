@@ -5,7 +5,7 @@ import pytest
 from deepdiff import DeepDiff
 
 from draco.renderer import AltairRenderer
-from draco.types import SpecificationDict
+from draco.types import MarkType, SpecificationDict
 
 NUM_ROWS = 100
 df = pd.DataFrame(
@@ -57,6 +57,44 @@ def build_spec(*args):
     for arg in args:
         dct.update(arg)
     return SpecificationDict.parse_obj(dct)
+
+
+def specs_with_mark(mark: MarkType):
+    spec_d = build_spec(
+        data(["temperature", "wind", "condition"]),
+        {
+            "view": [
+                {
+                    "mark": [
+                        {
+                            "type": mark,
+                            "encoding": [
+                                {"channel": "x", "field": "temperature"},
+                                {"channel": "shape", "field": "condition"},
+                                {"channel": "text", "field": "wind"},
+                            ],
+                        }
+                    ],
+                    "scale": [{"channel": "x", "type": "linear"}],
+                }
+            ]
+        },
+    )
+    spec_vl = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+        "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+        "encoding": {
+            "x": {
+                "field": "temperature",
+                "scale": {"type": "linear"},
+                "type": "quantitative",
+            },
+            "shape": {"field": "condition", "type": "nominal"},
+            "text": {"field": "wind", "type": "quantitative"},
+        },
+        "mark": mark,
+    }
+    return spec_d, spec_vl
 
 
 # https://dig.cmu.edu/draco2/facts/examples.html#tick-plot
@@ -158,6 +196,7 @@ bar_spec_vl = {
     "mark": "bar",
 }
 
+# https://dig.cmu.edu/draco2/facts/examples.html#histogram
 histogram_spec_d = build_spec(
     data(["condition"]),
     {
@@ -193,6 +232,7 @@ histogram_spec_vl = {
     "mark": "bar",
 }
 
+# https://dig.cmu.edu/draco2/facts/examples.html#binned-histogram
 binned_histogram_spec_d = build_spec(
     data(["temperature"]),
     {
@@ -218,7 +258,6 @@ binned_histogram_spec_d = build_spec(
         ]
     },
 )
-
 binned_histogram_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
@@ -234,6 +273,7 @@ binned_histogram_spec_vl = {
     "mark": "bar",
 }
 
+# https://dig.cmu.edu/draco2/facts/examples.html#scatterplot
 scatter_spec_d = build_spec(
     data(["temperature", "wind"]),
     {
@@ -256,7 +296,6 @@ scatter_spec_d = build_spec(
         ]
     },
 )
-
 scatter_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
@@ -271,6 +310,7 @@ scatter_spec_vl = {
     "mark": "point",
 }
 
+# https://dig.cmu.edu/draco2/facts/examples.html#scatterplot-with-color
 scatter_with_color_spec_d = build_spec(
     data(["temperature", "wind", "condition"]),
     {
@@ -295,7 +335,6 @@ scatter_with_color_spec_d = build_spec(
         ]
     },
 )
-
 scatter_with_color_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
@@ -315,6 +354,7 @@ scatter_with_color_spec_vl = {
     "mark": "point",
 }
 
+# https://dig.cmu.edu/draco2/facts/examples.html#bubble-chart
 bubble_spec_d = build_spec(
     data(["temperature", "wind", "precipitation"]),
     {
@@ -339,7 +379,6 @@ bubble_spec_d = build_spec(
         ]
     },
 )
-
 bubble_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
@@ -371,6 +410,8 @@ bubble_spec_vl = {
         (scatter_spec_d, scatter_spec_vl),
         (scatter_with_color_spec_d, scatter_with_color_spec_vl),
         (bubble_spec_d, bubble_spec_vl),
+        # Dummy specs for coverage
+        *list(map(specs_with_mark, ["line", "area", "text", "tick", "rect"])),
     ],
 )
 def test_single_view_single_mark(
@@ -381,6 +422,7 @@ def test_single_view_single_mark(
     assert vl_specs_equal(vl, expected_vl)
 
 
+# https://dig.cmu.edu/draco2/facts/examples.html#stacked-bar-chart
 stacked_bar_spec_d = build_spec(
     data(["temperature", "condition"]),
     {
@@ -408,7 +450,6 @@ stacked_bar_spec_d = build_spec(
         ]
     },
 )
-
 stacked_bar_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
@@ -433,6 +474,7 @@ stacked_bar_spec_vl = {
     "mark": "bar",
 }
 
+# https://dig.cmu.edu/draco2/facts/examples.html#normalized-percentage-stacked-bar-chart
 normalized_stacked_bar_spec_d = build_spec(
     data(["temperature", "condition"]),
     {
@@ -461,7 +503,6 @@ normalized_stacked_bar_spec_d = build_spec(
         ]
     },
 )
-
 normalized_stacked_bar_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
@@ -500,6 +541,7 @@ def test_stacked(spec: SpecificationDict, expected_vl: dict, renderer: AltairRen
     assert vl_specs_equal(vl, expected_vl)
 
 
+# https://dig.cmu.edu/draco2/facts/examples.html#bar-with-a-tick
 bar_with_tick_spec_d = build_spec(
     data(["temperature"]),
     {
@@ -526,7 +568,6 @@ bar_with_tick_spec_d = build_spec(
         ]
     },
 )
-
 bar_with_tick_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
@@ -570,6 +611,7 @@ def test_multi_mark(
     assert vl_specs_equal(vl, expected_vl)
 
 
+# https://dig.cmu.edu/draco2/facts/examples.html#facet-scatterplot-into-columns
 scatterplot_columns_spec_d = build_spec(
     data(["temperature", "wind", "condition"]),
     {
@@ -595,7 +637,6 @@ scatterplot_columns_spec_d = build_spec(
         ]
     },
 )
-
 scatterplot_columns_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
@@ -613,6 +654,49 @@ scatterplot_columns_spec_vl = {
     },
 }
 
+scatterplot_rows_spec_d = build_spec(
+    data(["temperature", "wind", "condition"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "point",
+                        "encoding": [
+                            {"channel": "x", "field": "temperature"},
+                            {"channel": "y", "field": "wind"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "x", "type": "linear"},
+                    {"channel": "y", "type": "linear"},
+                ],
+                "facet": [
+                    {"channel": "row", "field": "condition"},
+                ],
+            }
+        ]
+    },
+)
+scatterplot_rows_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "facet": {"row": {"field": "condition", "type": "nominal"}},
+    "spec": {
+        "encoding": {
+            "x": {
+                "field": "temperature",
+                "scale": {"type": "linear"},
+                "type": "quantitative",
+            },
+            "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
+        },
+        "mark": "point",
+    },
+}
+
+# https://dig.cmu.edu/draco2/facts/examples.html#facet-scatterplot-by-binned-data-into-columns
 scatterplot_columns_binned_spec_d = build_spec(
     data(["temperature", "wind", "condition"]),
     {
@@ -638,7 +722,6 @@ scatterplot_columns_binned_spec_d = build_spec(
         ]
     },
 )
-
 scatterplot_columns_binned_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
@@ -667,6 +750,7 @@ scatterplot_columns_binned_spec_vl = {
     "spec, expected_vl",
     [
         (scatterplot_columns_spec_d, scatterplot_columns_spec_vl),
+        (scatterplot_rows_spec_d, scatterplot_rows_spec_vl),
         (scatterplot_columns_binned_spec_d, scatterplot_columns_binned_spec_vl),
     ],
 )
@@ -676,6 +760,7 @@ def test_facets(spec: SpecificationDict, expected_vl: dict, renderer: AltairRend
     assert vl_specs_equal(vl, expected_vl)
 
 
+# https://dig.cmu.edu/draco2/facts/examples.html#tick-plot-and-histogram
 tick_plot_and_histogram_spec_d = build_spec(
     data(["temperature", "condition"]),
     {
@@ -736,6 +821,7 @@ tick_plot_and_histogram_spec_vl = {
     ],
 }
 
+# https://dig.cmu.edu/draco2/facts/examples.html#tick-plot-and-histogram-with-shared-y-scale
 tick_plot_and_histogram_shared_scale_spec_d = build_spec(
     data(["temperature", "condition"]),
     {
@@ -768,7 +854,6 @@ tick_plot_and_histogram_shared_scale_spec_d = build_spec(
         "scale": [{"channel": "y", "type": "linear", "zero": "true"}],
     },
 )
-
 tick_plot_and_histogram_shared_scale_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
