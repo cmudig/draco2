@@ -43,7 +43,7 @@ class RootContext(Generic[VegaLiteChart]):
 
 
 @dataclass(frozen=True)
-class ViewContext(RootContext):
+class ViewContext(RootContext[VegaLiteChart]):
     """
     Visitor callback context available when processing
     the dictionary-based specification at the `View` level.
