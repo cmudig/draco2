@@ -193,6 +193,172 @@ histogram_spec_vl = {
     "mark": "bar",
 }
 
+binned_histogram_spec_d = build_spec(
+    data(["temperature"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "bar",
+                        "encoding": [
+                            {"channel": "x", "field": "temperature", "binning": 10},
+                            {"channel": "y", "aggregate": "count"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {
+                        "channel": "x",
+                        "type": "linear",
+                    },
+                    {"channel": "y", "type": "linear", "zero": "true"},
+                ],
+            }
+        ]
+    },
+)
+
+binned_histogram_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "encoding": {
+        "x": {
+            "bin": {"maxbins": 10},
+            "field": "temperature",
+            "scale": {"type": "linear"},
+            "type": "quantitative",
+        },
+        "y": {"aggregate": "count", "scale": {"type": "linear", "zero": True}},
+    },
+    "mark": "bar",
+}
+
+scatter_spec_d = build_spec(
+    data(["temperature", "wind"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "point",
+                        "encoding": [
+                            {"channel": "x", "field": "temperature"},
+                            {"channel": "y", "field": "wind"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "x", "type": "linear"},
+                    {"channel": "y", "type": "linear"},
+                ],
+            }
+        ]
+    },
+)
+
+scatter_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "encoding": {
+        "x": {
+            "field": "temperature",
+            "scale": {"type": "linear"},
+            "type": "quantitative",
+        },
+        "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
+    },
+    "mark": "point",
+}
+
+scatter_with_color_spec_d = build_spec(
+    data(["temperature", "wind", "condition"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "point",
+                        "encoding": [
+                            {"channel": "x", "field": "temperature"},
+                            {"channel": "y", "field": "wind"},
+                            {"channel": "color", "field": "condition"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "x", "type": "linear"},
+                    {"channel": "y", "type": "linear"},
+                    {"channel": "color", "type": "categorical"},
+                ],
+            }
+        ]
+    },
+)
+
+scatter_with_color_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "encoding": {
+        "color": {
+            "field": "condition",
+            "scale": {"type": "ordinal"},
+            "type": "nominal",
+        },
+        "x": {
+            "field": "temperature",
+            "scale": {"type": "linear"},
+            "type": "quantitative",
+        },
+        "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
+    },
+    "mark": "point",
+}
+
+bubble_spec_d = build_spec(
+    data(["temperature", "wind", "precipitation"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "point",
+                        "encoding": [
+                            {"channel": "x", "field": "temperature"},
+                            {"channel": "y", "field": "wind"},
+                            {"channel": "size", "field": "precipitation"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "x", "type": "linear"},
+                    {"channel": "y", "type": "linear"},
+                    {"channel": "size", "type": "linear"},
+                ],
+            }
+        ]
+    },
+)
+
+bubble_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "encoding": {
+        "size": {
+            "field": "precipitation",
+            "scale": {"type": "linear"},
+            "type": "quantitative",
+        },
+        "x": {
+            "field": "temperature",
+            "scale": {"type": "linear"},
+            "type": "quantitative",
+        },
+        "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
+    },
+    "mark": "point",
+}
+
 
 @pytest.mark.parametrize(
     "spec, expected_vl",
@@ -201,6 +367,10 @@ histogram_spec_vl = {
         (tick_log_spec_d, tick_log_spec_vl),
         (bar_spec_d, bar_spec_vl),
         (histogram_spec_d, histogram_spec_vl),
+        (binned_histogram_spec_d, binned_histogram_spec_vl),
+        (scatter_spec_d, scatter_spec_vl),
+        (scatter_with_color_spec_d, scatter_with_color_spec_vl),
+        (bubble_spec_d, bubble_spec_vl),
     ],
 )
 def test_single_view_single_mark(
