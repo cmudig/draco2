@@ -498,3 +498,73 @@ def test_stacked(spec: SpecificationDict, expected_vl: dict, renderer: AltairRen
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
+
+
+bar_with_tick_spec_d = build_spec(
+    data(["temperature"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "bar",
+                        "encoding": [
+                            {
+                                "channel": "x",
+                                "aggregate": "mean",
+                                "field": "temperature",
+                            }
+                        ],
+                    },
+                    {
+                        "type": "tick",
+                        "encoding": [{"channel": "x", "field": "temperature"}],
+                    },
+                ],
+                "scale": [{"channel": "x", "type": "linear", "zero": "true"}],
+            }
+        ]
+    },
+)
+
+bar_with_tick_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "layer": [
+        {
+            "encoding": {
+                "x": {
+                    "aggregate": "mean",
+                    "field": "temperature",
+                    "scale": {"type": "linear", "zero": True},
+                    "type": "quantitative",
+                }
+            },
+            "mark": "bar",
+        },
+        {
+            "encoding": {
+                "x": {
+                    "field": "temperature",
+                    "scale": {"type": "linear", "zero": True},
+                    "type": "quantitative",
+                }
+            },
+            "mark": "tick",
+        },
+    ],
+}
+
+
+@pytest.mark.parametrize(
+    "spec, expected_vl",
+    [
+        (bar_with_tick_spec_d, bar_with_tick_spec_vl),
+    ],
+)
+def test_multi_mark(
+    spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer
+):
+    chart = renderer.render(spec, df)
+    vl = chart.to_dict()
+    assert vl_specs_equal(vl, expected_vl)
