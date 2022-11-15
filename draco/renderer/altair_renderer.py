@@ -21,7 +21,12 @@ Generic parameter for the type of the produced visualization object.
 Used to abstract away the final type of the produced visualization object.
 """
 VegaLiteChart = TypeVar(
-    "VegaLiteChart", alt.VConcatChart, alt.HConcatChart, alt.FacetChart, alt.Chart
+    "VegaLiteChart",
+    alt.VConcatChart,
+    alt.HConcatChart,
+    alt.FacetChart,
+    alt.Chart,
+    alt.LayerChart,
 )
 
 
@@ -44,6 +49,7 @@ class ViewContext(RootContext):
     the dictionary-based specification at the `View` level.
     """
 
+    layers: list[VegaLiteChart]
     view: View
 
 
@@ -80,10 +86,16 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
 
         # Traverse the specification dict and invoke the appropriate visitor
         for v in spec.view:
+            layers: list[VegaLiteChart] = []
             for m in v.mark:
                 chart = self.__visit_mark(
                     ctx=MarkContext(
-                        spec=spec, chart=chart, chart_views=chart_views, view=v, mark=m
+                        spec=spec,
+                        chart=chart,
+                        chart_views=chart_views,
+                        layers=layers,
+                        view=v,
+                        mark=m,
                     )
                 )
                 for e in m.encoding:
@@ -92,13 +104,21 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                             spec=spec,
                             chart=chart,
                             chart_views=chart_views,
+                            layers=layers,
                             view=v,
                             mark=m,
                             encoding=e,
                         )
                     )
+                layers.append(chart)
             chart = self.__visit_view(
-                ctx=ViewContext(spec=spec, chart=chart, chart_views=chart_views, view=v)
+                ctx=ViewContext(
+                    spec=spec,
+                    chart=chart,
+                    chart_views=chart_views,
+                    layers=layers,
+                    view=v,
+                )
             )
             chart_views.append(chart)
         return self.__visit_root(
@@ -130,7 +150,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         :return: The chart with the view applied.
         :raises ValueError: if the facet channel is not supported
         """
-        view, chart = (ctx.view, ctx.chart)
+        view, chart, layers = (ctx.view, ctx.chart, ctx.layers)
         if view.facet is not None:
             for f in view.facet:
                 channel = f.channel
@@ -147,7 +167,8 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                         chart = chart.facet(column=alt.Column(**facet_args))
                     case _:
                         raise ValueError(f"Unknown facet channel: {channel}")
-        return chart
+            return chart
+        return alt.layer(*layers) if len(layers) > 1 else layers[0]
 
     def __visit_mark(self, ctx: MarkContext) -> VegaLiteChart:
         """
