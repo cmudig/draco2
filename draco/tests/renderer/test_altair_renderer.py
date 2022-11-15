@@ -568,3 +568,109 @@ def test_multi_mark(
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
+
+
+scatterplot_columns_spec_d = build_spec(
+    data(["temperature", "wind", "condition"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "point",
+                        "encoding": [
+                            {"channel": "x", "field": "temperature"},
+                            {"channel": "y", "field": "wind"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "x", "type": "linear"},
+                    {"channel": "y", "type": "linear"},
+                ],
+                "facet": [
+                    {"channel": "col", "field": "condition"},
+                ],
+            }
+        ]
+    },
+)
+
+scatterplot_columns_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "facet": {"column": {"field": "condition", "type": "nominal"}},
+    "spec": {
+        "encoding": {
+            "x": {
+                "field": "temperature",
+                "scale": {"type": "linear"},
+                "type": "quantitative",
+            },
+            "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
+        },
+        "mark": "point",
+    },
+}
+
+scatterplot_columns_binned_spec_d = build_spec(
+    data(["temperature", "wind", "condition"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "point",
+                        "encoding": [
+                            {"channel": "x", "field": "condition"},
+                            {"channel": "y", "field": "wind"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "x", "type": "ordinal"},
+                    {"channel": "y", "type": "linear"},
+                ],
+                "facet": [
+                    {"channel": "col", "field": "temperature", "binning": 10},
+                ],
+            }
+        ]
+    },
+)
+
+scatterplot_columns_binned_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "facet": {
+        "column": {
+            "bin": {"maxbins": 10},
+            "field": "temperature",
+            "type": "quantitative",
+        }
+    },
+    "spec": {
+        "encoding": {
+            "x": {
+                "field": "condition",
+                "scale": {"type": "ordinal"},
+                "type": "nominal",
+            },
+            "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
+        },
+        "mark": "point",
+    },
+}
+
+
+@pytest.mark.parametrize(
+    "spec, expected_vl",
+    [
+        (scatterplot_columns_spec_d, scatterplot_columns_spec_vl),
+        (scatterplot_columns_binned_spec_d, scatterplot_columns_binned_spec_vl),
+    ],
+)
+def test_facets(spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer):
+    chart = renderer.render(spec, df)
+    vl = chart.to_dict()
+    assert vl_specs_equal(vl, expected_vl)
