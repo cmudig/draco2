@@ -920,3 +920,116 @@ def test_unknown_field_raises_value_error(renderer: AltairRenderer):
     )
     with pytest.raises(ValueError):
         renderer.render(spec, df)
+
+
+# https://dig.cmu.edu/draco2/facts/examples.html#pie-chart
+polar_pie_chart_spec_d = build_spec(
+    data(["condition", "temperature"]),
+    {
+        "view": [
+            {
+                "coordinates": "polar",
+                "mark": [
+                    {
+                        "type": "bar",
+                        "encoding": [
+                            {
+                                "channel": "y",
+                                "aggregate": "count",
+                                "stack": "zero",
+                            },
+                            {"channel": "color", "field": "condition"},
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "y", "type": "linear", "zero": "true"},
+                    {"channel": "color", "type": "categorical"},
+                ],
+            }
+        ]
+    },
+)
+polar_pie_chart_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "encoding": {
+        "color": {
+            "field": "condition",
+            "scale": {"type": "ordinal"},
+            "type": "nominal",
+        },
+        "theta": {
+            "aggregate": "count",
+            "scale": {"type": "linear", "zero": True},
+            "stack": "zero",
+        },
+    },
+    "mark": "arc",
+}
+
+# https://dig.cmu.edu/draco2/facts/examples.html#radial-chart
+polar_radial_chart_spec_d = build_spec(
+    data(["condition", "temperature"]),
+    {
+        "view": [
+            {
+                "coordinates": "polar",
+                "mark": [
+                    {
+                        "type": "bar",
+                        "encoding": [
+                            {"channel": "x", "field": "condition"},
+                            {
+                                "channel": "y",
+                                "field": "temperature",
+                                "aggregate": "mean",
+                            },
+                        ],
+                    }
+                ],
+                "scale": [
+                    {"channel": "x", "type": "ordinal"},
+                    {"channel": "y", "type": "linear", "zero": "true"},
+                ],
+            }
+        ]
+    },
+)
+polar_radial_chart_spec_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "config": {
+        "view": {"continuousHeight": 300, "continuousWidth": 400},
+    },
+    "encoding": {
+        "radius": {
+            "aggregate": "mean",
+            "field": "temperature",
+            "type": "quantitative",
+            "scale": {"type": "linear", "zero": True},
+        },
+        "text": {"field": "condition", "type": "nominal"},
+        "theta": {
+            "field": "condition",
+            "type": "nominal",
+            "scale": {"type": "ordinal"},
+        },
+    },
+    "layer": [
+        {"mark": {"type": "arc", "stroke": "#ffffff"}},
+        {"mark": {"radiusOffset": 15, "type": "text"}},
+    ],
+}
+
+
+@pytest.mark.parametrize(
+    "spec, expected_vl",
+    [
+        (polar_pie_chart_spec_d, polar_pie_chart_spec_vl),
+        (polar_radial_chart_spec_d, polar_radial_chart_spec_vl),
+    ],
+)
+def test_polar(spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer):
+    chart = renderer.render(spec, df)
+    vl = chart.to_dict()
+    assert vl_specs_equal(vl, expected_vl)
