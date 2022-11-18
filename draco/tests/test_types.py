@@ -41,6 +41,7 @@ def test_field_validator(data: dict, is_valid: bool):
 @pytest.mark.parametrize(
     "data, is_valid",
     [
+        # Cartesian - valid
         *[
             (
                 dict(
@@ -51,6 +52,7 @@ def test_field_validator(data: dict, is_valid: bool):
             )
             for t in ["point", "bar", "line", "area", "text", "tick", "rect"]
         ],
+        # Polar - invalid mark, valid encoding
         *[
             (
                 dict(
@@ -61,6 +63,7 @@ def test_field_validator(data: dict, is_valid: bool):
             )
             for t in ["point", "line", "area", "text", "tick", "rect"]
         ],
+        # Polar - valid mark, valid encoding
         *[
             (
                 dict(
@@ -70,6 +73,28 @@ def test_field_validator(data: dict, is_valid: bool):
                 True,
             )
             for t in ["bar"]
+        ],
+        # Polar - valid mark, invalid encoding
+        *[
+            (
+                dict(
+                    coordinates="polar",
+                    mark=[dict(type="bar", encoding=[dict(channel=c, field="temp")])],
+                ),
+                False,
+            )
+            for c in ["size", "shape", "text"]
+        ],
+        # Polar - valid mark, valid encoding
+        *[
+            (
+                dict(
+                    coordinates="polar",
+                    mark=[dict(type="bar", encoding=[dict(channel=c, field="temp")])],
+                ),
+                True,
+            )
+            for c in ["x", "y", "color"]
         ],
     ],
 )
