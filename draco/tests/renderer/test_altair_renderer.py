@@ -1,4 +1,5 @@
 import random
+from typing import Literal
 
 import pandas as pd
 import pytest
@@ -39,6 +40,16 @@ def data(fields):
 @pytest.fixture
 def renderer():
     return AltairRenderer()
+
+
+@pytest.fixture
+def renderer_with_vconcat():
+    return AltairRenderer(concat_mode="vconcat")
+
+
+@pytest.fixture
+def renderer_with_hconcat():
+    return AltairRenderer(concat_mode="hconcat")
 
 
 def vl_specs_equal(a: dict, b: dict) -> bool:
@@ -792,11 +803,10 @@ tick_plot_and_histogram_spec_d = build_spec(
         ]
     },
 )
-tick_plot_and_histogram_spec_vl = {
+tick_plot_and_histogram_spec_base_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
-    # TODO adjust `hconcat` / `vconcat` after handling it properly in the renderer
-    "vconcat": [
+    "CONCAT_MODE": [
         {
             "encoding": {
                 "y": {
@@ -854,11 +864,10 @@ tick_plot_and_histogram_shared_scale_spec_d = build_spec(
         "scale": [{"channel": "y", "type": "linear", "zero": "true"}],
     },
 )
-tick_plot_and_histogram_shared_scale_spec_vl = {
+tick_plot_and_histogram_shared_scale_spec_base_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
-    # TODO adjust `hconcat` / `vconcat` after handling it properly in the renderer
-    "vconcat": [
+    "CONCAT_MODE": [
         {
             "encoding": {"y": {"field": "temperature", "type": "quantitative"}},
             "mark": "tick",
@@ -883,20 +892,80 @@ tick_plot_and_histogram_shared_scale_spec_vl = {
 }
 
 
+def prepare_multi_view(
+    vl_spec: dict, concat_mode: Literal["vconcat", "hconcat"] | None = None
+) -> dict:
+    result = vl_spec.copy()
+    if concat_mode is not None:
+        result[concat_mode] = result.pop("CONCAT_MODE")
+    else:
+        result = result | result.pop("CONCAT_MODE")[0]
+    return result
+
+
 @pytest.mark.parametrize(
     "spec, expected_vl",
     [
-        (tick_plot_and_histogram_spec_d, tick_plot_and_histogram_spec_vl),
+        (
+            tick_plot_and_histogram_spec_d,
+            prepare_multi_view(tick_plot_and_histogram_spec_base_vl),
+        ),
         (
             tick_plot_and_histogram_shared_scale_spec_d,
-            tick_plot_and_histogram_shared_scale_spec_vl,
+            prepare_multi_view(tick_plot_and_histogram_shared_scale_spec_base_vl),
         ),
     ],
 )
-def test_multiple_views(
+def test_multiple_views_no_concat(
     spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer
 ):
     chart = renderer.render(spec, df)
+    vl = chart.to_dict()
+    assert vl_specs_equal(vl, expected_vl)
+
+
+@pytest.mark.parametrize(
+    "spec, expected_vl",
+    [
+        (
+            tick_plot_and_histogram_spec_d,
+            prepare_multi_view(tick_plot_and_histogram_spec_base_vl, "hconcat"),
+        ),
+        (
+            tick_plot_and_histogram_shared_scale_spec_d,
+            prepare_multi_view(
+                tick_plot_and_histogram_shared_scale_spec_base_vl, "hconcat"
+            ),
+        ),
+    ],
+)
+def test_multiple_views_hconcat(
+    spec: SpecificationDict, expected_vl: dict, renderer_with_hconcat: AltairRenderer
+):
+    chart = renderer_with_hconcat.render(spec, df)
+    vl = chart.to_dict()
+    assert vl_specs_equal(vl, expected_vl)
+
+
+@pytest.mark.parametrize(
+    "spec, expected_vl",
+    [
+        (
+            tick_plot_and_histogram_spec_d,
+            prepare_multi_view(tick_plot_and_histogram_spec_base_vl, "vconcat"),
+        ),
+        (
+            tick_plot_and_histogram_shared_scale_spec_d,
+            prepare_multi_view(
+                tick_plot_and_histogram_shared_scale_spec_base_vl, "vconcat"
+            ),
+        ),
+    ],
+)
+def test_multiple_views_vconcat(
+    spec: SpecificationDict, expected_vl: dict, renderer_with_vconcat: AltairRenderer
+):
+    chart = renderer_with_vconcat.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
 
