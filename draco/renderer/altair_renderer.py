@@ -180,6 +180,27 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
 
         :param ctx: The current visitor context.
         :return: The chart with the mark applied.
+        :raises ValueError: if the coordinate type is not supported
+        """
+        coord = ctx.view.coordinates
+        match coord:
+            case "cartesian":
+                return self.__visit_mark_cartesian(ctx)
+            case "polar":
+                return self.__visit_mark_polar(ctx)
+            # Should never happen, a pydantic error would be raised sooner
+            case _:  # pragma: no cover
+                raise ValueError(
+                    f"Unknown coordinate type: {coord}"
+                )  # pragma: no cover
+
+    def __visit_mark_cartesian(self, ctx: MarkContext) -> VegaLiteChart:
+        """
+        Handles mark-specific configuration.
+        Responsible for applying the mark type to a chart in cartesian coordinates.
+
+        :param ctx: The current visitor context.
+        :return: The chart with the mark applied.
         :raises ValueError: if the mark type is not supported
         """
         chart, mark_type = (ctx.chart, ctx.mark.type)
@@ -202,10 +223,54 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             case _:  # pragma: no cover
                 raise ValueError(f"Unknown mark type: {mark_type}")  # pragma: no cover
 
+    def __visit_mark_polar(self, ctx: MarkContext) -> VegaLiteChart:
+        """
+        Handles mark-specific configuration.
+        Responsible for applying the mark type to a chart in polar coordinates.
+
+        :param ctx: The current visitor context.
+        :return: The chart with the mark applied.
+        :raises ValueError: if the mark type is not supported
+        """
+        chart, encodings, mark_type = (ctx.chart, ctx.mark.encoding, ctx.mark.type)
+        match mark_type:
+            case "bar":
+                encodes_x_and_y = all([e.channel in ["x", "y"] for e in encodings])
+                if encodes_x_and_y:
+                    return chart.mark_arc(stroke="#ffffff") + chart.mark_text(
+                        radiusOffset=15
+                    )
+                else:
+                    return chart.mark_arc()
+                # Should never happen, a pydantic error would be raised sooner
+            case _:  # pragma: no cover
+                raise ValueError(f"Unknown mark type: {mark_type}")  # pragma: no cover
+
     def __visit_encoding(self, ctx: EncodingContext) -> VegaLiteChart:
         """
         Handles encoding-specific configuration.
         Responsible for applying the encoding to the chart.
+
+        :param ctx: The current visitor context.
+        :return: The updated chart.
+        :raises ValueError: If an unknown encoding channel is encountered.
+        """
+        coord = ctx.view.coordinates
+        match coord:
+            case "cartesian":
+                return self.__visit_encoding_cartesian(ctx)
+            case "polar":
+                return self.__visit_encoding_polar(ctx)
+                # Should never happen, a pydantic error would be raised sooner
+            case _:  # pragma: no cover
+                raise ValueError(
+                    f"Unknown coordinate type: {coord}"
+                )  # pragma: no cover
+
+    def __visit_encoding_cartesian(self, ctx: EncodingContext) -> VegaLiteChart:
+        """
+        Handles encoding-specific configuration.
+        Responsible for applying the encoding to a chart in cartesian coordinates.
 
         :param ctx: The current visitor context.
         :return: The updated chart.
@@ -243,6 +308,62 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 return chart.encode(shape=alt.Shape(**encoding_args))
             case "text":
                 return chart.encode(text=alt.Text(**encoding_args))
+                # Should never happen, a pydantic error would be raised sooner
+            case _:  # pragma: no cover
+                raise ValueError(
+                    f"Unknown channel: {encoding.channel}"
+                )  # pragma: no cover
+
+    def __visit_encoding_polar(self, ctx: EncodingContext) -> VegaLiteChart:
+        """
+        Handles encoding-specific configuration.
+        Responsible for applying the encoding to a chart in polar coordinates.
+
+        :param ctx: The current visitor context.
+        :return: The updated chart.
+        :raises ValueError: If an unknown encoding channel is encountered.
+        """
+        spec, chart, view, encoding, encodings = (
+            ctx.spec,
+            ctx.chart,
+            ctx.view,
+            ctx.encoding,
+            ctx.mark.encoding,
+        )
+        encodes_x_and_y = all([e.channel in ["x", "y"] for e in encodings])
+
+        custom_args = {}
+        if encoding.field is not None:
+            custom_args["field"] = encoding.field
+            custom_args["type"] = self.__get_field_type(spec.field, encoding.field)
+
+        if view.scale is not None:
+            scale_or_none = self.__get_scale_for_encoding(encoding.channel, view.scale)
+            if scale_or_none is not None:
+                custom_args["scale"] = scale_or_none
+
+        encoding_args = (
+            encoding.dict(
+                exclude_none=True, exclude={"channel", "field", "binning", "scale"}
+            )
+            | custom_args
+        )
+
+        match encoding.channel:
+            case "x":
+                return chart.encode(
+                    theta=alt.Theta(**encoding_args),
+                    text=alt.Text(
+                        field=encoding_args["field"], type=encoding_args["type"]
+                    ),
+                )
+            case "y":
+                if encodes_x_and_y:
+                    return chart.encode(radius=alt.Radius(**encoding_args))
+                else:
+                    return chart.encode(theta=alt.Theta(**encoding_args))
+            case "color":
+                return chart.encode(color=alt.Color(**encoding_args))
                 # Should never happen, a pydantic error would be raised sooner
             case _:  # pragma: no cover
                 raise ValueError(
