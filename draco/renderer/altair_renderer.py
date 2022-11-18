@@ -1,5 +1,6 @@
+import logging
 from dataclasses import dataclass
-from typing import Generic, TypeVar
+from typing import Generic, Literal, TypeVar
 
 import altair as alt
 from pandas import DataFrame
@@ -15,6 +16,8 @@ from ..types import (
     View,
 )
 from .base_renderer import BaseRenderer
+
+logger = logging.getLogger(__name__)
 
 """
 Generic parameter for the type of the produced visualization object.
@@ -79,6 +82,16 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
     represented as an `Altair <https://altair-viz.github.io/>`_ chart object.
     """
 
+    def __init__(self, concat_mode: Literal["hconcat", "vconcat"] | None = None):
+        """
+        Instantiates a new `Altair <https://altair-viz.github.io/>`-based renderer.
+
+        :param concat_mode: The concatenation mode to use
+                            when concatenating multiple views.
+                            Only the first view is returned if `None`.
+        """
+        self.concat_mode = concat_mode
+
     def render(self, spec: SpecificationDict, data: DataFrame) -> VegaLiteChart:
         # initial chart to be mutated by the visitor callbacks
         chart = alt.Chart(data)
@@ -134,7 +147,16 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         :return: The chart with the root configuration applied.
         """
         views = ctx.chart_views
-        chart = len(views) > 1 and alt.vconcat(*views) or views[0]
+        chart = views[0]
+        if len(views) > 1 and self.concat_mode is not None:
+            chart = getattr(alt, self.concat_mode)(*views)
+        else:
+            logger.log(
+                level=logging.WARNING,
+                msg="No concatenation performed on multiple views. "
+                "Returning the first view.",
+            )
+
         if ctx.spec.scale is not None:
             channels = [s.channel for s in ctx.spec.scale]
             resolve_scale_args = {c: "shared" for c in channels}
