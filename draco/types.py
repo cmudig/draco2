@@ -237,9 +237,10 @@ class View(SchemaBase):
     facet: list[Facet] | None = None
 
     __SUPPORTED_POLAR_MARKS__ = {"bar"}
+    __SUPPORTED_POLAR_ENCODINGS__ = {"x", "y", "color"}
 
     @pydantic_validators.root_validator(pre=True)
-    def check_polar_mark(cls, values: dict):
+    def check_polar_mark_and_encoding(cls, values: dict):
         if values.get("coordinates", "cartesian") == "polar":
             for mark in values.get("mark", []):
                 if mark.get("type", None) not in cls.__SUPPORTED_POLAR_MARKS__:
@@ -247,6 +248,15 @@ class View(SchemaBase):
                         f"polar coordinates only support "
                         f"{cls.__SUPPORTED_POLAR_MARKS__} marks"
                     )
+                for encoding in mark.get("encoding", []):
+                    if (
+                        encoding.get("channel", None)
+                        not in cls.__SUPPORTED_POLAR_ENCODINGS__
+                    ):
+                        raise ValueError(
+                            f"polar coordinates only support "
+                            f"{cls.__SUPPORTED_POLAR_ENCODINGS__} encodings"
+                        )
         return values
 
 
