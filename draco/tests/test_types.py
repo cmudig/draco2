@@ -36,3 +36,46 @@ def test_field_validator(data: dict, is_valid: bool):
     else:
         with pytest.raises(ValueError):
             draco_types.Field(**data)
+
+
+@pytest.mark.parametrize(
+    "data, is_valid",
+    [
+        *[
+            (
+                dict(
+                    coordinates="cartesian",
+                    mark=[dict(type=t, encoding=[dict(channel="x", field="temp")])],
+                ),
+                True,
+            )
+            for t in ["point", "bar", "line", "area", "text", "tick", "rect"]
+        ],
+        *[
+            (
+                dict(
+                    coordinates="polar",
+                    mark=[dict(type=t, encoding=[dict(channel="x", field="temp")])],
+                ),
+                False,
+            )
+            for t in ["point", "line", "area", "text", "tick", "rect"]
+        ],
+        *[
+            (
+                dict(
+                    coordinates="polar",
+                    mark=[dict(type=t, encoding=[dict(channel="x", field="temp")])],
+                ),
+                True,
+            )
+            for t in ["bar"]
+        ],
+    ],
+)
+def test_view_validator(data: dict, is_valid: bool):
+    if is_valid:
+        draco_types.View(**data)
+    else:
+        with pytest.raises(ValueError):
+            draco_types.View(**data)
