@@ -259,6 +259,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             case "bar":
                 encodes_x_and_y = all([e.channel in ["x", "y"] for e in encodings])
                 if encodes_x_and_y:
+                    # We are setting a white stroke here so that the radial
+                    # slices are visually separated from each other.
+                    # See https://github.com/cmudig/draco2/pull/438#discussion_r1042469389  # noqa: E501
                     return chart.mark_arc(stroke="#ffffff") + chart.mark_text(
                         radiusOffset=15
                     )
