@@ -210,11 +210,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 return self.__visit_mark_cartesian(ctx)
             case "polar":
                 return self.__visit_mark_polar(ctx)
-            # Should never happen, a pydantic error would be raised sooner
-            case _:  # pragma: no cover
-                raise ValueError(
-                    f"Unknown coordinate type: {coord}"
-                )  # pragma: no cover
+
+        # Should never happen, a pydantic error would be raised sooner
+        raise ValueError(f"Unknown coordinate type: {coord}")  # pragma: no cover
 
     def __visit_mark_cartesian(self, ctx: MarkContext) -> VegaLiteChart:
         """
@@ -241,9 +239,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 return chart.mark_tick()
             case "rect":
                 return chart.mark_rect()
-                # Should never happen, a pydantic error would be raised sooner
-            case _:  # pragma: no cover
-                raise ValueError(f"Unknown mark type: {mark_type}")  # pragma: no cover
+
+        # Should never happen, a pydantic error would be raised sooner
+        raise ValueError(f"Unknown mark type: {mark_type}")  # pragma: no cover
 
     def __visit_mark_polar(self, ctx: MarkContext) -> VegaLiteChart:
         """
@@ -264,9 +262,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     )
                 else:
                     return chart.mark_arc()
-                # Should never happen, a pydantic error would be raised sooner
-            case _:  # pragma: no cover
-                raise ValueError(f"Unknown mark type: {mark_type}")  # pragma: no cover
+
+        # Should never happen, a pydantic error would be raised sooner
+        raise ValueError(f"Unknown mark type: {mark_type}")  # pragma: no cover
 
     def __visit_encoding(self, ctx: EncodingContext) -> VegaLiteChart:
         """
@@ -283,11 +281,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 return self.__visit_encoding_cartesian(ctx)
             case "polar":
                 return self.__visit_encoding_polar(ctx)
-                # Should never happen, a pydantic error would be raised sooner
-            case _:  # pragma: no cover
-                raise ValueError(
-                    f"Unknown coordinate type: {coord}"
-                )  # pragma: no cover
+
+        # Should never happen, a pydantic error would be raised sooner
+        raise ValueError(f"Unknown coordinate type: {coord}")  # pragma: no cover
 
     def __visit_encoding_cartesian(self, ctx: EncodingContext) -> VegaLiteChart:
         """
@@ -330,11 +326,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 return chart.encode(shape=alt.Shape(**encoding_args))
             case "text":
                 return chart.encode(text=alt.Text(**encoding_args))
-                # Should never happen, a pydantic error would be raised sooner
-            case _:  # pragma: no cover
-                raise ValueError(
-                    f"Unknown channel: {encoding.channel}"
-                )  # pragma: no cover
+
+        # Should never happen, a pydantic error would be raised sooner
+        raise ValueError(f"Unknown channel: {encoding.channel}")  # pragma: no cover
 
     def __visit_encoding_polar(self, ctx: EncodingContext) -> VegaLiteChart:
         """
@@ -386,11 +380,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     return chart.encode(theta=alt.Theta(**encoding_args))
             case "color":
                 return chart.encode(color=alt.Color(**encoding_args))
-                # Should never happen, a pydantic error would be raised sooner
-            case _:  # pragma: no cover
-                raise ValueError(
-                    f"Unknown channel: {encoding.channel}"
-                )  # pragma: no cover
+
+        # Should never happen, a pydantic error would be raised sooner
+        raise ValueError(f"Unknown channel: {encoding.channel}")  # pragma: no cover
 
     def __get_field_type(self, fields: list[Field], field_name: FieldName) -> str:
         """
