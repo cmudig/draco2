@@ -1,6 +1,6 @@
 import pytest
 
-import draco.types as draco_types
+import draco.renderer.altair.types as draco_types
 
 
 @pytest.mark.parametrize(

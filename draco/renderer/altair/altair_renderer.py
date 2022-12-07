@@ -5,7 +5,9 @@ from typing import Generic, Literal, TypeVar
 import altair as alt
 from pandas import DataFrame
 
-from ..types import (
+from draco.renderer.base_renderer import BaseRenderer
+
+from .types import (
     Encoding,
     EncodingChannel,
     Field,
@@ -15,7 +17,6 @@ from ..types import (
     SpecificationDict,
     View,
 )
-from .base_renderer import BaseRenderer
 
 logger = logging.getLogger(__name__)
 
@@ -92,18 +93,19 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         """
         self.concat_mode = concat_mode
 
-    def render(self, spec: SpecificationDict, data: DataFrame) -> VegaLiteChart:
+    def render(self, spec: dict, data: DataFrame) -> VegaLiteChart:
+        typed_spec = SpecificationDict.parse_obj(spec)
         # initial chart to be mutated by the visitor callbacks
         chart = alt.Chart(data)
         chart_views: list[VegaLiteChart] = []
 
         # Traverse the specification dict and invoke the appropriate visitor
-        for v in spec.view:
+        for v in typed_spec.view:
             layers: list[VegaLiteChart] = []
             for m in v.mark:
                 chart = self.__visit_mark(
                     ctx=MarkContext(
-                        spec=spec,
+                        spec=typed_spec,
                         chart=chart,
                         chart_views=chart_views,
                         layers=layers,
@@ -114,7 +116,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 for e in m.encoding:
                     chart = self.__visit_encoding(
                         ctx=EncodingContext(
-                            spec=spec,
+                            spec=typed_spec,
                             chart=chart,
                             chart_views=chart_views,
                             layers=layers,
@@ -126,7 +128,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 layers.append(chart)
             chart = self.__visit_view(
                 ctx=ViewContext(
-                    spec=spec,
+                    spec=typed_spec,
                     chart=chart,
                     chart_views=chart_views,
                     layers=layers,
@@ -135,7 +137,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             )
             chart_views.append(chart)
         return self.__visit_root(
-            ctx=RootContext(spec=spec, chart=chart, chart_views=chart_views)
+            ctx=RootContext(spec=typed_spec, chart=chart, chart_views=chart_views)
         )
 
     def __visit_root(self, ctx: RootContext) -> VegaLiteChart:

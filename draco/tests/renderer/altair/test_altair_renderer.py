@@ -6,7 +6,7 @@ import pytest
 from deepdiff import DeepDiff
 
 from draco.renderer import AltairRenderer
-from draco.types import MarkType, SpecificationDict
+from draco.renderer.altair.types import MarkType
 
 NUM_ROWS = 100
 df = pd.DataFrame(
@@ -67,7 +67,7 @@ def build_spec(*args):
     dct = {}
     for arg in args:
         dct.update(arg)
-    return SpecificationDict.parse_obj(dct)
+    return dct
 
 
 def specs_with_mark(mark: MarkType):
@@ -426,7 +426,7 @@ bubble_spec_vl = {
     ],
 )
 def test_single_view_single_mark(
-    spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer
+    spec: dict, expected_vl: dict, renderer: AltairRenderer
 ):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
@@ -546,7 +546,7 @@ normalized_stacked_bar_spec_vl = {
         (normalized_stacked_bar_spec_d, normalized_stacked_bar_spec_vl),
     ],
 )
-def test_stacked(spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer):
+def test_stacked(spec: dict, expected_vl: dict, renderer: AltairRenderer):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
@@ -614,9 +614,7 @@ bar_with_tick_spec_vl = {
         (bar_with_tick_spec_d, bar_with_tick_spec_vl),
     ],
 )
-def test_multi_mark(
-    spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer
-):
+def test_multi_mark(spec: dict, expected_vl: dict, renderer: AltairRenderer):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
@@ -765,7 +763,7 @@ scatterplot_columns_binned_spec_vl = {
         (scatterplot_columns_binned_spec_d, scatterplot_columns_binned_spec_vl),
     ],
 )
-def test_facets(spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer):
+def test_facets(spec: dict, expected_vl: dict, renderer: AltairRenderer):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
@@ -917,7 +915,7 @@ def prepare_multi_view(
     ],
 )
 def test_multiple_views_no_concat(
-    spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer
+    spec: dict, expected_vl: dict, renderer: AltairRenderer
 ):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
@@ -940,7 +938,7 @@ def test_multiple_views_no_concat(
     ],
 )
 def test_multiple_views_hconcat(
-    spec: SpecificationDict, expected_vl: dict, renderer_with_hconcat: AltairRenderer
+    spec: dict, expected_vl: dict, renderer_with_hconcat: AltairRenderer
 ):
     chart = renderer_with_hconcat.render(spec, df)
     vl = chart.to_dict()
@@ -963,7 +961,7 @@ def test_multiple_views_hconcat(
     ],
 )
 def test_multiple_views_vconcat(
-    spec: SpecificationDict, expected_vl: dict, renderer_with_vconcat: AltairRenderer
+    spec: dict, expected_vl: dict, renderer_with_vconcat: AltairRenderer
 ):
     chart = renderer_with_vconcat.render(spec, df)
     vl = chart.to_dict()
@@ -1098,7 +1096,7 @@ polar_radial_chart_spec_vl = {
         (polar_radial_chart_spec_d, polar_radial_chart_spec_vl),
     ],
 )
-def test_polar(spec: SpecificationDict, expected_vl: dict, renderer: AltairRenderer):
+def test_polar(spec: dict, expected_vl: dict, renderer: AltairRenderer):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)

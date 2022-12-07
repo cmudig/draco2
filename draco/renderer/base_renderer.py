@@ -3,8 +3,6 @@ from typing import Generic, TypeVar
 
 from pandas import DataFrame
 
-from ..types import SpecificationDict
-
 T = TypeVar("T")
 
 
@@ -16,7 +14,7 @@ class BaseRenderer(ABC, Generic[T]):
     """
 
     @abstractmethod
-    def render(self, spec: SpecificationDict, data: DataFrame) -> T:
+    def render(self, spec: dict, data: DataFrame) -> T:
         """
         Render a visualization from a dictionary-based specification and data.
 
