@@ -228,8 +228,13 @@ class View(SchemaBase):
 
     coordinates: ViewCoordinate = pydantic_fields.Field(default="cartesian")
     mark: list[Mark]
-    scale: list[Scale] | None = None
     facet: list[Facet] | None = None
+
+    """
+    View-specific scales define scales on a per-channel basis in the view.
+    `None` means that a top-level scale (shared scale) is present.
+    """
+    scale: list[Scale] | None = None
 
     __SUPPORTED_POLAR_MARKS__ = {"bar"}
     __SUPPORTED_POLAR_ENCODINGS__ = {"x", "y", "color"}
@@ -307,4 +312,9 @@ class SpecificationDict(SchemaBase):
     number_rows: DatasetNumberRows
     field: list[Field]
     view: list[View]
+
+    """
+    Top-level scales define shared scales across views.
+    `None` means no shared scales are used.
+    """
     scale: list[Scale] | None = None
