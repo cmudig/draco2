@@ -216,7 +216,8 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         # Should never happen, a pydantic error would be raised sooner
         raise ValueError(f"Unknown coordinate type: {coord}")  # pragma: no cover
 
-    def __visit_mark_cartesian(self, ctx: MarkContext) -> VegaLiteChart:
+    @staticmethod
+    def __visit_mark_cartesian(ctx: MarkContext) -> VegaLiteChart:
         """
         Handles mark-specific configuration.
         Responsible for applying the mark type to a chart in cartesian coordinates.
@@ -245,7 +246,8 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         # Should never happen, a pydantic error would be raised sooner
         raise ValueError(f"Unknown mark type: {mark_type}")  # pragma: no cover
 
-    def __visit_mark_polar(self, ctx: MarkContext) -> VegaLiteChart:
+    @staticmethod
+    def __visit_mark_polar(ctx: MarkContext) -> VegaLiteChart:
         """
         Handles mark-specific configuration.
         Responsible for applying the mark type to a chart in polar coordinates.
@@ -389,7 +391,8 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         # Should never happen, a pydantic error would be raised sooner
         raise ValueError(f"Unknown channel: {encoding.channel}")  # pragma: no cover
 
-    def __get_field_type(self, fields: list[Field], field_name: FieldName) -> str:
+    @staticmethod
+    def __get_field_type(fields: list[Field], field_name: FieldName) -> str:
         """
         Returns the type of the field with the given name.
         Needed to map from Draco-spec data types to Vega-Lite data types.
@@ -410,8 +413,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             raise ValueError(f"Unknown field: {field_name}")
         return renames[field_by_name[0].type]
 
+    @staticmethod
     def __get_scale_for_encoding(
-        self, channel: EncodingChannel, scales: list[Scale]
+        channel: EncodingChannel, scales: list[Scale]
     ) -> alt.Scale | None:
         """
         Returns the scale for the given encoding channel, if any.
