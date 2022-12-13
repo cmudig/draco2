@@ -468,21 +468,18 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         renames = {
             "linear": {
                 "number": "quantitative",
-                "string": "nominal",
-                "boolean": "nominal",
                 "datetime": "temporal",
             },
             "log": {
                 "number": "quantitative",
-                "string": "nominal",
-                "boolean": "nominal",
-                "datetime": "temporal",
+                "datetime": "quantitative",
             },
             "ordinal": {
-                "number": "quantitative",
+                "number": "ordinal",
+                # Accounting for colors
                 "string": "nominal",
-                "boolean": "nominal",
-                "datetime": "temporal",
+                "boolean": "ordinal",
+                "datetime": "ordinal",
             },
             "categorical": {
                 "number": "nominal",
