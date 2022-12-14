@@ -8,7 +8,9 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # https://github.com/actions/setup-python/issues/162#issuecomment-1325307787
+    # FIXME: temp change to ubuntu-20.04 from ubuntu-latest to fix python can not found error
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v3
@@ -37,7 +39,9 @@ jobs:
           fail_ci_if_error: true
 
   lint:
-    runs-on: ubuntu-latest
+    # https://github.com/actions/setup-python/issues/162#issuecomment-1325307787
+    # FIXME: temp change to ubuntu-20.04 from ubuntu-latest to fix python can not found error
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v3
