@@ -312,7 +312,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             custom_args["bin"] = alt.BinParams(maxbins=encoding.binning)
 
         if view.scale is not None:
-            scale_or_none = self.__get_scale_for_encoding(encoding.channel, view.scale)
+            scale_or_none = self.__get_alt_scale_for_encoding(
+                encoding.channel, view.scale
+            )
             if scale_or_none is not None:
                 custom_args["scale"] = scale_or_none
 
@@ -362,7 +364,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             custom_args["type"] = self.__get_field_type(spec, encoding.field)
 
         if view.scale is not None:
-            scale_or_none = self.__get_scale_for_encoding(encoding.channel, view.scale)
+            scale_or_none = self.__get_alt_scale_for_encoding(
+                encoding.channel, view.scale
+            )
             if scale_or_none is not None:
                 custom_args["scale"] = scale_or_none
 
@@ -476,8 +480,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             },
             "ordinal": {
                 "number": "ordinal",
-                # Accounting for colors
-                "string": "nominal",
+                "string": "ordinal",
                 "boolean": "ordinal",
                 "datetime": "ordinal",
             },
@@ -513,9 +516,25 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
     @staticmethod
     def __get_scale_for_encoding(
         channel: EncodingChannel, scales: list[Scale]
+    ) -> Scale | None:
+        """
+        Returns the `Scale` for the given encoding channel, if any.
+
+        :param channel: the channel for which to look up a scale
+        :param scales: the list of scales in the view
+        :return: the scale for the given channel, or None if no scale is found
+        """
+        for scale in scales:
+            if scale.channel == channel:
+                return scale
+        return None
+
+    @staticmethod
+    def __get_alt_scale_for_encoding(
+        channel: EncodingChannel, scales: list[Scale]
     ) -> alt.Scale | None:
         """
-        Returns the scale for the given encoding channel, if any.
+        Returns an `alt.Scale` for the given encoding channel, if any.
 
         :param channel: the channel for which to look up a scale
         :param scales: the list of scales in the view
@@ -524,9 +543,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         renames = {
             "categorical": "ordinal",
         }
-        for scale in scales:
-            if scale.channel == channel:
-                scale_args = scale.dict(exclude_none=True, exclude={"channel"})
-                scale_args["type"] = renames.get(scale.type, scale.type)
-                return alt.Scale(**scale_args)
-        return None
+        scale = AltairRenderer.__get_scale_for_encoding(channel, scales)
+        if scale is None:
+            return None
+        scale_args = scale.dict(exclude_none=True, exclude={"channel"})
+        scale_args["type"] = renames.get(scale.type, scale.type)
+        return alt.Scale(**scale_args)
