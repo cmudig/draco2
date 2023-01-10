@@ -102,10 +102,10 @@ class Draco:
         return is_satisfiable(program)
 
     def complete_spec(self, spec: Specification, models=1):
-        """Get optimal completions for the [partial input specification.
+        """Get optimal completions for the partial input specification.
 
         :param spec: The partial specification to complete.
-        :param models: The number of completetions to return, defaults to 1
+        :param models: The number of completions to return, defaults to 1
         """
         if not isinstance(spec, str):
             spec = "\n".join(spec)
