@@ -40,10 +40,7 @@ uvicorn = ">=0.18.3,<0.21.0"
 altair = "^4.2.0"
 black = {extras = ["jupyter"], version = "^22.10.0"}
 deepdiff = "^6.2.1"
-flake8 = "^5.0.4"
-flake8-black = "^0.3.3"
 ipywidgets = "^7.7.2"
-isort = "^5.10.1"
 jupyter-book = "^0.13.1"
 jupyterlab = "^3.5.0"
 mypy = "^0.990"
@@ -58,6 +55,7 @@ types-pkg-resources = "^0.1.2"
 vega-datasets = "^0.9.0"
 wheel = "^0.38.4"
 httpx = "^0.23.0"
+ruff = "^0.0.218"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -66,5 +64,14 @@ build-backend = "poetry.core.masonry.api"
 [tool.pyright]
 include = ["draco"]
 
-[tool.isort]
-profile = "black"
+[tool.ruff]
+line-length = 88
+select = [
+    "E",
+    "F",
+    "W",
+    # isort
+    "I001"
+]
+src = ["draco"]
+fix = true
