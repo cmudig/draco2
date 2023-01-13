@@ -461,7 +461,7 @@ def test_count_with_field():
             + """
     entity(encoding,root,1).
     attribute((encoding,aggregate),1,count).
-    attribute((encoding,field),1,temp).
+    helper((encoding,field),1,temp).
     """
         )
         == ["count_with_field"]
@@ -515,13 +515,14 @@ def test_scale_type_data_type():
     assert no_violations(
         b.program
         + """
-    attribute((field,type),temperature,number).
+    attribute((field,type),f0,number).
+    attribute((field,name),f0,temperature).
     attribute((field,type),name,string).
 
     entity(mark,root,1).
     entity(encoding,1,3).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,temperature).
+    helper((encoding,field),3,temperature).
 
     entity(scale,root,5).
     attribute((scale,channel),5,x).
@@ -535,11 +536,12 @@ def test_scale_type_data_type():
             b.program
             + """
     attribute((field,type),f1,string).
+    attribute((field,name),f1,temperature).
 
     entity(mark,0,1).
     entity(encoding,1,3).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,f1).
+    attribute((encoding,field),3,temperature).
 
     entity(scale,0,5).
     attribute((scale,channel),5,x).
@@ -555,12 +557,13 @@ def test_scale_type_data_type():
             b.program
             + """
     attribute((field,type),f1,string).
+    attribute((field,name),f1,temperature).
     entity(view,0,1).
 
     entity(mark,1,2).
     entity(encoding,2,3).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,f1).
+    attribute((encoding,field),3,temperature).
 
     entity(scale,0,5).
     attribute((scale,channel),5,x).
@@ -586,7 +589,7 @@ def test_log_non_positive():
     entity(encoding,1,2).
     entity(scale,0,4).
     attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,precipitation).
+    helper((encoding,field),2,precipitation).
     attribute((scale,channel),4,x).
     attribute((scale,type),4,linear).
     """
@@ -603,7 +606,7 @@ def test_log_non_positive():
     entity(encoding,1,2).
     entity(scale,0,4).
     attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,precipitation).
+    helper((encoding,field),2,precipitation).
     attribute((scale,channel),4,x).
     attribute((scale,type),4,log).
     """
@@ -621,7 +624,7 @@ def test_log_non_positive():
     entity(encoding,1,2).
     entity(scale,0,4).
     attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,precipitation).
+    helper((encoding,field),2,precipitation).
     attribute((scale,channel),4,x).
     attribute((scale,type),4,log).
     """
@@ -639,7 +642,7 @@ def test_aggregate_t_valid():
         + """
     attribute((field,type),time,datetime).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,time).
+    helper((encoding,field),3,time).
     attribute((encoding,aggregate),3,min).
     """
     )
@@ -649,7 +652,7 @@ def test_aggregate_t_valid():
         + """
     attribute((field,type),time,datetime).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,time).
+    helper((encoding,field),3,time).
     attribute((encoding,aggregate),3,max).
     """
     )
@@ -660,7 +663,7 @@ def test_aggregate_t_valid():
             + """
     attribute((field,type),time,datetime).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,time).
+    helper((encoding,field),3,time).
     attribute((encoding,aggregate),3,median).
     """
         )
@@ -677,7 +680,7 @@ def test_aggregate_num_valid():
         + """
     attribute((field,type),f1,number).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,f1).
+    helper((encoding,field),3,f1).
     attribute((encoding,aggregate),3,mean).
     """
     )
@@ -688,7 +691,7 @@ def test_aggregate_num_valid():
             + """
     attribute((field,type),f1,string).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,f1).
+    helper((encoding,field),3,f1).
     attribute((encoding,aggregate),3,sum).
     """
         )
@@ -705,7 +708,7 @@ def test_bin_n_d():
         + """
     attribute((field,type),f1,number).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,f1).
+    helper((encoding,field),3,f1).
     attribute((encoding,binning),3,10).
     """
     )
@@ -715,7 +718,7 @@ def test_bin_n_d():
         + """
     attribute((field,type),f1,datetime).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,f1).
+    helper((encoding,field),3,f1).
     attribute((encoding,binning),3,10).
     """
     )
@@ -726,7 +729,7 @@ def test_bin_n_d():
             + """
     attribute((field,type),f1,string).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,f1).
+    helper((encoding,field),3,f1).
     attribute((encoding,binning),3,10).
     """
         )
@@ -874,7 +877,7 @@ def test_size_negative():
 
     entity(encoding,0,1).
     attribute((encoding,channel),1,size).
-    attribute((encoding,field),1,precipitation).
+    helper((encoding,field),1,precipitation).
     """
     )
 
@@ -887,7 +890,7 @@ def test_size_negative():
 
     entity(encoding,0,1).
     attribute((encoding,channel),1,size).
-    attribute((encoding,field),1,precipitation).
+    helper((encoding,field),1,precipitation).
     """
         )
         == ["size_negative"]
@@ -1020,7 +1023,7 @@ def test_bar_tick_continuous_x_y():
 
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
+    helper((encoding,field),2,temperature).
     attribute((encoding,binning),2,10).
 
     entity(encoding,1,3).
@@ -1483,7 +1486,8 @@ def test_same_field_x_and_y():
     assert no_violations(
         b.program
         + """
-    entity(field,root,temperature).
+    entity(field,root,f1).
+    attribute((field,name),f1,temperature).
     entity(field,root,date).
     entity(mark,root,1).
     entity(encoding,1,2).
@@ -1493,7 +1497,7 @@ def test_same_field_x_and_y():
     attribute((encoding,field),2,temperature).
 
     attribute((encoding,channel),3,y).
-    attribute((encoding,field),3,date).
+    helper((encoding,field),3,date).
     """
     )
 
@@ -1502,7 +1506,8 @@ def test_same_field_x_and_y():
         list_violations(
             b.program
             + """
-    entity(field,root,temperature).
+    entity(field,root,f1).
+    attribute((field,name),f1,temperature).
     entity(mark,root,1).
     entity(encoding,1,2).
     entity(encoding,1,3).
@@ -1606,7 +1611,7 @@ def test_aggregate_not_all_continuous():
 
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
+    helper((encoding,field),2,temperature).
     attribute((encoding,binning),2,10).
 
     entity(encoding,1,3).
@@ -1819,7 +1824,7 @@ def test_zero_d_n():
 
     entity(encoding,1,3).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,2).
+    helper((encoding,field),3,2).
 
     entity(scale,0,4).
     attribute((scale,channel),4,x).
@@ -1842,11 +1847,11 @@ def test_zero_d_n():
 
     entity(encoding,0,1).
     attribute((encoding,channel),1,x).
-    attribute((encoding,field),1,condition).
+    helper((encoding,field),1,condition).
 
     entity(encoding,0,2).
     attribute((encoding,channel),2,y).
-    attribute((encoding,field),2,temperature).
+    helper((encoding,field),2,temperature).
     attribute((encoding,aggregate),2,mean).
 
     entity(scale,root,3).
@@ -1872,7 +1877,7 @@ def test_zero_d_n():
 
     entity(encoding,1,3).
     attribute((encoding,channel),3,x).
-    attribute((encoding,field),3,2).
+    helper((encoding,field),3,2).
 
     entity(scale,0,4).
     attribute((scale,channel),4,x).
@@ -2171,7 +2176,7 @@ def test_no_stack_with_bar_area_discrete_color():
 
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
-    attribute((encoding,field),4,condition).
+    helper((encoding,field),4,condition).
 
     entity(scale,0,6).
     attribute((scale,channel),6,y).
@@ -2198,7 +2203,7 @@ def test_no_stack_with_bar_area_discrete_color():
 
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
-    attribute((encoding,field),4,condition).
+    helper((encoding,field),4,condition).
 
     entity(scale,0,6).
     attribute((scale,channel),6,y).
@@ -2232,7 +2237,7 @@ def test_stack_without_discrete_color_or_detail():
 
     entity(encoding,1,4).
     attribute((encoding,channel),4,color).
-    attribute((encoding,field),4,condition).
+    helper((encoding,field),4,condition).
 
     entity(scale,0,6).
     attribute((scale,channel),6,y).
@@ -2258,7 +2263,7 @@ def test_stack_without_discrete_color_or_detail():
 
     entity(encoding,1,5).
     attribute((encoding,channel),5,detail).
-    attribute((encoding,field),5,condition).
+    helper((encoding,field),5,condition).
 
     entity(scale,0,7).
     attribute((scale,channel),7,y).
@@ -2281,7 +2286,7 @@ def test_stack_without_discrete_color_or_detail():
 
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
+    helper((encoding,field),2,temperature).
     attribute((encoding,binning),2,10).
 
     entity(encoding,1,3).
@@ -2291,7 +2296,7 @@ def test_stack_without_discrete_color_or_detail():
 
     entity(encoding,1,4).
     attribute((encoding,channel),4,size).
-    attribute((encoding,field),4,condition).
+    helper((encoding,field),4,condition).
     """
         )
         == ["stack_without_discrete_color_or_detail"]
@@ -2459,7 +2464,7 @@ def test_invalid_bin():
         + """
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
+    helper((encoding,field),2,temperature).
     attribute((encoding,binning),2,30).
     """
     )
@@ -2471,7 +2476,7 @@ def test_invalid_bin():
             + """
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
-    attribute((encoding,field),2,temperature).
+    helper((encoding,field),2,temperature).
     attribute((encoding,binning),2,-1).
     """
         )
