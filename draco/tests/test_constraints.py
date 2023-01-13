@@ -13,7 +13,7 @@ def test_domain_valid():
         BASE_PROGRAMS
         + [
             "entity(field,root,0).",
-            "attribute((field,name),1,time)."
+            "attribute((field,name),1,time).",
             "attribute((encoding,field),1,time).",
         ]
     )
@@ -51,6 +51,23 @@ def test_duplicate_attribute():
     assert not is_satisfiable(
         BASE_PROGRAMS
         + ["attribute((mark,type),0,bar).", "attribute((mark,type),0,line)."]
+    )
+
+
+def test_duplicate_field_name():
+    assert is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "attribute((field,name),0,temperature).",
+            "attribute((field,name),1,time).",
+        ]
+    )
+    assert not is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "attribute((field,name),0,temperature).",
+            "attribute((field,name),1,temperature).",
+        ]
     )
 
 
