@@ -91,7 +91,7 @@ helper(discrete_cardinality,M,E,N) :-
 % @helper(facet_cardinality,Fa,N) The cardinality of a facet.
 helper(facet_cardinality,Fa,N) :-
     attribute((field,unique),Fi,N),
-    attribute((facet,field),Fa,Fi),
+    helper((facet,field),Fa,Fi),
     not attribute((facet,binning),Fa,_).
 helper(facet_cardinality,Fa,N) :-
     attribute((facet,binning),Fa,N).
@@ -224,10 +224,15 @@ helper(enc_interesting,E) :-
     helper((encoding,field),E,F),
     attribute((field,interesting),F,true).
 helper(enc_interesting,E) :-
-    attribute((facet,field),E,F), % same field name here
+    helper((facet,field),E,F), % same field name here
     attribute((field,interesting),F,true).
 
 % @helper(encoding_field) The encoding field name matches the id.
-helper((encoding,field),M,F) :-
-    attribute((encoding,field),M,N),
+helper((encoding,field),E,F) :-
+    attribute((encoding,field),E,N),
+    attribute((field,name),F,N).
+
+% @helper(facet_field) The encoding field name matches the id.
+helper((facet,field),FC,F) :-
+    attribute((facet,field),FC,N),
     attribute((field,name),F,N).

@@ -1820,7 +1820,8 @@ def test_horizontal_scrolling_col():
         list_preferences(
             b.program
             + """
-    attribute((field,unique),date,1461).
+    attribute((field,unique),fd,1461).
+    attribute((field,name),fd,date).
 
     entity(facet,v,f).
     attribute((facet,field),f,date).
@@ -1835,7 +1836,8 @@ def test_horizontal_scrolling_col():
         list_preferences(
             b.program
             + """
-    attribute((field,unique),date,1461).
+    attribute((field,unique),fd,1461).
+    attribute((field,name),fd,date).
 
     entity(facet,v,f).
     attribute((facet,field),f,date).
@@ -6502,7 +6504,8 @@ def test_interesting_column():
         list_preferences(
             b.program
             + """
-    attribute((field,interesting),precipitation,true).
+    attribute((field,interesting),fd,true).
+    attribute((field,name),fd,precipitation).
     attribute(task,root,summary).
 
     entity(view,root,v).

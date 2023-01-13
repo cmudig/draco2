@@ -82,6 +82,17 @@ def test_fields():
     )
     assert not is_satisfiable(BASE_PROGRAMS + ["attribute((encoding,field),0,foo)."])
 
+def test_facets():
+    assert is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "entity(field,root,0).",
+            "attribute((field,name),0,foo).",
+            "attribute((facet,field),1,foo).",
+        ]
+    )
+    assert not is_satisfiable(BASE_PROGRAMS + ["attribute((facet,field),0,foo)."])
+
 
 def test_attribute_entity():
     assert is_satisfiable(

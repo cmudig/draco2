@@ -53,5 +53,5 @@ facet_id(0..1).
 :- entity(facet,V,(fc,1)), not entity(facet,V,(fc,0)),facet_id(1), facet_id(0).
 
 required((facet,channel)).
-required((facet,field)).
 not_required((facet,binning)).
+{ attribute((facet,field),E,N): domain((field,name),N) } = 1 :- entity(facet,_,E).

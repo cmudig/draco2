@@ -68,7 +68,7 @@ domain((encoding,stack),(zero;center;normalize)).
 domain((scale,zero),true).
 
 % @definition(facets) Definition for facets.
-domain((facet,field),F) :- entity(field,_,F).
+domain((facet,field),F) :- attribute((field,name),_,F).
 domain((facet,channel),(row;col)).
 domain((facet,binning),N) :- domain(binCount,N).
 
