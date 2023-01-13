@@ -82,6 +82,7 @@ def test_fields():
     )
     assert not is_satisfiable(BASE_PROGRAMS + ["attribute((encoding,field),0,foo)."])
 
+
 def test_facets():
     assert is_satisfiable(
         BASE_PROGRAMS
