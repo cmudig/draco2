@@ -13,6 +13,12 @@ The number of rows in the dataset.
 DatasetNumberRows = pydantic_types.PositiveInt
 
 """
+ID set for a field to be used as the ``entity_id``
+when being processed as an ASP entity.
+"""
+FieldId = str
+
+"""
 The name of a data field.
 Described as `(field,name)`
 """
@@ -269,6 +275,7 @@ class Field(SchemaBase):
     `Read More <https://dig.cmu.edu/draco2/facts/schema.html#field-properties>`_.
     """
 
+    id: FieldId | None = pydantic_fields.Field(default=None, alias="__id__")
     name: FieldName
     type: FieldType
     unique: FieldUnique | None = None
