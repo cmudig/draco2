@@ -1,4 +1,5 @@
 import logging
+import warnings
 from dataclasses import dataclass
 from typing import Generic, Literal, TypeVar
 
@@ -19,7 +20,6 @@ from .types import (
 )
 
 logger = logging.getLogger(__name__)
-
 
 """
 Generic parameter for the type of the produced visualization object.
@@ -151,14 +151,17 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         """
         views = ctx.chart_views
         chart = views[0]
-        if len(views) > 1 and self.concat_mode is not None:
-            chart = getattr(alt, self.concat_mode)(*views)
-        else:
-            logger.log(
-                level=logging.WARNING,
-                msg="No concatenation performed on multiple views. "
-                "Returning the first view.",
-            )
+        is_multi_view = len(views) > 1
+
+        # TODO: move this logic to the ASP layer by introducing constraints
+        if is_multi_view:
+            if self.concat_mode is not None:
+                chart = getattr(alt, self.concat_mode)(*views)
+            else:
+                warnings.warn(
+                    message="No concatenation performed on multiple views. "
+                    "Returning the first view."
+                )
 
         if ctx.spec.scale is not None:
             channels = [s.channel for s in ctx.spec.scale]
