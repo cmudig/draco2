@@ -27,6 +27,7 @@ parts:
       - file: applications/draco_learn
       - file: applications/debug_draco
       - file: applications/server
+      - file: applications/renderer
   - caption: Guide
     chapters:
       - file: guide
