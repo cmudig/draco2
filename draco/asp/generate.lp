@@ -36,8 +36,8 @@ root_required(task).
 % @generator(encoding_attribute) Encoding with binning, aggregate, field or stack.
 not_required((encoding,binning)).
 not_required((encoding,aggregate)).
-not_required((encoding,field)).
 not_required((encoding,stack)).
+0 { attribute((encoding,field),E,N): domain((field,name),N) } 1 :- entity(encoding,_,E).
 
 % generator(scale) generate scales such that their ids and channels corresponde to the encodings in each view.
 { entity(scale,V,(s,E)) } :- entity(mark,V,M), entity(encoding,M,E), attribute((encoding,channel),E,C).
@@ -53,5 +53,5 @@ facet_id(0..1).
 :- entity(facet,V,(fc,1)), not entity(facet,V,(fc,0)),facet_id(1), facet_id(0).
 
 required((facet,channel)).
-required((facet,field)).
 not_required((facet,binning)).
+{ attribute((facet,field),E,N): domain((field,name),N) } = 1 :- entity(facet,_,E).

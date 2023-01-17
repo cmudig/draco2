@@ -12,9 +12,9 @@ entity(view,root,v0).
 
 entity(mark,v0,m).
 entity(encoding,m,e0).
-attribute((encoding,field),e0,f0).
+attribute((encoding,field),e0,temperature).
 entity(encoding,m,e1).
-attribute((encoding,field),e1,f1).
+attribute((encoding,field),e1,precipitation).
 
 #show entity/3.
 #show attribute/3.

@@ -11,7 +11,7 @@ attribute((mark,type),(m,0),bar).
 
 entity(encoding,(m,0),(e,0)).
 attribute((encoding,channel),(e,0),x).
-attribute((encoding,field),(e,0),(f,0)).
+attribute((encoding,field),(e,0),temperature).
 attribute((encoding,binning),(e,0),10).
 
 entity(encoding,(m,0),(e,1)).

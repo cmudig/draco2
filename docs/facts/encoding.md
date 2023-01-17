@@ -7,7 +7,9 @@ Encodings define how [data fields](schema.md) map to visual properties (channel)
 `(encoding,channel)` : The visual channel. One of `x`, `y`, `color`, `size`, `shape`, or `text`. Same as the
 [scale channel](scale.md).
 
-`(encoding,field)` : The field that maps to the visual property of the mark.
+`(encoding,field)` : The field that maps to the visual property of the mark. Note that the field should refers to field
+`name` rather than the field `entity` id. Although we specify the name and the id in the same way in the following
+examples, they can be different.
 
 `(encoding,aggregate)` : How the data is aggregated. One of `count`, `mean`, `median`, `min`, `max`, `stdev`, or `sum`.
 

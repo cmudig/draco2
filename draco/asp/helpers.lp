@@ -42,7 +42,7 @@ helper((encoding,scale_type),E,T) :-
 helper(mark_channel_field,M,C,F) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),
-    attribute((encoding,field),E,F).
+    helper((encoding,field),E,F).
 
 % @helper(mark_channel_discrete_or_binned) Whether a mark has a discrete scale or binned encoding for a channel.
 helper(mark_channel_discrete_or_binned,M,C) :-
@@ -78,7 +78,7 @@ helper(mark_channel_cont,M,C) :-
 % @helper(encoding_cardinality) The cardinality of an encoding.
 helper(encoding_cardinality,E,N) :-
     attribute((field,unique),F,N),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     not attribute((encoding,binning),E,_).
 helper(encoding_cardinality,E,N) :-
     attribute((encoding,binning),E,N).
@@ -91,7 +91,7 @@ helper(discrete_cardinality,M,E,N) :-
 % @helper(facet_cardinality,Fa,N) The cardinality of a facet.
 helper(facet_cardinality,Fa,N) :-
     attribute((field,unique),Fi,N),
-    attribute((facet,field),Fa,Fi),
+    helper((facet,field),Fa,Fi),
     not attribute((facet,binning),Fa,_).
 helper(facet_cardinality,Fa,N) :-
     attribute((facet,binning),Fa,N).
@@ -221,8 +221,18 @@ helper(y_cardinality,M,1) :-
 
 % @helper(enc_interesting) The field relevant to the task is mapped to the encoding E.
 helper(enc_interesting,E) :-
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((field,interesting),F,true).
 helper(enc_interesting,E) :-
-    attribute((facet,field),E,F),
+    helper((facet,field),E,F), % same field name here
     attribute((field,interesting),F,true).
+
+% @helper(encoding_field) The encoding field name matches the id.
+helper((encoding,field),E,F) :-
+    attribute((encoding,field),E,N),
+    attribute((field,name),F,N).
+
+% @helper(facet_field) The encoding field name matches the id.
+helper((facet,field),FC,F) :-
+    attribute((facet,field),FC,N),
+    attribute((field,name),F,N).

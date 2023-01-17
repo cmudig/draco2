@@ -3,14 +3,14 @@
 % @hard(scale_type_data_type) Primitive type has to support scale type.
 violation(scale_type_data_type) :-
     attribute((field,type),F,(string;boolean)),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     helper((encoding,scale_type),E,T),
     domain(continuous_scale,T).
 
 % @hard(log_non_positive) Cannot use log if the data is negative or zero.
 violation(log_non_positive) :-
     attribute((field,min),F,MIN),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     helper((encoding,scale_type),E,log),
     MIN <= 0.
 
@@ -22,7 +22,7 @@ violation(bin_and_aggregate) :-
 % @hard(aggregate_t_valid) Temporal scale only supports min and max.
 violation(aggregate_t_valid) :-
     attribute((field,type),F,datetime),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((encoding,aggregate),E,A),
     A != min,
     A != max.
@@ -30,14 +30,14 @@ violation(aggregate_t_valid) :-
 % @hard(aggregate_num_valid) Only numbers can be aggregated with mean, sum, stdev
 violation(aggregate_num_valid) :-
     attribute((field,type),F,T),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((encoding,aggregate),E,(mean;sum;stdev)),
     T != number.
 
 % @hard(bin_n_d) Only numbers and datetimes can be binned
 violation(bin_n_d) :-
     attribute((field,type),F,T),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((encoding,binning),E,_),
     T != number,
     T != datetime.
@@ -66,7 +66,7 @@ violation(categorical_not_color) :-
 % @hard(size_negative) Do not use size when data is negative as size implies that data is positive.
 violation(size_negative) :-
     attribute((encoding,channel),E,size),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((field,min),F,MIN),
     attribute((field,max),F,MAX),
     MIN < 0,
@@ -115,7 +115,7 @@ violation(encoding_no_field_and_not_count) :-
 % @hard(count_with_field) Count should not have a field. Having a field doesn't make a difference.
 violation(count_with_field) :-
     attribute((encoding,aggregate),E,count),
-    attribute((encoding,field),E,_).
+    helper((encoding,field),E,_).
 
 % @hard(text_mark_without_text_channel) Text mark requires text encoding.
 violation(text_mark_without_text_channel) :-
@@ -229,7 +229,7 @@ violation(zero_d_n) :-
     attribute((encoding,channel),E,C),
     attribute((scale,zero),S,_),
     attribute((scale,channel),S,C),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((field,type),F,T),
     T != datetime,
     T != number.

@@ -7,7 +7,8 @@ often called a small multiples chart.
 
 `(facet,channel)` : The facet channel. Can be one of `col` and `row`.
 
-`(facet,field)` : The facet field.
+`(facet,field)` : The facet field. Note that the field should refers to field `name` rather than the field `entity` id.
+Although we specify the name and the id in the same way in the following examples, they can be different.
 
 `(facet,binning)` : Binning a numeric field for faceting.
 
