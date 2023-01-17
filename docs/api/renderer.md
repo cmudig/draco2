@@ -2,7 +2,7 @@
 
 # Renderer
 
-The renderer was designed with extensibility in mind and allows for the creation of custom renderers for different
+The renderer was designed with extensibility in mind and allows you to create custom renderers for different
 specification formats. The renderer module exposes a [BaseRenderer](#baserenderer) abstract class to provide the clients
 with a common interface. The [AltairRenderer](#altairrenderer) class is a concrete implementation of the
 [BaseRenderer](#baserenderer). In order to constraint the input handled by [AltairRenderer](#altairrenderer), strict
