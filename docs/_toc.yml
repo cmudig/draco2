@@ -21,6 +21,7 @@ parts:
       - file: api/facts
       - file: api/programs
       - file: api/server
+      - file: api/renderer
   - caption: Applications
     chapters:
       - file: applications/recommendation
