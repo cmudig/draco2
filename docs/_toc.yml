@@ -21,12 +21,14 @@ parts:
       - file: api/facts
       - file: api/programs
       - file: api/server
+      - file: api/renderer
   - caption: Applications
     chapters:
       - file: applications/recommendation
       - file: applications/draco_learn
       - file: applications/debug_draco
       - file: applications/server
+      - file: applications/renderer
   - caption: Guide
     chapters:
       - file: guide
