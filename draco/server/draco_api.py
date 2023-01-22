@@ -41,10 +41,10 @@ class DracoAPI:
         and :code:`UtilityRouter` and configure them to use custom prefix and tags:
 
         .. code-block:: python
+
         >>> from draco import Draco
         >>> from draco.server.routers import DracoRouter, UtilityRouter
         >>> from draco.server import DracoAPI
-
         >>> draco = Draco()
         >>> draco_router = DracoRouter(draco,
         >>>                            prefix='/my-draco',

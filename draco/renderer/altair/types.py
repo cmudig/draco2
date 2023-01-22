@@ -167,7 +167,7 @@ class Encoding(SchemaBase):
     Encoding schema.
     Encodings define how data fields map to visual properties (channel) of the mark.
 
-    `Read More <https://dig.cmu.edu/draco2/facts/encoding.html>`_.
+    `Read More <https://dig.cmu.edu/draco2/facts/encoding.html>`__.
     """
 
     channel: EncodingChannel
@@ -188,7 +188,7 @@ class Mark(SchemaBase):
     Mark schema.
     A mark represents the graphical mark of the visualization.
 
-    `Read More <https://dig.cmu.edu/draco2/facts/mark.html>`_.
+    `Read More <https://dig.cmu.edu/draco2/facts/mark.html>`__.
     """
 
     type: MarkType
@@ -201,7 +201,7 @@ class Scale(SchemaBase):
     Scales map abstract values such as time or temperature to
     a visual value such as x- or y-position or color.
 
-    `Read More <https://dig.cmu.edu/draco2/facts/scale.html>`_.
+    `Read More <https://dig.cmu.edu/draco2/facts/scale.html>`__.
     """
 
     channel: ScaleChannel
@@ -216,7 +216,7 @@ class Facet(SchemaBase):
     and create a view for each field.
     The resulting chart is often called a small multiples chart.
 
-    `Read More <https://dig.cmu.edu/draco2/facts/facet.html>`_.
+    `Read More <https://dig.cmu.edu/draco2/facts/facet.html>`__.
     """
 
     channel: FacetChannel
@@ -229,7 +229,7 @@ class View(SchemaBase):
     View schema.
     A view can group marks and scales together.
 
-    `Read More <https://dig.cmu.edu/draco2/facts/view.html>`_.
+    `Read More <https://dig.cmu.edu/draco2/facts/view.html>`__.
     """
 
     coordinates: ViewCoordinate = pydantic_fields.Field(default="cartesian")
@@ -272,7 +272,7 @@ class Field(SchemaBase):
     Represents a column in the dataset.
     Draco can use information about the field type and field statistics.
 
-    `Read More <https://dig.cmu.edu/draco2/facts/schema.html#field-properties>`_.
+    `Read More <https://dig.cmu.edu/draco2/facts/schema.html#field-properties>`__.
     """
 
     id: FieldId | None = pydantic_fields.Field(default=None, alias="__id__")
