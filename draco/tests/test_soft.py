@@ -260,8 +260,8 @@ def test_same_field():
     entity(encoding,m,e1).
     entity(encoding,m,e2).
 
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,date).
+    helper((encoding,field),e1,temperature).
+    helper((encoding,field),e2,date).
     """
         )
         == []
@@ -277,8 +277,8 @@ def test_same_field():
     entity(encoding,m,e1).
     entity(encoding,m,e2).
 
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,temperature).
+    helper((encoding,field),e1,temperature).
+    helper((encoding,field),e2,temperature).
     """
         )
         == [("same_field", "temperature")]
@@ -297,10 +297,10 @@ def test_same_field():
     entity(encoding,m,e3).
     entity(encoding,m,e4).
 
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,temperature).
-    attribute((encoding,field),e3,date).
-    attribute((encoding,field),e4,date).
+    helper((encoding,field),e1,temperature).
+    helper((encoding,field),e2,temperature).
+    helper((encoding,field),e3,date).
+    helper((encoding,field),e4,date).
     """
         )
         == [("same_field", "date"), ("same_field", "temperature")]
@@ -322,10 +322,10 @@ def test_same_field():
     entity(encoding,m2,e3).
     entity(encoding,m1,e4).
 
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,temperature).
-    attribute((encoding,field),e3,date).
-    attribute((encoding,field),e4,date).
+    helper((encoding,field),e1,temperature).
+    helper((encoding,field),e2,temperature).
+    helper((encoding,field),e3,date).
+    helper((encoding,field),e4,date).
     """
         )
         == [("same_field", "temperature")]
@@ -347,8 +347,8 @@ def test_same_field_grt3():
     entity(encoding,m,e1).
     entity(encoding,m,e2).
 
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,date).
+    helper((encoding,field),e1,temperature).
+    helper((encoding,field),e2,date).
     """
         )
         == []
@@ -364,8 +364,8 @@ def test_same_field_grt3():
     entity(encoding,m,e1).
     entity(encoding,m,e2).
 
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,temperature).
+    helper((encoding,field),e1,temperature).
+    helper((encoding,field),e2,temperature).
     """
         )
         == []
@@ -386,9 +386,9 @@ def test_same_field_grt3():
     entity(encoding,m2,e3).
 
 
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,temperature).
-    attribute((encoding,field),e3,temperature).
+    helper((encoding,field),e1,temperature).
+    helper((encoding,field),e2,temperature).
+    helper((encoding,field),e3,temperature).
     """
         )
         == []
@@ -406,9 +406,9 @@ def test_same_field_grt3():
     entity(encoding,m,e2).
     entity(encoding,m,e3).
 
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,temperature).
-    attribute((encoding,field),e3,temperature).
+    helper((encoding,field),e1,temperature).
+    helper((encoding,field),e2,temperature).
+    helper((encoding,field),e3,temperature).
     """
         )
         == [("same_field_grt3", "temperature")]
@@ -428,10 +428,10 @@ def test_same_field_grt3():
     entity(encoding,m,e3).
     entity(encoding,m,e4).
 
-    attribute((encoding,field),e1,temperature).
-    attribute((encoding,field),e2,temperature).
-    attribute((encoding,field),e3,temperature).
-    attribute((encoding,field),e4,temperature).
+    helper((encoding,field),e1,temperature).
+    helper((encoding,field),e2,temperature).
+    helper((encoding,field),e3,temperature).
+    helper((encoding,field),e4,temperature).
     """
         )
         == [("same_field_grt3", "temperature")]
@@ -518,7 +518,7 @@ def test_number_categorical():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v,s1).
@@ -539,7 +539,7 @@ def test_number_categorical():
     entity(view,root,v).
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
 
     entity(scale,root,s1).
@@ -559,7 +559,7 @@ def test_number_categorical():
 
     entity(mark,v1,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v1,s1).
@@ -579,11 +579,11 @@ def test_number_categorical():
 
     entity(mark,v1,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
 
     entity(encoding,m1,e2).
-    attribute((encoding,field),e2,temperature).
+    helper((encoding,field),e2,temperature).
     attribute((encoding,channel),e2,color).
 
     entity(scale,v1,s1).
@@ -610,7 +610,7 @@ def test_bin_low_unique():
             + """
     attribute((field,type),temperature,number).
     attribute((field,unique),temperature,50).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,binning),e1,20).
     """
         )
@@ -624,7 +624,7 @@ def test_bin_low_unique():
             + """
     attribute((field,type),date,datetime).
     attribute((field,unique),date,10).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,binning),e1,5).
     """
         )
@@ -1381,7 +1381,7 @@ def test_skew_zero():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e,temperature).
+    helper((encoding,field),e,temperature).
     attribute((encoding,channel),e1,y).
 
     entity(scale,v,s).
@@ -1402,7 +1402,7 @@ def test_skew_zero():
 
     entity(mark,v,m).
     entity(encoding,m,e).
-    attribute((encoding,field),e,temperature).
+    helper((encoding,field),e,temperature).
     attribute((encoding,channel),e,y).
 
     entity(scale,v,s).
@@ -1423,7 +1423,7 @@ def test_skew_zero():
 
     entity(mark,v,m).
     entity(encoding,m,e).
-    attribute((encoding,field),e,temperature).
+    helper((encoding,field),e,temperature).
     attribute((encoding,channel),e,y).
 
     entity(scale,v,s).
@@ -1448,7 +1448,7 @@ def test_cross_zero():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e,temperature).
+    helper((encoding,field),e,temperature).
     attribute((encoding,channel),e1,y).
 
     entity(scale,v,s).
@@ -1468,7 +1468,7 @@ def test_cross_zero():
 
     entity(mark,v,m).
     entity(encoding,m,e).
-    attribute((encoding,field),e,temperature).
+    helper((encoding,field),e,temperature).
     attribute((encoding,channel),e,y).
 
     entity(scale,v,s).
@@ -1540,7 +1540,7 @@ def test_binned_orientation_not_x():
             b.program
             + """
     attribute((field,type),temperature,number).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,binning),e1,20).
     attribute((encoding,channel),e1,x).
     """
@@ -1554,7 +1554,7 @@ def test_binned_orientation_not_x():
             b.program
             + """
     attribute((field,type),date,datetime).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,binning),e1,20).
     attribute((encoding,channel),e1,y).
     """
@@ -1576,7 +1576,7 @@ def test_high_cardinality_ordinal():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binning),e1,20).
 
@@ -1597,7 +1597,7 @@ def test_high_cardinality_ordinal():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v,s1).
@@ -1621,7 +1621,7 @@ def test_high_cardinality_categorical_grt10():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,weather).
+    helper((encoding,field),e1,weather).
     attribute((encoding,channel),e1,color).
 
     entity(scale,v,s1).
@@ -1640,7 +1640,7 @@ def test_high_cardinality_categorical_grt10():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,weather).
+    helper((encoding,field),e1,weather).
     attribute((encoding,channel),e1,color).
 
     entity(scale,v,s1).
@@ -1661,7 +1661,7 @@ def test_high_cardinality_shape():
             b.program
             + """
     attribute((field,unique),date,25).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,shape).
     attribute((encoding,binning),e1,5).
     """
@@ -1674,7 +1674,7 @@ def test_high_cardinality_shape():
             b.program
             + """
     attribute((field,unique),weather,15).
-    attribute((encoding,field),e1,weather).
+    helper((encoding,field),e1,weather).
     attribute((encoding,channel),e1,shape).
     """
         )
@@ -1695,7 +1695,7 @@ def test_high_cardinality_size():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,binning),e1,20).
     attribute((encoding,channel),e1,x).
 
@@ -1715,7 +1715,7 @@ def test_high_cardinality_size():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,weather).
+    helper((encoding,field),e1,weather).
     attribute((encoding,channel),e1,x).
 
     entity(encoding,m,e2).
@@ -1738,7 +1738,7 @@ def test_high_cardinality_size():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,y).
 
     entity(encoding,m,e2).
@@ -1765,7 +1765,7 @@ def test_horizontal_scrolling_x():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binning),e1,20).
     """
@@ -1781,7 +1781,7 @@ def test_horizontal_scrolling_x():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v,s1).
@@ -1800,7 +1800,7 @@ def test_horizontal_scrolling_x():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v,s1).
@@ -1820,7 +1820,8 @@ def test_horizontal_scrolling_col():
         list_preferences(
             b.program
             + """
-    attribute((field,unique),date,1461).
+    attribute((field,unique),fd,1461).
+    attribute((field,name),fd,date).
 
     entity(facet,v,f).
     attribute((facet,field),f,date).
@@ -1835,7 +1836,8 @@ def test_horizontal_scrolling_col():
         list_preferences(
             b.program
             + """
-    attribute((field,unique),date,1461).
+    attribute((field,unique),fd,1461).
+    attribute((field,name),fd,date).
 
     entity(facet,v,f).
     attribute((facet,field),f,date).
@@ -1859,7 +1861,7 @@ def test_date_scale():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v,s1).
@@ -1880,7 +1882,7 @@ def test_date_scale():
     entity(view,root,v).
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
 
     entity(scale,root,s1).
@@ -1900,7 +1902,7 @@ def test_date_scale():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v,s1).
@@ -1921,7 +1923,7 @@ def test_date_scale():
     entity(view,root,v).
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,color).
 
     entity(scale,root,s1).
@@ -1947,7 +1949,7 @@ def test_number_linear():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v,s1).
@@ -1969,7 +1971,7 @@ def test_number_linear():
     entity(view,root,v).
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binning),e1,20).
 
@@ -1991,7 +1993,7 @@ def test_number_linear():
 
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
 
     entity(scale,v,s1).
@@ -2013,7 +2015,7 @@ def test_number_linear():
     entity(view,root,v).
     entity(mark,v,m).
     entity(encoding,m,e1).
-    attribute((encoding,field),e1,temperature).
+    helper((encoding,field),e1,temperature).
     attribute((encoding,channel),e1,x).
 
     entity(scale,root,s1).
@@ -2219,7 +2221,7 @@ def test_date_not_x():
     attribute((field,type),date,datetime).
 
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,x).
     """
         )
@@ -2233,7 +2235,7 @@ def test_date_not_x():
     attribute((field,type),date,datetime).
 
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,date).
+    helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,y).
     """
         )
@@ -2467,7 +2469,7 @@ def test_color_entropy_high():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,v,s1).
@@ -2489,7 +2491,7 @@ def test_color_entropy_high():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,root,s1).
@@ -2515,7 +2517,7 @@ def test_color_entropy_low():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,v,s1).
@@ -2537,7 +2539,7 @@ def test_color_entropy_low():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,root,s1).
@@ -2563,7 +2565,7 @@ def test_size_entropy_high():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,v,s1).
@@ -2585,7 +2587,7 @@ def test_size_entropy_high():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,root,s1).
@@ -2611,7 +2613,7 @@ def test_size_entropy_low():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,v,s1).
@@ -2633,7 +2635,7 @@ def test_size_entropy_low():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,root,s1).
@@ -3132,7 +3134,7 @@ def test_c_d_overlap_point():
 
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,field),e1,wind).
+    helper((encoding,field),e1,wind).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
@@ -3178,7 +3180,7 @@ def test_c_d_overlap_point():
 
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,field),e1,wind).
+    helper((encoding,field),e1,wind).
 
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
@@ -3428,7 +3430,7 @@ def test_c_d_overlap_tick():
 
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
-    attribute((encoding,field),e1,wind).
+    helper((encoding,field),e1,wind).
 
     entity(scale,root,s1).
     attribute((scale,channel),s1,y).
@@ -3485,7 +3487,7 @@ def test_c_d_no_overlap_point():
 
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,field),e1,wind).
+    helper((encoding,field),e1,wind).
 
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
@@ -3511,7 +3513,7 @@ def test_c_d_no_overlap_point():
 
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,field),e1,wind).
+    helper((encoding,field),e1,wind).
 
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
@@ -3770,7 +3772,7 @@ def test_d_d_overlap():
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binning),e1,10).
-    attribute((encoding,field),e1,wind).
+    helper((encoding,field),e1,wind).
     """
         )
         == [("d_d_overlap", "m1")]
@@ -5384,7 +5386,7 @@ def test_value_continuous_x():
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binning),e1,10).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     """
         )
         == []
@@ -5401,7 +5403,7 @@ def test_value_continuous_x():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
@@ -5426,7 +5428,7 @@ def test_value_continuous_y():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,y).
     attribute((encoding,binning),e1,10).
     """
@@ -5445,7 +5447,7 @@ def test_value_continuous_y():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,y).
@@ -5472,7 +5474,7 @@ def test_value_continuous_color():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
 
     entity(scale,root,s1).
     attribute((scale,channel),s1,color).
@@ -5493,7 +5495,7 @@ def test_value_continuous_color():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,color).
@@ -5519,7 +5521,7 @@ def test_value_continuous_size():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,10).
     """
         )
@@ -5536,7 +5538,7 @@ def test_value_continuous_size():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,v,s1).
@@ -5562,7 +5564,7 @@ def test_value_continuous_text():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
     """
         )
@@ -5579,7 +5581,7 @@ def test_value_continuous_text():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
 
     entity(scale,v,s1).
@@ -5605,7 +5607,7 @@ def test_value_discrete_x():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,x).
     """
         )
@@ -5623,7 +5625,7 @@ def test_value_discrete_x():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
         )
@@ -5645,7 +5647,7 @@ def test_value_discrete_y():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,y).
     """
         )
@@ -5663,7 +5665,7 @@ def test_value_discrete_y():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
         )
@@ -5685,7 +5687,7 @@ def test_value_discrete_color():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,v,s1).
@@ -5707,7 +5709,7 @@ def test_value_discrete_color():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,root,s1).
@@ -5733,7 +5735,7 @@ def test_value_discrete_size():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,v,s1).
@@ -5756,7 +5758,7 @@ def test_value_discrete_size():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
 
     entity(scale,root,s1).
     attribute((scale,channel),s1,size).
@@ -5781,7 +5783,7 @@ def test_value_discrete_shape():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,shape).
 
     entity(scale,v,s1).
@@ -5803,7 +5805,7 @@ def test_value_discrete_shape():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,shape).
 
     entity(scale,root,s1).
@@ -5829,7 +5831,7 @@ def test_value_discrete_text():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
     """
         )
@@ -5847,7 +5849,7 @@ def test_value_discrete_text():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,text).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,10).
     """
         )
@@ -5870,7 +5872,7 @@ def test_value_discrete_detail():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,detail).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,detail).
@@ -5890,7 +5892,7 @@ def test_value_discrete_detail():
 
     entity(view,root,v).
     entity(mark,v,m1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,detail).
 
@@ -5918,7 +5920,7 @@ def test_summary_continuous_x():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,10).
     """
         )
@@ -5936,7 +5938,7 @@ def test_summary_continuous_x():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,x).
@@ -5961,7 +5963,7 @@ def test_summary_continuous_y():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,y).
     attribute((encoding,binning),e1,10).
     """
@@ -5979,7 +5981,7 @@ def test_summary_continuous_y():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,y).
 
     entity(scale,v,s1).
@@ -6007,7 +6009,7 @@ def test_summary_continuous_color():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
 
     entity(scale,root,s1).
     attribute((scale,channel),s1,color).
@@ -6026,7 +6028,7 @@ def test_summary_continuous_color():
     attribute(task,root,summary).
 
     entity(mark,v,m1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
 
@@ -6053,7 +6055,7 @@ def test_summary_continuous_size():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
     attribute((encoding,binning),e1,10).
     """
@@ -6071,7 +6073,7 @@ def test_summary_continuous_size():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,v,s1).
@@ -6097,7 +6099,7 @@ def test_summary_continuous_text():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
     """
         )
@@ -6114,7 +6116,7 @@ def test_summary_continuous_text():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
 
     entity(scale,v,s1).
@@ -6140,7 +6142,7 @@ def test_summary_discrete_x():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,x).
     """
         )
@@ -6158,7 +6160,7 @@ def test_summary_discrete_x():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
         )
@@ -6180,7 +6182,7 @@ def test_summary_discrete_y():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,y).
     """
         )
@@ -6198,7 +6200,7 @@ def test_summary_discrete_y():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
         )
@@ -6220,7 +6222,7 @@ def test_summary_discrete_color():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,v,s1).
@@ -6242,7 +6244,7 @@ def test_summary_discrete_color():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,color).
 
     entity(scale,root,s1).
@@ -6269,7 +6271,7 @@ def test_summary_discrete_size():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
 
     entity(scale,v,s1).
     attribute((scale,channel),s1,size).
@@ -6290,7 +6292,7 @@ def test_summary_discrete_size():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,size).
 
     entity(scale,root,s1).
@@ -6316,7 +6318,7 @@ def test_summary_discrete_shape():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,shape).
 
     entity(scale,v,s1).
@@ -6338,7 +6340,7 @@ def test_summary_discrete_shape():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,shape).
 
     entity(scale,root,s1).
@@ -6364,7 +6366,7 @@ def test_summary_discrete_text():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,text).
     """
         )
@@ -6382,7 +6384,7 @@ def test_summary_discrete_text():
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,text).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,10).
     """
         )
@@ -6404,7 +6406,7 @@ def test_summary_discrete_detail():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,detail).
 
     entity(scale,v,s1).
@@ -6426,7 +6428,7 @@ def test_summary_discrete_detail():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,detail).
 
     entity(scale,root,s1).
@@ -6451,7 +6453,7 @@ def test_interesting_x():
 
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,x).
     """
         )
@@ -6469,7 +6471,7 @@ def test_interesting_x():
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
-    attribute((encoding,field),e1,precipitation).
+    helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,x).
     """
         )
@@ -6502,7 +6504,8 @@ def test_interesting_column():
         list_preferences(
             b.program
             + """
-    attribute((field,interesting),precipitation,true).
+    attribute((field,interesting),fd,true).
+    attribute((field,name),fd,precipitation).
     attribute(task,root,summary).
 
     entity(view,root,v).

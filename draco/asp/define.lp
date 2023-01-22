@@ -12,8 +12,8 @@ domain((field,type),(string;number;boolean;datetime)).
 % @definition(field_names) Names of the data.
 domain((field,name),F) :- attribute((field,name),_,F).
 
-% @definition(field_ids)
-domain((encoding,field),F) :- entity(field,_,F).
+% @definition(encoding_fields) Encoding fields are defined by field names.
+domain((encoding,field),N) :- attribute((field,name),_,N).
 
 % @definition(aggregate) Aggregation functions.
 domain((encoding,aggregate),(count;mean;median;min;max;stdev;sum)).
@@ -68,7 +68,7 @@ domain((encoding,stack),(zero;center;normalize)).
 domain((scale,zero),true).
 
 % @definition(facets) Definition for facets.
-domain((facet,field),F) :- entity(field,_,F).
+domain((facet,field),F) :- attribute((field,name),_,F).
 domain((facet,channel),(row;col)).
 domain((facet,binning),N) :- domain(binCount,N).
 

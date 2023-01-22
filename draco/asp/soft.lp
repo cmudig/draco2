@@ -28,13 +28,13 @@ preference(encoding_field,E) :-
 preference(same_field,F) :-
     entity(field,_,F),
     entity(mark,_,M),
-    { entity(encoding,M,E): attribute((encoding,field),E,F) } = 2.
+    { entity(encoding,M,E): helper((encoding,field),E,F) } = 2.
 
 % @soft(same_field_grt3) Prefer not to use the same field three or more times for the same mark.
 preference(same_field_grt3,F) :-
     entity(field,_,F),
     entity(mark,_,M),
-    { entity(encoding,M,E): attribute((encoding,field),E,F) } >= 3.
+    { entity(encoding,M,E): helper((encoding,field),E,F) } >= 3.
 
 % @soft(count_grt1) Prefer not to use count more than once.
 preference(count_grt1,M) :-
@@ -44,14 +44,14 @@ preference(count_grt1,M) :-
 % @soft(number_categorical) Should not use categorical scale for number field.
 preference(number_categorical,E) :-
     attribute((field,type),F,number),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     helper((encoding,scale_type),E,categorical).
 
 % @soft(bin_low_unique) Binned field should not have too less unique values.
 preference(bin_low_unique,E) :-
     attribute((field,type),F,(number;datetime)),
     attribute((field,unique),F,U),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((encoding,binning),E,_),
     U < 15.
 
@@ -125,7 +125,7 @@ preference(skew_zero,E) :-
     |MAX| > EXT,
     |MIN| > EXT,
     entity(encoding,M,E),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     helper(mark_encoding_scale,M,E,S),
     attribute((scale,zero),S,true).
 
@@ -136,7 +136,7 @@ preference(cross_zero,E) :-
     MAX > 0,
     MIN < 0,
     entity(encoding,M,E),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     helper(mark_encoding_scale,M,E,S),
     attribute((scale,zero),S,true).
 
@@ -148,7 +148,7 @@ preference(only_y,M) :-
 % @soft(binned_orientation_not_x) Prefer binned quantative on x axis.
 preference(binned_orientation_not_x,E) :-
     attribute((field,type),F,(number;datetime)),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((encoding,binning),E,_),
     not attribute((encoding,channel),E,x).
 
@@ -195,7 +195,7 @@ preference(horizontal_scrolling_col,F) :-
 % @soft(date_scale) Prefer to use linear/ordinal scale type with dates.
 preference(date_scale,E) :-
     attribute((field,type),F,datetime),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     not helper((encoding,scale_type),E,linear),
     not helper((encoding,scale_type),E,ordinal).
 
@@ -204,7 +204,7 @@ preference(number_linear,E) :-
     attribute((field,type),F,number),
     attribute((field,unique),F,N),
     N > 20,
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     not attribute((encoding,binning),E,_),
     not helper((encoding,scale_type),E,linear).
 
@@ -214,7 +214,7 @@ preference(position_entropy,E) :-
     attribute(encoding_cardinality,E,N),
     N > 100,
     attribute((field,entropy),F,EN),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     EN <= 3000,
     not helper(mark_encoding_discrete_or_binned,_,E),
     not attribute((encoding,aggregate),E,_).
@@ -242,7 +242,7 @@ preference(c_d_col,V) :-
 % @soft(date_not_x) Prefer datetime on x.
 preference(date_not_x,E) :-
     attribute((field,type),F,datetime),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     not attribute((encoding,channel),E,x).
 
 % @soft(x_row) Positional interactions as suggested by Kim et al.
@@ -276,7 +276,7 @@ preference(y_col,V) :-
 % @soft(color_entropy_high) Entropy, primary quantive interactions as suggested by Kim et al.
 preference(color_entropy_high,E) :-
     attribute((field,entropy),F,EN),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((encoding,channel),E,color),
     helper((encoding,scale_type),E,linear),
     helper(enc_interesting,E),
@@ -285,7 +285,7 @@ preference(color_entropy_high,E) :-
 % @soft(color_entropy_low) Entropy, primary quantive interactions as suggested by Kim et al.
 preference(color_entropy_low,E) :-
     attribute((field,entropy),F,EN),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((encoding,channel),E,color),
     helper((encoding,scale_type),E,linear),
     helper(enc_interesting,E),
@@ -294,7 +294,7 @@ preference(color_entropy_low,E) :-
 % @soft(size_entropy_high) Entropy, primary quantive interactions as suggested by Kim et al.
 preference(size_entropy_high,E) :-
     attribute((field,entropy),F,EN),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((encoding,channel),E,size),
     helper((encoding,scale_type),E,linear),
     helper(enc_interesting,E),
@@ -303,7 +303,7 @@ preference(size_entropy_high,E) :-
 % @soft(size_entropy_low) Entropy, primary quantive interactions as suggested by Kim et al.
 preference(size_entropy_low,E) :-
     attribute((field,entropy),F,EN),
-    attribute((encoding,field),E,F),
+    helper((encoding,field),E,F),
     attribute((encoding,channel),E,size),
     helper((encoding,scale_type),E,linear),
     helper(enc_interesting,E),

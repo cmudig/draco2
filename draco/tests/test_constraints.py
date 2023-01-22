@@ -13,7 +13,8 @@ def test_domain_valid():
         BASE_PROGRAMS
         + [
             "entity(field,root,0).",
-            "attribute((encoding,field),1,0).",
+            "attribute((field,name),1,time).",
+            "attribute((encoding,field),1,time).",
         ]
     )
     assert is_satisfiable(BASE_PROGRAMS + ["attribute((encoding,aggregate),0,mean)."])
@@ -53,16 +54,45 @@ def test_duplicate_attribute():
     )
 
 
+def test_duplicate_field_name():
+    assert is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "attribute((field,name),0,temperature).",
+            "attribute((field,name),1,time).",
+        ]
+    )
+    assert not is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "attribute((field,name),0,temperature).",
+            "attribute((field,name),1,temperature).",
+        ]
+    )
+
+
 def test_fields():
     assert is_satisfiable(
         BASE_PROGRAMS
         + [
             "entity(field,root,0).",
             "attribute((field,name),0,foo).",
-            "attribute((encoding,field),1,0).",
+            "attribute((encoding,field),1,foo).",
         ]
     )
     assert not is_satisfiable(BASE_PROGRAMS + ["attribute((encoding,field),0,foo)."])
+
+
+def test_facets():
+    assert is_satisfiable(
+        BASE_PROGRAMS
+        + [
+            "entity(field,root,0).",
+            "attribute((field,name),0,foo).",
+            "attribute((facet,field),1,foo).",
+        ]
+    )
+    assert not is_satisfiable(BASE_PROGRAMS + ["attribute((facet,field),0,foo)."])
 
 
 def test_attribute_entity():
