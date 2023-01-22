@@ -196,7 +196,7 @@ bar_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
-        "x": {"field": "condition", "scale": {"type": "ordinal"}, "type": "ordinal"},
+        "x": {"field": "condition", "scale": {}, "type": "ordinal"},
         "y": {
             "aggregate": "mean",
             "field": "temperature",
@@ -234,7 +234,7 @@ histogram_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
-        "x": {"field": "condition", "scale": {"type": "ordinal"}, "type": "ordinal"},
+        "x": {"field": "condition", "scale": {}, "type": "ordinal"},
         "y": {
             "aggregate": "count",
             "scale": {"type": "linear", "zero": True},
@@ -745,7 +745,7 @@ scatterplot_columns_binned_spec_vl = {
         "encoding": {
             "x": {
                 "field": "condition",
-                "scale": {"type": "ordinal"},
+                "scale": {},
                 "type": "ordinal",
             },
             "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
@@ -819,7 +819,7 @@ tick_plot_and_histogram_spec_base_vl = {
             "encoding": {
                 "x": {
                     "field": "condition",
-                    "scale": {"type": "ordinal"},
+                    "scale": {},
                     "type": "ordinal",
                 },
                 "y": {"aggregate": "count", "scale": {"type": "linear", "zero": True}},
@@ -875,7 +875,7 @@ tick_plot_and_histogram_shared_scale_spec_base_vl = {
                 "x": {
                     "field": "condition",
                     "type": "ordinal",
-                    "scale": {"type": "ordinal"},
+                    "scale": {},
                 },
                 "y": {
                     "aggregate": "mean",
@@ -1079,7 +1079,7 @@ polar_radial_chart_spec_vl = {
         "theta": {
             "field": "condition",
             "type": "ordinal",
-            "scale": {"type": "ordinal"},
+            "scale": {},
         },
     },
     "layer": [
