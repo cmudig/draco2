@@ -14,7 +14,7 @@ cover:
 lint:
 	@echo "==> 👕 Linting"
 	@poetry run black .
-	@poetry run ruff
+	@poetry run ruff .
 
 .PHONY: typecheck
 typecheck:
