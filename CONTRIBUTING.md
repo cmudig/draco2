@@ -58,3 +58,33 @@ For more information about writing constraints and optimization-based problems, 
 You can start the custom [FastAPI](https://fastapi.tiangolo.com/) server in hot-reload mode with `make serve`. This way,
 you can make changes to the server code and see the changes immediately. You can explore the API by visiting the OpenAPI
 docs at [http://localhost:8000/docs](http://localhost:8000/docs).
+
+## Development with Docker
+
+We provide a pre-configured [Docker](https://www.docker.com) environment for a better developer experience. You can
+execute the following commands from a UNIX shell to start the development environment:
+
+```shell
+# Build the docker image
+NB_USER="draco2" && \
+docker build --build-arg NB_USER=${NB_USER} -t draco2-dev . && \
+# Start a container with local volume mounting and port forwarding for FastAPI, Jupyter and Jupyter Book
+docker run -it --rm \
+               -v $(pwd):/home/${NB_USER}/app \
+               -p 5000:5000 \  # Jupyter Book
+               -p 8000:8000 \  # FastAPI
+               -p 8888:8888 \  # Jupyter
+               --name draco2-dev draco2-dev bash
+```
+
+As soon as you are inside the container's shell, you can execute `make` targets as you would from your local machine.
+You can run `make test` to verify that everything is working as expected.
+
+The services for which we reserved the ports are:
+
+- Jupyter Book (Project Documentation): [http://localhost:5000](http://localhost:5000). Start it by `make book-serve`.
+- FastAPI: [http://localhost:8000/docs](http://localhost:8000/docs). Start it by `make serve`.
+- Jupyter: [http://localhost:8888](http://localhost:8888). Start it by `make lab`.
+
+You can open new shells inside the running container with `docker exec -it draco2-dev bash`. This way it is OK to run
+the above-listed commands which 'block' your current shell session.
