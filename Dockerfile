@@ -1,4 +1,4 @@
-FROM python:3.10.8-buster
+FROM python:3.10.9-buster
 
 # Create user with a home directory
 ARG NB_USER="draco2"
@@ -16,14 +16,14 @@ WORKDIR ${HOME}/app
 RUN python -m pip install --upgrade pip &&  \
     pip install poetry
 COPY pyproject.toml poetry.lock ./
-# Purposely not using --no-dev here to install dev dependencies needed for Jupyter Notebooks
+# Purposefully not using --no-dev here to install dev dependencies needed for Jupyter Notebooks
 RUN poetry config virtualenvs.create false && \
     poetry install
 
 # Copy the project source code
 COPY . .
 
-# Install Draco2 from local sources, needed for notebooks
+# Install draco2 from local sources, needed for notebooks
 RUN pip install -e .
 
 # Grant permissions to the notebook user

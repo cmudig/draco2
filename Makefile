@@ -44,7 +44,7 @@ book:
 .PHONY: book-serve
 book-serve: book
 	@echo "==> 📡 Serving Book at http://localhost:5000"
-	@poetry run python -m http.server --directory docs/_build/html 5000
+	@poetry run python -m http.server --directory docs/_build/html --bind 0.0.0.0 5000
 
 .PHONY: book-strict
 book-strict:
@@ -52,7 +52,7 @@ book-strict:
 
 .PHONY: lab
 lab:
-	@poetry run jupyter lab
+	@poetry run jupyter lab --ip=0.0.0.0
 
 .PHONY: build
 build:
@@ -91,4 +91,4 @@ clean:
 .PHONY: serve
 serve:
 	@echo "==> 📡 Serve"
-	@poetry run uvicorn draco.server.__main__:app --reload
+	@poetry run uvicorn draco.server.__main__:app --reload --host=0.0.0.0
