@@ -1,5 +1,9 @@
 FROM python:3.10.9-buster
 
+# Logging to the console breaks without this
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONFAULTHANDLER 1
+
 # Install Node.js as it is needed as a dev dependency
 RUN apt-get update && apt-get install -y \
     curl \
