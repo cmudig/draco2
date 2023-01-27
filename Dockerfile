@@ -1,4 +1,14 @@
-FROM python:3.10.9-buster
+FROM python:3.10.9-bullseye
+
+# Install Node.js as it is needed as a dev dependency
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
+    ca-certificates \
+    lsb-release &&  \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - &&  \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
 
 # Create user with a home directory
 ARG NB_USER="draco2"
