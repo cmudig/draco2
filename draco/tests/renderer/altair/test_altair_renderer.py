@@ -352,7 +352,7 @@ scatter_with_color_spec_vl = {
     "encoding": {
         "color": {
             "field": "condition",
-            "scale": {"type": "ordinal"},
+            "scale": {},
             "type": "nominal",
         },
         "x": {
@@ -468,7 +468,7 @@ stacked_bar_spec_vl = {
         "color": {
             "field": "condition",
             "type": "nominal",
-            "scale": {"type": "ordinal"},
+            "scale": {},
         },
         "x": {
             "bin": {"maxbins": 10},
@@ -521,7 +521,7 @@ normalized_stacked_bar_spec_vl = {
         "color": {
             "field": "condition",
             "type": "nominal",
-            "scale": {"type": "ordinal"},
+            "scale": {},
         },
         "x": {
             "aggregate": "count",
@@ -1023,7 +1023,7 @@ polar_pie_chart_spec_vl = {
     "encoding": {
         "color": {
             "field": "condition",
-            "scale": {"type": "ordinal"},
+            "scale": {},
             "type": "nominal",
         },
         "theta": {
