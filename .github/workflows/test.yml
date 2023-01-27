@@ -44,7 +44,7 @@ jobs:
       - name: Build docker image
         run: docker build -t draco .
 
-      - name: Run `make test`
+      - name: Run `make all`
         run: docker run --rm draco bash -c "make all"
 
   lint:
@@ -64,6 +64,7 @@ jobs:
   automerge:
     needs:
       - test
+      - test-docker
       - lint
     runs-on: ubuntu-latest
 
