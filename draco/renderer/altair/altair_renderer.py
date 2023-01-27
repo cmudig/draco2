@@ -591,4 +591,4 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             # so that Vega-Lite can infer it automatically.
             del scale_args["type"]
 
-        return alt.Scale(**scale_args)
+        return alt.Scale(**scale_args) if scale_args else None
