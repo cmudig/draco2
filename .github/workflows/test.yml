@@ -44,8 +44,8 @@ jobs:
       - name: Build docker image
         run: docker build -t draco .
 
-      - name: Run `make all`
-        run: docker run --rm draco bash -c "make all"
+      - name: Run all make targets
+        run: docker run --rm draco bash -c "make"
 
   lint:
     runs-on: ubuntu-latest
