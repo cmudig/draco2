@@ -581,7 +581,14 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         }
 
         alt_scale_type = renames.get(scale.type, scale.type)
-        if alt_scale_type is not None:
+
+        # Whenever we have a scale specified other than "ordinal",
+        # we assign it to the args explicitly.
+        if alt_scale_type is not None and alt_scale_type != "ordinal":
             scale_args["type"] = alt_scale_type
+        else:
+            # Otherwise, we remove the type from the args,
+            # so that Vega-Lite can infer it automatically.
+            del scale_args["type"]
 
         return alt.Scale(**scale_args)
