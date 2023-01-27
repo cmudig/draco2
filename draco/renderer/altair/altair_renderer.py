@@ -13,7 +13,9 @@ from .types import (
     EncodingChannel,
     Field,
     FieldName,
+    FieldType,
     Mark,
+    MarkType,
     Scale,
     SpecificationDict,
     View,
@@ -305,8 +307,13 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         :return: The updated chart.
         :raises ValueError: If an unknown encoding channel is encountered.
         """
-        spec, chart, view, encoding = (ctx.spec, ctx.chart, ctx.view, ctx.encoding)
-
+        spec, chart, view, mark, encoding = (
+            ctx.spec,
+            ctx.chart,
+            ctx.view,
+            ctx.mark,
+            ctx.encoding,
+        )
         custom_args = {}
         if encoding.field is not None:
             custom_args["field"] = encoding.field
@@ -315,8 +322,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             custom_args["bin"] = alt.BinParams(maxbins=encoding.binning)
 
         if view.scale is not None:
+            field_type = self.__get_field_type_raw(spec.field, encoding.field)
             scale_or_none = self.__get_alt_scale_for_encoding(
-                encoding.channel, view.scale
+                field_type, mark.type, encoding.channel, view.scale
             )
             if scale_or_none is not None:
                 custom_args["scale"] = scale_or_none
@@ -352,10 +360,11 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         :return: The updated chart.
         :raises ValueError: If an unknown encoding channel is encountered.
         """
-        spec, chart, view, encoding, encodings = (
+        spec, chart, view, mark, encoding, encodings = (
             ctx.spec,
             ctx.chart,
             ctx.view,
+            ctx.mark,
             ctx.encoding,
             ctx.mark.encoding,
         )
@@ -367,8 +376,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             custom_args["type"] = self.__get_field_type(spec, encoding.field)
 
         if view.scale is not None:
+            field_type = self.__get_field_type_raw(spec.field, encoding.field)
             scale_or_none = self.__get_alt_scale_for_encoding(
-                encoding.channel, view.scale
+                field_type, mark.type, encoding.channel, view.scale
             )
             if scale_or_none is not None:
                 custom_args["scale"] = scale_or_none
@@ -533,22 +543,52 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         return None
 
     @staticmethod
+    def __get_field_type_raw(
+        fields: list[Field], field_name: FieldName | None
+    ) -> FieldType:
+        if field_name is None:
+            return "number"
+
+        cls = AltairRenderer
+        field_type = cls.__get_field_by_name(fields, field_name)
+        return field_type.type
+
+    @staticmethod
     def __get_alt_scale_for_encoding(
-        channel: EncodingChannel, scales: list[Scale]
+        field_type: FieldType,
+        mark_type: MarkType,
+        channel: EncodingChannel,
+        scales: list[Scale],
     ) -> alt.Scale | None:
         """
         Returns an `alt.Scale` for the given encoding channel, if any.
 
+        :param field_type: the type of the field for which to look up a scale
+        :param mark_type: the type of the mark used for the field
         :param channel: the channel for which to look up a scale
         :param scales: the list of scales in the view
         :return: the scale for the given channel, or None if no scale is found
         """
-        renames = {
-            "categorical": "ordinal",
-        }
         scale = AltairRenderer.__get_scale_for_encoding(channel, scales)
         if scale is None:
             return None
+
+        # Extract arguments and process them further
         scale_args = scale.dict(exclude_none=True, exclude={"channel"})
-        scale_args["type"] = renames.get(scale.type, scale.type)
-        return alt.Scale(**scale_args)
+
+        renames = {
+            "categorical": "ordinal",
+        }
+
+        alt_scale_type = renames.get(scale.type, scale.type)
+
+        # Whenever we have a scale specified other than "ordinal",
+        # we assign it to the args explicitly.
+        if alt_scale_type is not None and alt_scale_type != "ordinal":
+            scale_args["type"] = alt_scale_type
+        else:
+            # Otherwise, we remove the type from the args,
+            # so that Vega-Lite can infer it automatically.
+            del scale_args["type"]
+
+        return alt.Scale(**scale_args) if scale_args else None

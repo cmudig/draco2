@@ -196,7 +196,7 @@ bar_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
-        "x": {"field": "condition", "scale": {"type": "ordinal"}, "type": "ordinal"},
+        "x": {"field": "condition", "type": "ordinal"},
         "y": {
             "aggregate": "mean",
             "field": "temperature",
@@ -234,7 +234,7 @@ histogram_spec_vl = {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
-        "x": {"field": "condition", "scale": {"type": "ordinal"}, "type": "ordinal"},
+        "x": {"field": "condition", "type": "ordinal"},
         "y": {
             "aggregate": "count",
             "scale": {"type": "linear", "zero": True},
@@ -352,7 +352,6 @@ scatter_with_color_spec_vl = {
     "encoding": {
         "color": {
             "field": "condition",
-            "scale": {"type": "ordinal"},
             "type": "nominal",
         },
         "x": {
@@ -468,7 +467,6 @@ stacked_bar_spec_vl = {
         "color": {
             "field": "condition",
             "type": "nominal",
-            "scale": {"type": "ordinal"},
         },
         "x": {
             "bin": {"maxbins": 10},
@@ -521,7 +519,6 @@ normalized_stacked_bar_spec_vl = {
         "color": {
             "field": "condition",
             "type": "nominal",
-            "scale": {"type": "ordinal"},
         },
         "x": {
             "aggregate": "count",
@@ -745,7 +742,6 @@ scatterplot_columns_binned_spec_vl = {
         "encoding": {
             "x": {
                 "field": "condition",
-                "scale": {"type": "ordinal"},
                 "type": "ordinal",
             },
             "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
@@ -819,7 +815,6 @@ tick_plot_and_histogram_spec_base_vl = {
             "encoding": {
                 "x": {
                     "field": "condition",
-                    "scale": {"type": "ordinal"},
                     "type": "ordinal",
                 },
                 "y": {"aggregate": "count", "scale": {"type": "linear", "zero": True}},
@@ -875,7 +870,6 @@ tick_plot_and_histogram_shared_scale_spec_base_vl = {
                 "x": {
                     "field": "condition",
                     "type": "ordinal",
-                    "scale": {"type": "ordinal"},
                 },
                 "y": {
                     "aggregate": "mean",
@@ -1023,7 +1017,6 @@ polar_pie_chart_spec_vl = {
     "encoding": {
         "color": {
             "field": "condition",
-            "scale": {"type": "ordinal"},
             "type": "nominal",
         },
         "theta": {
@@ -1079,7 +1072,6 @@ polar_radial_chart_spec_vl = {
         "theta": {
             "field": "condition",
             "type": "ordinal",
-            "scale": {"type": "ordinal"},
         },
     },
     "layer": [
