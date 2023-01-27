@@ -36,6 +36,17 @@ jobs:
         with:
           fail_ci_if_error: true
 
+  test-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build docker image
+        run: docker build -t draco .
+
+      - name: Run `make test`
+        run: docker run --rm draco bash -c "make all"
+
   lint:
     runs-on: ubuntu-latest
 
