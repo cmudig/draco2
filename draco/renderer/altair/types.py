@@ -136,6 +136,13 @@ Described as `(scale,zero)`.
 ScaleZero = bool
 
 """
+The task type.
+The task that the user tries to complete when looking at a visualization
+helps Draco find the most appropriate visualization.
+"""
+Task = Literal["value", "summary"]
+
+"""
 The facet channel. Can be one of col and row.
 Described as `(facet,channel)`.
 """
@@ -317,6 +324,7 @@ class SpecificationDict(SchemaBase):
     """
 
     number_rows: DatasetNumberRows
+    task: Task | None = None
     field: list[Field]
     view: list[View]
 
