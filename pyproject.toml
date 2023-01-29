@@ -30,11 +30,11 @@ classifiers = [
 [tool.poetry.dependencies]
 altair = "^4.2.2"
 clingo = "^5.5.2"
+fastapi = ">=0.85,<0.90"
 matplotlib = "^3.6.0"
 pandas = "^1.4.2"
 python = ">=3.10.0,<3.11"
 scikit-learn = "^1.2.1"
-fastapi = ">=0.85,<0.90"
 uvicorn = ">=0.18.3,<0.21.0"
 
 [tool.poetry.group.dev.dependencies]
@@ -42,6 +42,7 @@ black = {extras = ["jupyter"], version = "^22.10.0"}
 deepdiff = "^6.2.1"
 flake8 = "^5.0.4"
 flake8-black = "^0.3.3"
+httpx = "^0.23.0"
 ipywidgets = "^7.7.2"
 isort = "^5.10.1"
 jupyter-book = "^0.13.1"
@@ -57,7 +58,6 @@ toml = "^0.10.2"
 types-pkg-resources = "^0.1.2"
 vega-datasets = "^0.9.0"
 wheel = "^0.38.4"
-httpx = "^0.23.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
