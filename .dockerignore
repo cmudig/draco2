@@ -17,3 +17,6 @@ dmypy.json
 
 # temporary files
 **/_tmp/*
+
+# PyCharm
+.idea
