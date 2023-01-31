@@ -47,25 +47,10 @@ jobs:
       - name: Run all make targets
         run: docker run --rm draco bash -c "make"
 
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version-file: ".python-version"
-      - uses: psf/black@stable
-        with:
-          version: "22.6.0"
-      - uses: py-actions/flake8@v2
-
   automerge:
     needs:
       - test
       - test-docker
-      - lint
     runs-on: ubuntu-latest
 
     permissions:
@@ -73,6 +58,9 @@ jobs:
       contents: write
 
     steps:
+      - name: Run precommit checks
+        uses: pre-commit/action@v3.0.0
+
       - name: Merge pull requests
         uses: fastify/github-action-merge-dependabot@v3.5.3
         with:
