@@ -58,9 +58,6 @@ jobs:
       contents: write
 
     steps:
-      - name: Run precommit checks
-        uses: pre-commit/action@v3.0.0
-
       - name: Merge pull requests
         uses: fastify/github-action-merge-dependabot@v3.5.3
         with:
