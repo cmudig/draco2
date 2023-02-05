@@ -1,0 +1,20 @@
+package:
+  name: altair
+  version: 4.2.2
+  top-level:
+    - altair
+source:
+  url: https://files.pythonhosted.org/packages/18/62/47452306e84d4d2e67f9c559380aeb230f5e6ca84fafb428dd36b96a99ba/altair-4.2.2-py3-none-any.whl
+  sha256: 8b45ebeaf8557f2d760c5c77b79f02ae12aee7c46c27c06014febab6f849bc87
+requirements:
+  run:
+    - jinja2
+    - jsonschema
+    - numpy
+    - pandas
+    - toolz
+about:
+  home: http://altair-viz.github.io
+  PyPI: https://pypi.org/project/altair
+  summary: "Altair: A declarative statistical visualization library for Python."
+  license: BSD 3-clause

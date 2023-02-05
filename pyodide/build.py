@@ -1,0 +1,255 @@
+"""
+Zero-dependency Python script to build a custom Pyodide distribution,
+relying on a basic Unix shell environment with `poetry` and `docker` installed.
+"""
+import subprocess
+import shlex
+import os
+import pathlib
+import sys
+import shutil
+
+# All paths are relative to the root of draco's git root
+PYODIDE_BUILD_MODULE_ROOT_PATH = pathlib.Path('.') / 'pyodide'
+PYODIDE_PACKAGES_PATH = PYODIDE_BUILD_MODULE_ROOT_PATH / 'packages'
+PYODIDE_REPO_NAME = 'pyodide-src'
+PYODIDE_REPO_PATH = PYODIDE_BUILD_MODULE_ROOT_PATH / PYODIDE_REPO_NAME
+PYODIDE_REPO_URL = 'https://github.com/pyodide/pyodide.git'
+PYODIDE_REPO_TAG = '0.22.1'
+
+# Paths relative to the root of the docker container
+DOCKER_PYODIDE_REPO_ROOT = pathlib.Path('/src')
+
+
+def warn(msg: str) -> None:
+    """
+    Prints a warning message to stderr.
+
+    :param msg: the warning message to print
+    """
+    WARN_COLOR = '\033[93m'
+    ENDC = '\033[0m'
+    print(f'{WARN_COLOR}Warning: {msg}{ENDC}', file=sys.stderr)
+
+
+def info(msg: str) -> None:
+    """
+    Prints an info message to stdout.
+
+    :param msg: the info message to print
+    """
+    INFO_COLOR = '\033[94m'
+    ENDC = '\033[0m'
+    print(f'{INFO_COLOR}Info: {msg}{ENDC}')
+
+
+def error(msg: str) -> None:
+    """
+    Prints an error message to stderr and exits with code 1.
+
+    :param msg: the error message to print
+    """
+    ERROR_COLOR = '\033[91m'
+    ENDC = '\033[0m'
+    print(f'{ERROR_COLOR}Error: {msg}{ENDC}', file=sys.stderr)
+    sys.exit(1)
+
+
+def sh(cmd: str) -> str:
+    """
+    Simply utility function to run a shell command,
+    handling command argument splitting by default.
+
+    :param cmd: the shell command to run
+    :return: the output of the command as a stripped string
+    """
+    return subprocess.check_output(shlex.split(cmd)).decode().strip()
+
+
+def find_git_repo_root() -> pathlib.Path:
+    """
+    Finds the root directory of the git repository
+    that contains this file.
+
+    :return: path to the root of the git repository
+    """
+    return pathlib.Path(__file__).parent.parent.resolve()
+
+
+def build_draco() -> None:
+    """
+    Builds the Draco library.
+    """
+    sh('poetry build')
+
+
+def get_draco_wheel_path(draco_repo_root: pathlib.Path) -> pathlib.Path:
+    """
+    Gets the path to the built Draco wheel.
+
+    :return: the path to the built Draco wheel
+    """
+    dist_dir = draco_repo_root / 'dist'
+    return next(dist_dir.glob('draco-*.whl'))
+
+
+def copy_draco_build_to_pyodide_repo(draco_repo_root: pathlib.Path) -> None:
+    """
+    Copies the built Draco wheel to the Pyodide repository.
+    """
+    wheel_path = get_draco_wheel_path(draco_repo_root)
+    shutil.copy(wheel_path, PYODIDE_REPO_PATH / wheel_path.name)
+
+
+def get_draco_build_version() -> str:
+    """
+    Gets the version of the Draco library that was built.
+
+    :return: the version of the Draco library that was built
+    """
+    return sh('poetry version -s')
+
+
+def get_sha256_sum(file_path: pathlib.Path) -> str:
+    """
+    Gets the SHA256 hash of the supplied `file_path`.
+
+    :param file_path: the path to the file to hash
+    :return: the SHA256 hash of the supplied `file_path`
+    """
+    return sh(f'sha256sum {file_path}').split(' ')[0]
+
+
+def get_draco_wheel_data(draco_repo_root: pathlib.Path = find_git_repo_root(),
+                         docker_pyodide_repo_root: pathlib.Path = DOCKER_PYODIDE_REPO_ROOT) -> tuple:
+    """
+    Returns an url to the built wheel and its SHA256 hash as a tuple.
+
+    :return: wheel URL and the wheel's SHA256 hash as a tuple
+    """
+    wheel_path = get_draco_wheel_path(draco_repo_root)
+    wheel_name = wheel_path.name
+    docker_full_wheel_path = docker_pyodide_repo_root / wheel_name
+    wheel_url = f'file://{docker_full_wheel_path.resolve()}'
+    sha256 = get_sha256_sum(wheel_path.resolve())
+    return wheel_url, sha256
+
+
+def get_draco_build_recipe_template_data() -> dict:
+    """
+    :return: a dictionary containing the data to use in `pyodide/packages/draco/meta.yaml.template`
+    """
+    package_version = get_draco_build_version()
+    wheel_url, sha256 = get_draco_wheel_data(find_git_repo_root())
+    return {
+        'package_version': package_version,
+        'source_url': wheel_url,
+        'source_sha256': sha256,
+    }
+
+
+def render_template_string(template: str, data: dict) -> str:
+    """
+    Renders the supplied `template` string using the supplied `data`.
+    `template` is expected to be a Python format string.
+
+    :param template: the template string to render
+    :param data: the data to use when rendering the template
+    :return: the rendered template string
+    """
+    return template.format(**data)
+
+
+def build_draco_custom_recipe() -> None:
+    """
+    Builds the custom Draco package recipe from `pyodide/packages/draco/meta.yaml.template`
+    and writes it to `pyodide/packages/draco/meta.yaml`.
+    """
+    template_data = get_draco_build_recipe_template_data()
+    template = (PYODIDE_PACKAGES_PATH / 'draco' / 'meta.yaml.template').read_text()
+    rendered = render_template_string(template, template_data)
+    (PYODIDE_PACKAGES_PATH / 'draco' / 'meta.yaml').write_text(rendered)
+
+
+def list_custom_packages(packages_path: pathlib.Path = PYODIDE_PACKAGES_PATH) -> list:
+    """
+    Lists all the custom package recipes in the supplied `packages_path`.
+
+    :param packages_path: the path to the directory containing the custom packages
+    :return: a list of the names of the custom packages
+    """
+    dirs = [d for d in packages_path.iterdir() if d.is_dir()]
+    return [d.name for d in dirs]
+
+
+def copy_package_recipe_to_pyodide_repo(package_name: str, packages_path: pathlib.Path = PYODIDE_PACKAGES_PATH,
+                                        pyodide_repo_path: pathlib.Path = PYODIDE_REPO_PATH) -> None:
+    """
+    Copies the package recipe for the supplied `package_name` from the supplied `packages_path`
+    to the supplied `pyodide_repo_path`.
+
+    :param package_name: the name of the package to copy
+    :param packages_path: the path to the directory containing the custom packages
+    :param pyodide_repo_path: the path to the Pyodide repository
+    """
+    package_path = packages_path / package_name
+    if not package_path.exists():
+        error(f'Package {package_name} does not exist in {packages_path}')
+
+    pyodide_packages_path = pyodide_repo_path / 'packages'
+    pyodide_package_path = pyodide_packages_path / package_name
+
+    # Create dir & copy package
+    shutil.copytree(package_path, pyodide_package_path)
+
+
+def clone_pyodide_repo(git_url: str = PYODIDE_REPO_URL,
+                       pyodide_repo_path: pathlib.Path = PYODIDE_REPO_PATH,
+                       pyodide_repo_tag: str = PYODIDE_REPO_TAG) -> None:
+    """
+    Clones the Pyodide repository to the supplied `pyodide_repo_path`.
+
+    :param git_url: the URL of the Pyodide repository
+    :param pyodide_repo_path: the path to clone the Pyodide repository to
+    :param pyodide_repo_tag: the tag of the Pyodide repository to clone
+    """
+    sh(f'git clone {git_url} {pyodide_repo_path} --branch {pyodide_repo_tag}')
+
+
+def main():
+    git_repo_root = find_git_repo_root().resolve()
+    current_dir = os.getcwd()
+    # Normalize current working directory
+    if current_dir != str(git_repo_root):
+        warn('You are not in the root of the git repository. '
+             f'Changing cwd to {git_repo_root}...')
+        os.chdir(git_repo_root)
+
+    info(f'🚧 Executing actions from {os.getcwd()}')
+
+    info('🏗️ Building Draco...')
+    build_draco()
+
+    info('🧑‍🍳 Building custom Draco package recipe...')
+    build_draco_custom_recipe()
+
+    custom_packages = list_custom_packages()
+    info(f'📦 Found custom packages: {custom_packages}')
+
+    if PYODIDE_REPO_PATH.exists():
+        warn(f'{PYODIDE_REPO_PATH} already exists. Deleting it...')
+        sh(f'rm -rf {PYODIDE_REPO_PATH}')
+
+    info(f'🐙 Cloning Pyodide repository to {PYODIDE_REPO_PATH}...')
+    clone_pyodide_repo()
+
+    info(f'🛞 Copying built Draco wheel to Pyodide repository...')
+    copy_draco_build_to_pyodide_repo(git_repo_root)
+
+    for package in custom_packages:
+        info(f'📦 Copying {package} recipe to Pyodide repository...')
+        copy_package_recipe_to_pyodide_repo(package)
+
+
+if __name__ == '__main__':
+    main()
