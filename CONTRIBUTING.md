@@ -88,3 +88,14 @@ The services for which we reserved the ports are:
 
 You can open new shells inside the running container with `docker exec -it draco2-dev bash`. This way it is OK to run
 the above-listed commands which 'block' your current shell session.
+
+## Making a release
+
+- After pulling the latest coimmits, run `poetry version prerelease` to update the version number in `pyproject.toml`.
+- Run `git commit -am "chore: bump version to $(poetry version -s)"` to commit the version bump and add a tag with
+  `git tag "v$(poetry version -s)"`.
+- Run `poetry build` to build the package.
+- Run `poetry publish -r testpypi` to publish the package to [TestPyPI](https://test.pypi.org/project/draco/).
+- Run `poetry publish` to publish the package to [PyPI](https://pypi.org/project/draco/).
+- Push the commits and tags with `git push && git push --tags`.
+- Create a [release on GitHub](https://github.com/cmudig/draco2/releases) for the new version tag.
