@@ -101,4 +101,4 @@ pyodide-prepare:
 .PHONY: pyodide-build
 pyodide-build: pyodide-prepare
 	@echo "==> 🐳 Building Pyodide Distribution"
-	@cd pyodide/pyodide-src && ./run_docker --non-interactive bash -c 'PYODIDE_PACKAGES="draco" make'
+	@cd pyodide/pyodide-src && ./run_docker --non-interactive bash -c './build_draco.sh'

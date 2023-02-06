@@ -216,6 +216,19 @@ def clone_pyodide_repo(git_url: str = PYODIDE_REPO_URL,
     sh(f'git clone {git_url} {pyodide_repo_path} --branch {pyodide_repo_tag}')
 
 
+def create_distro_build_script() -> None:
+    script_body = '\n'.join([
+        '#!/bin/bash',
+        'python -m pip install --upgrade pip',
+        'pip install -e pyodide-build',
+        'make',
+        'pyodide build-recipes draco --install',
+    ])
+    script_path = (PYODIDE_REPO_PATH / 'build_draco.sh').resolve()
+    script_path.write_text(script_body)
+    script_path.chmod(0o755)
+
+
 def main():
     git_repo_root = find_git_repo_root().resolve()
     current_dir = os.getcwd()
@@ -249,6 +262,9 @@ def main():
     for package in custom_packages:
         info(f'📦 Copying {package} recipe to Pyodide repository...')
         copy_package_recipe_to_pyodide_repo(package)
+
+    info(f'📄 Creating distro build script...')
+    create_distro_build_script()
 
 
 if __name__ == '__main__':
