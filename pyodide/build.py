@@ -12,6 +12,7 @@ import sys
 # All paths are relative to the root of draco's git root
 PYODIDE_BUILD_MODULE_ROOT_PATH = pathlib.Path(".") / "pyodide"
 PYODIDE_PACKAGES_PATH = PYODIDE_BUILD_MODULE_ROOT_PATH / "packages"
+PYODIDE_REQUIREMENTS_PATH = PYODIDE_PACKAGES_PATH / "pyodide-requirements.txt"
 PYODIDE_REPO_NAME = "pyodide-src"
 PYODIDE_REPO_PATH = PYODIDE_BUILD_MODULE_ROOT_PATH / PYODIDE_REPO_NAME
 PYODIDE_REPO_URL = "https://github.com/pyodide/pyodide.git"
@@ -225,14 +226,39 @@ def clone_pyodide_repo(
     sh(f"git clone {git_url} {pyodide_repo_path} --branch {pyodide_repo_tag}")
 
 
-def create_distro_build_script() -> None:
+def install_recipe_cmd(package_name: str) -> str:
+    """
+    Returns the command to install the package recipe for the supplied `package_name`.
+
+    :param package_name: the name of the package to install
+    :return: the command to install the package recipe
+    """
+    return f"pyodide build-recipes {package_name} --install"
+
+
+def load_pyodide_requirements(
+    pyodide_requirements_path: pathlib.Path = PYODIDE_REQUIREMENTS_PATH,
+) -> list:
+    """
+    :return: a list of the packages listed in `pyodide/requirements.txt`
+    """
+    return [
+        line
+        for line in pyodide_requirements_path.read_text().splitlines()
+        if not line.startswith("#")
+    ]
+
+
+def create_distro_build_script(pyodide_requirements: list) -> None:
+    packages_to_install = [*pyodide_requirements, "draco"]
+    recipe_installation_cmds = [install_recipe_cmd(p) for p in packages_to_install]
     script_body = "\n".join(
         [
             "#!/bin/bash",
             "python -m pip install --upgrade pip",
             "pip install -e pyodide-build",
             "make",
-            "pyodide build-recipes draco --install",
+            *recipe_installation_cmds,
         ]
     )
     script_path = (PYODIDE_REPO_PATH / "build_draco.sh").resolve()
@@ -276,8 +302,13 @@ def main():
         info(f"📦Copying {package} recipe to Pyodide repository...")
         copy_package_recipe_to_pyodide_repo(package)
 
+    info("📄Loading Pyodide requirements...")
+    pyodide_requirements = load_pyodide_requirements()
+    for package in pyodide_requirements:
+        info(f"📦Found Pyodide requirement: {package}")
+
     info("📄Creating distro build script...")
-    create_distro_build_script()
+    create_distro_build_script(pyodide_requirements)
 
 
 if __name__ == "__main__":
