@@ -245,7 +245,7 @@ def load_pyodide_requirements(
     return [
         line
         for line in pyodide_requirements_path.read_text().splitlines()
-        if not line.startswith("#")
+        if line.strip() and not line.startswith("#")
     ]
 
 
