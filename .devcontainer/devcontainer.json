@@ -7,15 +7,19 @@
   "context": "..",
   "dockerFile": "../Dockerfile",
 
-  // Allow using Docker from inside the container on GitHub Codespaces
   "features": {
+        // Allow using Docker from inside the container on GitHub Codespaces
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
             "installZsh": true,
             "upgradePackages": true,
 			"dockerVersion": "latest",
 			"enableNonRootDocker": true,
 			"moby": true
-		}
+		},
+        // Allow opening the codespace in a local editor through SSH
+        "ghcr.io/devcontainers/features/sshd:1": {
+            "version": "latest"
+        }
 	},
 
 	// Use this environment variable if you need to bind mount your local source code into a new container.
