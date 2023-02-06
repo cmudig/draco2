@@ -139,7 +139,8 @@ def get_draco_wheel_data(
 
 def get_draco_build_recipe_template_data() -> dict:
     """
-    :return: a dictionary containing the data to use in `pyodide/packages/draco/meta.yaml.template`
+    :return: a dictionary containing the data to use in
+             `pyodide/packages/draco/meta.yaml.template`
     """
     package_version = get_draco_build_version()
     wheel_url, sha256 = get_draco_wheel_data(find_git_repo_root())
@@ -164,8 +165,9 @@ def render_template_string(template: str, data: dict) -> str:
 
 def build_draco_custom_recipe() -> None:
     """
-    Builds the custom Draco package recipe from `pyodide/packages/draco/meta.yaml.template`
-    and writes it to `pyodide/packages/draco/meta.yaml`.
+    Builds the custom Draco package recipe from
+    `pyodide/packages/draco/meta.yaml.template`and
+    writes it to `pyodide/packages/draco/meta.yaml`.
     """
     template_data = get_draco_build_recipe_template_data()
     template = (PYODIDE_PACKAGES_PATH / "draco" / "meta.yaml.template").read_text()
@@ -190,8 +192,8 @@ def copy_package_recipe_to_pyodide_repo(
     pyodide_repo_path: pathlib.Path = PYODIDE_REPO_PATH,
 ) -> None:
     """
-    Copies the package recipe for the supplied `package_name` from the supplied `packages_path`
-    to the supplied `pyodide_repo_path`.
+    Copies the package recipe for the supplied `package_name`
+    from the supplied `packages_path`to the supplied `pyodide_repo_path`.
 
     :param package_name: the name of the package to copy
     :param packages_path: the path to the directory containing the custom packages
@@ -249,32 +251,32 @@ def main():
         )
         os.chdir(git_repo_root)
 
-    info(f"🚧 Executing actions from {os.getcwd()}")
+    info(f"🚧Executing actions from {os.getcwd()}")
 
-    info("🏗️ Building Draco...")
+    info("🏗️Building Draco...")
     build_draco()
 
-    info("🧑‍🍳 Building custom Draco package recipe...")
+    info("🧑‍🍳Building custom Draco package recipe...")
     build_draco_custom_recipe()
 
     custom_packages = list_custom_packages()
-    info(f"📦 Found custom packages: {custom_packages}")
+    info(f"📦Found custom packages: {custom_packages}")
 
     if PYODIDE_REPO_PATH.exists():
         warn(f"{PYODIDE_REPO_PATH} already exists. Deleting it...")
         sh(f"rm -rf {PYODIDE_REPO_PATH}")
 
-    info(f"🐙 Cloning Pyodide repository to {PYODIDE_REPO_PATH}...")
+    info(f"🐙Cloning Pyodide repository to {PYODIDE_REPO_PATH}...")
     clone_pyodide_repo()
 
-    info(f"🛞 Copying built Draco wheel to Pyodide repository...")
+    info("🛞Copying built Draco wheel to Pyodide repository...")
     copy_draco_build_to_pyodide_repo(git_repo_root)
 
     for package in custom_packages:
-        info(f"📦 Copying {package} recipe to Pyodide repository...")
+        info(f"📦Copying {package} recipe to Pyodide repository...")
         copy_package_recipe_to_pyodide_repo(package)
 
-    info(f"📄 Creating distro build script...")
+    info("📄Creating distro build script...")
     create_distro_build_script()
 
 
