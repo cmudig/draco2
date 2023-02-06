@@ -8,7 +8,7 @@ source:
   sha256: 8b45ebeaf8557f2d760c5c77b79f02ae12aee7c46c27c06014febab6f849bc87
 requirements:
   run:
-    - jinja2
+    - Jinja2
     - jsonschema
     - numpy
     - pandas
