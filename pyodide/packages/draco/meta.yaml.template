@@ -11,6 +11,7 @@ requirements:
     - altair
     - clingo
     - pandas
+    - pydantic
     - scikit-learn
 about:
   home: https://github.com/cmudig/draco2
