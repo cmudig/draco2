@@ -10,6 +10,7 @@ requirements:
   run:
     - altair
     - clingo
+    - matplotlib
     - pandas
     - pydantic
     - scikit-learn
