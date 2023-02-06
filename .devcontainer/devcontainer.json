@@ -7,6 +7,22 @@
   "context": "..",
   "dockerFile": "../Dockerfile",
 
+  // Allow using Docker from inside the container on GitHub Codespaces
+  "features": {
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+            "installZsh": true,
+            "upgradePackages": true,
+			"dockerVersion": "latest",
+			"enableNonRootDocker": true,
+			"moby": true
+		}
+	},
+
+	// Use this environment variable if you need to bind mount your local source code into a new container.
+	"remoteEnv": {
+		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+	},
+
   // Adding default settings
   "settings": {
     "python.pythonPath": "/usr/local/bin/python",
