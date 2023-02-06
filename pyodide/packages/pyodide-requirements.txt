@@ -1,4 +1,3 @@
 # A list of packages to install from the existing Pyodide build recipes
 python-dateutil
 matplotlib
-matplotlib-pyodide
