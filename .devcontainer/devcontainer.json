@@ -51,5 +51,8 @@
   ],
 
   // Making ports available locally for the docs, Jupyter server and FastAPI server
-  "forwardPorts": [5000, 8000, 8888]
+  "forwardPorts": [5000, 8000, 8888],
+
+  // Using the root user for the container (https://aka.ms/dev-containers-non-root)
+  "remoteUser": "root"
 }
