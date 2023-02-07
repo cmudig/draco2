@@ -59,7 +59,6 @@ def test_blocks_to_program_keys(asp_file):
 
 
 def test_get_constants():
-
     program1 = """
     % some content to ignore
 
