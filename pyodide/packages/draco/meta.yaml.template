@@ -14,6 +14,7 @@ requirements:
     - pandas
     - pydantic
     - scikit-learn
+    - vega-datasets
 about:
   home: https://github.com/cmudig/draco2
   PyPI: https://pypi.org/project/draco
