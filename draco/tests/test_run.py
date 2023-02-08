@@ -78,7 +78,6 @@ def test_run_clingo_top_k_counts():
 
 
 def test_run_clingo_arguments():
-
     for c in [1, 2, 5]:
         model = next(
             run_clingo(

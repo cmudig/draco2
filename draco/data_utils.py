@@ -79,7 +79,6 @@ def pair_partition_to_vec(
     dfs = []
 
     for example in partition_data:
-
         neg_feature_vec = count_preferences_memoized(
             processed_specs, f"{example['pair_id']}_{fields[0]}", example[fields[0]]
         )

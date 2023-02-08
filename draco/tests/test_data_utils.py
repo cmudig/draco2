@@ -53,7 +53,6 @@ def test_count_preferences_memoized():
 
 
 def test_pairs_to_vecs():
-
     data = pairs_to_vec(learn_data)
 
     assert set(data.negative.columns) == set(
