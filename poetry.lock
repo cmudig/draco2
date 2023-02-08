@@ -563,6 +563,18 @@ files = [
 cffi = "*"
 
 [[package]]
+name = "cloudpickle"
+version = "2.2.1"
+description = "Extended pickling support for Python objects"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "cloudpickle-2.2.1-py3-none-any.whl", hash = "sha256:61f594d1f4c295fa5cd9014ceb3a1fc4a70b0de1164b94fbc2d854ccba056f9f"},
+    {file = "cloudpickle-2.2.1.tar.gz", hash = "sha256:d89684b8de9e34a2a43b3460fbca07d09d6e25ce858df4d5a44240403b6178f5"},
+]
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 description = "Cross-platform colored terminal text."
@@ -840,6 +852,25 @@ files = [
     {file = "docutils-0.17.1-py2.py3-none-any.whl", hash = "sha256:cf316c8370a737a022b72b56874f6602acf974a37a9fba42ec2876387549fc61"},
     {file = "docutils-0.17.1.tar.gz", hash = "sha256:686577d2e4c32380bb50cbb22f575ed742d58168cee37e99117a854bcd88f125"},
 ]
+
+[[package]]
+name = "doit"
+version = "0.36.0"
+description = "doit - Automation Tool"
+category = "dev"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "doit-0.36.0-py3-none-any.whl", hash = "sha256:ebc285f6666871b5300091c26eafdff3de968a6bd60ea35dd1e3fc6f2e32479a"},
+    {file = "doit-0.36.0.tar.gz", hash = "sha256:71d07ccc9514cb22fe59d98999577665eaab57e16f644d04336ae0b4bae234bc"},
+]
+
+[package.dependencies]
+cloudpickle = "*"
+importlib-metadata = ">=4.4"
+
+[package.extras]
+toml = ["tomli"]
 
 [[package]]
 name = "entrypoints"
@@ -1782,6 +1813,34 @@ files = [
 ]
 
 [[package]]
+name = "jupyterlite"
+version = "0.1.0b18"
+description = "tools for building JupyterLite sites"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "jupyterlite-0.1.0b18-py3-none-any.whl", hash = "sha256:c94dd7d175f8acbe184af2f5a38f1efcabfbb23e890d896ddbe882b65f32ed20"},
+    {file = "jupyterlite-0.1.0b18.tar.gz", hash = "sha256:e3aae73786dca8892033840339b3895320eef5a36e1831b665a78e6d2ced1db8"},
+]
+
+[package.dependencies]
+doit = ">=0.34,<1"
+jupyter_core = ">=4.7"
+
+[package.extras]
+all = ["jsonschema (>=3)", "jupyter-server-mathjax (>=0.2.3)", "jupyter_server", "jupyterlab (>=3.5.2,<4)", "jupyterlab_server (>=2.8.1,<3)", "libarchive-c (>=4.0)", "pkginfo", "tornado (>=6.1)"]
+check = ["jsonschema[format-nongpl] (>=3)"]
+contents = ["jupyter_server"]
+lab = ["jupyterlab (>=3.5.2,<4)"]
+libarchive = ["libarchive-c (>=4.0)"]
+mathjax = ["jupyter-server-mathjax (>=0.2.3)"]
+piplite = ["pkginfo"]
+serve = ["tornado (>=6.1)"]
+test = ["ansi2html", "diffoscope", "pytest-console-scripts", "pytest-cov", "pytest-html", "pytest-xdist"]
+translation = ["jupyterlab_server (>=2.8.1,<3)"]
+
+[[package]]
 name = "kiwisolver"
 version = "1.4.4"
 description = "A fast implementation of the Cassowary constraint solver"
@@ -1873,6 +1932,18 @@ files = [
 
 [package.dependencies]
 six = ">=1.4.1"
+
+[[package]]
+name = "libarchive-c"
+version = "4.0"
+description = "Python interface to libarchive"
+category = "dev"
+optional = false
+python-versions = "*"
+files = [
+    {file = "libarchive-c-4.0.tar.gz", hash = "sha256:a5b41ade94ba58b198d778e68000f6b7de41da768de7140c984f71d7fa8416e5"},
+    {file = "libarchive_c-4.0-py2.py3-none-any.whl", hash = "sha256:b7306dceaeeac199dd53a471ea9d39ed4be8e81962df99d628db7a12efbb9b52"},
+]
 
 [[package]]
 name = "libcst"
@@ -4736,4 +4807,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10.0,<3.11"
-content-hash = "d8c4debbfbf657810ca0e1d9b0f12f8879ae57522b2dfde0d86681542ae15639"
+content-hash = "e48eb47193594d702ddecbd5938c4c1a0c51dd4a6263bb050e6a764e55cfa867"

@@ -47,6 +47,7 @@ ipywidgets = "^7.7.2"
 isort = "^5.12.0"
 jupyter-book = "^0.13.1"
 jupyterlab = "^3.3.0"
+jupyterlite = "^0.1.0b18"
 matplotlib = "^3.6.0"
 mypy = "^0.990"
 pandas-stubs = "^1.5.1"
@@ -59,6 +60,7 @@ toml = "^0.10.2"
 types-pkg-resources = "^0.1.2"
 vega-datasets = "^0.9.0"
 wheel = "^0.38.4"
+libarchive-c = "^4.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
