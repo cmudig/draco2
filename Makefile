@@ -81,6 +81,8 @@ clean:
 	@jupyter-book clean docs
 	@rm -rf .coverage
 	@rm -rf dist
+	@rm -rf pyodide/pyodide-src
+	@rm -rf jupyterlite/lite-dir/static/pyodide
 	@find . -type d -name '.pytype' -exec rm -rf {} +
 	@find . -type d -name '.mypy_cache' -exec rm -rf {} +
 	@find . -type d -name '__pycache__' -exec rm -rf {} +
@@ -102,3 +104,21 @@ pyodide-prepare:
 pyodide-build: pyodide-prepare
 	@echo "==> 🐳 Building Pyodide Distribution"
 	@cd pyodide/pyodide-src && ./run_docker --non-interactive bash -c './build_draco.sh'
+
+
+.PHONY: jupyterlite-build
+jupyterlite-build:
+	@echo "==> 💡 Building Jupyter Lite Static Site"
+	@cd jupyterlite && poetry run python build.py && poetry run jupyter lite build
+
+
+# Re-using the Jupyter Lite build target, since it handles the download and 'caching' of our Pyodide distribution.
+.PHONY: pyodide-serve
+pyodide-serve: jupyterlite-build
+	@echo "==> 📡 Serving Pyodide Console at http://localhost:9000/console.html"
+	@poetry run python -m http.server --directory dist/jupyterlite/static/pyodide --bind 0.0.0.0 9000
+
+.PHONY: jupyterlite-serve
+jupyterlite-serve: jupyterlite-build
+	@echo "==> 📡 Serving Jupyter Lite at http://localhost:9999"
+	@poetry run python -m http.server --directory dist/jupyterlite --bind 0.0.0.0 9999
