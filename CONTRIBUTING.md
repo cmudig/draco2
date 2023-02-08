@@ -68,12 +68,15 @@ execute the following commands from a UNIX shell to start the development enviro
 # Build the docker image
 NB_USER="draco2" && \
 docker build --build-arg NB_USER=${NB_USER} -t draco2-dev . && \
-# Start a container with local volume mounting and port forwarding for FastAPI, Jupyter and Jupyter Book
+# Start a container with local volume mounting and port forwarding for
+# [Jupyter Book, FastAPI, Jupyter, Pyodide Console, JupyterLite]
 docker run -it --rm \
                -v $(pwd):/home/${NB_USER}/app \
-               -p 5000:5000 \  # Jupyter Book
-               -p 8000:8000 \  # FastAPI
-               -p 8888:8888 \  # Jupyter
+               -p 5000:5000 \
+               -p 8000:8000 \
+               -p 8888:8888 \
+               -p 9000:9000 \
+               -p 9999:9999 \
                --name draco2-dev draco2-dev bash
 ```
 

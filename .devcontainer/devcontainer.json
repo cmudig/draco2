@@ -54,8 +54,9 @@
     "VisualStudioExptTeam.vscodeintellicode"
   ],
 
-  // Making ports available locally for codespaces ssh, docs, Jupyter server and FastAPI server
-  "forwardPorts": [2222, 5000, 8000, 8888],
+  // Making ports available locally for
+  // [Codespaces SSH, Jupyter Book, FastAPI, Jupyter, Pyodide Console, JupyterLite]
+  "forwardPorts": [2222, 5000, 8000, 8888, 9000, 9999],
 
   // Using the root user for the container (https://aka.ms/dev-containers-non-root)
   "remoteUser": "root"
