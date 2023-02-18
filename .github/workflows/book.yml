@@ -32,6 +32,9 @@ jobs:
       - name: Embed JupyterLite into docs
         run: cp -r dist/jupyterlite docs/_build/html/jupyterlite
 
+      - name: Display HTML bundle tree
+        run: find docs/_build/html/ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"
+
       - name: Create tarball from Pyodide distribution
         run: tar -czvf pyodide.tar.gz -C jupyterlite/lite-dir/static/pyodide .
 
