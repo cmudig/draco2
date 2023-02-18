@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ci/test*
 
 jobs:
   book:
@@ -21,6 +22,13 @@ jobs:
 
       - name: Make book
         run: make book
+
+      - name: Make JupyterLite
+        run: make jupyterlite-build
+
+      - name: Embed JupyterLite into docs
+        run: cp -r dist/jupyterlite docs/_build/html/jupyterlite
+
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3
         with:
