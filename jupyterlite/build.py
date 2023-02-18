@@ -61,7 +61,9 @@ def extract_pyodide_tarball_to_static_dir(
         with tarfile.open(fileobj=response, mode="r|gz") as tar:
             tar.extractall(path=lite_dir_path)
             # rename ./build/pyodide/pyodide to ./build/static/pyodide
-            (lite_dir_path / "pyodide").resolve().rename(lite_dir_path / "static")
+            (lite_dir_path / "pyodide").resolve().rename(
+                lite_dir_path / "static" / "pyodide"
+            )
 
 
 def copy_local_dist_to_static_dir(
