@@ -32,6 +32,15 @@ jobs:
       - name: Embed JupyterLite into docs
         run: cp -r dist/jupyterlite docs/_build/html/jupyterlite
 
+      - name: Create tarball from Pyodide distribution
+        run: tar -czvf pyodide.tar.gz -C jupyterlite/lite-dir/static/pyodide .
+
+      - name: Upload Pyodide distribution
+        uses: actions/upload-artifact@v3
+        with:
+          name: pyodide-${{ github.sha }}
+          path: pyodide.tar.gz
+
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3
         with:
