@@ -83,12 +83,13 @@ clean:
 	@rm -rf dist
 	@rm -rf pyodide/pyodide-src
 	@rm -rf jupyterlite/lite-dir/static/pyodide
-	@rm jupyterlite/.jupyterlite.doit.db
+	@rm -f jupyterlite/.jupyterlite.doit.db
 	@find . -type d -name '.pytype' -exec rm -rf {} +
 	@find . -type d -name '.mypy_cache' -exec rm -rf {} +
 	@find . -type d -name '__pycache__' -exec rm -rf {} +
 	@find . -type d -name '*pytest_cache*' -exec rm -rf {} +
 	@find . -type f -name "*.py[co]" -exec rm -rf {} +
+	@find . -type f -name ".coverage.*" -exec rm -rf {} +
 	@find . -type d -name '*.ipynb_checkpoints' -exec rm -r {} +
 
 .PHONY: serve
