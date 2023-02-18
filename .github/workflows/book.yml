@@ -23,8 +23,8 @@ jobs:
       - name: Make book
         run: make book
 
-      #- name: Make Pyodide distribution
-      #  run: make pyodide-build
+      - name: Make Pyodide distribution
+        run: make pyodide-build
 
       - name: Make JupyterLite
         run: make jupyterlite-build
