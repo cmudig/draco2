@@ -1,0 +1,177 @@
+name: Build and publish artifacts
+
+on:
+  push:
+    branches:
+      - main
+      - ci/test*
+  release:
+    types:
+      - published
+
+jobs:
+  variables:
+    name: Set auxiliary variables
+    runs-on: ubuntu-latest
+    outputs:
+      pyodide_distro_name: ${{ steps.var.outputs.pyodide_distro_name}}
+      should_build_pyodide: ${{ steps.var.outputs.should_build_pyodide}}
+      is_release: ${{ steps.var.outputs.is_release }}
+      latest_tag_name: ${{ steps.var.outputs.latest_tag_name }}
+
+    steps:
+      - name: Setting global variables using GitHub Script
+        uses: actions/github-script@v6
+        id: var
+        with:
+          script: |
+            // Setting Pyodide distro name
+            const shaShort = context.sha.substring(0, 7);
+            const pyodideDistroName = `pyodide-${shaShort}`;
+            core.setOutput('pyodide_distro_name', pyodideDistroName);
+            
+            // Determining whether the Pyodide distro should be built.
+            // We can skip the build if an artifact with the same name already exists.
+            const shouldBuildPyodide = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            }).then(({ data }) => {
+              return !data.artifacts.some(artifact => artifact.name === pyodideDistroName);
+            });
+            
+            // Setting whether this is a release, indicating that the Pyodide distro
+            // should be pinned as a release artifact & uploaded to NPM
+            const isRelease = context.eventName === 'release';
+            core.setOutput('is_release', isRelease);
+            
+            // Setting the latest tag name to be used for release asset suffixes
+            const latestTagName = await github.rest.repos.listTags({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 1
+            }).then(({ data }) => {
+              return data[0].name;
+            });
+            core.setOutput('latest_tag_name', latestTagName);
+            
+            // Output summary
+            console.log(`pyodide_distro_name: ${pyodideDistroName}`);
+            console.log(`should_build_pyodide: ${shouldBuildPyodide}`);
+            console.log(`is_release: ${isRelease}`);
+            console.log(`latest_tag_name: ${latestTagName}`);
+
+  pyodide:
+    needs: [ variables ]
+    name: Build Pyodide Distro and upload as an artifact
+    runs-on: ubuntu-latest
+    env:
+      PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
+      SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
+
+    steps:
+      - name: Finish job with success if Pyodide distro for this commit already exists
+        if: ${{ !env.SHOULD_BUILD_PYODIDE }}
+        run: echo "Pyodide distro ${{ env.PYODIDE_DISTRO_NAME }} already exists. Skipping build." && exit 0
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: ".python-version"
+          cache: "poetry"
+
+      - name: Install dependencies
+        run: poetry install --with web
+
+      - name: Make Pyodide distribution
+        run: make pyodide-build
+
+      - name: Upload Pyodide distribution
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.PYODIDE_DISTRO_NAME }}
+          path: pyodide/pyodide-src/dist
+
+  docs:
+    needs: [ variables, pyodide ]
+    name: Build Jupyter Book with Jupyter Lite and publish to GitHub Pages
+    runs-on: ubuntu-latest
+    env:
+      PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: ".python-version"
+          cache: "poetry"
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Make book
+        run: make book
+
+      # Downloads to the local folder `pyodide/pyodide-src/dist` which
+      # gets picked up by `make jupyterlite-build` and embedded into the Jupyter Lite build
+      - name: Download Pyodide distribution
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.PYODIDE_DISTRO_NAME }}
+          path: pyodide/pyodide-src/dist
+
+      - name: Make JupyterLite
+        run: make jupyterlite-build
+
+      - name: Embed JupyterLite into docs
+        run: cp -r dist/jupyterlite docs/_build/html/jupyterlite
+
+      - name: Display HTML bundle tree
+        run: find docs/_build/html/ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"
+
+      - name: Upload Documentation site to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build/html
+
+  pin_distro:
+    if: ${{ needs.variables.outputs.is_release }}
+    needs: [ variables, pyodide ]
+    name: Pin Pyodide distribution as a release artifact
+    runs-on: ubuntu-latest
+    env:
+      # E.g.: pyodide-08ecf9c
+      PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
+      # E.g.: pyodide-v2.0.0-beta.2.tar.gz
+      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_tag_name }}.tar.gz
+
+    steps:
+      - name: Download Pyodide distribution
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.PYODIDE_DISTRO_NAME }}
+          path: pyodide
+
+      - name: Create tarball from Pyodide distribution
+        run: tar -czvf $PYODIDE_TAR_NAME -C pyodide .
+
+      - name: Upload Pyodide distribution as release asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: $PYODIDE_TAR_NAME
+          asset_name: $PYODIDE_TAR_NAME
+          asset_content_type: application/gzip
