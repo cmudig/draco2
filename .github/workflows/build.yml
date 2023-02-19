@@ -92,6 +92,9 @@ jobs:
       - name: Make Pyodide distribution
         run: make pyodide-build
 
+      - name: Copy Pyodide README.md to dist folder
+        run: cp pyodide/README.md pyodide/pyodide-src/dist
+
       - name: Upload Pyodide distribution
         uses: actions/upload-artifact@v3
         with:
