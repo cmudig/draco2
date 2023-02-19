@@ -99,6 +99,8 @@ jobs:
           path: pyodide/pyodide-src/dist
 
   docs:
+    # No need to rebuild the docs if this is a release
+    if: ${{ !needs.variables.outputs.is_release }}
     needs: [ variables, pyodide ]
     name: Build Jupyter Book with Jupyter Lite and publish to GitHub Pages
     runs-on: ubuntu-latest
