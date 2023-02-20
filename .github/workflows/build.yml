@@ -14,32 +14,79 @@ jobs:
     name: Set auxiliary variables
     runs-on: ubuntu-latest
     outputs:
-      pyodide_distro_name: ${{ steps.var.outputs.pyodide_distro_name}}
-      should_build_pyodide: ${{ steps.var.outputs.should_build_pyodide}}
-      is_release: ${{ steps.var.outputs.is_release }}
-      latest_tag_name: ${{ steps.var.outputs.latest_tag_name }}
+      pyodide_distro_name: ${{ steps.var_distro.outputs.pyodide_distro_name}}
+      should_build_pyodide: ${{ steps.var_distro.outputs.should_build_pyodide}}
+      is_release: ${{ steps.var_release.outputs.is_release }}
+      latest_tag_name: ${{ steps.var_release.outputs.latest_tag_name }}
 
     steps:
-      - name: Setting global variables using GitHub Script
+      - name: Setting variables for the Pyodide distro
         uses: actions/github-script@v6
-        id: var
+        id: var_distro
+        env:
+          # Rebuilding the distro if any of these files have changed since the last build
+          PYODIDE_DISTRO_SRC: '["pyodide/packages/", 
+                                "pyodide/build.py", 
+                                "pyodide/README.md", 
+                                "draco/", 
+                                "poetry.lock", 
+                                "pyproject.toml"]'
+
         with:
           script: |
-            // Setting Pyodide distro name
             const shaShort = context.sha.substring(0, 7);
-            const pyodideDistroName = `pyodide-${shaShort}`;
-            core.setOutput('pyodide_distro_name', pyodideDistroName);
             
             // Determining whether the Pyodide distro should be built.
-            // We can skip the build if an artifact with the same name already exists.
-            const shouldBuildPyodide = await github.rest.actions.listArtifactsForRepo({
+            // We can skip the build if an artifact with the same name already exists (`distroForThisShaExists`)
+            // OR
+            // If files relevant to the Pyodide build have not changed since the last Pyodide build (`distroDepDidNotChange`)
+            const artifacts = await github.rest.actions.listArtifactsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               per_page: 100
-            }).then(({ data }) => {
-              return !data.artifacts.some(artifact => artifact.name === pyodideDistroName);
-            });
+            }).then(({ data }) => data.artifacts);
             
+            // Extracting the commit SHA from the latest artifact name so that we can do some git diffing
+            const pyodideArtifacts = artifacts.filter(artifact => artifact.name.startsWith('pyodide-'));
+            const latestPyodideArtifact = pyodideArtifacts.sort((a, b) => b.updated_at - a.updated_at)[0];
+            core.info(`Latest Pyodide artifact: ${latestPyodideArtifact.name}`);
+            const latestPyodideShaShort = latestPyodideArtifact.name.split('-')[1];
+            
+            const distroForThisShaExists = shaShort === latestPyodideShaShort;
+            if (distroForThisShaExists) {
+              core.setOutput('should_build_pyodide', false);
+              core.setOutput('pyodide_distro_name', latestPyodideArtifact.name);
+              return;
+            }
+            
+            // List the file names that have changed since the last Pyodide build
+            const filesChangedBetweenCommits = await github.rest.repos.compareCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: latestPyodideShaShort,
+              head: shaShort
+            }).then(({ data }) => (data.files || []).map((file) => file.filename))
+            core.info(`Files changed between ${latestPyodideShaShort} and ${shaShort}: ${filesChangedBetweenCommits}`);
+            
+            // Comparing changed files against the list of files that should trigger a rebuild
+            // We have directories in the list, so if any of the changed files are in one of those, we should rebuild
+            const pyodideDistroSrc = JSON.parse(process.env.PYODIDE_DISTRO_SRC);
+            const distroDepDidNotChange = filesChangedBetweenCommits.every(file => !pyodideDistroSrc.some(src => file.startsWith(src)));
+            if (distroDepDidNotChange) {
+              core.setOutput('should_build_pyodide', false);
+              core.setOutput('pyodide_distro_name', latestPyodideArtifact.name);
+              return;
+            }
+            
+            // If we've made it this far, we should build the Pyodide distro from the current commit
+            core.setOutput('should_build_pyodide', true);
+            core.setOutput('pyodide_distro_name', `pyodide-${shaShort}`);
+
+      - name: Setting variables for the release
+        uses: actions/github-script@v6
+        id: var_release
+        with:
+          script: |
             // Setting whether this is a release, indicating that the Pyodide distro
             // should be pinned as a release artifact & uploaded to NPM
             const isRelease = context.eventName === 'release';
@@ -53,13 +100,14 @@ jobs:
             }).then(({ data }) => {
               return data[0].name;
             });
-            core.setOutput('latest_tag_name', latestTagName);
-            
-            // Output summary
-            console.log(`pyodide_distro_name: ${pyodideDistroName}`);
-            console.log(`should_build_pyodide: ${shouldBuildPyodide}`);
-            console.log(`is_release: ${isRelease}`);
-            console.log(`latest_tag_name: ${latestTagName}`);
+            core.setOutput('latest_tag_name', latestTagName);      
+
+      - name: Summarize outputs
+        run: |
+          echo "pyodide_distro_name: ${{ steps.var_distro.outputs.pyodide_distro_name}}"
+          echo "should_build_pyodide: ${{ steps.var_distro.outputs.should_build_pyodide}}"
+          echo "is_release: ${{ steps.var_release.outputs.is_release }}"
+          echo "latest_tag_name: ${{ steps.var_release.outputs.latest_tag_name }}"
 
   pyodide:
     needs: [ variables ]
@@ -103,7 +151,7 @@ jobs:
 
   docs:
     # No need to rebuild the docs if this is a release
-    if: ${{ !needs.variables.outputs.is_release }}
+    if: ${{ needs.variables.outputs.is_release == 'false' }}
     needs: [ variables, pyodide ]
     name: Build Jupyter Book with Jupyter Lite and publish to GitHub Pages
     runs-on: ubuntu-latest
@@ -153,7 +201,7 @@ jobs:
           publish_dir: ./docs/_build/html
 
   pin_distro:
-    if: ${{ needs.variables.outputs.is_release }}
+    if: ${{ needs.variables.outputs.is_release == 'true' }}
     needs: [ variables, pyodide ]
     name: Pin Pyodide distribution as a release artifact
     runs-on: ubuntu-latest
@@ -180,3 +228,33 @@ jobs:
           asset_path: $PYODIDE_TAR_NAME
           asset_name: $PYODIDE_TAR_NAME
           asset_content_type: application/gzip
+
+
+  npm_publish:
+    if: ${{ needs.variables.outputs.is_release == 'true' }}
+    needs: [ variables, pyodide ]
+    name: Publish Pyodide distribution to NPM
+    runs-on: ubuntu-latest
+    env:
+      # E.g.: pyodide-08ecf9c
+      PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
+      # E.g.: pyodide-v2.0.0-beta.2.tar.gz
+      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_tag_name }}.tar.gz
+      NODE_VERSION: 16
+
+    steps:
+      - name: Download Pyodide distribution
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.PYODIDE_DISTRO_NAME }}
+          path: pyodide
+
+      - name: Create tarball from Pyodide distribution
+        run: tar -czvf $PYODIDE_TAR_NAME -C pyodide .
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Publish Pyodide distribution to NPM
+        run: npm publish $PYODIDE_TAR_NAME
