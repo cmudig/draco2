@@ -240,17 +240,25 @@ jobs:
     name: Pin Pyodide distribution as a release artifact
     runs-on: ubuntu-latest
     env:
-      # E.g.: pyodide-08ecf9c
+      SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
-      # E.g.: pyodide-2.0.0b3.tar.gz
+      PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
       PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_version_label }}.tar.gz
 
     steps:
-      - name: Download Pyodide distribution
-        uses: actions/download-artifact@v3
+      - name: Download freshly built Pyodide distribution
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         with:
           name: ${{ env.PYODIDE_DISTRO_NAME }}
           path: pyodide
+
+      - name: Download prebuilt Pyodide distro
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
+          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide
 
       - name: Create tarball from Pyodide distribution
         run: tar -czvf $PYODIDE_TAR_NAME -C pyodide .
