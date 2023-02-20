@@ -117,33 +117,41 @@ jobs:
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
       SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
 
+    # GitHub actions does not allow early exiting from a job, so we have to do it manually using `if`s
     steps:
       - name: Finish job with success if Pyodide distro for this commit already exists
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
-        run: echo "Pyodide distro ${{ env.PYODIDE_DISTRO_NAME }} already exists. Skipping build." && exit 0
+        run: echo "Pyodide distro ${{ env.PYODIDE_DISTRO_NAME }} already exists. Skipping build."
 
       - name: Checkout repository
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         uses: actions/checkout@v3
 
       - name: Install poetry
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         run: pipx install poetry
 
       - name: Setup Python
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         uses: actions/setup-python@v4
         with:
           python-version-file: ".python-version"
           cache: "poetry"
 
       - name: Install dependencies
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         run: poetry install --with web
 
       - name: Make Pyodide distribution
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         run: make pyodide-build
 
       - name: Copy Pyodide README.md to dist folder
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         run: cp pyodide/README.md pyodide/pyodide-src/dist
 
       - name: Upload Pyodide distribution
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.PYODIDE_DISTRO_NAME }}
