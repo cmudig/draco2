@@ -18,7 +18,7 @@ jobs:
       should_build_pyodide: ${{ steps.var_distro.outputs.should_build_pyodide}}
       pyodide_distro_url: ${{ steps.var_distro.outputs.pyodide_distro_url}}
       is_release: ${{ steps.var_release.outputs.is_release }}
-      latest_tag_name: ${{ steps.var_release.outputs.latest_tag_name }}
+      latest_version_label: ${{ steps.var_release.outputs.latest_version_label }}
 
     steps:
       - name: Setting variables for the Pyodide distro
@@ -97,15 +97,17 @@ jobs:
             const isRelease = context.eventName === 'release';
             core.setOutput('is_release', isRelease);
             
-            // Setting the latest tag name to be used for release asset suffixes
-            const latestTagName = await github.rest.repos.listTags({
+            // Getting the latest version label by reading the 'version = {version}' line of 'pyproject.toml'
+            const latestVersionLabel = await github.rest.repos.getContent({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              per_page: 1
+              path: 'pyproject.toml'
             }).then(({ data }) => {
-              return data[0].name;
+              const pyprojectToml = Buffer.from(data.content, 'base64').toString();
+              const versionLine = pyprojectToml.split('\n').find(line => line.startsWith('version = '));
+              return versionLine.split(' = ')[1].replace(/"/g, '');
             });
-            core.setOutput('latest_tag_name', latestTagName);      
+            core.setOutput('latest_version_label', latestVersionLabel);
 
       - name: Summarize outputs
         run: |
@@ -113,7 +115,7 @@ jobs:
           echo "should_build_pyodide: ${{ steps.var_distro.outputs.should_build_pyodide}}"
           echo "pyodide_distro_url: ${{ steps.var_distro.outputs.pyodide_distro_url}}"
           echo "is_release: ${{ steps.var_release.outputs.is_release }}"
-          echo "latest_tag_name: ${{ steps.var_release.outputs.latest_tag_name }}"
+          echo "latest_version_label: ${{ steps.var_release.outputs.latest_version_label }}"
 
   pyodide:
     needs: [ variables ]
@@ -240,8 +242,8 @@ jobs:
     env:
       # E.g.: pyodide-08ecf9c
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
-      # E.g.: pyodide-v2.0.0-beta.2.tar.gz
-      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_tag_name }}.tar.gz
+      # E.g.: pyodide-2.0.0b3.tar.gz
+      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_version_label }}.tar.gz
 
     steps:
       - name: Download Pyodide distribution
@@ -272,8 +274,8 @@ jobs:
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
       # https://api.github.com/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
       PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
-      # E.g.: pyodide-v2.0.0-beta.2.tar.gz
-      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_tag_name }}.tar.gz
+      # E.g.: pyodide-2.0.0b3.tar.gz
+      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_version_label }}.tar.gz
       NODE_VERSION: 16
       NPM_REGISTRY_URL: https://registry.npmjs.org
 
