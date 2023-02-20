@@ -127,6 +127,9 @@ jobs:
       # Downloading the prebuilt Pyodide distro using the artifact URL if it exists
       - name: Download prebuilt Pyodide distro
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
+        env:
+          # Needed for `gh` calls
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
           unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide-prebuilt
