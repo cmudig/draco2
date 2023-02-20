@@ -33,7 +33,7 @@ matplotlib = "^3.6.0"
 pandas = "^1.4.2"
 python = ">=3.10.0,<3.11"
 scikit-learn = "^1.1.1"
-fastapi = ">=0.85,<0.92"
+fastapi = ">=0.85,<0.93"
 uvicorn = ">=0.18.3,<0.21.0"
 
 [tool.poetry.group.dev.dependencies]
