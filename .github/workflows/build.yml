@@ -208,8 +208,12 @@ jobs:
         env:
           # Needed for `gh` call
           GH_TOKEN: ${{ github.token }}
+        # Download and extract the distro to the folder `pyodide/pyodide-src/dist`
+        # into which a fresh distro would be built. This is folder is going to be
+        # scanned by `make jupyterlite-build` for a local copy-pasteable distro
         run: |
           gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
+          mkdir -p pyodide/pyodide-src
           unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide/pyodide-src/dist
 
       - name: Make JupyterLite
