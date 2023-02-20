@@ -110,6 +110,7 @@ jobs:
         run: |
           echo "pyodide_distro_name: ${{ steps.var_distro.outputs.pyodide_distro_name}}"
           echo "should_build_pyodide: ${{ steps.var_distro.outputs.should_build_pyodide}}"
+          echo "pyodide_distro_url: ${{ steps.var_distro.outputs.pyodide_distro_url}}"
           echo "is_release: ${{ steps.var_release.outputs.is_release }}"
           echo "latest_tag_name: ${{ steps.var_release.outputs.latest_tag_name }}"
 
@@ -124,26 +125,9 @@ jobs:
 
     # GitHub actions does not allow early exiting from a job, so we have to do it manually using `if`s
     steps:
-      # Downloading the prebuilt Pyodide distro using the artifact URL if it exists
-      - name: Download prebuilt Pyodide distro
+      - name: Skipping Pyodide build
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
-        env:
-          # Needed for `gh` calls
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
-          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide-prebuilt
-
-      # Uploading the just downloaded prebuilt Pyodide distro as an artifact
-      # so that it can be used within this workflow through `actions/download-artifact@v3` by name
-      # Purposefully setting the retention to the min value of 1 day so that the artifact is deleted asap
-      - name: Upload prebuilt Pyodide distribution
-        if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.PYODIDE_DISTRO_NAME }}
-          path: pyodide-prebuilt
-          retention-days: 1
+        run: echo "Skipping Pyodide build, will download distro from ${{ env.PYODIDE_DISTRO_URL }}"
 
       - name: Checkout repository
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
@@ -209,11 +193,22 @@ jobs:
 
       # Downloads to the local folder `pyodide/pyodide-src/dist` which
       # gets picked up by `make jupyterlite-build` and embedded into the Jupyter Lite build
-      - name: Download Pyodide distribution
+      - name: Download freshly built Pyodide distribution
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.PYODIDE_DISTRO_NAME }}
           path: pyodide/pyodide-src/dist
+
+      # Downloading the prebuilt Pyodide distro using the URL of a previous artifact
+      - name: Download prebuilt Pyodide distro
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
+        env:
+          # Needed for `gh` call
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
+          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide/pyodide-src/dist
 
       - name: Make JupyterLite
         run: make jupyterlite-build
@@ -268,16 +263,29 @@ jobs:
     env:
       # E.g.: pyodide-08ecf9c
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
+      # https://api.github.com/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
+      PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
       # E.g.: pyodide-v2.0.0-beta.2.tar.gz
       PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_tag_name }}.tar.gz
       NODE_VERSION: 16
 
     steps:
-      - name: Download Pyodide distribution
+      - name: Download freshly built Pyodide distribution
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.PYODIDE_DISTRO_NAME }}
           path: pyodide
+
+      # Downloading the prebuilt Pyodide distro using the URL of a previous artifact
+      - name: Download prebuilt Pyodide distro
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
+        env:
+          # Needed for `gh` call
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
+          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide
 
       - name: Create tarball from Pyodide distribution
         run: tar -czvf $PYODIDE_TAR_NAME -C pyodide .
