@@ -172,6 +172,7 @@ jobs:
     env:
       SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
+      PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
 
     steps:
       - name: Checkout repository
