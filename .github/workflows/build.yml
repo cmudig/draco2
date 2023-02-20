@@ -170,6 +170,7 @@ jobs:
     name: Build Jupyter Book with Jupyter Lite and publish to GitHub Pages
     runs-on: ubuntu-latest
     env:
+      SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
 
     steps:
