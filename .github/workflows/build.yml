@@ -119,7 +119,7 @@ jobs:
 
     steps:
       - name: Finish job with success if Pyodide distro for this commit already exists
-        if: ${{ !env.SHOULD_BUILD_PYODIDE }}
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
         run: echo "Pyodide distro ${{ env.PYODIDE_DISTRO_NAME }} already exists. Skipping build." && exit 0
 
       - name: Checkout repository
