@@ -2920,14 +2920,14 @@ test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
 
 [[package]]
 name = "pandas-stubs"
-version = "1.5.3.230203"
+version = "1.5.3.230214"
 description = "Type annotations for pandas"
 category = "dev"
 optional = false
 python-versions = ">=3.8,<3.12"
 files = [
-    {file = "pandas_stubs-1.5.3.230203-py3-none-any.whl", hash = "sha256:04da026f9933e1534ba480a2b06139a2dbd624c57ce0697e5873460d7815c67d"},
-    {file = "pandas_stubs-1.5.3.230203.tar.gz", hash = "sha256:7a4eedb210c77e0911fe32a4178673ba68ef569c034117ea19ada79451db4af9"},
+    {file = "pandas_stubs-1.5.3.230214-py3-none-any.whl", hash = "sha256:be0f3056fef543c37248951a9868cba77e17ace3b815b0a23c72ed2ec13fbd9e"},
+    {file = "pandas_stubs-1.5.3.230214.tar.gz", hash = "sha256:5fc1fc9c470d5332f9025a53ecab4c36cb80b2c52a596d597d6c5e33b4078153"},
 ]
 
 [package.dependencies]
