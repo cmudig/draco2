@@ -2,6 +2,7 @@
 Zero-dependency Python script to build a custom Pyodide distribution,
 relying on a basic Unix shell environment with `poetry` and `docker` installed.
 """
+import json
 import os
 import pathlib
 import shlex
@@ -17,6 +18,15 @@ PYODIDE_REPO_NAME = "pyodide-src"
 PYODIDE_REPO_PATH = PYODIDE_BUILD_MODULE_ROOT_PATH / PYODIDE_REPO_NAME
 PYODIDE_REPO_URL = "https://github.com/pyodide/pyodide.git"
 PYODIDE_REPO_TAG = "0.22.1"
+
+# Directory where the Pyodide distribution will be built
+PYODIDE_DIST_PATH = PYODIDE_REPO_PATH / "dist"
+
+# Path to the Pyodide package.json file and to the template to be merged with it
+PACKAGE_JSON_REAL_PATH = PYODIDE_DIST_PATH / "package.json"
+PACKAGE_JSON_TEMPLATE_PATH = (
+    PYODIDE_BUILD_MODULE_ROOT_PATH / "package-patch.json.template"
+)
 
 # Paths relative to the root of the docker container
 DOCKER_PYODIDE_REPO_ROOT = pathlib.Path("/src")
@@ -266,7 +276,23 @@ def create_distro_build_script(pyodide_requirements: list) -> None:
     script_path.chmod(0o755)
 
 
-def main():
+def package_json_template_data() -> dict:
+    return {"version": get_draco_build_version()}
+
+
+def update_package_json():
+    package_json_tmpl_content = json.loads(PACKAGE_JSON_TEMPLATE_PATH.read_text())
+    package_json_tmpl_data: dict = package_json_template_data()
+    package_json_updated_content = {
+        **package_json_tmpl_content,
+        **package_json_tmpl_data,
+    }
+    package_json_content_real: dict = json.loads(PACKAGE_JSON_REAL_PATH.read_text())
+    merged = {**package_json_content_real, **package_json_updated_content}
+    PACKAGE_JSON_REAL_PATH.write_text(json.dumps(merged, indent=2))
+
+
+def prepare():
     git_repo_root = find_git_repo_root().resolve()
     current_dir = os.getcwd()
     # Normalize current working directory
@@ -311,5 +337,27 @@ def main():
     create_distro_build_script(pyodide_requirements)
 
 
+def finalize():
+    git_repo_root = find_git_repo_root().resolve()
+    current_dir = os.getcwd()
+    # Normalize current working directory
+    if current_dir != str(git_repo_root):
+        warn(
+            "You are not in the root of the git repository. "
+            f"Changing cwd to {git_repo_root}..."
+        )
+        os.chdir(git_repo_root)
+
+    info(f"🚧Executing actions from {os.getcwd()}")
+    info("📄Updating package.json...")
+    update_package_json()
+
+
 if __name__ == "__main__":
-    main()
+    # check for --prepare flag
+    if len(sys.argv) > 1 and sys.argv[1] == "--prepare":
+        prepare()
+    elif len(sys.argv) > 1 and sys.argv[1] == "--finalize":
+        finalize()
+    else:
+        error("Please specify either --prepare or --finalize")

@@ -99,13 +99,17 @@ serve:
 
 .PHONY: pyodide-prepare
 pyodide-prepare:
-	@poetry run python pyodide/build.py
+	@poetry run python pyodide/build.py --prepare
 
+.PHONY: pyodide-finalize
+pyodide-finalize:
+	@poetry run python pyodide/build.py --finalize
 
 .PHONY: pyodide-build
 pyodide-build: pyodide-prepare
 	@echo "==> 🐳 Building Pyodide Distribution"
 	@cd pyodide/pyodide-src && ./run_docker --non-interactive bash -c './build_draco.sh'
+	@make pyodide-finalize
 
 
 .PHONY: jupyterlite-build
