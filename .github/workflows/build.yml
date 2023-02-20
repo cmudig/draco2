@@ -26,9 +26,10 @@ jobs:
         id: var_distro
         env:
           # Rebuilding the distro if any of these files have changed since the last build
-          PYODIDE_DISTRO_SRC: '["pyodide/packages/", 
-                                "pyodide/build.py", 
-                                "pyodide/README.md", 
+          PYODIDE_DISTRO_SRC: '["pyodide/packages/",
+                                "pyodide/build.py",
+                                "pyodide/package-patch.json.template",
+                                "pyodide/README.md",
                                 "draco/", 
                                 "poetry.lock", 
                                 "pyproject.toml"]'
@@ -274,6 +275,7 @@ jobs:
       # E.g.: pyodide-v2.0.0-beta.2.tar.gz
       PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_tag_name }}.tar.gz
       NODE_VERSION: 16
+      NPM_REGISTRY_URL: https://registry.npmjs.org
 
     steps:
       - name: Download freshly built Pyodide distribution
@@ -299,6 +301,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+          registry-url: ${{ env.NPM_REGISTRY_URL }}
 
       - name: Publish Pyodide distribution to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish $PYODIDE_TAR_NAME
