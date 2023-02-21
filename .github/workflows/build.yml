@@ -243,7 +243,7 @@ jobs:
       SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
       PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
-      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_version_label }}.tar.gz
+      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_version_label }}
 
     steps:
       - name: Download freshly built Pyodide distribution
@@ -259,10 +259,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
-          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide
+          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d $PYODIDE_TAR_NAME
 
       - name: Create tarball from Pyodide distribution
-        run: tar -czvf $PYODIDE_TAR_NAME -C pyodide .
+        run: tar -czvf $PYODIDE_TAR_NAME.tar.gz -C pyodide .
 
       - name: Upload Pyodide distribution as release asset
         uses: actions/upload-release-asset@v1
@@ -284,7 +284,7 @@ jobs:
       # https://api.github.com/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
       PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
       # E.g.: pyodide-2.0.0b3.tar.gz
-      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_version_label }}.tar.gz
+      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_version_label }}
       NODE_VERSION: 16
       NPM_REGISTRY_URL: https://registry.npmjs.org
 
@@ -304,10 +304,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
-          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide
+          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d $PYODIDE_TAR_NAME
 
       - name: Create tarball from Pyodide distribution
-        run: tar -czvf $PYODIDE_TAR_NAME -C pyodide .
+        run: tar -czvf $PYODIDE_TAR_NAME.tar.gz -C pyodide .
 
       - uses: actions/setup-node@v3
         with:
