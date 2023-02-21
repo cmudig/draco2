@@ -10,7 +10,7 @@
 
 # Draco v2
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=313704611&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestEurope)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/launch-Codespaces-blue)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=313704611&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestEurope)
 [![PyPi](https://img.shields.io/pypi/v/draco.svg)](https://pypi.org/project/draco/)
 [![npm](https://img.shields.io/npm/v/draco-pyodide)](https://www.npmjs.com/package/draco-pyodide)
 [![Test](https://github.com/cmudig/draco2/actions/workflows/test.yml/badge.svg)](https://github.com/cmudig/draco2/actions/workflows/test.yml)
@@ -18,7 +18,7 @@
 [![codecov](https://codecov.io/gh/cmudig/draco2/branch/main/graph/badge.svg)](https://codecov.io/gh/cmudig/draco2)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cmudig/draco2/HEAD)
 [![Lite](https://gist.githubusercontent.com/willeppy/35cdc20a3fc26e393ce76f1df35bcdfc/raw/a7fca1d0a2d62c2b49f60c0217dffbd0fe404471/lite-badge-launch-small.svg)](https://dig.cmu.edu/draco2/jupyterlite)
-[![Pyodide Console](https://img.shields.io/badge/Pyodide%20Console-launch-brightgreen)](https://dig.cmu.edu/draco2/jupyterlite/static/pyodide/console.html)
+[![Pyodide Console](https://img.shields.io/badge/🐍%20launch-Pyodide%20Console-yellowgreen)](https://dig.cmu.edu/draco2/jupyterlite/static/pyodide/console.html)
 
 **Work in Progress**
 
