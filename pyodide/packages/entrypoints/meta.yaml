@@ -1,0 +1,13 @@
+package:
+  name: entrypoints
+  version: 0.4
+  top-level:
+    - entrypoints
+source:
+  url: https://files.pythonhosted.org/packages/35/a8/365059bbcd4572cbc41de17fd5b682be5868b218c3c5479071865cab9078/entrypoints-0.4-py3-none-any.whl
+  sha256: f174b5ff827504fd3cd97cc3f8649f3693f51538c7e4bdf3ef002c8429d42f9f
+about:
+  home: https://github.com/takluyver/entrypoints
+  PyPI: https://pypi.org/project/entrypoints/
+  summary: "Discover and load entry points from installed packages."
+  license: MIT

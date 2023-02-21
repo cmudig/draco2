@@ -28,36 +28,48 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
+altair = "^4.2.2"
 clingo = "^5.5.2"
-matplotlib = "^3.6.0"
-pandas = "^1.4.2"
-python = ">=3.10.0,<3.11"
-scikit-learn = "^1.1.1"
 fastapi = ">=0.85,<0.93"
+pandas = "^1.4.2"
+pydantic = "^1.10.5"
+python = ">=3.10.0,<3.11"
+scikit-learn = "^1.2.1"
 uvicorn = ">=0.18.3,<0.21.0"
 
 [tool.poetry.group.dev.dependencies]
-altair = "^4.2.0"
-black = {extras = ["jupyter"], version = "^22.12.0"}
-deepdiff = "^6.2.1"
-flake8 = "^5.0.4"
+black = { extras = ["jupyter"], version = "^23.1.0" }
+flake8 = "^6.0.0"
 flake8-black = "^0.3.3"
-ipywidgets = "^7.7.2"
-isort = "^5.10.1"
-jupyter-book = "^0.13.1"
-jupyterlab = "^3.3.0"
+isort = "^5.12.0"
 mypy = "^0.990"
 pandas-stubs = "^1.5.1"
 pre-commit = "^2.20.0"
-pytest = "^7.2.0"
-pytest-cov = "^4.0.0"
 pytype = "^2022.11.10"
+
+[tool.poetry.group.docs.dependencies]
+ipywidgets = "^7.7.2"
+jupyter-book = "^0.13.1"
+jupyterlab = "^3.3.0"
+matplotlib = "^3.6.0"
 sphinx-autodoc-typehints = "^1.19.1"
 toml = "^0.10.2"
 types-pkg-resources = "^0.1.2"
 vega-datasets = "^0.9.0"
 wheel = "^0.38.4"
+
+[tool.poetry.group.test.dependencies]
+deepdiff = "^6.2.1"
 httpx = "^0.23.0"
+pytest = "^7.2.0"
+pytest-cov = "^4.0.0"
+
+[tool.poetry.group.web]
+optional = true
+
+[tool.poetry.group.web.dependencies]
+jupyterlite = "^0.1.0b18"
+libarchive-c = "^4.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
