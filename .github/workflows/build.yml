@@ -246,6 +246,15 @@ jobs:
       GH_TOKEN: ${{ github.token }}
 
     steps:
+      - name: Checkout repository so that `gh` can be used
+        uses: actions/checkout@v3
+
+      # This way we won't have conflicts when extracting the prebuilt distro
+      # We do not need repo files here anyway, we just checked out the repo
+      # so that the `gh` CLI can be used
+      - name: Remove existing `pyodide` dir from repo
+        run: rm -rf pyodide
+
       - name: Download freshly built Pyodide distribution
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
         uses: actions/download-artifact@v3
@@ -263,9 +272,6 @@ jobs:
       - name: Create tarball from Pyodide distribution
         run: tar -czvf $PYODIDE_TAR_NAME -C pyodide .
 
-      - name: Checkout repository so that `gh` can be used
-        uses: actions/checkout@v3
-
       - name: Upload Pyodide distribution as release asset
         run: gh release upload ${{ github.event.release.tag_name }} $PYODIDE_TAR_NAME
 
@@ -280,8 +286,6 @@ jobs:
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
       # https://api.github.com/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
       PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
-      # E.g.: pyodide-2.0.0b3.tar.gz
-      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_version_label }}.tar.gz
       NODE_VERSION: 16
       NPM_REGISTRY_URL: https://registry.npmjs.org
 
@@ -302,12 +306,9 @@ jobs:
         run: |
           gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
           unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide
-          ls -l pyodide
 
-      - name: Create tarball from Pyodide distribution
-        run: tar -czvf $PYODIDE_TAR_NAME -C pyodide .
-
-      - uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: ${{ env.NPM_REGISTRY_URL }}
@@ -315,4 +316,5 @@ jobs:
       - name: Publish Pyodide distribution to NPM
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish $PYODIDE_TAR_NAME
+        working-directory: pyodide
+        run: npm publish
