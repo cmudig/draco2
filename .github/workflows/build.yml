@@ -244,6 +244,7 @@ jobs:
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
       PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
       PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_version_label }}
+      GH_TOKEN: ${{ github.token }}
 
     steps:
       - name: Download freshly built Pyodide distribution
@@ -255,8 +256,6 @@ jobs:
 
       - name: Download prebuilt Pyodide distro
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
           unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d $PYODIDE_TAR_NAME
@@ -265,13 +264,7 @@ jobs:
         run: tar -czvf $PYODIDE_TAR_NAME.tar.gz -C pyodide .
 
       - name: Upload Pyodide distribution as release asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: $PYODIDE_TAR_NAME
-          asset_name: $PYODIDE_TAR_NAME
-          asset_content_type: application/gzip
-
+        run: gh release upload ${{ github.event.release.tag_name }} $PYODIDE_TAR_NAME.tar.gz
 
   npm_publish:
     if: ${{ needs.variables.outputs.is_release == 'true' }}
