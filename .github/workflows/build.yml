@@ -263,6 +263,9 @@ jobs:
       - name: Create tarball from Pyodide distribution
         run: tar -czvf $PYODIDE_TAR_NAME -C pyodide .
 
+      - name: Checkout repository so that `gh` can be used
+        uses: actions/checkout@v3
+
       - name: Upload Pyodide distribution as release asset
         run: gh release upload ${{ github.event.release.tag_name }} $PYODIDE_TAR_NAME
 
@@ -272,6 +275,7 @@ jobs:
     name: Publish Pyodide distribution to NPM
     runs-on: ubuntu-latest
     env:
+      SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
       # E.g.: pyodide-08ecf9c
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
       # https://api.github.com/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
