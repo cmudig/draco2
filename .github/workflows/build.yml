@@ -190,7 +190,7 @@ jobs:
           cache: "poetry"
 
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --with web
 
       - name: Make book
         run: make book
