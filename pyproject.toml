@@ -39,13 +39,11 @@ uvicorn = ">=0.18.3,<0.21.0"
 
 [tool.poetry.group.dev.dependencies]
 black = { extras = ["jupyter"], version = "^23.1.0" }
-flake8 = "^6.0.0"
-flake8-black = "^0.3.3"
-isort = "^5.12.0"
 mypy = "^0.990"
 pandas-stubs = "^1.5.1"
 pre-commit = "^2.20.0"
 pytype = "^2022.11.10"
+ruff = "^0.0.251"
 
 [tool.poetry.group.docs.dependencies]
 ipywidgets = "^7.7.2"
@@ -78,5 +76,14 @@ build-backend = "poetry.core.masonry.api"
 [tool.pyright]
 include = ["draco"]
 
-[tool.isort]
-profile = "black"
+[tool.ruff]
+line-length = 88
+select = [
+    "E",
+    "F",
+    "W",
+    # isort
+    "I001"
+]
+src = ["draco"]
+fix = true
