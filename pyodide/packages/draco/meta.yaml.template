@@ -1,0 +1,22 @@
+package:
+  name: draco
+  version: {package_version}
+  top-level:
+    - draco
+source:
+  url: {source_url}
+  sha256: {source_sha256}
+requirements:
+  run:
+    - altair
+    - clingo
+    - matplotlib
+    - pandas
+    - pydantic
+    - scikit-learn
+    - vega-datasets
+about:
+  home: https://github.com/cmudig/draco2
+  PyPI: https://pypi.org/project/draco
+  summary: Visualization recommendation using constraints
+  license: MIT

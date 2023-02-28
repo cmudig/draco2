@@ -7,6 +7,26 @@
   "context": "..",
   "dockerFile": "../Dockerfile",
 
+  "features": {
+        // Allow using Docker from inside the container on GitHub Codespaces
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+            "installZsh": true,
+            "upgradePackages": true,
+			"dockerVersion": "latest",
+			"enableNonRootDocker": true,
+			"moby": true
+		},
+        // Allow opening the codespace in a local editor through SSH
+        "ghcr.io/devcontainers/features/sshd:1": {
+            "version": "latest"
+        }
+	},
+
+	// Use this environment variable if you need to bind mount your local source code into a new container.
+	"remoteEnv": {
+		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+	},
+
   // Adding default settings
   "settings": {
     "python.pythonPath": "/usr/local/bin/python",
@@ -34,6 +54,10 @@
     "VisualStudioExptTeam.vscodeintellicode"
   ],
 
-  // Making ports available locally for the docs, Jupyter server and FastAPI server
-  "forwardPorts": [5000, 8000, 8888]
+  // Making ports available locally for
+  // [Codespaces SSH, Jupyter Book, FastAPI, Jupyter, Pyodide Console, JupyterLite]
+  "forwardPorts": [2222, 5000, 8000, 8888, 9000, 9999],
+
+  // Using the root user for the container (https://aka.ms/dev-containers-non-root)
+  "remoteUser": "root"
 }

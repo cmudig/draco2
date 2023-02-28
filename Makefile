@@ -14,8 +14,7 @@ cover:
 lint:
 	@echo "==> 👕 Linting"
 	@poetry run black .
-	@poetry run isort .
-	@poetry run flake8 draco --statistics
+	@poetry run ruff .
 
 .PHONY: typecheck
 typecheck:
@@ -81,14 +80,50 @@ clean:
 	@jupyter-book clean docs
 	@rm -rf .coverage
 	@rm -rf dist
+	@rm -rf pyodide/pyodide-src
+	@rm -rf jupyterlite/lite-dir/static/pyodide
+	@rm -f jupyterlite/.jupyterlite.doit.db
 	@find . -type d -name '.pytype' -exec rm -rf {} +
 	@find . -type d -name '.mypy_cache' -exec rm -rf {} +
 	@find . -type d -name '__pycache__' -exec rm -rf {} +
 	@find . -type d -name '*pytest_cache*' -exec rm -rf {} +
 	@find . -type f -name "*.py[co]" -exec rm -rf {} +
+	@find . -type f -name ".coverage.*" -exec rm -rf {} +
 	@find . -type d -name '*.ipynb_checkpoints' -exec rm -r {} +
 
 .PHONY: serve
 serve:
 	@echo "==> 📡 Serve"
 	@poetry run uvicorn draco.server.__main__:app --reload --host=0.0.0.0
+
+.PHONY: pyodide-prepare
+pyodide-prepare:
+	@poetry run python pyodide/build.py --prepare
+
+.PHONY: pyodide-finalize
+pyodide-finalize:
+	@poetry run python pyodide/build.py --finalize
+
+.PHONY: pyodide-build
+pyodide-build: pyodide-prepare
+	@echo "==> 🐳 Building Pyodide Distribution"
+	@cd pyodide/pyodide-src && ./run_docker --non-interactive bash -c './build_draco.sh'
+	@make pyodide-finalize
+
+
+.PHONY: jupyterlite-build
+jupyterlite-build:
+	@echo "==> 💡 Building Jupyter Lite Static Site"
+	@cd jupyterlite && poetry run python build.py && poetry run jupyter lite build
+
+
+# Re-using the Jupyter Lite build target, since it handles the download and 'caching' of our Pyodide distribution.
+.PHONY: pyodide-serve
+pyodide-serve: jupyterlite-build
+	@echo "==> 📡 Serving Pyodide Console at http://localhost:9000/console.html"
+	@poetry run python -m http.server --directory dist/jupyterlite/static/pyodide --bind 0.0.0.0 9000
+
+.PHONY: jupyterlite-serve
+jupyterlite-serve: jupyterlite-build
+	@echo "==> 📡 Serving Jupyter Lite at http://localhost:9999"
+	@poetry run python -m http.server --directory dist/jupyterlite --bind 0.0.0.0 9999

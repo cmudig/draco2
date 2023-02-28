@@ -1,0 +1,7 @@
+{
+  "LiteBuildConfig": {
+    "base_url": "/",
+    "lite_dir": "lite-dir",
+    "output_dir": "../dist/jupyterlite"
+  }
+}

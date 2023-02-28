@@ -1,0 +1,18 @@
+package:
+  name: clingo
+  version: 5.6.2
+  top-level:
+    - clingo
+source:
+  url: https://files.pythonhosted.org/packages/fe/a3/f3886a49f6483cff0efc08be5c82ce1573a686aea21e5e7387811bdce587/clingo-5.6.2.tar.gz
+  sha256: 7750f6e47bf2e725f93555cc9acd3b10d2ab73c2a3868e9eb6a098df9a6dd755
+requirements:
+  run:
+    - cffi
+  host:
+    - cffi
+about:
+  home: https://github.com/potassco/clingo
+  PyPI: https://pypi.org/project/clingo
+  summary: CFFI-based bindings to the clingo solver.
+  license: MIT

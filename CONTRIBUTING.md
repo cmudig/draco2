@@ -68,12 +68,15 @@ execute the following commands from a UNIX shell to start the development enviro
 # Build the docker image
 NB_USER="draco2" && \
 docker build --build-arg NB_USER=${NB_USER} -t draco2-dev . && \
-# Start a container with local volume mounting and port forwarding for FastAPI, Jupyter and Jupyter Book
+# Start a container with local volume mounting and port forwarding for
+# [Jupyter Book, FastAPI, Jupyter, Pyodide Console, JupyterLite]
 docker run -it --rm \
                -v $(pwd):/home/${NB_USER}/app \
-               -p 5000:5000 \  # Jupyter Book
-               -p 8000:8000 \  # FastAPI
-               -p 8888:8888 \  # Jupyter
+               -p 5000:5000 \
+               -p 8000:8000 \
+               -p 8888:8888 \
+               -p 9000:9000 \
+               -p 9999:9999 \
                --name draco2-dev draco2-dev bash
 ```
 
@@ -91,7 +94,7 @@ the above-listed commands which 'block' your current shell session.
 
 ## Making a release
 
-- After pulling the latest coimmits, run `poetry version prerelease` to update the version number in `pyproject.toml`.
+- After pulling the latest commits, run `poetry version prerelease` to update the version number in `pyproject.toml`.
 - Run `git commit -am "chore: bump version to $(poetry version -s)"` to commit the version bump and add a tag with
   `git tag "v$(poetry version -s)"`.
 - Run `poetry build` to build the package.
@@ -99,3 +102,11 @@ the above-listed commands which 'block' your current shell session.
 - Run `poetry publish` to publish the package to [PyPI](https://pypi.org/project/draco/).
 - Push the commits and tags with `git push && git push --tags`.
 - Create a [release on GitHub](https://github.com/cmudig/draco2/releases) for the new version tag.
+
+### Pyodide Distributions Release
+
+The Pyodide distribution used for [Jupyter Lite](https://dig.cmu.edu/draco2/jupyterlite) and the
+[Pyodide Console](https://dig.cmu.edu/draco2/jupyterlite/static/pyodide/console.html) will be automatically attached to
+the GitHub release via `.github/workflows/build.yml#pin_distro`. To make the integration of Draco into web applications
+easier we also publish the Pyodide distribution to NPM via `.github/workflows/build.yml#npm_publish`. The NPM package is
+called [draco-pyodide](https://www.npmjs.com/package/draco-pyodide) and can be installed as any other NPM package.

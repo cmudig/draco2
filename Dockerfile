@@ -26,9 +26,9 @@ WORKDIR ${HOME}/app
 RUN python -m pip install --upgrade pip &&  \
     pip install poetry
 COPY pyproject.toml poetry.lock ./
-# Purposefully not using --no-dev here to install dev dependencies needed for Jupyter Notebooks
+# Installing all dependency groups to build a complete dev environment
 RUN poetry config virtualenvs.create false && \
-    poetry install
+    poetry install --with web
 
 # Copy the project source code
 COPY . .

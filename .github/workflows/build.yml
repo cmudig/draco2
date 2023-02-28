@@ -1,0 +1,320 @@
+name: Build and publish artifacts
+
+on:
+  push:
+    branches:
+      - main
+      - ci/test*
+  release:
+    types:
+      - published
+
+jobs:
+  variables:
+    name: Set auxiliary variables
+    runs-on: ubuntu-latest
+    outputs:
+      pyodide_distro_name: ${{ steps.var_distro.outputs.pyodide_distro_name}}
+      should_build_pyodide: ${{ steps.var_distro.outputs.should_build_pyodide}}
+      pyodide_distro_url: ${{ steps.var_distro.outputs.pyodide_distro_url}}
+      is_release: ${{ steps.var_release.outputs.is_release }}
+      latest_version_label: ${{ steps.var_release.outputs.latest_version_label }}
+
+    steps:
+      - name: Setting variables for the Pyodide distro
+        uses: actions/github-script@v6
+        id: var_distro
+        env:
+          # Rebuilding the distro if any of these files have changed since the last build
+          PYODIDE_DISTRO_SRC: '["pyodide/packages/",
+                                "pyodide/build.py",
+                                "pyodide/package-patch.json.template",
+                                "pyodide/README.md",
+                                "draco/", 
+                                "poetry.lock"]'
+
+        with:
+          script: |
+            const shaShort = context.sha.substring(0, 7);
+            
+            // Determining whether the Pyodide distro should be built.
+            // We can skip the build if an artifact with the same name already exists (`distroForThisShaExists`)
+            // OR
+            // If files relevant to the Pyodide build have not changed since the last Pyodide build (`distroDepDidNotChange`)
+            const artifacts = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            }).then(({ data }) => data.artifacts);
+            
+            // Extracting the commit SHA from the latest artifact name so that we can do some git diffing
+            const pyodideArtifacts = artifacts.filter(artifact => artifact.name.startsWith('pyodide-'));
+            const latestPyodideArtifact = pyodideArtifacts.sort((a, b) => b.updated_at - a.updated_at)[0];
+            core.info(`Latest Pyodide artifact: ${latestPyodideArtifact.name}`);
+            const latestPyodideShaShort = latestPyodideArtifact.name.split('-')[1];
+            
+            const distroForThisShaExists = shaShort === latestPyodideShaShort;
+            if (distroForThisShaExists) {
+              core.setOutput('should_build_pyodide', false);
+              core.setOutput('pyodide_distro_name', latestPyodideArtifact.name);
+              core.setOutput('pyodide_distro_url', latestPyodideArtifact.archive_download_url);
+              return;
+            }
+            
+            // List the file names that have changed since the last Pyodide build
+            const filesChangedBetweenCommits = await github.rest.repos.compareCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: latestPyodideShaShort,
+              head: shaShort
+            }).then(({ data }) => (data.files || []).map((file) => file.filename))
+            core.info(`Files changed between ${latestPyodideShaShort} and ${shaShort}: ${filesChangedBetweenCommits}`);
+            
+            // Comparing changed files against the list of files that should trigger a rebuild
+            // We have directories in the list, so if any of the changed files are in one of those, we should rebuild
+            const pyodideDistroSrc = JSON.parse(process.env.PYODIDE_DISTRO_SRC);
+            const distroDepDidNotChange = filesChangedBetweenCommits.every(file => !pyodideDistroSrc.some(src => file.startsWith(src)));
+            if (distroDepDidNotChange) {
+              core.setOutput('should_build_pyodide', false);
+              core.setOutput('pyodide_distro_name', latestPyodideArtifact.name);
+              core.setOutput('pyodide_distro_url', latestPyodideArtifact.archive_download_url);
+              return;
+            }
+            
+            // If we've made it this far, we should build the Pyodide distro from the current commit
+            core.setOutput('should_build_pyodide', true);
+            core.setOutput('pyodide_distro_name', `pyodide-${shaShort}`);
+            core.setOutput('pyodide_distro_url', null);
+
+      - name: Setting variables for the release
+        uses: actions/github-script@v6
+        id: var_release
+        with:
+          script: |
+            // Setting whether this is a release, indicating that the Pyodide distro
+            // should be pinned as a release artifact & uploaded to NPM
+            const isRelease = context.eventName === 'release';
+            core.setOutput('is_release', isRelease);
+            
+            // Getting the latest version label by reading the 'version = {version}' line of 'pyproject.toml'
+            const latestVersionLabel = await github.rest.repos.getContent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path: 'pyproject.toml'
+            }).then(({ data }) => {
+              const pyprojectToml = Buffer.from(data.content, 'base64').toString();
+              const versionLine = pyprojectToml.split('\n').find(line => line.startsWith('version = '));
+              return versionLine.split(' = ')[1].replace(/"/g, '');
+            });
+            core.setOutput('latest_version_label', latestVersionLabel);
+
+      - name: Summarize outputs
+        run: |
+          echo "pyodide_distro_name: ${{ steps.var_distro.outputs.pyodide_distro_name}}"
+          echo "should_build_pyodide: ${{ steps.var_distro.outputs.should_build_pyodide}}"
+          echo "pyodide_distro_url: ${{ steps.var_distro.outputs.pyodide_distro_url}}"
+          echo "is_release: ${{ steps.var_release.outputs.is_release }}"
+          echo "latest_version_label: ${{ steps.var_release.outputs.latest_version_label }}"
+
+  pyodide:
+    needs: [ variables ]
+    name: Build Pyodide Distro and upload as an artifact
+    runs-on: ubuntu-latest
+    env:
+      PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
+      SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
+      PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
+
+    # GitHub actions does not allow early exiting from a job, so we have to do it manually using `if`s
+    steps:
+      - name: Skipping Pyodide build
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
+        run: echo "Skipping Pyodide build, will download distro from ${{ env.PYODIDE_DISTRO_URL }}"
+
+      - name: Checkout repository
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
+        uses: actions/checkout@v3
+
+      - name: Install poetry
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
+        run: pipx install poetry
+
+      - name: Setup Python
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: ".python-version"
+          cache: "poetry"
+
+      - name: Install dependencies
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
+        run: poetry install --with web
+
+      - name: Make Pyodide distribution
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
+        run: make pyodide-build
+
+      - name: Copy Pyodide README.md to dist folder
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
+        run: cp pyodide/README.md pyodide/pyodide-src/dist
+
+      - name: Upload Pyodide distribution
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.PYODIDE_DISTRO_NAME }}
+          path: pyodide/pyodide-src/dist
+
+  docs:
+    # No need to rebuild the docs if this is a release
+    if: ${{ needs.variables.outputs.is_release == 'false' }}
+    needs: [ variables, pyodide ]
+    name: Build Jupyter Book with Jupyter Lite and publish to GitHub Pages
+    runs-on: ubuntu-latest
+    env:
+      SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
+      PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
+      PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: ".python-version"
+          cache: "poetry"
+
+      - name: Install dependencies
+        run: poetry install --with web
+
+      - name: Make book
+        run: make book
+
+      # Downloads to the local folder `pyodide/pyodide-src/dist` which
+      # gets picked up by `make jupyterlite-build` and embedded into the Jupyter Lite build
+      - name: Download freshly built Pyodide distribution
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.PYODIDE_DISTRO_NAME }}
+          path: pyodide/pyodide-src/dist
+
+      # Downloading the prebuilt Pyodide distro using the URL of a previous artifact
+      - name: Download prebuilt Pyodide distro
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
+        env:
+          # Needed for `gh` call
+          GH_TOKEN: ${{ github.token }}
+        # Download and extract the distro to the folder `pyodide/pyodide-src/dist`
+        # into which a fresh distro would be built. This is folder is going to be
+        # scanned by `make jupyterlite-build` for a local copy-pasteable distro
+        run: |
+          gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
+          mkdir -p pyodide/pyodide-src
+          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide/pyodide-src/dist
+
+      - name: Make JupyterLite
+        run: make jupyterlite-build
+
+      - name: Embed JupyterLite into docs
+        run: cp -r dist/jupyterlite docs/_build/html/jupyterlite
+
+      - name: Display HTML bundle tree
+        run: find docs/_build/html/ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"
+
+      - name: Upload Documentation site to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build/html
+
+  pin_distro:
+    if: ${{ needs.variables.outputs.is_release == 'true' }}
+    needs: [ variables, pyodide ]
+    name: Pin Pyodide distribution as a release artifact
+    runs-on: ubuntu-latest
+    env:
+      SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
+      PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
+      PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
+      PYODIDE_TAR_NAME: pyodide-${{ needs.variables.outputs.latest_version_label }}.tar.gz
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Checkout repository so that `gh` can be used
+        uses: actions/checkout@v3
+
+      # This way we won't have conflicts when extracting the prebuilt distro
+      # We do not need repo files here anyway, we just checked out the repo
+      # so that the `gh` CLI can be used
+      - name: Remove existing `pyodide` dir from repo
+        run: rm -rf pyodide
+
+      - name: Download freshly built Pyodide distribution
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.PYODIDE_DISTRO_NAME }}
+          path: pyodide
+
+      - name: Download prebuilt Pyodide distro
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
+        run: |
+          gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
+          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide
+          ls -l pyodide
+
+      - name: Create tarball from Pyodide distribution
+        run: tar -czvf $PYODIDE_TAR_NAME -C pyodide .
+
+      - name: Upload Pyodide distribution as release asset
+        run: gh release upload ${{ github.event.release.tag_name }} $PYODIDE_TAR_NAME
+
+  npm_publish:
+    if: ${{ needs.variables.outputs.is_release == 'true' }}
+    needs: [ variables, pyodide ]
+    name: Publish Pyodide distribution to NPM
+    runs-on: ubuntu-latest
+    env:
+      SHOULD_BUILD_PYODIDE: ${{ needs.variables.outputs.should_build_pyodide }}
+      # E.g.: pyodide-08ecf9c
+      PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
+      # https://api.github.com/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
+      PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
+      NODE_VERSION: 16
+      NPM_REGISTRY_URL: https://registry.npmjs.org
+
+    steps:
+      - name: Download freshly built Pyodide distribution
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.PYODIDE_DISTRO_NAME }}
+          path: pyodide
+
+      # Downloading the prebuilt Pyodide distro using the URL of a previous artifact
+      - name: Download prebuilt Pyodide distro
+        if: ${{ env.SHOULD_BUILD_PYODIDE == 'false' }}
+        env:
+          # Needed for `gh` call
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api ${{ env.PYODIDE_DISTRO_URL }} > ${{ env.PYODIDE_DISTRO_NAME }}.zip
+          unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: ${{ env.NPM_REGISTRY_URL }}
+
+      - name: Publish Pyodide distribution to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        working-directory: pyodide
+        run: npm publish
