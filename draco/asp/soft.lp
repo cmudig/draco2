@@ -150,7 +150,7 @@ preference(binned_orientation_not_x,E) :-
     attribute((field,type),F,(number;datetime)),
     helper((encoding,field),E,F),
     attribute((encoding,binning),E,_),
-    not attribute((encoding,channel),E,x).
+    not attribute((encoding,channel),_,x).
 
 % @soft(high_cardinality_ordinal) Prefer not to use ordinal for fields with high cardinality.
 preference(high_cardinality_ordinal,E) :-
