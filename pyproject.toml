@@ -42,7 +42,7 @@ black = { extras = ["jupyter"], version = "^23.1.0" }
 mypy = "^0.990"
 pandas-stubs = "^1.5.1"
 pre-commit = "^2.20.0"
-pytype = "^2022.11.10"
+pytype = ">=2022.11.10,<2024.0.0"
 ruff = "^0.0.253"
 
 [tool.poetry.group.docs.dependencies]
