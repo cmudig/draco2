@@ -23,7 +23,7 @@ typecheck:
 
 .PHONY: mypy
 mypy:
-	@poetry run mypy -p draco
+	@poetry run mypy -p draco --check-untyped-defs
 
 .PHONY: pytype
 pytype:
