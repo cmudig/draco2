@@ -176,6 +176,7 @@ jobs:
       PYODIDE_DISTRO_NAME: ${{ needs.variables.outputs.pyodide_distro_name }}
       PYODIDE_DISTRO_URL: ${{ needs.variables.outputs.pyodide_distro_url }}
 
+    # This job is responsible for the GH Pages deployment
     environment:
       name: github-pages
       url: ${{ steps.gh_pages_deployment.outputs.page_url }}
