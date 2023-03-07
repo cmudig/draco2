@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict
+from typing import DefaultDict, Dict
 
 import pandas as pd
 
@@ -11,7 +11,6 @@ draco = Draco()
 learn_data: Dict[str, Dict] = {}
 
 root_path = Path(__file__).resolve().parents[2]
-learn_data = {}
 with open(root_path / "docs/applications/data/saket2018_draco2.json") as file:
     i = 0
     json_data = json.load(file)
@@ -45,7 +44,7 @@ def test_run_in_parallel():
 
 
 def test_count_preferences_memoized():
-    processed_specs = {}
+    processed_specs: Dict[str, DefaultDict[str, int]] = {}
     pair_id = "saket_2018_0"
     key = "saket_2018_0_negative"
     count_preferences_memoized(processed_specs, key, learn_data[pair_id]["negative"])

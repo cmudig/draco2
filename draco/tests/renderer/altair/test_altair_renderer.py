@@ -408,6 +408,8 @@ bubble_spec_vl = {
     "mark": "point",
 }
 
+marks_to_test: list[MarkType] = ["line", "area", "text", "tick", "rect"]
+
 
 @pytest.mark.parametrize(
     "spec, expected_vl",
@@ -421,7 +423,7 @@ bubble_spec_vl = {
         (scatter_with_color_spec_d, scatter_with_color_spec_vl),
         (bubble_spec_d, bubble_spec_vl),
         # Dummy specs for coverage
-        *list(map(specs_with_mark, ["line", "area", "text", "tick", "rect"])),
+        *[specs_with_mark(mark) for mark in marks_to_test],
     ],
 )
 def test_single_view_single_mark(

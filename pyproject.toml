@@ -39,15 +39,15 @@ uvicorn = ">=0.18.3,<0.21.0"
 
 [tool.poetry.group.dev.dependencies]
 black = { extras = ["jupyter"], version = "^23.1.0" }
-mypy = "^0.990"
+mypy = ">=0.990,<1.1"
 pandas-stubs = "^1.5.1"
-pre-commit = "^2.20.0"
-pytype = "^2022.11.10"
-ruff = "^0.0.251"
+pre-commit = ">=2.20,<4.0"
+pytype = ">=2022.11.10,<2024.0.0"
+ruff = ">=0.0.253,<0.0.255"
 
 [tool.poetry.group.docs.dependencies]
 ipywidgets = "^7.7.2"
-jupyter-book = "^0.13.1"
+jupyter-book = ">=0.13.1,<0.15.0"
 jupyterlab = "^3.3.0"
 matplotlib = "^3.6.0"
 sphinx-autodoc-typehints = "^1.19.1"
