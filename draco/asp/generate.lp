@@ -55,7 +55,3 @@ facet_id(0..1).
 required((facet,channel)).
 not_required((facet,binning)).
 { attribute((facet,field),E,N): domain((field,name),N) } = 1 :- entity(facet,_,E).
-
-% enfoce the order to reduce redundency
-:- entity(view,root,V), M1 < M2, attribute((mark,type),(V,M1),T1), attribute((mark,type),(V,M2),T2), not T1 < T2.
-:- entity(mark,_,M), E1 < E2, attribute((encoding,channel),(M,E1),C1), attribute((encoding,channel),(M,E2),C2), not C1 < C2.

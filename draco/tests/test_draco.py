@@ -9,9 +9,7 @@ default_draco = Draco()
 def test_check_spec():
     prog_valid = dict_to_facts(
         {
-            "field": [
-                {"name": "temperature", "type": "number"}
-            ],
+            "field": [{"name": "temperature", "type": "number"}],
             "mark": [
                 {
                     "type": "tick",
@@ -25,9 +23,7 @@ def test_check_spec():
 
     prog_invalid = dict_to_facts(
         {
-            "field": [
-                {"name": "temperature", "type": "number"}
-            ],
+            "field": [{"name": "temperature", "type": "number"}],
             "mark": [
                 {
                     # invalid mark
@@ -52,9 +48,7 @@ def test_check_spec_custom_draco():
 def test_get_violations():
     prog = dict_to_facts(
         {
-            "field": [
-                {"name": "temperature", "type": "number"}
-            ],
+            "field": [{"name": "temperature", "type": "number"}],
             "mark": [
                 {
                     # invalid mark
