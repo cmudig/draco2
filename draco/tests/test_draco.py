@@ -10,7 +10,7 @@ def test_check_spec():
     prog_valid = dict_to_facts(
         {
             "field": [
-                {"name": "temperature", "type": "number", "__id__": "temperature"}
+                {"name": "temperature", "type": "number"}
             ],
             "mark": [
                 {
@@ -26,7 +26,7 @@ def test_check_spec():
     prog_invalid = dict_to_facts(
         {
             "field": [
-                {"name": "temperature", "type": "number", "__id__": "temperature"}
+                {"name": "temperature", "type": "number"}
             ],
             "mark": [
                 {
@@ -53,7 +53,7 @@ def test_get_violations():
     prog = dict_to_facts(
         {
             "field": [
-                {"name": "temperature", "type": "number", "__id__": "temperature"}
+                {"name": "temperature", "type": "number"}
             ],
             "mark": [
                 {

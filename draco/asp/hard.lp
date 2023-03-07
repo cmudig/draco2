@@ -347,3 +347,15 @@ violation(invalid_extent_order) :-
 violation(invalid_non_string_freq) :-
     attribute((field,freq),F,_),
     not attribute((field,type),F,string).
+
+% % @hard(enforce_order)
+% violation(enforce_order):-
+%     entity(view,root,V), M1 < M2,
+%     attribute((mark,type),(V,M1),T1),
+%     attribute((mark,type),(V,M2),T2),
+%     not T1 < T2.
+% violation(enforce_order):-
+%     entity(mark,_,M), E1 < E2,
+%     attribute((encoding,channel),(M,E1),C1),
+%     attribute((encoding,channel),(M,E2),C2),
+%     not C1 < C2.
