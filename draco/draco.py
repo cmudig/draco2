@@ -98,7 +98,8 @@ class Draco:
         if not isinstance(spec, str):
             spec = "\n".join(spec)
 
-        program = self.define + self.constraints + self.helpers + self.hard + spec
+        program = [self.define, self.constraints, self.helpers, self.hard, spec]
+
         return is_satisfiable(program)
 
     def complete_spec(self, spec: Specification, models=1):
@@ -110,17 +111,17 @@ class Draco:
         if not isinstance(spec, str):
             spec = "\n".join(spec)
 
-        program = (
-            self.define
-            + self.generate
-            + self.constraints
-            + self.helpers
-            + self.hard
-            + self.soft
-            + self.assign_weights
-            + self.optimize
-            + spec
-        )
+        program = [
+            self.define,
+            self.generate,
+            self.constraints,
+            self.helpers,
+            self.hard,
+            self.soft,
+            self.assign_weights,
+            self.optimize,
+            spec,
+        ]
 
         # pass the weights as constraint to Clingo
         args = [f"-c {w}={v}" for w, v in self.weights.items()]
@@ -139,7 +140,7 @@ class Draco:
         if not isinstance(spec, str):
             spec = "\n".join(spec)
 
-        program = self.define + self.constraints + self.helpers + self.soft + spec
+        program = [self.define, self.constraints, self.helpers, self.soft, spec]
 
         try:
             result: DefaultDict[str, int] = defaultdict(int)
@@ -166,13 +167,13 @@ class Draco:
         if not isinstance(spec, str):
             spec = "\n".join(spec)
 
-        program = (
-            self.define
-            + self._constraints_no_violation
-            + self.helpers
-            + self.hard
-            + spec
-        )
+        program = [
+            self.define,
+            self._constraints_no_violation,
+            self.helpers,
+            self.hard,
+            spec,
+        ]
 
         try:
             model = next(run_clingo(program, 1))
