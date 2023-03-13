@@ -47,7 +47,7 @@ ruff = ">=0.0.253,<0.0.255"
 
 [tool.poetry.group.docs.dependencies]
 ipywidgets = "^7.7.2"
-jupyter-book = ">=0.13.1,<0.15.0"
+jupyter-book = ">=0.13.1,<0.16.0"
 jupyterlab = "^3.3.0"
 matplotlib = "^3.6.0"
 sphinx-autodoc-typehints = "^1.19.1"
