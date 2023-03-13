@@ -2710,3 +2710,38 @@ def test_invalid_non_string_freq():
         )
         == ["invalid_non_string_freq"]
     )
+
+
+def test_enforce_order():
+    b = hard.blocks["enforce_order"]
+    assert isinstance(b, Block)
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,(v,(m,0))).
+    entity(mark,v,(v,(m,1))).
+
+    attribute((mark,type),(v,(m,0)),y).
+    attribute((mark,type),(v,(m,1)),x).
+    """
+        )
+        == ["enforce_order"]
+    )
+
+    assert (
+        list_violations(
+            b.program
+            + """
+    entity(view,root,v).
+    entity(mark,v,(v,(m,0))).
+    entity(mark,v,(v,(m,1))).
+
+    attribute((mark,type),(v,(m,0)),x).
+    attribute((mark,type),(v,(m,1)),y).
+    """
+        )
+        == []
+    )

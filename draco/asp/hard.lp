@@ -74,19 +74,15 @@ violation(size_negative) :-
 
 % @hard(encoding_repeat_channel) Cannot use single channels twice for the same mark.
 violation(encoding_repeat_channel) :-
-    entity(encoding,M,E1),
-    entity(encoding,M,E2),
-    attribute((encoding,channel),E1,C),
-    attribute((encoding,channel),E2,C),
-    E1 > E2.
+    entity(mark,_,M),
+    domain(single_channel,C),
+    2 <= #count { E : entity(encoding,M,E), attribute((encoding,channel),E,C) }.
 
 % @hard(scale_repeat_channel) Cannot use single channels twice for the same view.
 violation(scale_repeat_channel) :-
-    entity(scale,V,S1),
-    entity(scale,V,S2),
-    attribute((scale,channel),S1,C),
-    attribute((scale,channel),S2,C),
-    S1 > S2.
+    entity(view,root,V),
+    domain(single_channel,C),
+    2 <= #count { S : entity(scale,V,S), attribute((scale,channel),S,C) }.
 
 % @hard(encoding_channel_without_scale) Encoding channel doesn't have a corresponding scale channel.
 violation(encoding_channel_without_scale) :-
@@ -347,3 +343,15 @@ violation(invalid_extent_order) :-
 violation(invalid_non_string_freq) :-
     attribute((field,freq),F,_),
     not attribute((field,type),F,string).
+
+% @hard(enforce_order) property should follow natural order for generated entities.
+violation(enforce_order):-
+    entity(view,root,V), M1 < M2,
+    attribute((mark,type),(V,M1),T1),
+    attribute((mark,type),(V,M2),T2),
+    not T1 < T2.
+violation(enforce_order):-
+    entity(mark,_,M), E1 < E2,
+    attribute((encoding,channel),(M,E1),C1),
+    attribute((encoding,channel),(M,E2),C2),
+    not C1 < C2.

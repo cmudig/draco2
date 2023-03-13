@@ -1548,6 +1548,23 @@ def test_binned_orientation_not_x():
         == []
     )
 
+    assert (
+        list_preferences(
+            b.program
+            + """
+    attribute((field,type),temperature,number).
+    helper((encoding,field),e1,temperature).
+    attribute((encoding,binning),e1,20).
+    attribute((encoding,channel),e1,x).
+
+    helper((encoding,field),e2,temperature).
+    attribute((encoding,binning),e2,20).
+    attribute((encoding,channel),e2,y).
+    """
+        )
+        == []
+    )
+
     # datetime
     assert (
         list_preferences(
