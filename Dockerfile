@@ -24,7 +24,7 @@ WORKDIR ${HOME}/app
 
 # Install dependencies using Poetry
 RUN python -m pip install --upgrade pip &&  \
-    pip install poetry
+    pip install poetry==1.4.0
 COPY pyproject.toml poetry.lock ./
 # Installing all dependency groups to build a complete dev environment
 RUN poetry config virtualenvs.create false && \
