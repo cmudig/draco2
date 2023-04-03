@@ -1832,31 +1832,91 @@ files = [
 
 [[package]]
 name = "jupyterlite"
-version = "0.1.0b18"
-description = "tools for building JupyterLite sites"
+version = "0.1.0rc0"
+description = ""
 category = "dev"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "jupyterlite-0.1.0b18-py3-none-any.whl", hash = "sha256:c94dd7d175f8acbe184af2f5a38f1efcabfbb23e890d896ddbe882b65f32ed20"},
-    {file = "jupyterlite-0.1.0b18.tar.gz", hash = "sha256:e3aae73786dca8892033840339b3895320eef5a36e1831b665a78e6d2ced1db8"},
+    {file = "jupyterlite-0.1.0rc0-py3-none-any.whl", hash = "sha256:1df1afd1ea063f3bd1329e3b75f3955c1d2380ed9ffaee502842de4f4edee532"},
+    {file = "jupyterlite-0.1.0rc0.tar.gz", hash = "sha256:d08658ad432b81a486a64fb485fbbba2110fd7db6193824262f4d394d84fdad8"},
+]
+
+[package.dependencies]
+jupyterlite-core = "*"
+jupyterlite-javascript-kernel = "*"
+jupyterlite-pyodide-kernel = ">=0.0.4"
+
+[package.extras]
+all = ["jsonschema (>=3)", "jupyter-server", "jupyter-server-mathjax (>=0.2.3)", "jupyterlab (>=3.5.3,<3.6)", "jupyterlab-server (>=2.8.1,<3)", "libarchive-c (>=4.0)", "pkginfo", "tornado (>=6.1)"]
+check = ["jsonschema[format-nongpl] (>=3)"]
+contents = ["jupyter-server"]
+lab = ["jupyterlab (>=3.5.3,<3.6)"]
+libarchive = ["libarchive-c (>=4.0)"]
+mathjax = ["jupyter-server-mathjax (>=0.2.3)"]
+serve = ["tornado (>=6.1)"]
+translation = ["jupyterlab-server (>=2.8.1,<3)"]
+
+[[package]]
+name = "jupyterlite-core"
+version = "0.1.0rc0"
+description = ""
+category = "dev"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "jupyterlite_core-0.1.0rc0-py3-none-any.whl", hash = "sha256:f90067d5756f982663777c31bfc4e54dfbfaf97a4ff0ea7f25f7909ebff9d53b"},
+    {file = "jupyterlite_core-0.1.0rc0.tar.gz", hash = "sha256:176d4dbec845a1ce1fd7cf03adf22aa176e618f113756381d822b19aa7454824"},
 ]
 
 [package.dependencies]
 doit = ">=0.34,<1"
-jupyter_core = ">=4.7"
+jupyter-core = ">=4.7"
 
 [package.extras]
-all = ["jsonschema (>=3)", "jupyter-server-mathjax (>=0.2.3)", "jupyter_server", "jupyterlab (>=3.5.2,<4)", "jupyterlab_server (>=2.8.1,<3)", "libarchive-c (>=4.0)", "pkginfo", "tornado (>=6.1)"]
+all = ["jsonschema (>=3)", "jupyter-server", "jupyter-server-mathjax (>=0.2.3)", "jupyterlab (>=3.5.3,<3.6)", "jupyterlab-server (>=2.8.1,<3)", "libarchive-c (>=4.0)", "pkginfo", "tornado (>=6.1)"]
 check = ["jsonschema[format-nongpl] (>=3)"]
-contents = ["jupyter_server"]
-lab = ["jupyterlab (>=3.5.2,<4)"]
+contents = ["jupyter-server"]
+lab = ["jupyterlab (>=3.5.3,<3.6)"]
 libarchive = ["libarchive-c (>=4.0)"]
 mathjax = ["jupyter-server-mathjax (>=0.2.3)"]
-piplite = ["pkginfo"]
 serve = ["tornado (>=6.1)"]
 test = ["ansi2html", "diffoscope", "pytest-console-scripts", "pytest-cov", "pytest-html", "pytest-xdist"]
-translation = ["jupyterlab_server (>=2.8.1,<3)"]
+translation = ["jupyterlab-server (>=2.8.1,<3)"]
+
+[[package]]
+name = "jupyterlite-javascript-kernel"
+version = "0.1.0rc0"
+description = "JavaScript kernel for JupyterLite running in a Web Worker"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "jupyterlite_javascript_kernel-0.1.0rc0-py3-none-any.whl", hash = "sha256:a0ea928d165941f168a5feced250cd18f65e204cd0fcaca45eccb36c31e9dded"},
+    {file = "jupyterlite_javascript_kernel-0.1.0rc0.tar.gz", hash = "sha256:63956a1dc82fb442a0f9656b47d6f4e17b53eb6533839e157f89c15862e11e57"},
+]
+
+[[package]]
+name = "jupyterlite-pyodide-kernel"
+version = "0.0.6"
+description = "Python kernel for JupyterLite powered by Pyodide"
+category = "dev"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "jupyterlite_pyodide_kernel-0.0.6-py3-none-any.whl", hash = "sha256:38ee0889f83270e06d893de211bbcd2674d57ba5b3292b2f80c5fbb9eeb5fe71"},
+    {file = "jupyterlite_pyodide_kernel-0.0.6.tar.gz", hash = "sha256:2f9c61104ad61f1c4fa10af4ff36bf3c5682db353bf07c56548e0aa03bf7a0fa"},
+]
+
+[package.dependencies]
+jupyterlite-core = ">=0.1.0b22,<0.2.0"
+pkginfo = "*"
+
+[package.extras]
+dev = ["build", "hatch", "jupyterlab (>=3.5.3,<3.6)"]
+docs = ["ipywidgets (>=8.0,<9)", "jupyter-server-mathjax", "jupyterlab-language-pack-fr-fr", "jupyterlab-language-pack-zh-cn", "libarchive-c", "myst-parser", "pydata-sphinx-theme", "sphinx-copybutton"]
+lint = ["black", "ruff"]
+test = ["pytest", "pytest-console-scripts", "pytest-cov", "pytest-html"]
 
 [[package]]
 name = "kiwisolver"
@@ -2961,6 +3021,21 @@ files = [
 [package.extras]
 docs = ["furo", "olefile", "sphinx (>=2.4)", "sphinx-copybutton", "sphinx-inline-tabs", "sphinx-issues (>=3.0.1)", "sphinx-removed-in", "sphinxext-opengraph"]
 tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "packaging", "pyroma", "pytest", "pytest-cov", "pytest-timeout"]
+
+[[package]]
+name = "pkginfo"
+version = "1.9.6"
+description = "Query metadata from sdists / bdists / installed packages."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pkginfo-1.9.6-py3-none-any.whl", hash = "sha256:4b7a555a6d5a22169fcc9cf7bfd78d296b0361adad412a346c1226849af5e546"},
+    {file = "pkginfo-1.9.6.tar.gz", hash = "sha256:8fd5896e8718a4372f0ea9cc9d96f6417c9b986e23a4d116dda26b62cc29d046"},
+]
+
+[package.extras]
+testing = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "platformdirs"
