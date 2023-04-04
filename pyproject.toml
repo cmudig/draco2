@@ -43,7 +43,7 @@ mypy = ">=0.990,<1.2"
 pandas-stubs = "^1.5.1"
 pre-commit = ">=2.20,<4.0"
 pytype = ">=2022.11.10,<2024.0.0"
-ruff = ">=0.0.253,<0.0.260"
+ruff = ">=0.0.253,<0.0.261"
 
 [tool.poetry.group.docs.dependencies]
 ipywidgets = ">=7.7.2,<9.0.0"
