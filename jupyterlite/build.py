@@ -85,7 +85,10 @@ def main():
         info("🏗Copying local Pyodide distro to static dir...")
         copy_local_dist_to_static_dir(PYODIDE_DIST_LOCAL_PATH, lite_dir_path)
     else:
-        info(f"🧶Extracting pyodide tarball to static dir from {PYODIDE_TARBALL_URL}...")
+        info(
+            f"🧶Extracting pyodide tarball to static dir "
+            f"from {PYODIDE_TARBALL_URL}..."
+        )
         extract_pyodide_tarball_to_static_dir(PYODIDE_TARBALL_URL, lite_dir_path)
 
 

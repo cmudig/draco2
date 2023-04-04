@@ -31,7 +31,7 @@ classifiers = [
 altair = "^4.2.2"
 clingo = "^5.5.2"
 fastapi = ">=0.85,<0.96"
-pandas = "^1.4.2"
+pandas = ">=1.4.2,<3.0.0"
 pydantic = "^1.10.5"
 python = ">=3.10.0,<3.11"
 scikit-learn = "^1.2.1"
@@ -43,7 +43,7 @@ mypy = ">=0.990,<1.2"
 pandas-stubs = "^1.5.1"
 pre-commit = ">=2.20,<4.0"
 pytype = ">=2022.11.10,<2024.0.0"
-ruff = ">=0.0.253,<0.0.260"
+ruff = ">=0.0.253,<0.0.261"
 
 [tool.poetry.group.docs.dependencies]
 ipywidgets = ">=7.7.2,<9.0.0"
