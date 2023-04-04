@@ -31,7 +31,7 @@ classifiers = [
 altair = "^4.2.2"
 clingo = "^5.5.2"
 fastapi = ">=0.85,<0.96"
-pandas = "^1.4.2"
+pandas = ">=1.4.2,<3.0.0"
 pydantic = "^1.10.5"
 python = ">=3.10.0,<3.11"
 scikit-learn = "^1.2.1"
