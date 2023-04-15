@@ -192,7 +192,16 @@ class DracoDebugPlotter:
                 color=alt.condition(
                     alt.datum.count == 0,
                     alt.value("white"),
-                    alt.Color(field="count", type="quantitative"),
+                    alt.Color(
+                        field="count",
+                        type="quantitative",
+                        # Only show integer values in the legend
+                        legend=alt.Legend(
+                            labelExpr="datum.value == ceil(datum.value) "
+                            "? datum.value "
+                            ": ''"
+                        ),
+                    ),
                 ),
                 tooltip=chart_preferences.columns.tolist(),
             )
