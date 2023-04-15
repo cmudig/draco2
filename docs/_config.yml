@@ -26,7 +26,6 @@ html:
 launch_buttons:
   notebook_interface: jupyterlab
   binderhub_url: https://mybinder.org
-  thebe: true
 
 parse:
   myst_enable_extensions:
