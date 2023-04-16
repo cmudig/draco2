@@ -30,6 +30,7 @@ parts:
       - file: applications/debug_draco
       - file: applications/server
       - file: applications/renderer
+      - file: applications/design_space_exploration
   - caption: Guide
     chapters:
       - file: guide
