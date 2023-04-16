@@ -8,6 +8,13 @@ from .draco import Draco
 
 
 class DracoDebug:
+    """
+    Class to aid the debugging of visualization specifications against
+    the knowledge base of a Draco instance. Methods exposed by this class
+    give insight into the constraints and weights defined in the Draco instance and
+    how they are violated by the supplied visualization specifications.
+    """
+
     __DEFAULT_DRACO__ = Draco()
 
     def __init__(
@@ -16,7 +23,7 @@ class DracoDebug:
         draco: Draco = __DEFAULT_DRACO__,
     ):
         """
-        Initializes a new debugging instance.
+        Initializes a new debugger instance.
 
         :param specs: ``dict`` of specifications to analyze, keys representing
                        the spec name and values the corresponding ASP declarations.
@@ -118,6 +125,11 @@ class ChartConfig(NamedTuple):
 
 
 class DracoDebugPlotter:
+    """
+    Class to aid the plotting of Draco debug data
+    produced by ``DracoDebug.chart_preferences``.
+    """
+
     __DEFAULT_CONFIGS__: list[ChartConfig] = [
         ChartConfig(
             title="Sort alphabetically", sort_x="ascending", sort_y="ascending"
@@ -137,6 +149,16 @@ class DracoDebugPlotter:
         chart_configs: list[ChartConfig] | None = None,
         plot_size: tuple[float, float] | None = None,
     ):
+        """
+        Initializes a new plotter instance, to be used
+        to create charts visualizing the Draco debug data.
+
+        :param chart_preferences: the ``DataFrame``
+                                  returned by ``DracoDebug.chart_preferences``
+        :param chart_configs: a list of ``ChartConfig`` instances
+                              specifying the chart titles and sorting options
+        :param plot_size: a tuple of floats specifying the width and height of the chart
+        """
         cls = DracoDebugPlotter
         if chart_configs is None:
             chart_configs = cls.__DEFAULT_CONFIGS__
