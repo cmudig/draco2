@@ -2057,6 +2057,49 @@ def test_col_no_x():
     )
 
 
+# Don't use the same field twice when faceting.
+def test_facet_no_duplicate_field():
+    b = hard.blocks["facet_no_duplicate_field"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,0).
+    attribute((field,name),0,field1).
+    entity(field,root,1).
+    attribute((field,name),1,field2).
+
+    entity(view,root,2).
+
+    entity(facet,2,3).
+    attribute((facet,field),3,field1).
+    """
+    )
+
+    # cannot use the same field twice when faceting
+    assert (
+        list_violations(
+            p
+            + """
+        entity(field,root,0).
+        attribute((field,name),0,field1).
+        entity(field,root,1).
+        attribute((field,name),1,field2).
+
+        entity(view,root,2).
+
+        entity(facet,2,3).
+        attribute((facet,field),3,field1).
+        entity(facet,2,4).
+        attribute((facet,field),4,field1).
+        """
+        )
+        == ["facet_no_duplicate_field"]
+    )
+
+
 def test_stack_without_bar_area():
     b = hard.blocks["stack_without_bar_area"]
     assert isinstance(b, Block)
