@@ -257,6 +257,14 @@ violation(col_no_x) :-
     entity(mark,V,M),
     not helper((mark,channel),M,x).
 
+% @hard(facet_no_duplicate_field) Don't use the same field twice when faceting.
+violation(facet_no_duplicate_field) :-
+    entity(facet,V,F1),
+    entity(facet,V,F2),
+    F1 != F2,
+    attribute((facet,field),F1,F),
+    attribute((facet,field),F2,F).
+
 % @hard(stack_without_bar_area) Only use stacking for bar and area.
 violation(stack_without_bar_area) :-
     helper(mark_with_stack,M),
