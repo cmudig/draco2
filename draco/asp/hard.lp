@@ -265,6 +265,15 @@ violation(facet_no_duplicate_field) :-
     attribute((facet,field),F1,F),
     attribute((facet,field),F2,F).
 
+% @hard(facet_no_duplicate_channel_on_same_view) Don't use the same channel twice for faceting on the same view.
+violation(facet_no_duplicate_channel_on_same_view) :-
+    entity(view,root,V),
+    entity(facet,V,F1),
+    entity(facet,V,F2),
+    F1 != F2,
+    attribute((facet,channel),F1,C),
+    attribute((facet,channel),F2,C).
+
 % @hard(stack_without_bar_area) Only use stacking for bar and area.
 violation(stack_without_bar_area) :-
     helper(mark_with_stack,M),
