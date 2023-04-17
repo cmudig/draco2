@@ -23,11 +23,11 @@ RUN adduser --disabled-password \
 WORKDIR ${HOME}/app
 
 # Install dependencies using Poetry
-RUN python -m pip install --upgrade pip &&  \
-    pip install poetry==1.4.0
-COPY pyproject.toml poetry.lock ./
 # Installing all dependency groups to build a complete dev environment
-RUN poetry config virtualenvs.create false && \
+COPY pyproject.toml poetry.lock ./
+RUN python -m pip install --upgrade pip &&  \
+    pip install poetry==1.4.0  && \
+    poetry config virtualenvs.create false && \
     poetry install --with web
 
 # Copy the project source code

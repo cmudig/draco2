@@ -2057,6 +2057,130 @@ def test_col_no_x():
     )
 
 
+def test_facet_no_duplicate_field():
+    b = hard.blocks["facet_no_duplicate_field"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    assert no_violations(
+        p
+        + """
+    entity(field,root,0).
+    attribute((field,name),0,field1).
+    entity(field,root,1).
+    attribute((field,name),1,field2).
+
+    entity(view,root,2).
+
+    entity(facet,2,3).
+    attribute((facet,field),3,field1).
+    """
+    )
+
+    # cannot use the same field twice when faceting
+    assert (
+        list_violations(
+            p
+            + """
+        entity(field,root,0).
+        attribute((field,name),0,field1).
+        entity(field,root,1).
+        attribute((field,name),1,field2).
+
+        entity(view,root,2).
+
+        entity(facet,2,3).
+        attribute((facet,field),3,field1).
+        entity(facet,2,4).
+        attribute((facet,field),4,field1).
+        """
+        )
+        == ["facet_no_duplicate_field"]
+    )
+
+
+def test_facet_no_duplicate_channel_on_same_view():
+    b = hard.blocks["facet_no_duplicate_channel_on_same_view"]
+    assert isinstance(b, Block)
+    p = b.program
+
+    # Single view, single facet
+    assert no_violations(
+        p
+        + """
+    entity(field,root,0).
+    attribute((field,name),0,field1).
+    entity(field,root,1).
+    attribute((field,name),1,field2).
+
+    entity(view,root,2).
+
+    entity(facet,2,3).
+    attribute((facet,channel),3,row).
+    """
+    )
+
+    # Single view, multi facet (different channels)
+    assert no_violations(
+        p
+        + """
+        entity(field,root,0).
+        attribute((field,name),0,field1).
+        entity(field,root,1).
+        attribute((field,name),1,field2).
+
+        entity(view,root,2).
+
+        entity(facet,2,3).
+        attribute((facet,channel),3,row).
+        entity(facet,2,4).
+        attribute((facet,channel),4,col).
+        """
+    )
+
+    # Multi view, multi facet (same channels)
+    assert no_violations(
+        p
+        + """
+        entity(field,root,0).
+        attribute((field,name),0,field1).
+        entity(field,root,1).
+        attribute((field,name),1,field2).
+
+        entity(view,root,2).
+
+        entity(facet,2,3).
+        attribute((facet,channel),3,row).
+
+        entity(view,root,4).
+        entity(facet,4,5).
+        attribute((facet,channel),5,row).
+        """
+    )
+
+    # Multi view, multi facet (same channels)
+    # cannot use the same channel on the same view when faceting
+    assert (
+        list_violations(
+            p
+            + """
+        entity(field,root,0).
+        attribute((field,name),0,field1).
+        entity(field,root,1).
+        attribute((field,name),1,field2).
+
+        entity(view,root,2).
+
+        entity(facet,2,3).
+        attribute((facet,channel),3,row).
+        entity(facet,2,4).
+        attribute((facet,channel),4,row).
+        """
+        )
+        == ["facet_no_duplicate_channel_on_same_view"]
+    )
+
+
 def test_stack_without_bar_area():
     b = hard.blocks["stack_without_bar_area"]
     assert isinstance(b, Block)

@@ -2,6 +2,7 @@ from importlib.metadata import version
 
 from draco import programs
 
+from .debug import DracoDebug, DracoDebugPlotter
 from .draco import Draco
 from .fact_utils import answer_set_to_dict, dict_to_facts
 from .run import is_satisfiable, run_clingo
@@ -12,6 +13,8 @@ from .weights import weights
 __version__ = version("draco")
 
 __all__ = [
+    "DracoDebug",
+    "DracoDebugPlotter",
     "programs",
     "dict_to_facts",
     "answer_set_to_dict",

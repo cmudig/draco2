@@ -7,7 +7,7 @@ __pycache__
 dmypy.json
 
 # pytest
-.pytest_cache
+.pytest_cache/
 
 # Pyre type checker
 .pyre/
@@ -20,3 +20,7 @@ dmypy.json
 
 # PyCharm
 .idea
+
+.ruff_cache
+.DS_Store
+.dockerignore

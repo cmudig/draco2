@@ -20,8 +20,9 @@ parts:
       - file: api/run
       - file: api/facts
       - file: api/programs
-      - file: api/server
+      - file: api/debug
       - file: api/renderer
+      - file: api/server
   - caption: Applications
     chapters:
       - file: applications/recommendation
@@ -29,6 +30,7 @@ parts:
       - file: applications/debug_draco
       - file: applications/server
       - file: applications/renderer
+      - file: applications/design_space_exploration
   - caption: Guide
     chapters:
       - file: guide

@@ -3,6 +3,7 @@
 
 title: Draco
 author: CMU Data Interaction Group
+copyright: 2023
 logo: logo-light.png
 
 # Define the name of the latex output file for PDF builds
@@ -25,6 +26,7 @@ html:
 
 launch_buttons:
   notebook_interface: jupyterlab
+  binderhub_url: https://mybinder.org
 
 parse:
   myst_enable_extensions:
