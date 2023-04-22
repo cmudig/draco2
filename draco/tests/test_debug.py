@@ -51,7 +51,9 @@ def test_chart_preferences():
     instance = DracoDebug(specs=specs)
     df = instance.chart_preferences
     rows, cols = df.shape
-    assert cols == 4
+    assert cols == len(
+        ["chart_name", "pref_name", "pref_description", "count", "weight"]
+    )
     assert rows == len(instance.specs) * len(instance.feature_names)
 
 
@@ -100,10 +102,14 @@ __create_chart_test_cases = list(
     __create_chart_test_cases,
 )
 def test_plotter_create_chart(instance: DracoDebugPlotter, config: ChartConfig):
-    chart = instance.create_chart(cfg=config)
+    chart = instance.create_chart(cfg=config, violated_prefs_only=False)
+    chart_violated_prefs_only = instance.create_chart(
+        cfg=config, violated_prefs_only=True
+    )
+    charts = [chart, chart_violated_prefs_only]
 
-    # Expect a vertically concatenated chart made up of two sub-plots
-    assert type(chart) is alt.VConcatChart and len(chart.vconcat) == 2
+    # Expect a vertically concatenated chart made up of two sub-plots in each case
+    assert all(type(c) is alt.VConcatChart and len(c.vconcat) == 2 for c in charts)
 
 
 @pytest.mark.parametrize(
