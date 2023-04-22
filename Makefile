@@ -77,7 +77,7 @@ publish: build
 
 .PHONY: clean
 clean:
-	@jupyter-book clean docs
+	@poetry run jupyter-book clean docs
 	@rm -rf .coverage
 	@rm -rf dist
 	@rm -rf pyodide/pyodide-src
