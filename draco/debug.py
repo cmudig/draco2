@@ -238,10 +238,9 @@ class DracoDebugPlotter:
         :param plot_size: the size of the plot described as a tuple of (width, height).
         :return: the above-described Altair chart
         """
-        if cfg is None:
-            cfg = DracoDebugChartConfig.SORT_ALPHABETICALLY.value
-        elif isinstance(cfg, DracoDebugChartConfig):
-            cfg = cfg.value
+        used_config: ChartConfig = DracoDebugChartConfig.SORT_ALPHABETICALLY.value
+        if cfg is not None:
+            used_config = cfg if isinstance(cfg, ChartConfig) else cfg.value
         width, height = plot_size or self._compute_ideal_plot_size()
 
         chart_preferences = self.chart_preferences
@@ -252,7 +251,7 @@ class DracoDebugPlotter:
 
         return self.__create_chart(
             chart_preferences=chart_preferences,
-            cfg=cfg,
+            cfg=used_config,
             width=width,
             height=height,
         )
