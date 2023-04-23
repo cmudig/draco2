@@ -1,3 +1,4 @@
+from enum import Enum
 from functools import cached_property
 from typing import Iterable, NamedTuple
 
@@ -166,22 +167,30 @@ class ChartConfig(NamedTuple):
     sort_y: alt.Sort | str | None
 
 
+class DracoDebugChartConfig(Enum):
+    SORT_ALPHABETICALLY = ChartConfig(
+        title="Sort alphabetically", sort_x="ascending", sort_y="ascending"
+    )
+    SORT_BY_COUNT_SUM = ChartConfig(
+        title="Sort by count sum",
+        sort_x=alt.EncodingSortField(field="count", op="sum", order="descending"),
+        sort_y=alt.EncodingSortField(field="count", op="sum", order="descending"),
+    )
+
+    @staticmethod
+    def by_title(title: str) -> "DracoDebugChartConfig":
+        for config in DracoDebugChartConfig:
+            if config.value.title == title:
+                return config
+        raise ValueError(f"Unknown chart config title: {title}")
+
+
 class DracoDebugPlotter:
     """
     Class to aid the plotting of Draco debug data
     produced by ``DracoDebug.chart_preferences``.
     """
 
-    __DEFAULT_CONFIGS__: list[ChartConfig] = [
-        ChartConfig(
-            title="Sort alphabetically", sort_x="ascending", sort_y="ascending"
-        ),
-        ChartConfig(
-            title="Sort by count sum",
-            sort_x=alt.EncodingSortField(field="count", op="sum", order="descending"),
-            sort_y=alt.EncodingSortField(field="count", op="sum", order="descending"),
-        ),
-    ]
     # width, height
     __DEFAULT_CELL_SIZE__: tuple[float, float] = (30, 30)
     __DEFAULT_PLOT_SIZE__: tuple[float, float] = (1200, 400)
@@ -189,8 +198,6 @@ class DracoDebugPlotter:
     def __init__(
         self,
         chart_preferences: pd.DataFrame,
-        chart_configs: list[ChartConfig] | None = None,
-        plot_size: tuple[float, float] | None = None,
     ):
         """
         Initializes a new plotter instance, to be used
@@ -198,21 +205,8 @@ class DracoDebugPlotter:
 
         :param chart_preferences: the ``DataFrame``
                                   returned by ``DracoDebug.chart_preferences``
-        :param chart_configs: a list of ``ChartConfig`` instances
-                              specifying the chart titles and sorting options
-        :param plot_size: a tuple of floats specifying the width and height of the chart
         """
-        cls = DracoDebugPlotter
-        if chart_configs is None:
-            chart_configs = cls.__DEFAULT_CONFIGS__
-
         self.chart_preferences = chart_preferences
-        self.chart_configs = chart_configs
-
-        if plot_size is None:
-            plot_size = self._compute_ideal_plot_size()
-
-        self.plot_size = plot_size
 
     def _compute_ideal_plot_size(self) -> tuple[float, float]:
         cell_width, cell_height = DracoDebugPlotter.__DEFAULT_CELL_SIZE__
@@ -225,7 +219,11 @@ class DracoDebugPlotter:
         return min(width, width_max), min(height, height_max)
 
     def create_chart(
-        self, cfg: ChartConfig | None = None, violated_prefs_only: bool = False
+        self,
+        *,
+        cfg: DracoDebugChartConfig | ChartConfig | None = None,
+        violated_prefs_only: bool = False,
+        plot_size: tuple[float, float] | None = None,
     ) -> alt.VConcatChart:
         """
         Creates a vertically concatenated chart made up of
@@ -237,11 +235,14 @@ class DracoDebugPlotter:
                     featuring an alphabetical sort by feature name and spec name.
         :param violated_prefs_only: whether to only include features that are violated
                                     by at least one spec. Defaults to ``False``.
+        :param plot_size: the size of the plot described as a tuple of (width, height).
         :return: the above-described Altair chart
         """
         if cfg is None:
-            cfg = self.__DEFAULT_CONFIGS__[0]
-        width, height = self.plot_size
+            cfg = DracoDebugChartConfig.SORT_ALPHABETICALLY.value
+        elif isinstance(cfg, DracoDebugChartConfig):
+            cfg = cfg.value
+        width, height = plot_size or self._compute_ideal_plot_size()
 
         chart_preferences = self.chart_preferences
         if violated_prefs_only:
