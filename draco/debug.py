@@ -1,3 +1,4 @@
+from collections import defaultdict
 from enum import Enum
 from functools import cached_property
 from typing import Iterable, NamedTuple
@@ -52,7 +53,7 @@ class DracoDebug:
         :return: a dict mapping feature names to their descriptions
         """
         # Dict returning "N/A" by default as description for a feature
-        dct: dict[str, str] = {}
+        dct: dict[str, str] = defaultdict(lambda: "N/A")
         soft_constraint_program_blocks = parse_blocks(self.draco.soft)
         for feature, block in soft_constraint_program_blocks.items():
             if isinstance(feature, str) and isinstance(block, Block):
