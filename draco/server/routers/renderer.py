@@ -5,7 +5,12 @@ from .base import BaseDracoRouter
 
 
 class RendererRouter(BaseDracoRouter):
-    """Router exposing renderer functionality through REST endpoints."""
+    """
+    Router exposing renderer functionality through REST endpoints.
+    To spare the round trip between the client and the server, the actual dataset
+    to be rendered does not need to be sent to the server. The returned specification
+    will contain an empty dataset and the client is responsible for filling it in.
+    """
 
     __DEFAULT_PREFIX__ = "/renderer"
     __DEFAULT_TAGS__ = ["Renderer"]
