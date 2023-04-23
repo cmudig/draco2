@@ -25,4 +25,4 @@ class RendererRouter(BaseDracoRouter):
         def render_spec(
             dto: endpoint_models.RenderSpecDTO,
         ) -> endpoint_models.RenderSpecReturn:
-            return service.render_spec(spec=dto.spec)
+            return service.render_spec(spec=dto.spec)  # pragma: no cover

@@ -30,13 +30,17 @@ def client(app: FastAPI) -> TestClient:
     return TestClient(app)
 
 
+ROUTER_TYPES = [
+    routers.ClingoRouter,
+    routers.DracoRouter,
+    routers.RendererRouter,
+    routers.UtilityRouter,
+]
+
+
 @pytest.mark.parametrize(
     "cls",
-    [
-        routers.DracoRouter,
-        routers.UtilityRouter,
-        routers.DracoRouter,
-    ],
+    ROUTER_TYPES,
 )
 def test_init_router(default_draco: Draco, cls: Type[routers.BaseDracoRouter]):
     router = cls(default_draco)
@@ -45,11 +49,7 @@ def test_init_router(default_draco: Draco, cls: Type[routers.BaseDracoRouter]):
 
 @pytest.mark.parametrize(
     "cls",
-    [
-        routers.DracoRouter,
-        routers.UtilityRouter,
-        routers.DracoRouter,
-    ],
+    ROUTER_TYPES,
 )
 def test_register_router(default_draco: Draco, cls: Type[routers.BaseDracoRouter]):
     router = cls(default_draco)
@@ -178,6 +178,55 @@ def test_utility_dict_to_facts(client: TestClient, json: dict[str, Any]):
 )
 def test_utility_answer_set_to_dict(client: TestClient, json: dict[str, Any]):
     response = client.post("/utility/answer-set-to-dict", json=json)
+    assert response.is_success
+
+
+@pytest.mark.parametrize(
+    "json",
+    [
+        {
+            "spec": {
+                "number_rows": 42,
+                "field": [
+                    {
+                        "name": "a",
+                        "type": "number",
+                    },
+                    {
+                        "name": "b",
+                        "type": "number",
+                    },
+                ],
+                "view": [
+                    {
+                        "coordinates": "cartesian",
+                        "mark": [
+                            {
+                                "type": "bar",
+                                "encoding": [
+                                    {
+                                        "channel": "x",
+                                        "field": "a",
+                                    },
+                                    {
+                                        "channel": "y",
+                                        "field": "b",
+                                    },
+                                ],
+                            }
+                        ],
+                        "scale": [
+                            {"channel": "x", "type": "ordinal"},
+                            {"channel": "y", "type": "linear", "zero": "true"},
+                        ],
+                    }
+                ],
+            }
+        }
+    ],
+)
+def test_renderer_render_spec(client: TestClient, json: dict[str, Any]):
+    response = client.post("/renderer/render-spec", json=json)
     assert response.is_success
 
 

@@ -3,6 +3,7 @@ from typing import Mapping
 import pytest
 
 import draco.server.services.clingo as clingo_service
+import draco.server.services.renderer as renderer_service
 import draco.server.services.utility as utility_service
 import draco.types as draco_types
 from draco import Draco
@@ -261,3 +262,50 @@ def test_answer_set_to_dict(inp: list[str], expected: Mapping):
     res = utility_service.answer_set_to_dict(answer_set=inp)
     assert res is not None
     assert res == expected
+
+
+@pytest.mark.parametrize(
+    "spec",
+    [
+        {
+            "number_rows": 42,
+            "field": [
+                {
+                    "name": "a",
+                    "type": "number",
+                },
+                {
+                    "name": "b",
+                    "type": "number",
+                },
+            ],
+            "view": [
+                {
+                    "coordinates": "cartesian",
+                    "mark": [
+                        {
+                            "type": "bar",
+                            "encoding": [
+                                {
+                                    "channel": "x",
+                                    "field": "a",
+                                },
+                                {
+                                    "channel": "y",
+                                    "field": "b",
+                                },
+                            ],
+                        }
+                    ],
+                    "scale": [
+                        {"channel": "x", "type": "ordinal"},
+                        {"channel": "y", "type": "linear", "zero": "true"},
+                    ],
+                }
+            ],
+        }
+    ],
+)
+def test_render_spec(spec: dict):
+    vl_chart = renderer_service.render_spec(spec)
+    assert isinstance(vl_chart, dict)
