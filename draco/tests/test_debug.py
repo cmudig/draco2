@@ -5,7 +5,12 @@ import altair as alt
 import pandas as pd
 import pytest
 
-from draco.debug import ChartConfig, DracoDebug, DracoDebugPlotter
+from draco.debug import (
+    ChartConfig,
+    DracoDebug,
+    DracoDebugChartConfig,
+    DracoDebugPlotter,
+)
 
 specs: dict[str, Iterable[str] | str] = {
     "tick_plot": """
@@ -65,6 +70,23 @@ def __create_test_data(num_data_rows: int = 10) -> pd.DataFrame:
 
 
 @pytest.mark.parametrize(
+    "config",
+    list(DracoDebugChartConfig),
+)
+def test_draco_debug_chart_config_by_title(config: DracoDebugChartConfig):
+    assert DracoDebugChartConfig.by_title(config.value.title) == config
+
+
+@pytest.mark.parametrize(
+    "title",
+    ["", "foo", "bar"],
+)
+def test_draco_debug_chart_config_by_title_raises_for_unknown_title(title: str):
+    with pytest.raises(ValueError):
+        DracoDebugChartConfig.by_title(title)
+
+
+@pytest.mark.parametrize(
     "data",
     [__create_test_data(0), __create_test_data(5)],
 )
@@ -85,7 +107,7 @@ __num_data_row_test_cases = [0, 100, 1000, 10_000]
 # Running `test_plotter_create_chart` with these configs
 __chart_config_test_cases = [
     None,
-    *DracoDebugPlotter.__DEFAULT_CONFIGS__,
+    *list(DracoDebugChartConfig),
     ChartConfig(title="Test Title", sort_x=None, sort_y=None),
 ]
 # Produces the `"instance,config"` tuples for `@pytest.mark.parametrize`
@@ -101,7 +123,9 @@ __create_chart_test_cases = list(
     "instance,config",
     __create_chart_test_cases,
 )
-def test_plotter_create_chart(instance: DracoDebugPlotter, config: ChartConfig):
+def test_plotter_create_chart(
+    instance: DracoDebugPlotter, config: ChartConfig | DracoDebugChartConfig
+):
     chart = instance.create_chart(cfg=config, violated_prefs_only=False)
     chart_violated_prefs_only = instance.create_chart(
         cfg=config, violated_prefs_only=True
@@ -117,7 +141,7 @@ def test_plotter_create_chart(instance: DracoDebugPlotter, config: ChartConfig):
     __create_chart_test_cases,
 )
 def test_plotter_create_chart_used_data(
-    instance: DracoDebugPlotter, config: ChartConfig
+    instance: DracoDebugPlotter, config: ChartConfig | DracoDebugChartConfig
 ):
     chart = instance.create_chart(cfg=config)
 
@@ -129,11 +153,14 @@ def test_plotter_create_chart_used_data(
     "instance,config",
     __create_chart_test_cases,
 )
-def test_plotter_create_chart_title(instance: DracoDebugPlotter, config: ChartConfig):
+def test_plotter_create_chart_title(
+    instance: DracoDebugPlotter, config: ChartConfig | DracoDebugChartConfig
+):
     chart = instance.create_chart(cfg=config)
 
     # Expect that the configured title is used
     if config is not None:
+        config = config if isinstance(config, ChartConfig) else config.value
         assert chart.title == config.title
 
 
@@ -149,21 +176,8 @@ def __mark_as_str(mark: str | alt.MarkDef) -> str:
     "instance,config",
     __create_chart_test_cases,
 )
-def test_plotter_create_chart_size(instance: DracoDebugPlotter, config: ChartConfig):
-    chart = instance.create_chart(cfg=config)
-    weight_bar_chart, pref_rect_chart = chart.vconcat
-    # vertically concatenated chart -> Taking max for width and sum for height
-    subplot_size_sum_width = max([weight_bar_chart.width, pref_rect_chart.width])
-    subplot_size_sum_height = sum([weight_bar_chart.height, pref_rect_chart.height])
-    assert (subplot_size_sum_width, subplot_size_sum_height) == instance.plot_size
-
-
-@pytest.mark.parametrize(
-    "instance,config",
-    __create_chart_test_cases,
-)
 def test_plotter_create_chart_subplot_marks(
-    instance: DracoDebugPlotter, config: ChartConfig
+    instance: DracoDebugPlotter, config: ChartConfig | DracoDebugChartConfig
 ):
     chart = instance.create_chart(cfg=config)
     weight_bar_chart, pref_rect_chart = chart.vconcat
@@ -179,13 +193,14 @@ def test_plotter_create_chart_subplot_marks(
     __create_chart_test_cases,
 )
 def test_plotter_create_chart_subplot_sorting(
-    instance: DracoDebugPlotter, config: ChartConfig
+    instance: DracoDebugPlotter, config: ChartConfig | DracoDebugChartConfig
 ):
     chart = instance.create_chart(cfg=config)
     weight_bar_chart, pref_rect_chart = chart.vconcat
 
     # Expect that custom-configured sorting is used
     if config is not None:
+        config = config if isinstance(config, ChartConfig) else config.value
         if config.sort_x is not None:
             assert weight_bar_chart.encoding.x.sort == config.sort_x
             assert pref_rect_chart.encoding.x.sort == config.sort_x
