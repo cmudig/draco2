@@ -26,7 +26,7 @@ WORKDIR ${HOME}/app
 # Installing all dependency groups to build a complete dev environment
 COPY pyproject.toml poetry.lock ./
 RUN python -m pip install --upgrade pip &&  \
-    pip install poetry==1.4.0  && \
+    pip install poetry  && \
     poetry config virtualenvs.create false && \
     poetry install --with web
 
