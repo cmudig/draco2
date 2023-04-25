@@ -98,8 +98,9 @@ the above-listed commands which 'block' your current shell session.
 - Run `git commit -am "chore: bump version to $(poetry version -s)"` to commit the version bump and add a tag with
   `git tag "v$(poetry version -s)"`.
 - Run `poetry build` to build the package.
+- Configure the PyPI credentials with `poetry config pypi-token.pypi <token>`.
 - Run `poetry publish -r testpypi` to publish the package to [TestPyPI](https://test.pypi.org/project/draco/).
-- Run `poetry publish` to publish the package to [PyPI](https://pypi.org/project/draco/).
+- Run `poetry publish ` to publish the package to [PyPI](https://pypi.org/project/draco/).
 - Push the commits and tags with `git push && git push --tags`.
 - Create a [release on GitHub](https://github.com/cmudig/draco2/releases) for the new version tag.
 
