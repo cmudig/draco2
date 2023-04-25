@@ -24,10 +24,11 @@ class DracoAPI:
 
         The :code:`base_routers` parameter governs the routers which get registered
         to the :code:`FastAPI` instance, that is, they define the actual endpoints
-        which will be available. Three routers get registered automatically:
+        which will be available. Default routers get registered automatically:
 
         - :code:`DracoRouter` - exposes the core functionality of :code:`Draco`
         - :code:`ClingoRouter` - exposes the functionality of the Clingo solver
+        - :code:`RendererRouter` - exposes renderer functionality
         - :code:`UtilityRouter` - exposes various utility endpoints
 
         If you wish to enable only a subset of these endpoints,
@@ -74,8 +75,14 @@ class DracoAPI:
         if base_routers is None:
             draco_router = routers.DracoRouter(draco)
             clingo_router = routers.ClingoRouter(draco)
+            renderer_router = routers.RendererRouter(draco)
             utility_router = routers.UtilityRouter(draco)
-            self.base_routers = [clingo_router, draco_router, utility_router]
+            self.base_routers = [
+                clingo_router,
+                draco_router,
+                renderer_router,
+                utility_router,
+            ]
         else:
             self.base_routers = base_routers
 

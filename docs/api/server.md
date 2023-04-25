@@ -20,10 +20,11 @@ includes examples.
 ```
 
 ```{note}
-This abstract class has three concrete implementations:
+As of now, this abstract class has four concrete implementations:
 
 - [ClingoRouter](#clingorouter)
 - [DracoRouter](#dracorouter)
+- [RendererRouter](#rendererrouter)
 - [UtilityRouter](#utilityrouter)
 ```
 
@@ -49,6 +50,20 @@ Defines endpoints under `/draco`.
 
 ```{eval-rst}
 .. autoclass:: draco.server.routers.DracoRouter
+  :show-inheritance:
+  :members:
+
+  .. automethod:: __init__
+```
+
+### `RendererRouter`
+
+```{note}
+Defines endpoints under `/renderer`.
+```
+
+```{eval-rst}
+.. autoclass:: draco.server.routers.RendererRouter
   :show-inheritance:
   :members:
 

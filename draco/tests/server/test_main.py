@@ -30,7 +30,18 @@ import draco.server.main as server_main
         ),
         (
             ["--reload", "--port", "1234", "--host", "some-host"],
-            server_main.DracoServerArgs(reload=True, port=1234, host="some-host"),
+            server_main.DracoServerArgs(
+                **(
+                    server_main.__DEFAULT_ARGS__.__dict__
+                    | {"reload": True, "port": 1234, "host": "some-host"}
+                )
+            ),
+        ),
+        (
+            ["--show-routes"],
+            server_main.DracoServerArgs(
+                **(server_main.__DEFAULT_ARGS__.__dict__ | {"show_routes": True})
+            ),
         ),
     ],
 )
@@ -39,6 +50,17 @@ def test_argument_parser(raw_args: list[str], expected_ns: server_main.DracoServ
     ns = server_main.DracoServerArgs()
     parser.parse_args(raw_args, namespace=ns)
     assert ns == expected_ns
+
+
+def test_show_routes(capsys: pytest.CaptureFixture):
+    args = server_main.DracoServerArgs(show_routes=True)
+    server_main.main(args=args)
+
+    captured = capsys.readouterr()
+    output = captured.out.strip()
+    expected_headers = ["Name", "Path", "Methods", "Tags"]
+    for header in expected_headers:
+        assert header in output
 
 
 def test_start_server_via_main():
