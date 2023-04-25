@@ -1,10 +1,17 @@
+from collections import defaultdict
+from enum import Enum
 from functools import cached_property
 from typing import Iterable, NamedTuple
 
 import altair as alt
 import pandas as pd
 
+from .asp_utils import Block, parse_blocks
 from .draco import Draco
+
+PrefTuple = tuple[str, str, int]
+PrefTupleWithDescription = tuple[str, str, str, int]
+PrefTupleWithDescriptionWeighted = tuple[str, str, str, int, int]
 
 
 class DracoDebug:
@@ -41,6 +48,19 @@ class DracoDebug:
         return set(self.draco.soft_constraint_names)
 
     @cached_property
+    def feature_descriptions(self) -> dict[str, str]:
+        """
+        :return: a dict mapping feature names to their descriptions
+        """
+        # Dict returning "N/A" by default as description for a feature
+        dct: dict[str, str] = defaultdict(lambda: "N/A")
+        soft_constraint_program_blocks = parse_blocks(self.draco.soft)
+        for feature, block in soft_constraint_program_blocks.items():
+            if isinstance(feature, str) and isinstance(block, Block):
+                dct[feature] = block.description
+        return dct
+
+    @cached_property
     def chart_preferences(self) -> pd.DataFrame:
         """
         Returns a ``DataFrame`` with four columns:
@@ -48,6 +68,7 @@ class DracoDebug:
         * ``chart_name``: Specification name, a key of ``self.specs``
         * ``pref_name``: Preference (feature) name,
                          element of ``self.feature_names``
+        * ``pref_description``: Preference (feature) description.
         * ``count``: The number of times the spec
                      identified by ``chart_name`` violates ``pref_name``.
         * ``weight``: The weight associated with ``pref_name``.
@@ -66,12 +87,15 @@ class DracoDebug:
         }
         # Flattened preference counts
         pref_tuples = self.__unnest_pref_count_dict(pref_count_dict)
+        pref_tuples_with_descriptions = self.__pref_tuples_extended_with_descriptions(
+            pref_tuples, self.feature_descriptions
+        )
         pref_tuples_with_weights = self.__pref_tuples_extended_with_weights(
-            pref_tuples, self.draco.weights
+            pref_tuples_with_descriptions, self.draco.weights
         )
         return pd.DataFrame(
             data=pref_tuples_with_weights,
-            columns=["chart_name", "pref_name", "count", "weight"],
+            columns=["chart_name", "pref_name", "pref_description", "count", "weight"],
         )
 
     @staticmethod
@@ -88,9 +112,7 @@ class DracoDebug:
         return base | {feature_name: 0 for feature_name in not_included_feature_names}
 
     @staticmethod
-    def __unnest_pref_count_dict(
-        dct: dict[str, dict[str, int]]
-    ) -> list[tuple[str, str, int]]:
+    def __unnest_pref_count_dict(dct: dict[str, dict[str, int]]) -> list[PrefTuple]:
         """Flattens the dict of dicts into a list of tuples"""
         return [
             (chart_name, pref_name, count)
@@ -99,21 +121,43 @@ class DracoDebug:
         ]
 
     @staticmethod
-    def __pref_tuple_extended_with_weight(
-        tpl: tuple[str, str, int], weights: dict[str, int]
-    ) -> tuple[str, str, int, int]:
+    def __pref_tuple_extended_with_descriptions(
+        tpl: PrefTuple, descriptions: dict[str, str]
+    ) -> PrefTupleWithDescription:
         """
         Extends a ``(chart_name, pref_name, count)``
         tuple to include ``weight`` as its last element.
         """
         chart_name, pref_name, count = tpl
+        pref_description = descriptions[pref_name]
+        return chart_name, pref_name, pref_description, count
+
+    @staticmethod
+    def __pref_tuples_extended_with_descriptions(
+        tuples: list[PrefTuple], descriptions: dict[str, str]
+    ) -> list[PrefTupleWithDescription]:
+        cls = DracoDebug
+        return [
+            cls.__pref_tuple_extended_with_descriptions(tpl, descriptions)
+            for tpl in tuples
+        ]
+
+    @staticmethod
+    def __pref_tuple_extended_with_weight(
+        tpl: PrefTupleWithDescription, weights: dict[str, int]
+    ) -> PrefTupleWithDescriptionWeighted:
+        """
+        Extends a ``(chart_name, pref_name, count)``
+        tuple to include ``weight`` as its last element.
+        """
+        chart_name, pref_name, pref_description, count = tpl
         weight = weights[f"{pref_name}_weight"]
-        return chart_name, pref_name, count, weight
+        return chart_name, pref_name, pref_description, count, weight
 
     @staticmethod
     def __pref_tuples_extended_with_weights(
-        tuples: list[tuple[str, str, int]], weights: dict[str, int]
-    ) -> list[tuple[str, str, int, int]]:
+        tuples: list[PrefTupleWithDescription], weights: dict[str, int]
+    ) -> list[PrefTupleWithDescriptionWeighted]:
         cls = DracoDebug
         return [cls.__pref_tuple_extended_with_weight(tpl, weights) for tpl in tuples]
 
@@ -124,30 +168,37 @@ class ChartConfig(NamedTuple):
     sort_y: alt.Sort | str | None
 
 
+class DracoDebugChartConfig(Enum):
+    SORT_ALPHABETICALLY = ChartConfig(
+        title="Sort alphabetically", sort_x="ascending", sort_y="ascending"
+    )
+    SORT_BY_COUNT_SUM = ChartConfig(
+        title="Sort by count sum",
+        sort_x=alt.EncodingSortField(field="count", op="sum", order="descending"),
+        sort_y=alt.EncodingSortField(field="count", op="sum", order="descending"),
+    )
+
+    @staticmethod
+    def by_title(title: str) -> "DracoDebugChartConfig":
+        for config in DracoDebugChartConfig:
+            if config.value.title == title:
+                return config
+        raise ValueError(f"Unknown chart config title: {title}")
+
+
 class DracoDebugPlotter:
     """
     Class to aid the plotting of Draco debug data
     produced by ``DracoDebug.chart_preferences``.
     """
 
-    __DEFAULT_CONFIGS__: list[ChartConfig] = [
-        ChartConfig(
-            title="Sort alphabetically", sort_x="ascending", sort_y="ascending"
-        ),
-        ChartConfig(
-            title="Sort by count sum",
-            sort_x=alt.EncodingSortField(field="count", op="sum", order="descending"),
-            sort_y=alt.EncodingSortField(field="count", op="sum", order="descending"),
-        ),
-    ]
     # width, height
-    __DEFAULT_PLOT_SIZE__: tuple[float, float] = 1200, 400
+    __DEFAULT_CELL_SIZE__: tuple[float, float] = (30, 30)
+    __DEFAULT_PLOT_SIZE__: tuple[float, float] = (1200, 400)
 
     def __init__(
         self,
         chart_preferences: pd.DataFrame,
-        chart_configs: list[ChartConfig] | None = None,
-        plot_size: tuple[float, float] | None = None,
     ):
         """
         Initializes a new plotter instance, to be used
@@ -155,21 +206,26 @@ class DracoDebugPlotter:
 
         :param chart_preferences: the ``DataFrame``
                                   returned by ``DracoDebug.chart_preferences``
-        :param chart_configs: a list of ``ChartConfig`` instances
-                              specifying the chart titles and sorting options
-        :param plot_size: a tuple of floats specifying the width and height of the chart
         """
-        cls = DracoDebugPlotter
-        if chart_configs is None:
-            chart_configs = cls.__DEFAULT_CONFIGS__
-        if plot_size is None:
-            plot_size = cls.__DEFAULT_PLOT_SIZE__
-
         self.chart_preferences = chart_preferences
-        self.chart_configs = chart_configs
-        self.plot_size = plot_size
 
-    def create_chart(self, cfg: ChartConfig | None = None) -> alt.VConcatChart:
+    def _compute_ideal_plot_size(self) -> tuple[float, float]:
+        cell_width, cell_height = DracoDebugPlotter.__DEFAULT_CELL_SIZE__
+        num_prefs = len(set(self.chart_preferences["pref_name"]))
+        num_charts = len(set(self.chart_preferences["chart_name"]))
+
+        width = num_prefs * cell_width
+        height = 1.25 * (num_charts * cell_height)
+        width_max, height_max = DracoDebugPlotter.__DEFAULT_PLOT_SIZE__
+        return min(width, width_max), min(height, height_max)
+
+    def create_chart(
+        self,
+        *,
+        cfg: DracoDebugChartConfig | ChartConfig | None = None,
+        violated_prefs_only: bool = False,
+        plot_size: tuple[float, float] | None = None,
+    ) -> alt.VConcatChart:
         """
         Creates a vertically concatenated chart made up of
         an aligned bar chart visualizing feature weights
@@ -178,14 +234,25 @@ class DracoDebugPlotter:
         :param cfg: the configuration based on which the chart title and sorting is set.
                     A default configuration will be used of this is not specified,
                     featuring an alphabetical sort by feature name and spec name.
+        :param violated_prefs_only: whether to only include features that are violated
+                                    by at least one spec. Defaults to ``False``.
+        :param plot_size: the size of the plot described as a tuple of (width, height).
         :return: the above-described Altair chart
         """
-        if cfg is None:
-            cfg = self.__DEFAULT_CONFIGS__[0]
-        width, height = self.plot_size
+        used_config: ChartConfig = DracoDebugChartConfig.SORT_ALPHABETICALLY.value
+        if cfg is not None:
+            used_config = cfg if isinstance(cfg, ChartConfig) else cfg.value
+        width, height = plot_size or self._compute_ideal_plot_size()
+
+        chart_preferences = self.chart_preferences
+        if violated_prefs_only:
+            chart_preferences = chart_preferences[
+                chart_preferences["count"] != 0
+            ].reset_index()
+
         return self.__create_chart(
-            chart_preferences=self.chart_preferences,
-            cfg=cfg,
+            chart_preferences=chart_preferences,
+            cfg=used_config,
             width=width,
             height=height,
         )
