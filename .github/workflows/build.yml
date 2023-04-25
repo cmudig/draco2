@@ -137,7 +137,7 @@ jobs:
 
       - name: Install poetry
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
-        run: pipx install poetry==1.4.0
+        run: pipx install poetry
 
       - name: Setup Python
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
@@ -192,7 +192,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install poetry
-        run: pipx install poetry==1.4.0
+        run: pipx install poetry
 
       - name: Setup Python
         uses: actions/setup-python@v4
