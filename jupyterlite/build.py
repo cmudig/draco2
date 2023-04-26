@@ -84,8 +84,8 @@ def copy_local_dist_to_static_dir(
 def copy_local_docs_to_lite_dir(
     local_docs_path: pathlib.Path, lite_dir_files_path: pathlib.Path
 ):
-    # Only copying Markdown and Jupyter Notebook files
-    allowed_extensions = ["md", "ipynb"]
+    # Only copying Markdown, Jupyter Notebook and data files
+    allowed_extensions = ["md", "ipynb", "toml", "json"]
     # Not copying anything under these directories
     ignored_paths = ["_build", ".ipynb_checkpoints"]
     for path in local_docs_path.rglob("*"):
