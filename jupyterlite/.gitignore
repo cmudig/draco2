@@ -1,2 +1,5 @@
 lite-dir/static/pyodide
 .jupyterlite.doit.db
+
+# Ignoring the files directory since it gets auto-generated from notebooks under /docs
+lite-dir/files

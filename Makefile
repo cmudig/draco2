@@ -82,6 +82,7 @@ clean:
 	@rm -rf dist
 	@rm -rf pyodide/pyodide-src
 	@rm -rf jupyterlite/lite-dir/static/pyodide
+	@rm -rf jupyterlite/lite-dir/files
 	@rm -f jupyterlite/.jupyterlite.doit.db
 	@find . -type d -name '.pytype' -exec rm -rf {} +
 	@find . -type d -name '.mypy_cache' -exec rm -rf {} +
