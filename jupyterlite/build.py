@@ -13,15 +13,14 @@ import sys
 import tarfile
 import urllib.request
 
+import toml
+
+LOCAL_DOCS_DIR_PATH = pathlib.Path(__file__).parent.parent / "docs"
 LITE_DIR_PATH = pathlib.Path(__file__).parent / "lite-dir"
 PYODIDE_DIST_LOCAL_PATH = (
     pathlib.Path(__file__).parent.parent / "pyodide" / "pyodide-src" / "dist"
 )
 
-# TODO: replace this with a cmudig/draco2 Pyodide release
-PYODIDE_TARBALL_URL = (
-    "https://github.com/peter-gy/draco-pyodide/releases/download/test/pyodide.tar.gz"
-)
 JUPYTER_LITE_CONFIG_JSON_PATH = (
     pathlib.Path(__file__).parent / "jupyter_lite_config.json"
 )
@@ -49,6 +48,12 @@ def info(msg: str) -> None:
     print(f"{INFO_COLOR}Info: {msg}{ENDC}")
 
 
+def get_pyodide_tarball_url():
+    pyproject_toml_path = pathlib.Path(__file__).parent.parent / "pyproject.toml"
+    version = toml.loads(pyproject_toml_path.read_text())["tool"]["poetry"]["version"]
+    return f"https://github.com/cmudig/draco2/releases/download/v{version}/pyodide-{version}.tar.gz"
+
+
 def read_jupyter_lite_config_json() -> dict:
     with open(JUPYTER_LITE_CONFIG_JSON_PATH, "r") as f:
         return json.load(f)
@@ -59,7 +64,10 @@ def extract_pyodide_tarball_to_static_dir(
 ):
     with urllib.request.urlopen(pyodide_tarball_url) as response:
         with tarfile.open(fileobj=response, mode="r|gz") as tar:
-            tar.extractall(path=lite_dir_path)
+            extract_path = lite_dir_path / "pyodide"
+            if not extract_path.exists():
+                extract_path.mkdir(parents=True, exist_ok=True)
+            tar.extractall(path=extract_path)
             # rename ./build/pyodide/pyodide to ./build/static/pyodide
             (lite_dir_path / "pyodide").resolve().rename(
                 lite_dir_path / "static" / "pyodide"
@@ -71,6 +79,30 @@ def copy_local_dist_to_static_dir(
 ):
     dest_path = lite_dir_path / "static" / "pyodide"
     shutil.copytree(pyodide_local_dist_path, dest_path)
+
+
+def copy_local_docs_to_lite_dir(
+    local_docs_path: pathlib.Path, lite_dir_files_path: pathlib.Path
+):
+    # Only copying Markdown, Jupyter Notebook and data files
+    allowed_extensions = ["md", "ipynb", "toml", "json"]
+    # Not copying anything under these directories
+    ignored_paths = ["_build", ".ipynb_checkpoints"]
+    for path in local_docs_path.rglob("*"):
+        if any(
+            str(path.relative_to(local_docs_path)).startswith(ignored)
+            for ignored in ignored_paths
+        ):
+            continue
+        if path.is_dir():
+            dest_path = lite_dir_files_path / path.relative_to(local_docs_path)
+            dest_path.mkdir(parents=True, exist_ok=True)
+        elif path.is_file():
+            if path.suffix[1:] in allowed_extensions:
+                dest_path = lite_dir_files_path / path.relative_to(local_docs_path)
+                if not dest_path.parent.exists():
+                    dest_path.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(path, dest_path)
 
 
 def main():
@@ -85,11 +117,17 @@ def main():
         info("🏗Copying local Pyodide distro to static dir...")
         copy_local_dist_to_static_dir(PYODIDE_DIST_LOCAL_PATH, lite_dir_path)
     else:
+        pyodide_tarball_url = get_pyodide_tarball_url()
         info(
             f"🧶Extracting pyodide tarball to static dir "
-            f"from {PYODIDE_TARBALL_URL}..."
+            f"from {pyodide_tarball_url}..."
         )
-        extract_pyodide_tarball_to_static_dir(PYODIDE_TARBALL_URL, lite_dir_path)
+        extract_pyodide_tarball_to_static_dir(pyodide_tarball_url, lite_dir_path)
+
+    # Copy local docs to lite dir
+    lite_dir_files_path = (lite_dir_path / "files").resolve()
+    info(f"📂Copying local docs to lite dir {lite_dir_files_path}...")
+    copy_local_docs_to_lite_dir(LOCAL_DOCS_DIR_PATH, lite_dir_files_path)
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 
 title: Draco
 author: CMU Data Interaction Group
-copyright: 2023
+copyright: "2023"
 logo: logo-light.png
 
 # Define the name of the latex output file for PDF builds
@@ -20,6 +20,7 @@ repository:
 # Add GitHub buttons to your book
 # See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
 html:
+  favicon: "favicon.ico"
   use_issues_button: true
   use_repository_button: true
   use_edit_page_button: true
