@@ -209,15 +209,20 @@ class DracoDebugPlotter:
         """
         self.chart_preferences = chart_preferences
 
-    def _compute_ideal_plot_size(self) -> tuple[float, float]:
+    @staticmethod
+    def _compute_ideal_plot_size(
+        chart_preferences: pd.DataFrame,
+    ) -> tuple[float, float]:
         cell_width, cell_height = DracoDebugPlotter.__DEFAULT_CELL_SIZE__
-        num_prefs = len(set(self.chart_preferences["pref_name"]))
-        num_charts = len(set(self.chart_preferences["chart_name"]))
+        num_prefs = len(set(chart_preferences["pref_name"]))
+        num_charts = len(set(chart_preferences["chart_name"]))
 
         width = num_prefs * cell_width
-        height = 1.25 * (num_charts * cell_height)
+        # The heatmap has 3/4 the height of the full chart
+        heatmap_height = num_charts * cell_height
+        height = (4 / 3) * heatmap_height
         width_max, height_max = DracoDebugPlotter.__DEFAULT_PLOT_SIZE__
-        return min(width, width_max), min(height, height_max)
+        return (width, height) if width < width_max else (width_max, height_max)
 
     def create_chart(
         self,
@@ -242,13 +247,16 @@ class DracoDebugPlotter:
         used_config: ChartConfig = DracoDebugChartConfig.SORT_ALPHABETICALLY.value
         if cfg is not None:
             used_config = cfg if isinstance(cfg, ChartConfig) else cfg.value
-        width, height = plot_size or self._compute_ideal_plot_size()
 
         chart_preferences = self.chart_preferences
         if violated_prefs_only:
             chart_preferences = chart_preferences[
                 chart_preferences["count"] != 0
             ].reset_index()
+
+        width, height = plot_size or DracoDebugPlotter._compute_ideal_plot_size(
+            chart_preferences
+        )
 
         return self.__create_chart(
             chart_preferences=chart_preferences,
