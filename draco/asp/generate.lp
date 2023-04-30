@@ -39,7 +39,7 @@ not_required((encoding,aggregate)).
 not_required((encoding,stack)).
 0 { attribute((encoding,field),E,N): domain((field,name),N) } 1 :- entity(encoding,_,E).
 
-% generator(scale) generate scales such that their ids and channels corresponde to the encodings in each view.
+% generator(scale) generate scales such that their ids and channels corresponds to the encodings in each view.
 { entity(scale,V,(s,E)) } :- entity(mark,V,M), entity(encoding,M,E), attribute((encoding,channel),E,C).
 attribute((scale,channel),(s,E),C) :- entity(scale,V,(s,E)), attribute((encoding,channel),E,C).
 

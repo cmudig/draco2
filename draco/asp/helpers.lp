@@ -25,7 +25,7 @@ helper(mark_scale_channel,M,T,C) :-
     attribute((scale,channel),S,C),
     attribute((scale,type),S,T).
 
-% @helper(mark_encoding_scale) Link mark, encoding, and scale togther.
+% @helper(mark_encoding_scale) Link mark, encoding, and scale together.
 helper(mark_encoding_scale,M,E,S) :-
     entity(encoding,M,E),
     attribute((encoding,channel),E,C),

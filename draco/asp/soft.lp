@@ -145,7 +145,7 @@ preference(only_y,M) :-
     helper((mark,channel),M,y),
     not helper((mark,channel),M,x).
 
-% @soft(binned_orientation_not_x) Prefer binned quantative on x axis.
+% @soft(binned_orientation_not_x) Prefer binned quantitative on x axis.
 preference(binned_orientation_not_x,E) :-
     attribute((field,type),F,(number;datetime)),
     helper((encoding,field),E,F),
@@ -427,7 +427,7 @@ preference(d_d_point,M) :-
     helper(is_d_d,M),
     attribute((mark,type),M,point).
 
-% @soft(d_d_text) Discrete by discretee for text mark.
+% @soft(d_d_text) Discrete by discrete for text mark.
 preference(d_d_text,M) :-
     helper(is_d_d,M),
     attribute((mark,type),M,text).
