@@ -31,9 +31,6 @@ parts:
       - file: applications/server
       - file: applications/renderer
       - file: applications/design_space_exploration
-  - caption: Guide
-    chapters:
-      - file: guide
   - caption: Reference
     chapters:
       - file: bibliography
