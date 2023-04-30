@@ -51,7 +51,7 @@ book-strict:
 
 .PHONY: lab
 lab:
-	@poetry run jupyter lab --ip=0.0.0.0
+	@poetry run jupyter lab --ip=0.0.0.0 --allow-root
 
 .PHONY: build
 build:
