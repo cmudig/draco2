@@ -82,6 +82,9 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pyright]
 include = ["draco"]
+# We don't want pyright to use library code to extract type information in the absence of type stub files
+# since most of the times its inference is incomplete, leading to false positives.
+useLibraryCodeForTypes = false
 
 [tool.ruff]
 line-length = 88

@@ -17,7 +17,7 @@ PYODIDE_REQUIREMENTS_PATH = PYODIDE_PACKAGES_PATH / "pyodide-requirements.txt"
 PYODIDE_REPO_NAME = "pyodide-src"
 PYODIDE_REPO_PATH = PYODIDE_BUILD_MODULE_ROOT_PATH / PYODIDE_REPO_NAME
 PYODIDE_REPO_URL = "https://github.com/pyodide/pyodide.git"
-PYODIDE_REPO_TAG = "0.23.1"
+PYODIDE_REPO_TAG = "0.23.2"
 
 # Directory where the Pyodide distribution will be built
 PYODIDE_DIST_PATH = PYODIDE_REPO_PATH / "dist"
