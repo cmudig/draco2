@@ -3,7 +3,7 @@ all: lint typecheck cover book grounding-size check
 .PHONY: test
 test:
 	@echo "==> 🧪 Tests"
-	@poetry run pytest -svv .
+	@poetry run pytest -svv draco
 
 .PHONY: cover
 cover:
