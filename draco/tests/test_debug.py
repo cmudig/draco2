@@ -202,7 +202,9 @@ def test_plotter_create_chart_subplot_sorting(
     if config is not None:
         config = config if isinstance(config, ChartConfig) else config.value
         if config.sort_x is not None:
-            assert weight_bar_chart.encoding.x.sort == config.sort_x
-            assert pref_rect_chart.encoding.x.sort == config.sort_x
+            assert (
+                weight_bar_chart.encoding.x.__dict__["_kwds"]["sort"] == config.sort_x
+            )
+            assert pref_rect_chart.encoding.x.__dict__["_kwds"]["sort"] == config.sort_x
         if config.sort_y is not None:
-            assert pref_rect_chart.encoding.y.sort == config.sort_y
+            assert pref_rect_chart.encoding.y.__dict__["_kwds"]["sort"] == config.sort_y

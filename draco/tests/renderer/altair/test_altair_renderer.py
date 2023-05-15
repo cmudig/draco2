@@ -92,7 +92,7 @@ def specs_with_mark(mark: MarkType):
         },
     )
     spec_vl = {
-        "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
         "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
         "encoding": {
             "x": {
@@ -103,7 +103,7 @@ def specs_with_mark(mark: MarkType):
             "shape": {"field": "condition", "type": "nominal"},
             "text": {"field": "wind", "type": "quantitative"},
         },
-        "mark": mark,
+        "mark": {"type": mark},
     }
     return spec_d, spec_vl
 
@@ -126,7 +126,7 @@ tick_spec_d = build_spec(
     },
 )
 tick_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {
@@ -135,7 +135,7 @@ tick_spec_vl = {
             "type": "quantitative",
         }
     },
-    "mark": "tick",
+    "mark": {"type": "tick"},
 }
 
 # https://dig.cmu.edu/draco2/facts/examples.html#tick-plot-with-a-log-scale
@@ -156,12 +156,12 @@ tick_log_spec_d = build_spec(
     },
 )
 tick_log_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {"field": "temperature", "scale": {"type": "log"}, "type": "quantitative"}
     },
-    "mark": "tick",
+    "mark": {"type": "tick"},
 }
 
 # https://dig.cmu.edu/draco2/facts/examples.html#bar-chart
@@ -193,7 +193,7 @@ bar_spec_d = build_spec(
     },
 )
 bar_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {"field": "condition", "type": "ordinal"},
@@ -204,7 +204,7 @@ bar_spec_vl = {
             "type": "quantitative",
         },
     },
-    "mark": "bar",
+    "mark": {"type": "bar"},
 }
 
 # https://dig.cmu.edu/draco2/facts/examples.html#histogram
@@ -231,7 +231,7 @@ histogram_spec_d = build_spec(
     },
 )
 histogram_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {"field": "condition", "type": "ordinal"},
@@ -240,7 +240,7 @@ histogram_spec_vl = {
             "scale": {"type": "linear", "zero": True},
         },
     },
-    "mark": "bar",
+    "mark": {"type": "bar"},
 }
 
 # https://dig.cmu.edu/draco2/facts/examples.html#binned-histogram
@@ -270,7 +270,7 @@ binned_histogram_spec_d = build_spec(
     },
 )
 binned_histogram_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {
@@ -281,7 +281,7 @@ binned_histogram_spec_vl = {
         },
         "y": {"aggregate": "count", "scale": {"type": "linear", "zero": True}},
     },
-    "mark": "bar",
+    "mark": {"type": "bar"},
 }
 
 # https://dig.cmu.edu/draco2/facts/examples.html#scatterplot
@@ -308,7 +308,7 @@ scatter_spec_d = build_spec(
     },
 )
 scatter_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {
@@ -318,7 +318,7 @@ scatter_spec_vl = {
         },
         "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
     },
-    "mark": "point",
+    "mark": {"type": "point"},
 }
 
 # https://dig.cmu.edu/draco2/facts/examples.html#scatterplot-with-color
@@ -347,7 +347,7 @@ scatter_with_color_spec_d = build_spec(
     },
 )
 scatter_with_color_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "color": {
@@ -361,7 +361,7 @@ scatter_with_color_spec_vl = {
         },
         "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
     },
-    "mark": "point",
+    "mark": {"type": "point"},
 }
 
 # https://dig.cmu.edu/draco2/facts/examples.html#bubble-chart
@@ -390,7 +390,7 @@ bubble_spec_d = build_spec(
     },
 )
 bubble_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "size": {
@@ -405,7 +405,7 @@ bubble_spec_vl = {
         },
         "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
     },
-    "mark": "point",
+    "mark": {"type": "point"},
 }
 
 marks_to_test: list[MarkType] = ["line", "area", "text", "tick", "rect"]
@@ -463,7 +463,7 @@ stacked_bar_spec_d = build_spec(
     },
 )
 stacked_bar_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "color": {
@@ -482,7 +482,7 @@ stacked_bar_spec_vl = {
             "stack": "zero",
         },
     },
-    "mark": "bar",
+    "mark": {"type": "bar"},
 }
 
 # https://dig.cmu.edu/draco2/facts/examples.html#normalized-percentage-stacked-bar-chart
@@ -515,7 +515,7 @@ normalized_stacked_bar_spec_d = build_spec(
     },
 )
 normalized_stacked_bar_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "color": {
@@ -534,7 +534,7 @@ normalized_stacked_bar_spec_vl = {
             "type": "quantitative",
         },
     },
-    "mark": "bar",
+    "mark": {"type": "bar"},
 }
 
 
@@ -579,7 +579,7 @@ bar_with_tick_spec_d = build_spec(
     },
 )
 bar_with_tick_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "layer": [
         {
@@ -591,7 +591,7 @@ bar_with_tick_spec_vl = {
                     "type": "quantitative",
                 }
             },
-            "mark": "bar",
+            "mark": {"type": "bar"},
         },
         {
             "encoding": {
@@ -601,7 +601,7 @@ bar_with_tick_spec_vl = {
                     "type": "quantitative",
                 }
             },
-            "mark": "tick",
+            "mark": {"type": "tick"},
         },
     ],
 }
@@ -646,7 +646,7 @@ scatterplot_columns_spec_d = build_spec(
     },
 )
 scatterplot_columns_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "facet": {"column": {"field": "condition", "type": "nominal"}},
     "spec": {
@@ -658,7 +658,7 @@ scatterplot_columns_spec_vl = {
             },
             "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
         },
-        "mark": "point",
+        "mark": {"type": "point"},
     },
 }
 
@@ -688,7 +688,7 @@ scatterplot_rows_spec_d = build_spec(
     },
 )
 scatterplot_rows_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "facet": {"row": {"field": "condition", "type": "nominal"}},
     "spec": {
@@ -700,7 +700,7 @@ scatterplot_rows_spec_vl = {
             },
             "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
         },
-        "mark": "point",
+        "mark": {"type": "point"},
     },
 }
 
@@ -731,7 +731,7 @@ scatterplot_columns_binned_spec_d = build_spec(
     },
 )
 scatterplot_columns_binned_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "facet": {
         "column": {
@@ -748,7 +748,7 @@ scatterplot_columns_binned_spec_vl = {
             },
             "y": {"field": "wind", "scale": {"type": "linear"}, "type": "quantitative"},
         },
-        "mark": "point",
+        "mark": {"type": "point"},
     },
 }
 
@@ -800,7 +800,7 @@ tick_plot_and_histogram_spec_d = build_spec(
     },
 )
 tick_plot_and_histogram_spec_base_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "CONCAT_MODE": [
         {
@@ -811,7 +811,7 @@ tick_plot_and_histogram_spec_base_vl = {
                     "type": "quantitative",
                 }
             },
-            "mark": "tick",
+            "mark": {"type": "tick"},
         },
         {
             "encoding": {
@@ -821,7 +821,7 @@ tick_plot_and_histogram_spec_base_vl = {
                 },
                 "y": {"aggregate": "count", "scale": {"type": "linear", "zero": True}},
             },
-            "mark": "bar",
+            "mark": {"type": "bar"},
         },
     ],
 }
@@ -860,12 +860,12 @@ tick_plot_and_histogram_shared_scale_spec_d = build_spec(
     },
 )
 tick_plot_and_histogram_shared_scale_spec_base_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "CONCAT_MODE": [
         {
             "encoding": {"y": {"field": "temperature", "type": "quantitative"}},
-            "mark": "tick",
+            "mark": {"type": "tick"},
         },
         {
             "encoding": {
@@ -879,7 +879,7 @@ tick_plot_and_histogram_shared_scale_spec_base_vl = {
                     "type": "quantitative",
                 },
             },
-            "mark": "bar",
+            "mark": {"type": "bar"},
         },
     ],
     "resolve": {"scale": {"y": "shared"}},
@@ -1014,7 +1014,7 @@ polar_pie_chart_spec_d = build_spec(
     },
 )
 polar_pie_chart_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "color": {
@@ -1027,7 +1027,7 @@ polar_pie_chart_spec_vl = {
             "stack": "zero",
         },
     },
-    "mark": "arc",
+    "mark": {"type": "arc"},
 }
 
 # https://dig.cmu.edu/draco2/facts/examples.html#radial-chart
@@ -1059,7 +1059,7 @@ polar_radial_chart_spec_d = build_spec(
     },
 )
 polar_radial_chart_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {
         "view": {"continuousHeight": 300, "continuousWidth": 400},
     },
