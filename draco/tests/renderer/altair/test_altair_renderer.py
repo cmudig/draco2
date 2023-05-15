@@ -92,7 +92,7 @@ def specs_with_mark(mark: MarkType):
         },
     )
     spec_vl = {
-        "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
         "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
         "encoding": {
             "x": {
@@ -126,7 +126,7 @@ tick_spec_d = build_spec(
     },
 )
 tick_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {
@@ -156,7 +156,7 @@ tick_log_spec_d = build_spec(
     },
 )
 tick_log_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {"field": "temperature", "scale": {"type": "log"}, "type": "quantitative"}
@@ -193,7 +193,7 @@ bar_spec_d = build_spec(
     },
 )
 bar_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {"field": "condition", "type": "ordinal"},
@@ -231,7 +231,7 @@ histogram_spec_d = build_spec(
     },
 )
 histogram_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {"field": "condition", "type": "ordinal"},
@@ -270,7 +270,7 @@ binned_histogram_spec_d = build_spec(
     },
 )
 binned_histogram_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {
@@ -308,7 +308,7 @@ scatter_spec_d = build_spec(
     },
 )
 scatter_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "x": {
@@ -347,7 +347,7 @@ scatter_with_color_spec_d = build_spec(
     },
 )
 scatter_with_color_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "color": {
@@ -390,7 +390,7 @@ bubble_spec_d = build_spec(
     },
 )
 bubble_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "size": {
@@ -463,7 +463,7 @@ stacked_bar_spec_d = build_spec(
     },
 )
 stacked_bar_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "color": {
@@ -515,7 +515,7 @@ normalized_stacked_bar_spec_d = build_spec(
     },
 )
 normalized_stacked_bar_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "color": {
@@ -579,7 +579,7 @@ bar_with_tick_spec_d = build_spec(
     },
 )
 bar_with_tick_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "layer": [
         {
@@ -646,7 +646,7 @@ scatterplot_columns_spec_d = build_spec(
     },
 )
 scatterplot_columns_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "facet": {"column": {"field": "condition", "type": "nominal"}},
     "spec": {
@@ -688,7 +688,7 @@ scatterplot_rows_spec_d = build_spec(
     },
 )
 scatterplot_rows_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "facet": {"row": {"field": "condition", "type": "nominal"}},
     "spec": {
@@ -731,7 +731,7 @@ scatterplot_columns_binned_spec_d = build_spec(
     },
 )
 scatterplot_columns_binned_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "facet": {
         "column": {
@@ -800,7 +800,7 @@ tick_plot_and_histogram_spec_d = build_spec(
     },
 )
 tick_plot_and_histogram_spec_base_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "CONCAT_MODE": [
         {
@@ -860,7 +860,7 @@ tick_plot_and_histogram_shared_scale_spec_d = build_spec(
     },
 )
 tick_plot_and_histogram_shared_scale_spec_base_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "CONCAT_MODE": [
         {
@@ -1014,7 +1014,7 @@ polar_pie_chart_spec_d = build_spec(
     },
 )
 polar_pie_chart_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
     "encoding": {
         "color": {
@@ -1059,7 +1059,7 @@ polar_radial_chart_spec_d = build_spec(
     },
 )
 polar_radial_chart_spec_vl = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json",
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
     "config": {
         "view": {"continuousHeight": 300, "continuousWidth": 400},
     },
