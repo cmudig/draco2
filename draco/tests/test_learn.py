@@ -24,9 +24,8 @@ def test_train_model():
     X = data.negative - data.positive
     clf = train_model(X, 0.3)
 
-    features = data.negative.columns
     non_zero_coef = 0
-    for feature, weight in zip(features, clf.coef_[0]):
+    for weight in clf.coef_[0]:
         if not weight == 0:
             non_zero_coef += 1
 
