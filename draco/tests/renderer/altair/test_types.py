@@ -6,11 +6,11 @@ import draco.renderer.altair.types as draco_types
 @pytest.mark.parametrize(
     "data, is_valid",
     [
-        (dict(channel="x", field="temp"), True),
-        (dict(channel="x", field="temp", aggregate="mean"), True),
-        (dict(channel="x", field="temp", aggregate="count"), True),
-        (dict(channel="x", aggregate="count"), True),
-        (dict(channel="x", aggregate="mean"), False),
+        ({"channel": "x", "field": "temp"}, True),
+        ({"channel": "x", "field": "temp", "aggregate": "mean"}, True),
+        ({"channel": "x", "field": "temp", "aggregate": "count"}, True),
+        ({"channel": "x", "aggregate": "count"}, True),
+        ({"channel": "x", "aggregate": "mean"}, False),
     ],
 )
 def test_encoding_validator(data: dict, is_valid: bool):
@@ -24,10 +24,20 @@ def test_encoding_validator(data: dict, is_valid: bool):
 @pytest.mark.parametrize(
     "data, is_valid",
     [
-        (dict(name="temp", type="number"), True),
-        (dict(name="temp", type="number", min=-20, max=50, std=0), True),
-        (dict(name="temp", type="number", min=-20, max=50, std=0, freq=100), False),
-        (dict(name="temp", type="string", min=-20, max=50, std=0), False),
+        ({"name": "temp", "type": "number"}, True),
+        ({"name": "temp", "type": "number", "min": -20, "max": 50, "std": 0}, True),
+        (
+            {
+                "name": "temp",
+                "type": "number",
+                "min": -20,
+                "max": 50,
+                "std": 0,
+                "freq": 100,
+            },
+            False,
+        ),
+        ({"name": "temp", "type": "string", "min": -20, "max": 50, "std": 0}, False),
     ],
 )
 def test_field_validator(data: dict, is_valid: bool):
@@ -44,10 +54,12 @@ def test_field_validator(data: dict, is_valid: bool):
         # Cartesian - valid
         *[
             (
-                dict(
-                    coordinates="cartesian",
-                    mark=[dict(type=t, encoding=[dict(channel="x", field="temp")])],
-                ),
+                {
+                    "coordinates": "cartesian",
+                    "mark": [
+                        {"type": t, "encoding": [{"channel": "x", "field": "temp"}]}
+                    ],
+                },
                 True,
             )
             for t in ["point", "bar", "line", "area", "text", "tick", "rect"]
@@ -55,10 +67,12 @@ def test_field_validator(data: dict, is_valid: bool):
         # Polar - invalid mark, valid encoding
         *[
             (
-                dict(
-                    coordinates="polar",
-                    mark=[dict(type=t, encoding=[dict(channel="x", field="temp")])],
-                ),
+                {
+                    "coordinates": "polar",
+                    "mark": [
+                        {"type": t, "encoding": [{"channel": "x", "field": "temp"}]}
+                    ],
+                },
                 False,
             )
             for t in ["point", "line", "area", "text", "tick", "rect"]
@@ -66,10 +80,12 @@ def test_field_validator(data: dict, is_valid: bool):
         # Polar - valid mark, valid encoding
         *[
             (
-                dict(
-                    coordinates="polar",
-                    mark=[dict(type=t, encoding=[dict(channel="x", field="temp")])],
-                ),
+                {
+                    "coordinates": "polar",
+                    "mark": [
+                        {"type": t, "encoding": [{"channel": "x", "field": "temp"}]}
+                    ],
+                },
                 True,
             )
             for t in ["bar"]
@@ -77,10 +93,12 @@ def test_field_validator(data: dict, is_valid: bool):
         # Polar - valid mark, invalid encoding
         *[
             (
-                dict(
-                    coordinates="polar",
-                    mark=[dict(type="bar", encoding=[dict(channel=c, field="temp")])],
-                ),
+                {
+                    "coordinates": "polar",
+                    "mark": [
+                        {"type": "bar", "encoding": [{"channel": c, "field": "temp"}]}
+                    ],
+                },
                 False,
             )
             for c in ["size", "shape", "text"]
@@ -88,10 +106,12 @@ def test_field_validator(data: dict, is_valid: bool):
         # Polar - valid mark, valid encoding
         *[
             (
-                dict(
-                    coordinates="polar",
-                    mark=[dict(type="bar", encoding=[dict(channel=c, field="temp")])],
-                ),
+                {
+                    "coordinates": "polar",
+                    "mark": [
+                        {"type": "bar", "encoding": [{"channel": c, "field": "temp"}]}
+                    ],
+                },
                 True,
             )
             for c in ["x", "y", "color"]
