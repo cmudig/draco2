@@ -20,7 +20,6 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
     "Environment :: MacOS X",
-    "Environment :: WebAssembly",
     "Framework :: FastAPI",
     "Framework :: Jupyter",
     "Framework :: Pydantic",
