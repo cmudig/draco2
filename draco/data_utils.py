@@ -40,8 +40,8 @@ def run_in_parallel(
     processes = min(cpu_count(), splits)
 
     logger.info(
-        f"Running {splits} partitions of {len(data)} items \
-            in parallel on {processes} processes."
+        f"Running {splits} partitions of {len(data)} items "
+        "in parallel on {processes} processes."
     )
 
     with Manager() as manager:
