@@ -29,14 +29,14 @@ files = [
 
 [[package]]
 name = "altair"
-version = "5.0.0"
+version = "5.0.1"
 description = "Vega-Altair: A declarative statistical visualization library for Python."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "altair-5.0.0-py3-none-any.whl", hash = "sha256:e7deed321f61a3ec752186ae96e97b44a1353de142928c1934fb211e9f0bfe9e"},
-    {file = "altair-5.0.0.tar.gz", hash = "sha256:394c3d8be96f9cc90e15a0eee3634cc5b6f19e470fd2045759892623bd9a3fb2"},
+    {file = "altair-5.0.1-py3-none-any.whl", hash = "sha256:9f3552ed5497d4dfc14cf48a76141d8c29ee56eae2873481b4b28134268c9bbe"},
+    {file = "altair-5.0.1.tar.gz", hash = "sha256:087d7033cb2d6c228493a053e12613058a5d47faf6a36aea3ff60305fd8b4cb0"},
 ]
 
 [package.dependencies]
@@ -49,7 +49,7 @@ typing-extensions = {version = ">=4.0.1", markers = "python_version < \"3.11\""}
 
 [package.extras]
 dev = ["black (<24)", "hatch", "ipython", "m2r", "mypy", "pandas-stubs", "pytest", "pytest-cov", "ruff", "types-jsonschema", "types-setuptools", "vega-datasets", "vl-convert-python"]
-doc = ["docutils", "geopandas", "jinja2", "myst-parser", "numpydoc", "pillow", "pydata-sphinx-theme", "sphinx", "sphinx-copybutton", "sphinx-design"]
+doc = ["docutils", "geopandas", "jinja2", "myst-parser", "numpydoc", "pillow", "pydata-sphinx-theme", "sphinx", "sphinx-copybutton", "sphinx-design", "sphinxext-altair"]
 
 [[package]]
 name = "anyio"
