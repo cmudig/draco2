@@ -1,19 +1,19 @@
 import json
 from pathlib import Path
-from typing import DefaultDict, Dict
+from typing import DefaultDict
 
 import pandas as pd
 
 from draco import Draco
 from draco.data_utils import count_preferences_memoized, pairs_to_vec, run_in_parallel
 
-draco = Draco()
-learn_data: Dict[str, Dict] = {}
+draco: Draco = Draco()
+learn_data: dict[str, dict[str, str]] = {}
 
-root_path = Path(__file__).resolve().parents[2]
+root_path: Path = Path(__file__).resolve().parents[2]
 with open(root_path / "docs/applications/data/saket2018_draco2.json") as file:
-    i = 0
-    json_data = json.load(file)
+    i: int = 0
+    json_data: dict = json.load(file)
 
     for pair in json_data:
         pair["source"] = "saket_2018"
@@ -22,37 +22,37 @@ with open(root_path / "docs/applications/data/saket2018_draco2.json") as file:
         i += 1
 
 
-def square(x):
-    return x**2
+def square(x: int) -> int:
+    return int(x**2)
 
 
-def batch_square(d):
+def batch_square(d: tuple[str, str, list[tuple[int, int]]]) -> pd.Series:
     _, _, xs = d
 
-    s = pd.Series(dtype=int)
-    for i, x in xs:
-        s = pd.concat([s, pd.Series([x**2], index=[i])])
+    s: pd.Series = pd.Series(dtype=int)
+    for idx, x in xs:
+        s = pd.concat([s, pd.Series([x**2], index=[idx])])
     return s
 
 
-def test_run_in_parallel():
-    a = range(100)
-    expected = list(map(square, a))
+def test_run_in_parallel() -> None:
+    a: list[int] = list(range(100))
+    expected: list[int] = list(map(square, a))
     actual = run_in_parallel(batch_square, list(enumerate(a)), ("a", "b"))
 
     assert list(actual.values) == expected
 
 
-def test_count_preferences_memoized():
-    processed_specs: Dict[str, DefaultDict[str, int]] = {}
+def test_count_preferences_memoized() -> None:
+    processed_specs: dict[str, DefaultDict[str, int]] = {}
     pair_id = "saket_2018_0"
     key = "saket_2018_0_negative"
     count_preferences_memoized(processed_specs, key, learn_data[pair_id]["negative"])
     assert key in processed_specs
 
 
-def test_pairs_to_vecs():
-    data = pairs_to_vec(learn_data)
+def test_pairs_to_vecs() -> None:
+    data: pd.DataFrame = pairs_to_vec(learn_data)
 
     assert set(data.negative.columns) == set(
         draco.soft_constraint_names
