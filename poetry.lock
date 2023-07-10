@@ -1862,13 +1862,13 @@ six = ">=1.4.1"
 
 [[package]]
 name = "libarchive-c"
-version = "4.0"
+version = "5.0"
 description = "Python interface to libarchive"
 optional = false
 python-versions = "*"
 files = [
-    {file = "libarchive-c-4.0.tar.gz", hash = "sha256:a5b41ade94ba58b198d778e68000f6b7de41da768de7140c984f71d7fa8416e5"},
-    {file = "libarchive_c-4.0-py2.py3-none-any.whl", hash = "sha256:b7306dceaeeac199dd53a471ea9d39ed4be8e81962df99d628db7a12efbb9b52"},
+    {file = "libarchive-c-5.0.tar.gz", hash = "sha256:d673f56673d87ec740d1a328fa205cafad1d60f5daca4685594deb039d32b159"},
+    {file = "libarchive_c-5.0-py2.py3-none-any.whl", hash = "sha256:3ed7ee9b7d7d6fc200aecce63cee2084754cb6c00e946f6d007b80236e662bff"},
 ]
 
 [[package]]
@@ -4408,4 +4408,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10.0,<3.11"
-content-hash = "9d3e51353115161ab580f12b09c5b0532d161b7e868c614ed171ae1f067a3241"
+content-hash = "b466a36f8a2ea8adc4c5bc16e8413050c6e3f498f7300fa131b68b979c327b9d"

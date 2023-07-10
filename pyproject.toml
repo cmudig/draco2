@@ -73,7 +73,7 @@ optional = true
 
 [tool.poetry.group.web.dependencies]
 jupyterlite = "^0.1.0"
-libarchive-c = "^4.0"
+libarchive-c = ">=4,<6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
