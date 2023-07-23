@@ -1,8 +1,6 @@
 package:
   name: scikit-learn
   version: 1.2.2
-  tag:
-    - min-scipy-stack
   top-level:
     - sklearn
 source:
