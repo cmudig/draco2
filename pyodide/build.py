@@ -217,7 +217,7 @@ def copy_package_recipe_to_pyodide_repo(
     pyodide_packages_path = pyodide_repo_path / "packages"
     pyodide_package_path = pyodide_packages_path / package_name
     if pyodide_package_path.exists():
-        warn(f'{pyodide_package_path} exists. Overwriting it with custom recipe...')
+        warn(f"{pyodide_package_path} exists. Overwriting it with custom recipe...")
         shutil.rmtree(pyodide_package_path)
 
     # Create dir & copy package
