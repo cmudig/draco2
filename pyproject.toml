@@ -34,7 +34,7 @@ classifiers = [
 [tool.poetry.dependencies]
 altair = "^5.0.0"
 clingo = "^5.5.2"
-fastapi = ">=0.85,<0.100"
+fastapi = ">=0.85,<0.101"
 pandas = ">=1.4.2,<3.0.0"
 pydantic = "^1.10.5"
 python = ">=3.10.0,<3.11"
