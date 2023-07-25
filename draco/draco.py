@@ -64,7 +64,7 @@ class Draco:
         )
         self._constraints_no_violation = "".join(
             blocks_to_program(
-                constraints_blocks, set(constraints_blocks.keys()) - set(["violation"])
+                constraints_blocks, set(constraints_blocks.keys()) - {"violation"}
             )
         )
 

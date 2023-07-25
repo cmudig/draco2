@@ -18,13 +18,13 @@ required((view,coordinates)).
 #const max_marks = 2.
 { mark_id(V,0..max_marks-1) } :- entity(view,root,V).
 :- mark_id(V,ID), not mark_id(V,ID-1), ID > 0.
-{ entity(mark,V,(V,M)) } = 1 :- mark_id(V,M).
+entity(mark,V,(V,M)) :- mark_id(V,M).
 
 % maximum number for additional encoding channels.
 #const max_encs = 4.
 { enc_id(M,0..max_encs-1) } :- entity(mark,V,M).
 :- enc_id(M,ID), not enc_id(M,ID-1), ID > 0.
-{ entity(encoding,M,(M,E)) } = 1 :- enc_id(M,E).
+entity(encoding,M,(M,E)) :- enc_id(M,E).
 
 % @generate(encoding_channel) Each encoding requires a channel.
 required((encoding,channel)).

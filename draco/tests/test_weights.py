@@ -66,6 +66,6 @@ def test_complete_weights():
     soft_constraints = set(soft.blocks.keys())
     soft_constraints.remove("__preamble__")
 
-    weight_keys = set(s[: -len("_weight")] for s in weights.weights.keys())
+    weight_keys = {s[: -len("_weight")] for s in weights.weights.keys()}
 
     assert soft_constraints == weight_keys
