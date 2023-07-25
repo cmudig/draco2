@@ -62,7 +62,7 @@ class Draco:
             if isinstance(constraints, Program)
             else parse_blocks(constraints)
         )
-        self._constraints_no_violation = "".join(
+        self.constraints_no_violation = "".join(
             blocks_to_program(
                 constraints_blocks, set(constraints_blocks.keys()) - set(["violation"])
             )
@@ -169,7 +169,7 @@ class Draco:
 
         program = [
             self.define,
-            self._constraints_no_violation,
+            self.constraints_no_violation,
             self.helpers,
             self.hard,
             spec,
