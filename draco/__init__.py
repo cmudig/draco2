@@ -4,7 +4,7 @@ from draco import programs
 
 from .debug import DracoDebug, DracoDebugChartConfig, DracoDebugPlotter
 from .draco import Draco
-from .fact_utils import answer_set_to_dict, dict_to_facts
+from .fact_utils import answer_set_to_dict, dict_to_facts, facts_to_dict
 from .run import is_satisfiable, run_clingo
 from .schema import schema_from_dataframe, schema_from_file
 from .utils import dict_union
@@ -18,6 +18,7 @@ __all__ = [
     "DracoDebugChartConfig",
     "programs",
     "dict_to_facts",
+    "facts_to_dict",
     "answer_set_to_dict",
     "run_clingo",
     "is_satisfiable",

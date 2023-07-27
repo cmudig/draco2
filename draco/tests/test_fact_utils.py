@@ -2,7 +2,13 @@ import itertools
 
 import pytest
 
-from draco.fact_utils import FactKind, answer_set_to_dict, dict_to_facts, make_fact
+from draco.fact_utils import (
+    FactKind,
+    answer_set_to_dict,
+    dict_to_facts,
+    facts_to_dict,
+    make_fact,
+)
 from draco.run import run_clingo
 
 
@@ -182,6 +188,29 @@ def test_answer_set_to_dict():
 
     result = run_clingo(program)
     assert answer_set_to_dict(next(result).answer_set) == {
+        "numberRows": 42,
+        "field": [
+            {"unique": 12, "type": "number"},
+            {"unique": 32, "type": "string"},
+        ],
+    }
+
+
+def test_facts_to_dict():
+    program = [
+        # root
+        "attribute(numberRows,root,42).",
+        # first field
+        "entity(field,root,0).",
+        "attribute((field,unique),0,12).",
+        "attribute((field,type),0,number).",
+        # second fields
+        "entity(field,root,1).",
+        "attribute((field,unique),1,32).",
+        "attribute((field,type),1,string).",
+    ]
+
+    assert facts_to_dict(program) == {
         "numberRows": 42,
         "field": [
             {"unique": 12, "type": "number"},

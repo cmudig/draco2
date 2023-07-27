@@ -6,6 +6,9 @@ from typing import Generator, Iterable, Iterator, Mapping
 from clingo import Symbol
 from clingo.symbol import SymbolType
 
+from .run import run_clingo
+from .types import Specification
+
 
 @unique
 class FactKind(Enum):
@@ -148,3 +151,17 @@ def answer_set_to_dict(answer_set: Iterable[Symbol], root=ROOT) -> Mapping:
             collector[obj][prop] = collector[obj].get(prop, []) + [child]
 
     return collect_children(root, collector)
+
+
+def facts_to_dict(facts: Specification) -> Mapping:
+    """
+    Converts an ASP program to a nested data structure.
+    Uses :code:`run_clingo` and :code:`answer_set_to_dict` internally.
+
+    The inverse of this function is :code:`dict_to_facts`.
+
+    :param facts: The ASP program as a list of strings or a single string.
+    :return: The nested data structure representing the facts.
+    """
+    result = run_clingo(facts)
+    return answer_set_to_dict(next(result).answer_set)
