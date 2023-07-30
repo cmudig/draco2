@@ -203,6 +203,10 @@ jobs:
       - name: Install dependencies
         run: poetry install --with web
 
+      # Required to execute notebooks with Python modules wrapping Node.js modules, such as Draco 1
+      - name: Setup Node
+        uses: actions/setup-node@v3
+
       - name: Make book
         run: make book
 
