@@ -1,11 +1,12 @@
 from typing import Literal
 
-# granular imports to satisfy `pyright`
-import pydantic.class_validators as pydantic_validators
-import pydantic.config as pydantic_config
 import pydantic.fields as pydantic_fields
+
+# granular imports to satisfy `pyright`
+import pydantic.functional_validators as pydantic_validators
 import pydantic.main as pydantic_main
 import pydantic.types as pydantic_types
+from pydantic import ConfigDict
 
 """
 The number of rows in the dataset.
@@ -164,9 +165,7 @@ FacetBinning = EncodingBinning
 class SchemaBase(pydantic_main.BaseModel):
     """Base class for all schema classes."""
 
-    class Config:
-        # Do not allow fields that are not defined in the schema explicitly.
-        extra = pydantic_config.Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
 
 class Encoding(SchemaBase):
@@ -183,7 +182,7 @@ class Encoding(SchemaBase):
     binning: EncodingBinning | None = None
     stack: EncodingStack | None = None
 
-    @pydantic_validators.root_validator(pre=True)
+    @pydantic_validators.model_validator(mode="before")
     def check_field_is_present_unless_agg_count(cls, values: dict):
         if values.get("aggregate", None) != "count" and "field" not in values:
             raise ValueError("field must be present unless aggregate is count")
@@ -252,7 +251,7 @@ class View(SchemaBase):
     __SUPPORTED_POLAR_MARKS__ = {"bar"}
     __SUPPORTED_POLAR_ENCODINGS__ = {"x", "y", "color"}
 
-    @pydantic_validators.root_validator(pre=True)
+    @pydantic_validators.model_validator(mode="before")
     def check_polar_mark_and_encoding(cls, values: dict):
         if values.get("coordinates", "cartesian") == "polar":
             for mark in values.get("mark", []):
@@ -296,7 +295,7 @@ class Field(SchemaBase):
     __STRING_ONLY_FIELDS__ = {"freq"}
     __NUMBER_ONLY_FIELDS__ = {"min", "max", "std"}
 
-    @pydantic_validators.root_validator(pre=True)
+    @pydantic_validators.model_validator(mode="before")
     def check_no_string_attributes_on_number_type(cls, values: dict):
         if values["type"] == "number":
             for field in cls.__STRING_ONLY_FIELDS__:
@@ -306,7 +305,7 @@ class Field(SchemaBase):
                     )
         return values
 
-    @pydantic_validators.root_validator(pre=True)
+    @pydantic_validators.model_validator(mode="before")
     def check_no_number_attributes_on_string_type(cls, values: dict):
         if values["type"] == "string":
             for field in cls.__NUMBER_ONLY_FIELDS__:
