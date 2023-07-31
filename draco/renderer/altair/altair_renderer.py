@@ -97,7 +97,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         self.concat_mode = concat_mode
 
     def render(self, spec: dict, data: DataFrame) -> VegaLiteChart:
-        typed_spec = SpecificationDict.parse_obj(spec)
+        typed_spec = SpecificationDict.model_validate(spec)
         # initial chart to be mutated by the visitor callbacks
         chart = alt.Chart(data)
         chart_views: list[VegaLiteChart] = []
@@ -330,7 +330,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 custom_args["scale"] = scale_or_none
 
         encoding_args = (
-            encoding.dict(exclude_none=True, exclude={"channel", "field", "binning"})
+            encoding.model_dump(
+                exclude_none=True, exclude={"channel", "field", "binning"}
+            )
             | custom_args
         )
 
@@ -384,7 +386,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 custom_args["scale"] = scale_or_none
 
         encoding_args = (
-            encoding.dict(
+            encoding.model_dump(
                 exclude_none=True, exclude={"channel", "field", "binning", "scale"}
             )
             | custom_args
@@ -574,7 +576,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             return None
 
         # Extract arguments and process them further
-        scale_args = scale.dict(exclude_none=True, exclude={"channel"})
+        scale_args = scale.model_dump(exclude_none=True, exclude={"channel"})
 
         renames = {
             "categorical": "ordinal",
