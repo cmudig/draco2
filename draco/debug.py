@@ -274,7 +274,9 @@ class DracoDebugPlotter:
             .mark_bar()
             .encode(
                 x=alt.X(field="pref_name", type="nominal", sort=cfg.sort_x, axis=None),
-                y=alt.Y(field="weight", type="quantitative"),
+                y=alt.Y(
+                    field="weight", type="quantitative", aggregate="min", title="Weight"
+                ),
                 tooltip=["pref_name", "weight"],
             )
             .properties(width=width, height=height / 4)
@@ -283,8 +285,18 @@ class DracoDebugPlotter:
             alt.Chart(chart_preferences)
             .mark_rect(stroke="lightgray", strokeWidth=0.25)
             .encode(
-                x=alt.X(field="pref_name", type="nominal", sort=cfg.sort_x),
-                y=alt.Y(field="chart_name", type="nominal", sort=cfg.sort_y),
+                x=alt.X(
+                    field="pref_name",
+                    type="nominal",
+                    sort=cfg.sort_x,
+                    title="Constraint",
+                ),
+                y=alt.Y(
+                    field="chart_name",
+                    type="nominal",
+                    sort=cfg.sort_y,
+                    title="Chart specification",
+                ),
                 # Set rect color to white if `count == 0`
                 color=alt.condition(
                     alt.datum.count == 0,
