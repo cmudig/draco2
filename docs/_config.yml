@@ -6,6 +6,9 @@ author: CMU Data Interaction Group
 copyright: "2023"
 logo: logo-light.png
 
+execute:
+  timeout: 600
+
 # Define the name of the latex output file for PDF builds
 latex:
   latex_documents:
@@ -44,6 +47,7 @@ sphinx:
     autodoc_preserve_defaults: True
     # Print tracebacks for execution errors directly into the terminal, useful in CI (https://jupyterbook.org/en/stable/content/execute.html#execution-tracebacks-in-the-terminal)
     nb_execution_show_tb: True
+    nb_execution_timeout: 600
 
 bibtex_bibfiles:
   - references.bib
