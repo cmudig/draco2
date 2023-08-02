@@ -6,6 +6,11 @@ author: CMU Data Interaction Group
 copyright: "2023"
 logo: logo-light.png
 
+execute:
+  allow_errors: true
+  stderr_output: remove
+  timeout: 300
+
 # Define the name of the latex output file for PDF builds
 latex:
   latex_documents:
