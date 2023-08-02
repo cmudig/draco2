@@ -207,6 +207,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
 
+      # Installing system dependencies required by notebooks to be executed
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y gringo
+
       - name: Make book
         run: make book
 
