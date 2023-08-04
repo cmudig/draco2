@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
     apt-get install -y nodejs && \
     npm install -g npm@latest
 
+# Install Clingo so that it is available as an executable for the draco1 vs. draco2 comparison notebook
+RUN apt-get update && apt-get install -y gringo
+
 # Create user with a home directory
 ARG NB_USER="draco2"
 ARG NB_UID="1000"

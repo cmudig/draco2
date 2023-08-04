@@ -203,6 +203,14 @@ jobs:
       - name: Install dependencies
         run: poetry install --with web
 
+      # Required to execute notebooks with Python modules wrapping Node.js modules, such as Draco 1
+      - name: Setup Node
+        uses: actions/setup-node@v3
+
+      # Installing system dependencies required by notebooks to be executed
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y gringo
+
       - name: Make book
         run: make book
 
@@ -242,7 +250,7 @@ jobs:
         uses: actions/configure-pages@v3
 
       - name: Upload Documentation Site Artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: ./docs/_build/html
 
