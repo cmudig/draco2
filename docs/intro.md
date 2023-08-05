@@ -15,5 +15,4 @@ The code for Draco is [available as open source on GitHub](https://github.com/cm
 
 ## Installation
 
-You can install the Draco package from PyPI via `pip install draco --pre`. Note that the new version of Draco is
-currently a prerelease.
+You can install the Draco package from [PyPI](https://pypi.org/project/draco/) via `pip install draco`.
