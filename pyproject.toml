@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "draco"
-version = "2.0.0b5"
+version = "2.0.0"
 description = "Visualization recommendation using constraints"
 authors = [
     "Dominik Moritz <domoritz@cmu.edu>",
