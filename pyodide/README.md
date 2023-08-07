@@ -24,7 +24,7 @@ The version of the release needs to match exactly the version of this package.
 You can automate this using the following commands:
 
 ```shell
-DRACO_PYODIDE_VERSION=2.0.0b4  # Replace with the package version of your choice
+DRACO_PYODIDE_VERSION=2.0.0  # Replace with the package version of your choice
 ARTIFACT_DIR=draco-pyodide-artifacts  # Replace with the directory of your choice
 TAR_NAME=pyodide-$DRACO_PYODIDE_VERSION.tar.gz
 wget https://github.com/cmudig/draco2/releases/download/v$DRACO_PYODIDE_VERSION/$TAR_NAME
