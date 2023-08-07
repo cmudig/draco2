@@ -34,14 +34,6 @@ Read about Draco in the online book at [https://dig.cmu.edu/draco2/](https://dig
 interactive mode using [Binder](https://mybinder.org/v2/gh/cmudig/draco2/HEAD). In the documentation, we just refer to
 _Draco_ without a version.
 
-## What's different from [Draco v1](https://github.com/uwdata/draco)?
-
-- Draco v2 is completely written in Python. No more need to run both Python and Node. We still use ASP for the knowledge
-  base.
-- Generalized and extended chart specification format. The new format is more extensible with custom properties.
-- Support for multiple views and view composition.
-- High test-coverage, documentation, and updated development tooling.
-
 ## Contributing
 
 We welcome any input, feedback, bug reports, and contributions. You can learn about setting up your development
