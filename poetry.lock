@@ -2599,17 +2599,17 @@ xml = ["lxml (>=4.6.3)"]
 
 [[package]]
 name = "pandas-stubs"
-version = "2.0.2.230605"
+version = "2.0.3.230814"
 description = "Type annotations for pandas"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pandas_stubs-2.0.2.230605-py3-none-any.whl", hash = "sha256:39106b602f3cb6dc5f728b84e1b32bde6ecf41ee34ee714c66228009609fbada"},
-    {file = "pandas_stubs-2.0.2.230605.tar.gz", hash = "sha256:624c7bb06d38145a44b61be459ccd19b038e0bf20364a025ecaab78fea65e858"},
+    {file = "pandas_stubs-2.0.3.230814-py3-none-any.whl", hash = "sha256:4b3dfc027d49779176b7daa031a3405f7b839bcb6e312f4b9f29fea5feec5b4f"},
+    {file = "pandas_stubs-2.0.3.230814.tar.gz", hash = "sha256:1d5cc09e36e3d9f9a1ed9dceae4e03eeb26d1b898dd769996925f784365c8769"},
 ]
 
 [package.dependencies]
-numpy = ">=1.24.3"
+numpy = {version = ">=1.25.0", markers = "python_version >= \"3.9\""}
 types-pytz = ">=2022.1.1"
 
 [[package]]
