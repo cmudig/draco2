@@ -165,7 +165,7 @@ def test_plotter_create_chart_title(
 
 
 def __mark_as_str(mark: str | alt.MarkDef) -> str:
-    if type(mark) is str:
+    if isinstance(mark, str):
         return mark
     else:
         mark_def: alt.MarkDef = mark

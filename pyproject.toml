@@ -7,7 +7,7 @@ authors = [
     "Chenglong Wang <clwang@cs.washington.edu>",
     "JunranY <junran@cs.washington.edu>",
     "Zehua Zeng <zhzeng@umd.edu>",
-    "Péter Ferenc Gyarmati <peter.ferenc.gyarmati@univie.ac.at>"
+    "Péter Ferenc Gyarmati <peter.ferenc.gyarmati@univie.ac.at>",
 ]
 license = "MIT"
 homepage = "https://github.com/cmudig/draco2"
@@ -48,7 +48,7 @@ mypy = ">=0.990,<1.6"
 pandas-stubs = ">=1.5.1,<3.0.0"
 pre-commit = ">=2.20,<4.0"
 pytype = ">=2022.11.10,<2024.0.0"
-ruff = ">=0.0.253,<0.0.283"
+ruff = ">=0.0.253,<0.0.285"
 types-tabulate = "^0.9.0.2"
 
 [tool.poetry.group.docs.dependencies]
@@ -92,7 +92,7 @@ select = [
     "F",
     "W",
     # isort
-    "I001"
+    "I001",
 ]
 src = ["draco"]
 fix = true
