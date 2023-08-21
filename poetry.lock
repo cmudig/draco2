@@ -1732,13 +1732,13 @@ files = [
 
 [[package]]
 name = "jupyterlite"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jupyterlite-0.1.1-py3-none-any.whl", hash = "sha256:958b839836c9aa5a10e49b4ec98a7f6472359b73fd144c29665e6895ef5d18b0"},
-    {file = "jupyterlite-0.1.1.tar.gz", hash = "sha256:7188c672116ef96aea2eec6eaa83c6b268a6b9454bdf3375724dc1f16ae08718"},
+    {file = "jupyterlite-0.1.2-py3-none-any.whl", hash = "sha256:17787bd7ed2c183090019312429f79cc737daa2e5b4ee7332d544ac219401ede"},
+    {file = "jupyterlite-0.1.2.tar.gz", hash = "sha256:d6f5056847a37e7ba2a9e0a8346b67d966bd7188bbb0165d84d244126b3a47e5"},
 ]
 
 [package.dependencies]
