@@ -27,13 +27,13 @@ files = [
 
 [[package]]
 name = "altair"
-version = "5.1.0"
+version = "5.1.1"
 description = "Vega-Altair: A declarative statistical visualization library for Python."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "altair-5.1.0-py3-none-any.whl", hash = "sha256:af1d502fa27a400ab4c82c55a185b4eaa74f1146f619e53278ba19934e90510a"},
-    {file = "altair-5.1.0.tar.gz", hash = "sha256:46d2b1a9fa29eeed24513262cb1de13a40d55c04580fc21799d5de3991fea8ff"},
+    {file = "altair-5.1.1-py3-none-any.whl", hash = "sha256:bb421459b53c80ad45f2bd009c87da2a81165b8f7d5a90658e0fc1ffc741bf34"},
+    {file = "altair-5.1.1.tar.gz", hash = "sha256:ad6cd6983c8db69a34dd68e42653f6172b7fc3775b7190005107f1b4fc60d64d"},
 ]
 
 [package.dependencies]
