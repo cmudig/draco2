@@ -64,7 +64,7 @@ wheel = ">=0.38.4,<0.42.0"
 
 [tool.poetry.group.test.dependencies]
 deepdiff = "^6.2.1"
-httpx = ">=0.23,<0.25"
+httpx = ">=0.23,<0.26"
 pytest = "^7.2.0"
 pytest-cov = "^4.0.0"
 
