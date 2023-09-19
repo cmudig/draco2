@@ -133,7 +133,7 @@ jobs:
 
       - name: Checkout repository
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install poetry
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
@@ -189,7 +189,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install poetry
         run: pipx install poetry
@@ -272,7 +272,7 @@ jobs:
 
     steps:
       - name: Checkout repository so that `gh` can be used
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # This way we won't have conflicts when extracting the prebuilt distro
       # We do not need repo files here anyway, we just checked out the repo
