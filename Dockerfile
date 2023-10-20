@@ -1,4 +1,4 @@
-FROM python:3.11.6-slim-bookworm
+FROM python:3.11.6-bookworm
 
 # Install Node.js as it is needed as a dev dependency
 RUN apt-get update && apt-get install -y \
