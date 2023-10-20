@@ -14,6 +14,7 @@ requirements:
     - pandas
     - toolz
     - entrypoints
+    - typing-extensions
 about:
   home: http://altair-viz.github.io
   PyPI: https://pypi.org/project/altair
