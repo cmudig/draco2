@@ -265,11 +265,22 @@ def load_pyodide_requirements(
 def create_distro_build_script(pyodide_requirements: list) -> None:
     packages_to_install = [*pyodide_requirements, "draco"]
     recipe_installation_cmds = [install_recipe_cmd(p) for p in packages_to_install]
+
+    # We need additional components to build `pydantic-core` properly,
+    # as it is written in Rust
+    pydantic_core_buildenv = [
+        "pip install maturin",
+        "rustup install nightly",
+        "rustup default nightly",
+        "rustup target add wasm32-unknown-emscripten",
+    ]
+
     script_body = "\n".join(
         [
             "#!/bin/bash",
             "python -m pip install --upgrade pip",
             "pip install -e pyodide-build",
+            *pydantic_core_buildenv,
             "make",
             *recipe_installation_cmds,
         ]
