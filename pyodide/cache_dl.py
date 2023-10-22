@@ -79,10 +79,11 @@ def get_recipe_path(package_name: str) -> Path:
 
 def load_recipe(package_name: str) -> Recipe | None:
     path = get_recipe_path(package_name)
-    try:
-        return yaml.safe_load(open(path))
-    except FileNotFoundError:
-        return None
+    with open(path) as f:
+        try:
+            return yaml.safe_load(f)
+        except FileNotFoundError:
+            return None
 
 
 def load_lockfile(lockfile_url: str) -> Lockfile | None:
