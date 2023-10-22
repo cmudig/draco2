@@ -102,6 +102,15 @@ def load_remote_artifact(url: str, name: str) -> bytes | None:
     return None
 
 
+def load_dependent_packages_from_recipe(recipe: Recipe) -> set[str]:
+    dependent_packages: set[str] = set()
+    if "host" in recipe["requirements"]:
+        dependent_packages.update(recipe["requirements"]["host"])
+    if "run" in recipe["requirements"]:
+        dependent_packages.update(recipe["requirements"]["run"])
+    return dependent_packages
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Download prebuilt Pyodide artifacts")
     parser.add_argument(
@@ -120,7 +129,7 @@ if __name__ == "__main__":
     lockfile = load_lockfile(lockfile_url)
 
     if lockfile is None:
-        warn("🚧 Lockfile not found. Building everything from source.")
+        warn("🚧 Lockfile not found. Will build everything from source.")
         sys.exit(0)
 
     if lockfile["info"]["version"] != pyodide_tag:
@@ -131,6 +140,11 @@ if __name__ == "__main__":
         )
         sys.exit(0)
 
+    # Dedicated set to track packages that need to be rebuilt
+    # used to skip checking the same package multiple times
+    # when encountering it as a dependency of other packages
+    needs_rebuild: set[str] = set()
+
     for package in lockfile["packages"].values():
         package_name = package["name"].replace("-tests", "")
         recipe = load_recipe(package_name)
@@ -138,7 +152,9 @@ if __name__ == "__main__":
             warn(f"🚧 Recipe not found for {package['name']}. Will build from source.")
             continue
 
+        # Version specified in the lockfile we downloaded from the remote
         remote_version = str(package["version"]).lower().strip()
+        # Version specified in the local pyodide git repository under /packages
         local_version = str(recipe["package"]["version"]).lower().strip()
         if remote_version != local_version:
             warn(
@@ -146,6 +162,7 @@ if __name__ == "__main__":
                 f"(local: {local_version}, remote: {remote_version}). "
                 "Will build from source."
             )
+            needs_rebuild.add(package_name)
             continue
 
         info(f"⬇️ Downloading {package['file_name']}")
@@ -155,39 +172,54 @@ if __name__ == "__main__":
                 f"🚧 Failed to download {package['file_name']}. "
                 "Will build from source."
             )
+            needs_rebuild.add(package_name)
             continue
 
+        # Write the downloaded prebuilt artifact to the local dist folder
         dist_folder = get_recipe_path(package_name).parent / "dist"
         dist_folder.mkdir(parents=True, exist_ok=True)
         info(f"📦 Saving {package['file_name']} to {dist_folder}")
         dist_folder.joinpath(package["file_name"]).write_bytes(content)
 
+        # And mark it as built, as if we had built it from source
         build_folder = get_recipe_path(package_name).parent / "build"
         build_folder.mkdir(parents=True, exist_ok=True)
         info(f"👷 Marking package as built in {build_folder}")
         (build_folder / ".packaged").write_text("\n")
 
-        if "requirements" not in recipe:
+        package_has_no_dependencies = "requirements" not in recipe
+        if package_has_no_dependencies:
+            info(f"⏭️ {package['name']} has no dependencies")
             continue
 
-        dependent_packages: set[str] = set()
-        if "host" in recipe["requirements"]:
-            dependent_packages.update(recipe["requirements"]["host"])
-        if "run" in recipe["requirements"]:
-            dependent_packages.update(recipe["requirements"]["run"])
+        deps = load_dependent_packages_from_recipe(recipe)
+        info(f"🔎 Dependencies of {package['name']}: {deps}")
+        for dependent_pkg in deps:
+            # We don't want to process a package that was already checked
+            # or will be checked later
+            pkg_will_be_checked_later = dependent_pkg in lockfile["packages"]
+            if dependent_pkg in needs_rebuild:
+                info(f"🚧 Dependent package {dependent_pkg} will be built from source")
+                continue
+            elif pkg_will_be_checked_later:
+                info(f"⏭️ Dependent package {dependent_pkg} will be built later")
+                continue
 
-        for dependent_package in dependent_packages:
-            build_folder = get_recipe_path(dependent_package).parent / "build"
+            # Reaching this point means that the dependent package
+            # was **not** in the lockfile, therefore, it is a host dependency.
+            # Host dependencies are needed to build a package, but we already
+            # have the prebuilt package artifact, so we mark the host dep as built.
+            build_folder = get_recipe_path(dependent_pkg).parent / "build"
             build_folder.mkdir(parents=True, exist_ok=True)
             packaged_token = build_folder / ".packaged"
             if not packaged_token.exists():
                 info(
-                    f"🖇️ Marking dependent package {dependent_package} "
+                    f"🖇️ Marking dependent package {dependent_pkg} "
                     f"as built in {build_folder}"
                 )
                 packaged_token.write_text("\n")
             else:
                 info(
-                    f"⏭️ Dependent package {dependent_package} "
+                    f"⏭️ Dependent package {dependent_pkg} "
                     f"already built in {build_folder}"
                 )
