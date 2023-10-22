@@ -262,6 +262,18 @@ def load_pyodide_requirements(
     ]
 
 
+def copy_cache_dl_script_to_pyodide_src(
+    pyodide_repo_path: pathlib.Path = PYODIDE_REPO_PATH,
+) -> None:
+    """
+    Copies `cache_dl.py` to the Pyodide repository.
+
+    :param pyodide_repo_path: the path to the Pyodide repository
+    """
+    file_path = PYODIDE_BUILD_MODULE_ROOT_PATH / "cache_dl.py"
+    shutil.copy(file_path, pyodide_repo_path)
+
+
 def create_distro_build_script(pyodide_requirements: list) -> None:
     packages_to_install = [*pyodide_requirements, "draco"]
     recipe_installation_cmds = [install_recipe_cmd(p) for p in packages_to_install]
@@ -275,11 +287,18 @@ def create_distro_build_script(pyodide_requirements: list) -> None:
         "rustup target add wasm32-unknown-emscripten",
     ]
 
+    # Executing our custom cache downloader script
+    pyodide_cache_dl = [
+        "pip install pyyaml",
+        f"python cache_dl.py --tag {PYODIDE_REPO_TAG}",
+    ]
+
     script_body = "\n".join(
         [
             "#!/bin/bash",
             "python -m pip install --upgrade pip",
             "pip install -e pyodide-build",
+            *pyodide_cache_dl,
             *pydantic_core_buildenv,
             "make",
             *recipe_installation_cmds,
@@ -346,6 +365,9 @@ def prepare():
     pyodide_requirements = load_pyodide_requirements()
     for package in pyodide_requirements:
         info(f"📦Found Pyodide requirement: {package}")
+
+    info("📄Copying cache downloader script to Pyodide repository...")
+    copy_cache_dl_script_to_pyodide_src()
 
     info("📄Creating distro build script...")
     create_distro_build_script(pyodide_requirements)
