@@ -63,8 +63,14 @@ class RecipePackage(TypedDict):
     version: str
 
 
+class RecipeRequirements(TypedDict):
+    host: list[str]
+    run: list[str]
+
+
 class Recipe(TypedDict):
     package: RecipePackage
+    requirements: RecipeRequirements
 
 
 def get_recipe_path(package_name: str) -> Path:
@@ -158,5 +164,30 @@ if __name__ == "__main__":
 
         build_folder = get_recipe_path(package_name).parent / "build"
         build_folder.mkdir(parents=True, exist_ok=True)
-        info(f"📦 Marking package as built in {build_folder}")
+        info(f"👷 Marking package as built in {build_folder}")
         (build_folder / ".packaged").write_text("\n")
+
+        if "requirements" not in recipe:
+            continue
+
+        dependent_packages: set[str] = set()
+        if "host" in recipe["requirements"]:
+            dependent_packages.update(recipe["requirements"]["host"])
+        if "run" in recipe["requirements"]:
+            dependent_packages.update(recipe["requirements"]["run"])
+
+        for dependent_package in dependent_packages:
+            build_folder = get_recipe_path(dependent_package).parent / "build"
+            build_folder.mkdir(parents=True, exist_ok=True)
+            packaged_token = build_folder / ".packaged"
+            if not packaged_token.exists():
+                info(
+                    f"🖇️ Marking dependent package {dependent_package} "
+                    f"as built in {build_folder}"
+                )
+                packaged_token.write_text("\n")
+            else:
+                info(
+                    f"⏭️ Dependent package {dependent_package} "
+                    f"already built in {build_folder}"
+                )
