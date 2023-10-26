@@ -19,7 +19,7 @@ class ClingoRouter(BaseDracoRouter):
             draco,
             prefix=kwargs.pop("prefix", c.__DEFAULT_PREFIX__),
             tags=kwargs.pop("tags", c.__DEFAULT_TAGS__),
-            **kwargs
+            **kwargs,
         )
 
     @staticmethod

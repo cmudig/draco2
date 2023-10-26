@@ -60,35 +60,28 @@ def test_text_mark_without_text_channel():
     )
 
     # no encoding
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((mark,type),m1,text).
     """
-        )
-        == ["text_mark_without_text_channel"]
-    )
+    ) == ["text_mark_without_text_channel"]
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((mark,type),m1,text).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
     """
-        )
-        == ["text_mark_without_text_channel"]
-    )
+    ) == ["text_mark_without_text_channel"]
 
     # text encoding for a different mark
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((mark,type),m1,text).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -96,9 +89,7 @@ def test_text_mark_without_text_channel():
     attribute((encoding,channel),e2,y).
     attribute((encoding,channel),e3,text).
     """
-        )
-        == ["text_mark_without_text_channel"]
-    )
+    ) == ["text_mark_without_text_channel"]
 
 
 def test_text_channel_without_text_mark():
@@ -114,17 +105,14 @@ def test_text_channel_without_text_mark():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((mark,type),m1,bar).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,text).
     """
-        )
-        == ["text_channel_without_text_mark"]
-    )
+    ) == ["text_channel_without_text_mark"]
 
 
 def test_bin_and_aggregate():
@@ -143,18 +131,15 @@ def test_bin_and_aggregate():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(encoding,root,e1).
     attribute((encoding,channel),e1,x).
     attribute((encoding,binning),e1,10).
     attribute((encoding,aggregate),e1,count).
     """
-        )
-        == ["bin_and_aggregate"]
-    )
+    ) == ["bin_and_aggregate"]
 
 
 def test_no_encodings():
@@ -169,17 +154,14 @@ def test_no_encodings():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,root,1).
     entity(encoding,1,2).
     entity(mark,root,3).
     """
-        )
-        == ["no_encodings"]
-    )
+    ) == ["no_encodings"]
 
 
 def test_encoding_repeat_channel():
@@ -219,19 +201,16 @@ def test_encoding_repeat_channel():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,root,m0).
     entity(encoding,m0,e0).
     entity(encoding,m0,e1).
     attribute((encoding,channel),e0,x).
     attribute((encoding,channel),e1,x).
     """
-        )
-        == ["encoding_repeat_channel"]
-    )
+    ) == ["encoding_repeat_channel"]
 
 
 def test_scale_repeat_channel():
@@ -262,19 +241,16 @@ def test_scale_repeat_channel():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(view,root,v0).
     entity(scale,v0,s0).
     entity(scale,v0,s1).
     attribute((scale,channel),s0,x).
     attribute((scale,channel),s1,x).
     """
-        )
-        == ["scale_repeat_channel"]
-    )
+    ) == ["scale_repeat_channel"]
 
 
 def test_encoding_channel_without_scale():
@@ -327,10 +303,9 @@ def test_encoding_channel_without_scale():
     )
 
     # scale doesn't have x channel
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,v0,m0).
     entity(encoding,m0,e0).
     attribute((encoding,channel),e0,x).
@@ -338,9 +313,7 @@ def test_encoding_channel_without_scale():
     entity(scale,v0,s0).
     attribute((scale,channel),s0,y).
     """
-        )
-        == ["encoding_channel_without_scale"]
-    )
+    ) == ["encoding_channel_without_scale"]
 
 
 def test_scale_channel_without_encoding():
@@ -393,10 +366,9 @@ def test_scale_channel_without_encoding():
     )
 
     # encoding doesn't have y channel
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(view,root,v0).
     entity(mark,v0,m0).
     entity(encoding,m0,e0).
@@ -405,9 +377,7 @@ def test_scale_channel_without_encoding():
     entity(scale,v0,s0).
     attribute((scale,channel),s0,y).
     """
-        )
-        == ["scale_channel_without_encoding"]
-    )
+    ) == ["scale_channel_without_encoding"]
 
 
 def test_encoding_no_field_and_not_count():
@@ -431,16 +401,13 @@ def test_encoding_no_field_and_not_count():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(encoding,root,1).
     attribute((encoding,aggregate),1,mean).
     """
-        )
-        == ["encoding_no_field_and_not_count"]
-    )
+    ) == ["encoding_no_field_and_not_count"]
 
 
 def test_count_with_field():
@@ -455,17 +422,14 @@ def test_count_with_field():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(encoding,root,1).
     attribute((encoding,aggregate),1,count).
     helper((encoding,field),1,temp).
     """
-        )
-        == ["count_with_field"]
-    )
+    ) == ["count_with_field"]
 
 
 def test_point_tick_bar_without_x_or_y():
@@ -494,18 +458,15 @@ def test_point_tick_bar_without_x_or_y():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,root,m0).
     attribute((mark,type),m0,tick).
     entity(encoding,m0,e0).
     attribute((encoding,channel),e0,color).
     """
-        )
-        == ["point_tick_bar_without_x_or_y"]
-    )
+    ) == ["point_tick_bar_without_x_or_y"]
 
 
 def test_scale_type_data_type():
@@ -531,10 +492,9 @@ def test_scale_type_data_type():
     )
 
     # linear scale/encoding type doesn't support strings
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((field,type),f1,string).
     attribute((field,name),f1,temperature).
 
@@ -547,15 +507,12 @@ def test_scale_type_data_type():
     attribute((scale,channel),5,x).
     attribute((scale,type),5,linear).
     """
-        )
-        == ["scale_type_data_type"]
-    )
+    ) == ["scale_type_data_type"]
 
     # previous case with shared scale from root
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((field,type),f1,string).
     attribute((field,name),f1,temperature).
     entity(view,0,1).
@@ -569,9 +526,7 @@ def test_scale_type_data_type():
     attribute((scale,channel),5,x).
     attribute((scale,type),5,linear).
     """
-        )
-        == ["scale_type_data_type"]
-    )
+    ) == ["scale_type_data_type"]
 
 
 def test_log_non_positive():
@@ -613,10 +568,9 @@ def test_log_non_positive():
     )
 
     # a log scale with only negative numbers
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((field,min),precipitation,-10).
     attribute((field,max),precipitation,55).
 
@@ -628,9 +582,7 @@ def test_log_non_positive():
     attribute((scale,channel),4,x).
     attribute((scale,type),4,log).
     """
-        )
-        == ["log_non_positive"]
-    )
+    ) == ["log_non_positive"]
 
 
 def test_aggregate_t_valid():
@@ -657,18 +609,15 @@ def test_aggregate_t_valid():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((field,type),time,datetime).
     attribute((encoding,channel),3,x).
     helper((encoding,field),3,time).
     attribute((encoding,aggregate),3,median).
     """
-        )
-        == ["aggregate_t_valid"]
-    )
+    ) == ["aggregate_t_valid"]
 
 
 def test_aggregate_num_valid():
@@ -685,18 +634,15 @@ def test_aggregate_num_valid():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((field,type),f1,string).
     attribute((encoding,channel),3,x).
     helper((encoding,field),3,f1).
     attribute((encoding,aggregate),3,sum).
     """
-        )
-        == ["aggregate_num_valid"]
-    )
+    ) == ["aggregate_num_valid"]
 
 
 def test_bin_n_d():
@@ -723,34 +669,28 @@ def test_bin_n_d():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((field,type),f1,string).
     attribute((encoding,channel),3,x).
     helper((encoding,field),3,f1).
     attribute((encoding,binning),3,10).
     """
-        )
-        == ["bin_n_d"]
-    )
+    ) == ["bin_n_d"]
 
 
 def test_aggregate_detail():
     b = hard.blocks["aggregate_detail"]
     assert isinstance(b, Block)
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((encoding,channel),2,detail).
     attribute((encoding,aggregate),2,min).
     """
-        )
-        == ["aggregate_detail"]
-    )
+    ) == ["aggregate_detail"]
 
 
 def test_count_without_q():
@@ -771,10 +711,9 @@ def test_count_without_q():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
@@ -784,9 +723,7 @@ def test_count_without_q():
     attribute((scale,channel),4,x).
     attribute((scale,type),4,categorical).
     """
-        )
-        == ["count_without_q"]
-    )
+    ) == ["count_without_q"]
 
 
 def test_shape_not_ordinal():
@@ -806,10 +743,9 @@ def test_shape_not_ordinal():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
     entity(encoding,1,2).
     attribute((encoding,channel),2,shape).
@@ -818,15 +754,12 @@ def test_shape_not_ordinal():
     attribute((scale,channel),3,shape).
     attribute((scale,type),3,categorical).
     """
-        )
-        == ["shape_not_ordinal"]
-    )
+    ) == ["shape_not_ordinal"]
 
     # scale on root
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(view,root,0).
     entity(mark,0,1).
     entity(encoding,1,2).
@@ -836,9 +769,7 @@ def test_shape_not_ordinal():
     attribute((scale,channel),3,shape).
     attribute((scale,type),3,linear).
     """
-        )
-        == ["shape_not_ordinal"]
-    )
+    ) == ["shape_not_ordinal"]
 
 
 def test_categorical_not_color():
@@ -853,16 +784,13 @@ def test_categorical_not_color():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((scale,channel),4,shape).
     attribute((scale,type),4,categorical).
     """
-        )
-        == ["categorical_not_color"]
-    )
+    ) == ["categorical_not_color"]
 
 
 def test_size_negative():
@@ -881,10 +809,9 @@ def test_size_negative():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((field,min),precipitation,-10).
     attribute((field,max),precipitation,55).
 
@@ -892,9 +819,7 @@ def test_size_negative():
     attribute((encoding,channel),1,size).
     helper((encoding,field),1,precipitation).
     """
-        )
-        == ["size_negative"]
-    )
+    ) == ["size_negative"]
 
 
 def test_line_area_without_x_y():
@@ -913,43 +838,34 @@ def test_line_area_without_x_y():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,root,1).
     attribute((mark,type),1,line).
     entity(encoding,1,2).
     attribute((encoding,channel),2,y).
     """
-        )
-        == ["line_area_without_x_y"]
-    )
+    ) == ["line_area_without_x_y"]
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,root,1).
     attribute((mark,type),1,area).
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
     """
-        )
-        == ["line_area_without_x_y"]
-    )
+    ) == ["line_area_without_x_y"]
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,root,1).
     attribute((mark,type),1,area).
     entity(encoding,1,2).
     """
-        )
-        == ["line_area_without_x_y"]
-    )
+    ) == ["line_area_without_x_y"]
 
 
 def test_line_area_with_discrete():
@@ -988,10 +904,9 @@ def test_line_area_with_discrete():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,line).
 
@@ -1003,9 +918,7 @@ def test_line_area_with_discrete():
     attribute((scale,channel),3,y).
     attribute((scale,type),3,ordinal).
     """
-        )
-        == ["line_area_with_discrete"]
-    )
+    ) == ["line_area_with_discrete"]
 
 
 def test_bar_tick_continuous_x_y():
@@ -1242,10 +1155,9 @@ def test_view_scale_conflict():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(view,0,1).
 
     entity(scale,1,2).
@@ -1254,9 +1166,7 @@ def test_view_scale_conflict():
     entity(scale,0,3).
     attribute((scale,channel),3,x).
     """
-        )
-        == ["view_scale_conflict"]
-    )
+    ) == ["view_scale_conflict"]
 
 
 def test_shape_without_point():
@@ -1272,17 +1182,14 @@ def test_shape_without_point():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((mark,type),0,text).
     entity(encoding,0,1).
     attribute((encoding,channel),1,shape).
     """
-        )
-        == ["shape_without_point"]
-    )
+    ) == ["shape_without_point"]
 
 
 def test_size_without_point_text():
@@ -1307,17 +1214,14 @@ def test_size_without_point_text():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((mark,type),0,bar).
     entity(encoding,0,1).
     attribute((encoding,channel),1,size).
     """
-        )
-        == ["size_without_point_text"]
-    )
+    ) == ["size_without_point_text"]
 
 
 def test_detail_without_agg():
@@ -1334,17 +1238,14 @@ def test_detail_without_agg():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(encoding,0,1).
     entity(encoding,0,2).
     attribute((encoding,channel),1,detail).
     """
-        )
-        == ["detail_without_agg"]
-    )
+    ) == ["detail_without_agg"]
 
 
 def test_area_bar_with_log():
@@ -1375,10 +1276,9 @@ def test_area_bar_with_log():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
 
@@ -1386,14 +1286,11 @@ def test_area_bar_with_log():
     attribute((scale,channel),2,y).
     attribute((scale,type),2,log).
     """
-        )
-        == ["area_bar_with_log"]
-    )
+    ) == ["area_bar_with_log"]
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,area).
 
@@ -1401,9 +1298,7 @@ def test_area_bar_with_log():
     attribute((scale,channel),2,x).
     attribute((scale,type),2,log).
     """
-        )
-        == ["area_bar_with_log"]
-    )
+    ) == ["area_bar_with_log"]
 
 
 def test_rect_without_d_d():
@@ -1427,10 +1322,9 @@ def test_rect_without_d_d():
     )
 
     # x is not discrete
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,rect).
 
@@ -1442,9 +1336,7 @@ def test_rect_without_d_d():
     attribute((scale,channel),3,y).
     attribute((scale,type),3,ordinal).
     """
-        )
-        == ["rect_without_d_d"]
-    )
+    ) == ["rect_without_d_d"]
 
     # multiple views where y has log scale
     assert list_violations(
@@ -1502,10 +1394,9 @@ def test_same_field_x_and_y():
     )
 
     # same field for x and y
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(field,root,f1).
     attribute((field,name),f1,temperature).
     entity(mark,root,1).
@@ -1518,9 +1409,7 @@ def test_same_field_x_and_y():
     attribute((encoding,channel),3,y).
     attribute((encoding,field),3,temperature).
     """
-        )
-        == ["same_field_x_and_y"]
-    )
+    ) == ["same_field_x_and_y"]
 
 
 def test_count_twice():
@@ -1558,10 +1447,9 @@ def test_count_twice():
     )
 
     # use count both on x and y
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,root,1).
     entity(encoding,1,2).
     entity(encoding,1,3).
@@ -1572,15 +1460,12 @@ def test_count_twice():
     attribute((encoding,channel),3,y).
     attribute((encoding,aggregate),3,count).
     """
-        )
-        == ["count_twice"]
-    )
+    ) == ["count_twice"]
 
     # use count both on x and size
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,root,1).
     entity(encoding,1,2).
     entity(encoding,1,3).
@@ -1591,9 +1476,7 @@ def test_count_twice():
     attribute((encoding,channel),3,size).
     attribute((encoding,aggregate),3,count).
     """
-        )
-        == ["count_twice"]
-    )
+    ) == ["count_twice"]
 
 
 def test_aggregate_not_all_continuous():
@@ -1672,10 +1555,9 @@ def test_aggregate_not_all_continuous():
     )
 
     # x scale is continuous but not aggregated
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,root,1).
     entity(encoding,1,2).
     entity(encoding,1,3).
@@ -1689,9 +1571,7 @@ def test_aggregate_not_all_continuous():
     attribute((scale,type),4,linear).
     attribute((scale,channel),4,x).
     """
-        )
-        == ["aggregate_not_all_continuous"]
-    )
+    ) == ["aggregate_not_all_continuous"]
 
 
 def test_detail_not_ordinal():
@@ -1706,16 +1586,13 @@ def test_detail_not_ordinal():
     """
     )
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     attribute((scale,type),4,linear).
     attribute((scale,channel),4,detail).
     """
-        )
-        == ["detail_not_ordinal"]
-    )
+    ) == ["detail_not_ordinal"]
 
 
 def test_bar_tick_area_line_without_continuous_x_y():
@@ -1762,10 +1639,9 @@ def test_bar_tick_area_line_without_continuous_x_y():
     )
 
     # only binned x
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,tick).
 
@@ -1777,15 +1653,12 @@ def test_bar_tick_area_line_without_continuous_x_y():
     attribute((scale,channel),4,x).
     attribute((scale,type),4,linear).
     """
-        )
-        == ["bar_tick_area_line_without_continuous_x_y"]
-    )
+    ) == ["bar_tick_area_line_without_continuous_x_y"]
 
     # x is continuous and binned, and y is discrete
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
 
@@ -1804,9 +1677,7 @@ def test_bar_tick_area_line_without_continuous_x_y():
     attribute((scale,channel),5,y).
     attribute((scale,type),5,ordinal).
     """
-        )
-        == ["bar_tick_area_line_without_continuous_x_y"]
-    )
+    ) == ["bar_tick_area_line_without_continuous_x_y"]
 
 
 def test_zero_d_n():
@@ -1866,10 +1737,9 @@ def test_zero_d_n():
     )
 
     # x scale start with 0 with string data type
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
 
     entity(field,0,2).
@@ -1883,9 +1753,7 @@ def test_zero_d_n():
     attribute((scale,channel),4,x).
     attribute((scale,zero),4,true).
     """
-        )
-        == ["zero_d_n"]
-    )
+    ) == ["zero_d_n"]
 
 
 def test_bar_area_without_zero():
@@ -1943,10 +1811,9 @@ def test_bar_area_without_zero():
     )
 
     # continuous x scale not start with 0
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,area).
 
@@ -1957,15 +1824,12 @@ def test_bar_area_without_zero():
     attribute((scale,channel),4,x).
     attribute((scale,type),4,linear).
     """
-        )
-        == ["bar_area_without_zero"]
-    )
+    ) == ["bar_area_without_zero"]
 
     # continuous y scale not start with 0
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
 
@@ -1984,9 +1848,7 @@ def test_bar_area_without_zero():
     attribute((scale,channel),5,y).
     attribute((scale,type),5,linear).
     """
-        )
-        == ["bar_area_without_zero"]
-    )
+    ) == ["bar_area_without_zero"]
 
 
 def test_row_no_y():
@@ -2007,10 +1869,9 @@ def test_row_no_y():
     )
 
     # cannot use row without using y
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(view,root,0).
     entity(mark,0,1).
     entity(encoding,1,2).
@@ -2018,9 +1879,7 @@ def test_row_no_y():
     entity(facet,0,3).
     attribute((facet,channel),3,row).
     """
-        )
-        == ["row_no_y"]
-    )
+    ) == ["row_no_y"]
 
 
 def test_col_no_x():
@@ -2041,10 +1900,9 @@ def test_col_no_x():
     )
 
     # cannot use col without using x
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(view,root,0).
     entity(mark,0,1).
     entity(encoding,1,2).
@@ -2052,9 +1910,7 @@ def test_col_no_x():
     entity(facet,0,3).
     attribute((facet,channel),3,col).
     """
-        )
-        == ["col_no_x"]
-    )
+    ) == ["col_no_x"]
 
 
 def test_facet_no_duplicate_field():
@@ -2078,10 +1934,9 @@ def test_facet_no_duplicate_field():
     )
 
     # cannot use the same field twice when faceting
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
         entity(field,root,0).
         attribute((field,name),0,field1).
         entity(field,root,1).
@@ -2094,9 +1949,7 @@ def test_facet_no_duplicate_field():
         entity(facet,2,4).
         attribute((facet,field),4,field1).
         """
-        )
-        == ["facet_no_duplicate_field"]
-    )
+    ) == ["facet_no_duplicate_field"]
 
 
 def test_facet_no_duplicate_channel_on_same_view():
@@ -2160,10 +2013,9 @@ def test_facet_no_duplicate_channel_on_same_view():
 
     # Multi view, multi facet (same channels)
     # cannot use the same channel on the same view when faceting
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
         entity(field,root,0).
         attribute((field,name),0,field1).
         entity(field,root,1).
@@ -2176,9 +2028,7 @@ def test_facet_no_duplicate_channel_on_same_view():
         entity(facet,2,4).
         attribute((facet,channel),4,row).
         """
-        )
-        == ["facet_no_duplicate_channel_on_same_view"]
-    )
+    ) == ["facet_no_duplicate_channel_on_same_view"]
 
 
 def test_stack_without_bar_area():
@@ -2219,10 +2069,9 @@ def test_stack_without_bar_area():
     )
 
     # cannot stack point mark
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(mark,root,2).
     attribute((mark,type),2,point).
 
@@ -2234,9 +2083,7 @@ def test_stack_without_bar_area():
     attribute((encoding,aggregate),4,count).
     attribute((encoding,stack),4,normalize).
     """
-        )
-        == ["stack_without_bar_area"]
-    )
+    ) == ["stack_without_bar_area"]
 
 
 def test_stack_without_summative_agg():
@@ -2255,31 +2102,25 @@ def test_stack_without_summative_agg():
     )
 
     # cannot stack without summative aggregation: no aggregation
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(encoding,2,4).
     attribute((encoding,channel),4,y).
     attribute((encoding,stack),4,normalize).
     """
-        )
-        == ["stack_without_summative_agg"]
-    )
+    ) == ["stack_without_summative_agg"]
 
     # cannot stack without summative aggregation: aggregation is not summative
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(encoding,2,4).
     attribute((encoding,channel),4,y).
     attribute((encoding,aggregate),4,max).
     attribute((encoding,stack),4,normalize).
     """
-        )
-        == ["stack_without_summative_agg"]
-    )
+    ) == ["stack_without_summative_agg"]
 
 
 def test_no_stack_with_bar_area_discrete_color():
@@ -2314,10 +2155,9 @@ def test_no_stack_with_bar_area_discrete_color():
     )
 
     # bar/area mark with discrete color, must stack
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
 
@@ -2338,9 +2178,7 @@ def test_no_stack_with_bar_area_discrete_color():
     attribute((scale,channel),7,color).
     attribute((scale,type),7,categorical).
     """
-        )
-        == ["no_stack_with_bar_area_discrete_color"]
-    )
+    ) == ["no_stack_with_bar_area_discrete_color"]
 
 
 def test_stack_without_discrete_color_or_detail():
@@ -2401,10 +2239,9 @@ def test_stack_without_discrete_color_or_detail():
     )
 
     # cannot stack without discrete color or detail
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
 
@@ -2422,9 +2259,7 @@ def test_stack_without_discrete_color_or_detail():
     attribute((encoding,channel),4,size).
     helper((encoding,field),4,condition).
     """
-        )
-        == ["stack_without_discrete_color_or_detail"]
-    )
+    ) == ["stack_without_discrete_color_or_detail"]
 
 
 def test_stack_without_x_y():
@@ -2443,17 +2278,14 @@ def test_stack_without_x_y():
     )
 
     # cannot stack without encoding x or y
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(encoding,2,4).
     attribute((encoding,channel),4,color).
     attribute((encoding,stack),4,normalize).
     """
-        )
-        == ["stack_without_x_y"]
-    )
+    ) == ["stack_without_x_y"]
 
 
 def test_stack_discrete():
@@ -2480,23 +2312,19 @@ def test_stack_discrete():
     )
 
     # cannot stack on discrete.
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,binning),3,10).
     attribute((encoding,stack),3,zero).
     """
-        )
-        == ["stack_discrete"]
-    )
+    ) == ["stack_discrete"]
 
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(encoding,1,3).
     attribute((encoding,channel),3,y).
     attribute((encoding,binning),3,10).
@@ -2506,9 +2334,7 @@ def test_stack_discrete():
     attribute((scale,channel),7,y).
     attribute((scale,type),7,ordinal).
     """
-        )
-        == ["stack_discrete"]
-    )
+    ) == ["stack_discrete"]
 
 
 def test_stack_with_non_positional_non_agg():
@@ -2554,10 +2380,9 @@ def test_stack_with_non_positional_non_agg():
     )
 
     # cannot use non-positional continuous with stack unless it is aggregated.
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(mark,0,1).
     attribute((mark,type),1,bar).
 
@@ -2573,9 +2398,7 @@ def test_stack_with_non_positional_non_agg():
     attribute((scale,channel),8,color).
     attribute((scale,type),8,linear).
     """
-        )
-        == ["stack_with_non_positional_non_agg"]
-    )
+    ) == ["stack_with_non_positional_non_agg"]
 
 
 def test_invalid_bin():
@@ -2594,18 +2417,15 @@ def test_invalid_bin():
     )
 
     # number of bin cannot be a negative value
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(encoding,1,2).
     attribute((encoding,channel),2,x).
     helper((encoding,field),2,temperature).
     attribute((encoding,binning),2,-1).
     """
-        )
-        == ["invalid_bin"]
-    )
+    ) == ["invalid_bin"]
 
 
 def test_invalid_num_rows():
@@ -2621,15 +2441,12 @@ def test_invalid_num_rows():
     )
 
     # number of rows cannot be 0
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     attribute(number_rows,root,0).
     """
-        )
-        == ["invalid_num_rows"]
-    )
+    ) == ["invalid_num_rows"]
 
 
 def test_invalid_unique():
@@ -2647,17 +2464,14 @@ def test_invalid_unique():
     )
 
     # number of unique value cannot be 0
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(field,root,date).
     attribute((field,type),date,datetime).
     attribute((field,unique),date,0).
     """
-        )
-        == ["invalid_unique"]
-    )
+    ) == ["invalid_unique"]
 
 
 def test_invalid_extent_non_number():
@@ -2684,30 +2498,24 @@ def test_invalid_extent_non_number():
     )
 
     # extent is not allowed for data types other than number
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(field,root,date).
     attribute((field,type),date,datetime).
     attribute((field,min),date,0).
     """
-        )
-        == ["invalid_extent_non_number"]
-    )
+    ) == ["invalid_extent_non_number"]
 
     # extent is not allowed for data types other than number
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(field,root,date).
     attribute((field,type),date,datetime).
     attribute((field,max),date,55).
     """
-        )
-        == ["invalid_extent_non_number"]
-    )
+    ) == ["invalid_extent_non_number"]
 
 
 def test_invalid_non_number_std():
@@ -2725,17 +2533,14 @@ def test_invalid_non_number_std():
     )
 
     # std is not allowed for data types other than number
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(field,root,date).
     attribute((field,type),date,datetime).
     attribute((field,std),date,6).
     """
-        )
-        == ["invalid_non_number_std"]
-    )
+    ) == ["invalid_non_number_std"]
 
 
 def test_invalid_std():
@@ -2753,17 +2558,14 @@ def test_invalid_std():
     )
 
     # std cannot be a negative value
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(field,root,precipitation).
     attribute((field,type),precipitation,number).
     attribute((field,std),precipitation,-10).
     """
-        )
-        == ["invalid_std"]
-    )
+    ) == ["invalid_std"]
 
 
 def test_invalid_extent_order():
@@ -2794,18 +2596,15 @@ def test_invalid_extent_order():
     )
 
     # min cannot be larger than max
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(field,root,precipitation).
     attribute((field,type),precipitation,number).
     attribute((field,min),precipitation,55).
     attribute((field,max),precipitation,0).
     """
-        )
-        == ["invalid_extent_order"]
-    )
+    ) == ["invalid_extent_order"]
 
 
 def test_invalid_non_string_freq():
@@ -2823,27 +2622,23 @@ def test_invalid_non_string_freq():
     )
 
     # freq is not allowed for data types other than string
-    assert (
-        list_violations(
-            p
-            + """
+    assert list_violations(
+        p
+        + """
     entity(field,root,precipitation).
     attribute((field,type),precipitation,number).
     attribute((field,freq),precipitation,714).
     """
-        )
-        == ["invalid_non_string_freq"]
-    )
+    ) == ["invalid_non_string_freq"]
 
 
 def test_enforce_order():
     b = hard.blocks["enforce_order"]
     assert isinstance(b, Block)
 
-    assert (
-        list_violations(
-            b.program
-            + """
+    assert list_violations(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,(v,(m,0))).
     entity(mark,v,(v,(m,1))).
@@ -2851,9 +2646,7 @@ def test_enforce_order():
     attribute((mark,type),(v,(m,0)),y).
     attribute((mark,type),(v,(m,1)),x).
     """
-        )
-        == ["enforce_order"]
-    )
+    ) == ["enforce_order"]
 
     assert (
         list_violations(
