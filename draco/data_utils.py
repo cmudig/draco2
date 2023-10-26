@@ -70,7 +70,7 @@ def pair_partition_to_vec(
         Dict,
         Tuple[str, str],
         List[Dict],
-    ]
+    ],
 ):
     """given a specs partition, convert them into feature vectors."""
     processed_specs, fields, partition_data = input_data

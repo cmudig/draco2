@@ -13,7 +13,7 @@ cover:
 .PHONY: lint
 lint:
 	@echo "==> 👕 Linting"
-	@poetry run black .
+	@poetry run ruff format draco jupyterlite pyodide docs
 	@poetry run ruff .
 
 .PHONY: typecheck
