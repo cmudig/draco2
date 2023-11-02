@@ -205,7 +205,7 @@ jobs:
 
       # Required to execute notebooks with Python modules wrapping Node.js modules, such as Draco 1
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
 
       # Installing system dependencies required by notebooks to be executed
       - name: Install system dependencies
@@ -333,7 +333,7 @@ jobs:
           unzip ${{ env.PYODIDE_DISTRO_NAME }}.zip -d pyodide
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: ${{ env.NPM_REGISTRY_URL }}
