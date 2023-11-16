@@ -1759,6 +1759,27 @@ files = [
 ]
 
 [[package]]
+name = "jupyterlite-pyodide-kernel"
+version = "0.2.0"
+description = "Python kernel for JupyterLite powered by Pyodide"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "jupyterlite_pyodide_kernel-0.2.0-py3-none-any.whl", hash = "sha256:17d713f0eeb3f778c4d51129834096d364c16f05ac06e10292383c43c0eb5bd9"},
+    {file = "jupyterlite_pyodide_kernel-0.2.0.tar.gz", hash = "sha256:5979ffd9e4eeb8af145e14a900952a2e8ce3633158b385b9444a8238520f3482"},
+]
+
+[package.dependencies]
+jupyterlite-core = ">=0.2.0,<0.3.0"
+pkginfo = "*"
+
+[package.extras]
+dev = ["build", "hatch", "jupyterlab (>=4.0.7,<5.0.0a0)"]
+docs = ["ipywidgets (>=8.1.1,<9)", "jupyter-server-mathjax", "jupyterlab-language-pack-fr-fr", "jupyterlab-language-pack-zh-cn", "libarchive-c", "myst-parser", "pydata-sphinx-theme", "sphinx-copybutton"]
+lint = ["black", "ruff"]
+test = ["pytest", "pytest-console-scripts (>=1.4.0)", "pytest-cov", "pytest-html"]
+
+[[package]]
 name = "kiwisolver"
 version = "1.4.5"
 description = "A fast implementation of the Cassowary constraint solver"
@@ -2707,6 +2728,20 @@ files = [
 [package.extras]
 docs = ["furo", "olefile", "sphinx (>=2.4)", "sphinx-copybutton", "sphinx-inline-tabs", "sphinx-removed-in", "sphinxext-opengraph"]
 tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "packaging", "pyroma", "pytest", "pytest-cov", "pytest-timeout"]
+
+[[package]]
+name = "pkginfo"
+version = "1.9.6"
+description = "Query metadata from sdists / bdists / installed packages."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pkginfo-1.9.6-py3-none-any.whl", hash = "sha256:4b7a555a6d5a22169fcc9cf7bfd78d296b0361adad412a346c1226849af5e546"},
+    {file = "pkginfo-1.9.6.tar.gz", hash = "sha256:8fd5896e8718a4372f0ea9cc9d96f6417c9b986e23a4d116dda26b62cc29d046"},
+]
+
+[package.extras]
+testing = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "platformdirs"
@@ -4651,4 +4686,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10.0,<3.12"
-content-hash = "867e0c164c59f63f799910f5d4882e7335ba654f03df15ae7c13a42e14703738"
+content-hash = "b46423a774d7d49a9004d517fcc0cd9715b971a4a6a07c0deed98c54e6e698f7"
