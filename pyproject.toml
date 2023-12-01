@@ -60,7 +60,7 @@ sphinx-autodoc-typehints = "^1.19.1"
 toml = "^0.10.2"
 types-pkg-resources = "^0.1.2"
 vega-datasets = "^0.9.0"
-wheel = ">=0.38.4,<0.42.0"
+wheel = ">=0.38.4,<0.43.0"
 
 [tool.poetry.group.test.dependencies]
 deepdiff = "^6.2.1"
