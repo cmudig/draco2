@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Setting variables for the Pyodide distro
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         id: var_distro
         env:
           # Rebuilding the distro if any of these files have changed since the last build
@@ -87,7 +87,7 @@ jobs:
             core.setOutput('pyodide_distro_url', null);
 
       - name: Setting variables for the release
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         id: var_release
         with:
           script: |
