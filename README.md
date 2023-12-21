@@ -28,6 +28,9 @@ solver. We also implemented a way to learn weights for the recommendation system
 perception experiment. Draco v2 is a much improved version of the first iteration of
 [Draco](https://github.com/uwdata/draco).
 
+- [Draco paper (VIS 2018)](https://idl.cs.washington.edu/files/2019-Draco-InfoVis.pdf)
+- [Draco 2 paper (VIS 2023)](https://arxiv.org/pdf/2308.14247.pdf)
+
 ## Documentation
 
 Read about Draco in the online book at [https://dig.cmu.edu/draco2/](https://dig.cmu.edu/draco2/) or launch it in
