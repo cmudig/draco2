@@ -218,7 +218,7 @@ jobs:
       # gets picked up by `make jupyterlite-build` and embedded into the Jupyter Lite build
       - name: Download freshly built Pyodide distribution
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ env.PYODIDE_DISTRO_NAME }}
           path: pyodide/pyodide-src/dist
@@ -282,7 +282,7 @@ jobs:
 
       - name: Download freshly built Pyodide distribution
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ env.PYODIDE_DISTRO_NAME }}
           path: pyodide
@@ -317,7 +317,7 @@ jobs:
     steps:
       - name: Download freshly built Pyodide distribution
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ env.PYODIDE_DISTRO_NAME }}
           path: pyodide
