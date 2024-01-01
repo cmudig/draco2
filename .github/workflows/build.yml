@@ -256,7 +256,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: gh_pages_deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
 
   pin_distro:
     if: ${{ needs.variables.outputs.is_release == 'true' }}
