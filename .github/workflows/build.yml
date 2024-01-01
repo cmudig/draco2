@@ -160,7 +160,7 @@ jobs:
 
       - name: Upload Pyodide distribution
         if: ${{ env.SHOULD_BUILD_PYODIDE == 'true' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.PYODIDE_DISTRO_NAME }}
           path: pyodide/pyodide-src/dist
