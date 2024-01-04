@@ -1,4 +1,4 @@
-FROM python:3.11.6-bookworm
+FROM python:3.11.7-bookworm
 
 # Install Node.js as it is needed as a dev dependency
 ENV NODE_MAJOR=20
