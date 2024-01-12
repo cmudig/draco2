@@ -19,7 +19,7 @@ lint:
 .PHONY: typecheck
 typecheck:
 	@echo "==> ✅ Type checks"
-	@make mypy pytype pyright
+	@make mypy pytype
 
 .PHONY: mypy
 mypy:
@@ -28,10 +28,6 @@ mypy:
 .PHONY: pytype
 pytype:
 	@poetry run pytype draco
-
-.PHONY: pyright
-pyright:
-	@poetry run npx --yes pyright@latest
 
 book:
 	@echo "==> 📕 Book"

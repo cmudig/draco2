@@ -1,7 +1,7 @@
 import logging
 import warnings
 from dataclasses import dataclass
-from typing import Generic, Literal, TypeVar
+from typing import Any, Generic, Literal, TypeVar
 
 import altair as alt
 from pandas import DataFrame
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 """
 Generic parameter for the type of the produced visualization object.
-Used to abstract away the final type of the produced visualization object.
+Used to abstract away the final type of the produced chart instance.
 """
 VegaLiteChart = TypeVar(
     "VegaLiteChart",
@@ -34,6 +34,9 @@ VegaLiteChart = TypeVar(
     alt.FacetChart,
     alt.Chart,
     alt.LayerChart,
+)
+AnyAltairChart = (
+    alt.VConcatChart | alt.HConcatChart | alt.FacetChart | alt.Chart | alt.LayerChart
 )
 
 
@@ -99,7 +102,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
     def render(self, spec: dict, data: DataFrame) -> VegaLiteChart:
         typed_spec = SpecificationDict.model_validate(spec)
         # initial chart to be mutated by the visitor callbacks
-        chart = alt.Chart(data)
+        chart: AnyAltairChart = alt.Chart(data)
         chart_views: list[VegaLiteChart] = []
 
         # Traverse the specification dict and invoke the appropriate visitor
@@ -184,7 +187,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         if view.facet is not None:
             for f in view.facet:
                 channel = f.channel
-                facet_args = {
+                facet_args: dict[str, Any] = {
                     "field": f.field,
                     "type": self.__get_field_type(ctx.spec, f.field),
                 }
@@ -314,7 +317,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             ctx.mark,
             ctx.encoding,
         )
-        custom_args = {}
+        custom_args: dict[str, Any] = {}
         if encoding.field is not None:
             custom_args["field"] = encoding.field
             custom_args["type"] = self.__get_field_type(spec, encoding.field)
@@ -372,7 +375,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         )
         encodes_x_and_y = all([e.channel in ["x", "y"] for e in encodings])
 
-        custom_args = {}
+        custom_args: dict[str, Any] = {}
         if encoding.field is not None:
             custom_args["field"] = encoding.field
             custom_args["type"] = self.__get_field_type(spec, encoding.field)

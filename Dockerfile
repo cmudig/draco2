@@ -1,6 +1,6 @@
-FROM python:3.11.6-bookworm
+FROM python:3.11.7-bookworm
 
-# Install Node.js as it is needed as a dev dependency
+# Install Node.js as it is needed for draco1 vs draco2 comparison demos
 ENV NODE_MAJOR=20
 RUN apt-get update && apt-get install -y ca-certificates curl gnupg && \
     mkdir -p /etc/apt/keyrings && \
