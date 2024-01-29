@@ -39,26 +39,20 @@ def test_aggregate():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((encoding,aggregate),e1,mean).
     """
-        )
-        == [("aggregate", "e1")]
-    )
+    ) == [("aggregate", "e1")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((encoding,aggregate),e1,mean).
     attribute((encoding,aggregate),e2,mean).
     """
-        )
-        == [("aggregate", "e1"), ("aggregate", "e2")]
-    )
+    ) == [("aggregate", "e1"), ("aggregate", "e2")]
 
 
 def test_bin():
@@ -77,26 +71,20 @@ def test_bin():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((encoding,binning),e1,10).
     """
-        )
-        == [("bin", "e1")]
-    )
+    ) == [("bin", "e1")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((encoding,binning),e1,10).
     attribute((encoding,binning),e2,20).
     """
-        )
-        == [("bin", "e1"), ("bin", "e2")]
-    )
+    ) == [("bin", "e1"), ("bin", "e2")]
 
 
 def test_bin_high():
@@ -113,26 +101,20 @@ def test_bin_high():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((encoding,binning),e1,13).
     """
-        )
-        == [("bin_high", "e1")]
-    )
+    ) == [("bin_high", "e1")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((encoding,binning),e1,14).
     attribute((encoding,binning),e2,20).
     """
-        )
-        == [("bin_high", "e1"), ("bin_high", "e2")]
-    )
+    ) == [("bin_high", "e1"), ("bin_high", "e2")]
 
 
 def test_bin_low():
@@ -149,26 +131,20 @@ def test_bin_low():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((encoding,binning),e1,3).
     """
-        )
-        == [("bin_low", "e1")]
-    )
+    ) == [("bin_low", "e1")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((encoding,binning),e1,7).
     attribute((encoding,binning),e2,3).
     """
-        )
-        == [("bin_low", "e1"), ("bin_low", "e2")]
-    )
+    ) == [("bin_low", "e1"), ("bin_low", "e2")]
 
 
 def test_encoding():
@@ -185,28 +161,22 @@ def test_encoding():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((mark,type),m1,text).
     entity(encoding,m1,e1).
     """
-        )
-        == [("encoding", "e1")]
-    )
+    ) == [("encoding", "e1")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((mark,type),m1,text).
     entity(encoding,m1,e1).
     entity(encoding,m1,e2).
     """
-        )
-        == [("encoding", "e1"), ("encoding", "e2")]
-    )
+    ) == [("encoding", "e1"), ("encoding", "e2")]
 
 
 def test_encoding_field():
@@ -223,26 +193,20 @@ def test_encoding_field():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((encoding,field),e1,temperature).
     """
-        )
-        == [("encoding_field", "e1")]
-    )
+    ) == [("encoding_field", "e1")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((encoding,field),e1,temperature).
     attribute((encoding,field),e2,date).
     """
-        )
-        == [("encoding_field", "e1"), ("encoding_field", "e2")]
-    )
+    ) == [("encoding_field", "e1"), ("encoding_field", "e2")]
 
 
 def test_same_field():
@@ -267,10 +231,9 @@ def test_same_field():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(field,root,temperature).
 
     entity(mark,v,m).
@@ -280,14 +243,11 @@ def test_same_field():
     helper((encoding,field),e1,temperature).
     helper((encoding,field),e2,temperature).
     """
-        )
-        == [("same_field", "temperature")]
-    )
+    ) == [("same_field", "temperature")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(field,root,temperature).
     entity(field,root,date).
 
@@ -302,15 +262,12 @@ def test_same_field():
     helper((encoding,field),e3,date).
     helper((encoding,field),e4,date).
     """
-        )
-        == [("same_field", "date"), ("same_field", "temperature")]
-    )
+    ) == [("same_field", "date"), ("same_field", "temperature")]
 
     # use field temperature twice with mark m1, and field date with 2 different marks
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(field,root,temperature).
     entity(field,root,date).
 
@@ -327,9 +284,7 @@ def test_same_field():
     helper((encoding,field),e3,date).
     helper((encoding,field),e4,date).
     """
-        )
-        == [("same_field", "temperature")]
-    )
+    ) == [("same_field", "temperature")]
 
 
 def test_same_field_grt3():
@@ -395,10 +350,9 @@ def test_same_field_grt3():
     )
 
     # use field temperature 3 times with the same mark
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(field,root,temperature).
 
     entity(mark,v,m).
@@ -410,15 +364,12 @@ def test_same_field_grt3():
     helper((encoding,field),e2,temperature).
     helper((encoding,field),e3,temperature).
     """
-        )
-        == [("same_field_grt3", "temperature")]
-    )
+    ) == [("same_field_grt3", "temperature")]
 
     # use field temperature 4 times with the same mark
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(field,root,temperature).
 
     entity(mark,v,m).
@@ -433,9 +384,7 @@ def test_same_field_grt3():
     helper((encoding,field),e3,temperature).
     helper((encoding,field),e4,temperature).
     """
-        )
-        == [("same_field_grt3", "temperature")]
-    )
+    ) == [("same_field_grt3", "temperature")]
 
 
 def test_count_grt1():
@@ -472,10 +421,9 @@ def test_count_grt1():
     )
 
     # 2 counts
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m).
     entity(encoding,m,e1).
     entity(encoding,m,e2).
@@ -483,15 +431,12 @@ def test_count_grt1():
     attribute((encoding,aggregate),e1,count).
     attribute((encoding,aggregate),e2,count).
     """
-        )
-        == [("count_grt1", "m")]
-    )
+    ) == [("count_grt1", "m")]
 
     # 3 counts
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m).
     entity(encoding,m,e1).
     entity(encoding,m,e2).
@@ -501,9 +446,7 @@ def test_count_grt1():
     attribute((encoding,aggregate),e2,count).
     attribute((encoding,aggregate),e3,count).
     """
-        )
-        == [("count_grt1", "m")]
-    )
+    ) == [("count_grt1", "m")]
 
 
 def test_number_categorical():
@@ -530,10 +473,9 @@ def test_number_categorical():
     )
 
     # root scale, categorical for number
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,type),temperature,number).
 
     entity(view,root,v).
@@ -546,15 +488,12 @@ def test_number_categorical():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,categorical).
     """
-        )
-        == [("number_categorical", "e1")]
-    )
+    ) == [("number_categorical", "e1")]
 
     # two scales, categorical for number
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,type),temperature,number).
 
     entity(mark,v1,m).
@@ -566,15 +505,12 @@ def test_number_categorical():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,categorical).
     """
-        )
-        == [("number_categorical", "e1")]
-    )
+    ) == [("number_categorical", "e1")]
 
     # number field used for two times (in same mark)
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,type),temperature,number).
 
     entity(mark,v1,m1).
@@ -594,9 +530,7 @@ def test_number_categorical():
     attribute((scale,channel),s2,color).
     attribute((scale,type),s2,categorical).
     """
-        )
-        == [("number_categorical", "e2")]
-    )
+    ) == [("number_categorical", "e2")]
 
 
 def test_bin_low_unique():
@@ -618,18 +552,15 @@ def test_bin_low_unique():
     )
 
     # datetime
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,type),date,datetime).
     attribute((field,unique),date,10).
     helper((encoding,field),e1,date).
     attribute((encoding,binning),e1,5).
     """
-        )
-        == [("bin_low_unique", "e1")]
-    )
+    ) == [("bin_low_unique", "e1")]
 
 
 def test_bin_not_linear():
@@ -673,10 +604,9 @@ def test_bin_not_linear():
     )
 
     # log scale
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m).
     entity(encoding,m,e1).
     attribute((encoding,channel),e1,x).
@@ -686,9 +616,7 @@ def test_bin_not_linear():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("bin_not_linear", "e1")]
-    )
+    ) == [("bin_not_linear", "e1")]
 
 
 def test_only_discrete():
@@ -732,10 +660,9 @@ def test_only_discrete():
     )
 
     # 1 encoding
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
@@ -744,15 +671,12 @@ def test_only_discrete():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,categorical).
     """
-        )
-        == [("only_discrete", "m1")]
-    )
+    ) == [("only_discrete", "m1")]
 
     # 2 encodings
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -765,15 +689,12 @@ def test_only_discrete():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("only_discrete", "m1")]
-    )
+    ) == [("only_discrete", "m1")]
 
     # shared scale
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v1).
     entity(mark,v1,m1).
     entity(encoding,m1,e1).
@@ -796,9 +717,7 @@ def test_only_discrete():
     attribute((scale,channel),s2,color).
     attribute((scale,type),s2,categorical).
     """
-        )
-        == [("only_discrete", "m1"), ("only_discrete", "m2")]
-    )
+    ) == [("only_discrete", "m1"), ("only_discrete", "m2")]
 
 
 def test_multi_non_pos():
@@ -817,10 +736,9 @@ def test_multi_non_pos():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
@@ -828,9 +746,7 @@ def test_multi_non_pos():
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,size).
     """
-        )
-        == [("multi_non_pos", "m1")]
-    )
+    ) == [("multi_non_pos", "m1")]
 
 
 def test_non_pos_used_before_pos():
@@ -865,23 +781,19 @@ def test_non_pos_used_before_pos():
     )
 
     # both x and y are not used yet
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
     """
-        )
-        == [("non_pos_used_before_pos", "m1")]
-    )
+    ) == [("non_pos_used_before_pos", "m1")]
 
     # x is not used yet
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
@@ -889,9 +801,7 @@ def test_non_pos_used_before_pos():
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,color).
     """
-        )
-        == [("non_pos_used_before_pos", "m1")]
-    )
+    ) == [("non_pos_used_before_pos", "m1")]
 
 
 def test_aggregate_group_by_raw():
@@ -952,10 +862,9 @@ def test_aggregate_group_by_raw():
     )
 
     # raw continuous
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
@@ -967,9 +876,7 @@ def test_aggregate_group_by_raw():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("aggregate_group_by_raw", "e2")]
-    )
+    ) == [("aggregate_group_by_raw", "e2")]
 
 
 def test_aggregate_no_discrete():
@@ -1013,10 +920,9 @@ def test_aggregate_no_discrete():
     )
 
     # aggregate continuous
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
@@ -1029,15 +935,12 @@ def test_aggregate_no_discrete():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("aggregate_no_discrete", "m1")]
-    )
+    ) == [("aggregate_no_discrete", "m1")]
 
     # raw continuous
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,aggregate),e1,count).
@@ -1049,9 +952,7 @@ def test_aggregate_no_discrete():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("aggregate_no_discrete", "m1")]
-    )
+    ) == [("aggregate_no_discrete", "m1")]
 
 
 def test_x_y_raw():
@@ -1146,10 +1047,9 @@ def test_x_y_raw():
     )
 
     # x, y discrete, color raw continuous
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -1172,9 +1072,7 @@ def test_x_y_raw():
     attribute((scale,channel),s3,color).
     attribute((scale,type),s3,linear).
     """
-        )
-        == [("x_y_raw", "m1")]
-    )
+    ) == [("x_y_raw", "m1")]
 
 
 def test_continuous_not_zero():
@@ -1216,10 +1114,9 @@ def test_continuous_not_zero():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -1228,9 +1125,7 @@ def test_continuous_not_zero():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("continuous_not_zero", "e1")]
-    )
+    ) == [("continuous_not_zero", "e1")]
 
 
 def test_size_not_zero():
@@ -1254,10 +1149,9 @@ def test_size_not_zero():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
@@ -1266,15 +1160,12 @@ def test_size_not_zero():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("size_not_zero", "e1")]
-    )
+    ) == [("size_not_zero", "e1")]
 
     # even bin needs to zero
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
@@ -1284,9 +1175,7 @@ def test_size_not_zero():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("size_not_zero", "e1")]
-    )
+    ) == [("size_not_zero", "e1")]
 
 
 def test_continuous_pos_not_zero():
@@ -1328,10 +1217,9 @@ def test_continuous_pos_not_zero():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -1340,14 +1228,11 @@ def test_continuous_pos_not_zero():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("continuous_pos_not_zero", "e1")]
-    )
+    ) == [("continuous_pos_not_zero", "e1")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -1363,9 +1248,7 @@ def test_continuous_pos_not_zero():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,linear).
     """
-        )
-        == [("continuous_pos_not_zero", "e1"), ("continuous_pos_not_zero", "e2")]
-    )
+    ) == [("continuous_pos_not_zero", "e1"), ("continuous_pos_not_zero", "e2")]
 
 
 def test_skew_zero():
@@ -1393,10 +1276,9 @@ def test_skew_zero():
     )
 
     # both max and min are positive
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,min),temperature,800).
     attribute((field,max),temperature,1000).
 
@@ -1409,15 +1291,12 @@ def test_skew_zero():
     attribute((scale,channel),s,y).
     attribute((scale,zero),s,true).
     """
-        )
-        == [("skew_zero", "e")]
-    )
+    ) == [("skew_zero", "e")]
 
     # both max and min are negative
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,min),temperature,-500).
     attribute((field,max),temperature,-700).
 
@@ -1430,9 +1309,7 @@ def test_skew_zero():
     attribute((scale,channel),s,y).
     attribute((scale,zero),s,true).
     """
-        )
-        == [("skew_zero", "e")]
-    )
+    ) == [("skew_zero", "e")]
 
 
 def test_cross_zero():
@@ -1459,10 +1336,9 @@ def test_cross_zero():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,min),temperature,-200).
     attribute((field,max),temperature,1000).
 
@@ -1475,9 +1351,7 @@ def test_cross_zero():
     attribute((scale,channel),s,y).
     attribute((scale,zero),s,true).
     """
-        )
-        == [("cross_zero", "e")]
-    )
+    ) == [("cross_zero", "e")]
 
 
 def test_only_y():
@@ -1497,10 +1371,9 @@ def test_only_y():
     )
 
     # 1 mark with channel y and size
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
@@ -1508,15 +1381,12 @@ def test_only_y():
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,size).
     """
-        )
-        == [("only_y", "m1")]
-    )
+    ) == [("only_y", "m1")]
 
     # 2 marks
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
@@ -1525,9 +1395,7 @@ def test_only_y():
     entity(encoding,m2,e2).
     attribute((encoding,channel),e2,x).
     """
-        )
-        == [("only_y", "m1")]
-    )
+    ) == [("only_y", "m1")]
 
 
 def test_binned_orientation_not_x():
@@ -1566,18 +1434,15 @@ def test_binned_orientation_not_x():
     )
 
     # datetime
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,type),date,datetime).
     helper((encoding,field),e1,date).
     attribute((encoding,binning),e1,20).
     attribute((encoding,channel),e1,y).
     """
-        )
-        == [("binned_orientation_not_x", "e1")]
-    )
+    ) == [("binned_orientation_not_x", "e1")]
 
 
 def test_high_cardinality_ordinal():
@@ -1606,10 +1471,9 @@ def test_high_cardinality_ordinal():
     )
 
     # high cardinality: unique
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,unique),date,1461).
 
     entity(mark,v,m).
@@ -1621,9 +1485,7 @@ def test_high_cardinality_ordinal():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("high_cardinality_ordinal", "e1")]
-    )
+    ) == [("high_cardinality_ordinal", "e1")]
 
 
 def test_high_cardinality_categorical_grt10():
@@ -1649,10 +1511,9 @@ def test_high_cardinality_categorical_grt10():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,unique),weather,15).
 
     entity(mark,v,m).
@@ -1664,9 +1525,7 @@ def test_high_cardinality_categorical_grt10():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,categorical).
     """
-        )
-        == [("high_cardinality_categorical_grt10", "e1")]
-    )
+    ) == [("high_cardinality_categorical_grt10", "e1")]
 
 
 def test_high_cardinality_shape():
@@ -1686,17 +1545,14 @@ def test_high_cardinality_shape():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,unique),weather,15).
     helper((encoding,field),e1,weather).
     attribute((encoding,channel),e1,shape).
     """
-        )
-        == [("high_cardinality_shape", "e1")]
-    )
+    ) == [("high_cardinality_shape", "e1")]
 
 
 def test_high_cardinality_size():
@@ -1747,10 +1603,9 @@ def test_high_cardinality_size():
     )
 
     # y is continuous with high cardinality
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,unique),temperature,150).
 
     entity(mark,v,m).
@@ -1765,9 +1620,7 @@ def test_high_cardinality_size():
     attribute((scale,channel),s1,y).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("high_cardinality_size", "e1")]
-    )
+    ) == [("high_cardinality_size", "e1")]
 
 
 def test_horizontal_scrolling_x():
@@ -1809,10 +1662,9 @@ def test_horizontal_scrolling_x():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,unique),date,1461).
 
     entity(mark,v,m).
@@ -1824,9 +1676,7 @@ def test_horizontal_scrolling_x():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("horizontal_scrolling_x", "e1")]
-    )
+    ) == [("horizontal_scrolling_x", "e1")]
 
 
 def test_horizontal_scrolling_col():
@@ -1849,10 +1699,9 @@ def test_horizontal_scrolling_col():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,unique),fd,1461).
     attribute((field,name),fd,date).
 
@@ -1860,9 +1709,7 @@ def test_horizontal_scrolling_col():
     attribute((facet,field),f,date).
     attribute((facet,channel),f,col).
     """
-        )
-        == [("horizontal_scrolling_col", "f")]
-    )
+    ) == [("horizontal_scrolling_col", "f")]
 
 
 def test_date_scale():
@@ -1911,10 +1758,9 @@ def test_date_scale():
     )
 
     # scale on view, log
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,type),date,datetime).
 
     entity(mark,v,m).
@@ -1926,15 +1772,12 @@ def test_date_scale():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("date_scale", "e1")]
-    )
+    ) == [("date_scale", "e1")]
 
     # scale on root, categorical
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,type),date,datetime).
 
     entity(view,root,v).
@@ -1947,9 +1790,7 @@ def test_date_scale():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,categorical).
     """
-        )
-        == [("date_scale", "e1")]
-    )
+    ) == [("date_scale", "e1")]
 
 
 def test_number_linear():
@@ -2001,10 +1842,9 @@ def test_number_linear():
     )
 
     # scale on view, ordinal
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,type),temperature,number).
     attribute((field,unique),temperature,111).
 
@@ -2017,15 +1857,12 @@ def test_number_linear():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("number_linear", "e1")]
-    )
+    ) == [("number_linear", "e1")]
 
     # scale on root, log
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,type),temperature,number).
     attribute((field,unique),temperature,111).
 
@@ -2039,9 +1876,7 @@ def test_number_linear():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("number_linear", "e1")]
-    )
+    ) == [("number_linear", "e1")]
 
 
 def test_value_agg():
@@ -2081,10 +1916,9 @@ def test_value_agg():
     )
 
     # value task, v1 has agg
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,value).
 
     entity(view,root,v1).
@@ -2097,9 +1931,7 @@ def test_value_agg():
     entity(encoding,m2,e2).
     attribute((encoding,binning),e2,20).
     """
-        )
-        == [("value_agg", "v1")]
-    )
+    ) == [("value_agg", "v1")]
 
 
 def test_summary_facet():
@@ -2137,10 +1969,9 @@ def test_summary_facet():
     )
 
     # summary task, v has facet
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,summary).
 
     entity(view,root,v1).
@@ -2151,9 +1982,7 @@ def test_summary_facet():
     entity(encoding,m1,e1).
     attribute((encoding,binning),e1,20).
     """
-        )
-        == [("summary_facet", "v1")]
-    )
+    ) == [("summary_facet", "v1")]
 
 
 def test_c_d_col():
@@ -2203,10 +2032,9 @@ def test_c_d_col():
     )
 
     # continuous x, discrete y (ordinal), column
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -2222,9 +2050,7 @@ def test_c_d_col():
     entity(facet,v,f).
     attribute((facet,channel),f,col).
     """
-        )
-        == [("c_d_col", "v")]
-    )
+    ) == [("c_d_col", "v")]
 
 
 def test_date_not_x():
@@ -2245,19 +2071,16 @@ def test_date_not_x():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,type),date,datetime).
 
     entity(encoding,m1,e1).
     helper((encoding,field),e1,date).
     attribute((encoding,channel),e1,y).
     """
-        )
-        == [("date_not_x", "e1")]
-    )
+    ) == [("date_not_x", "e1")]
 
 
 def test_x_row():
@@ -2297,10 +2120,9 @@ def test_x_row():
     )
 
     # x and row in the same view
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -2308,9 +2130,7 @@ def test_x_row():
     entity(facet,v,f1).
     attribute((facet,channel),f1,row).
     """
-        )
-        == [("x_row", "v")]
-    )
+    ) == [("x_row", "v")]
 
 
 def test_y_row():
@@ -2350,10 +2170,9 @@ def test_y_row():
     )
 
     # y and row in the same view
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
@@ -2361,9 +2180,7 @@ def test_y_row():
     entity(facet,v,f1).
     attribute((facet,channel),f1,row).
     """
-        )
-        == [("y_row", "v")]
-    )
+    ) == [("y_row", "v")]
 
 
 def test_x_col():
@@ -2403,10 +2220,9 @@ def test_x_col():
     )
 
     # x and col in the same view
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -2414,9 +2230,7 @@ def test_x_col():
     entity(facet,v,f1).
     attribute((facet,channel),f1,col).
     """
-        )
-        == [("x_col", "v")]
-    )
+    ) == [("x_col", "v")]
 
 
 def test_y_col():
@@ -2456,10 +2270,9 @@ def test_y_col():
     )
 
     # y and col in the same view
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
@@ -2467,9 +2280,7 @@ def test_y_col():
     entity(facet,v,f1).
     attribute((facet,channel),f1,col).
     """
-        )
-        == [("y_col", "v")]
-    )
+    ) == [("y_col", "v")]
 
 
 def test_color_entropy_high():
@@ -2498,10 +2309,9 @@ def test_color_entropy_high():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,entropy),precipitation,60000).
     attribute((field,interesting),precipitation,true).
 
@@ -2515,9 +2325,7 @@ def test_color_entropy_high():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("color_entropy_high", "e1")]
-    )
+    ) == [("color_entropy_high", "e1")]
 
 
 def test_color_entropy_low():
@@ -2546,10 +2354,9 @@ def test_color_entropy_low():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,entropy),precipitation,2000).
     attribute((field,interesting),precipitation,true).
 
@@ -2563,9 +2370,7 @@ def test_color_entropy_low():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("color_entropy_low", "e1")]
-    )
+    ) == [("color_entropy_low", "e1")]
 
 
 def test_size_entropy_high():
@@ -2594,10 +2399,9 @@ def test_size_entropy_high():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,entropy),precipitation,4000).
     attribute((field,interesting),precipitation,true).
 
@@ -2611,9 +2415,7 @@ def test_size_entropy_high():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("size_entropy_high", "e1")]
-    )
+    ) == [("size_entropy_high", "e1")]
 
 
 def test_size_entropy_low():
@@ -2642,10 +2444,9 @@ def test_size_entropy_low():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,entropy),precipitation,2000).
     attribute((field,interesting),precipitation,true).
 
@@ -2659,9 +2460,7 @@ def test_size_entropy_low():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("size_entropy_low", "e1")]
-    )
+    ) == [("size_entropy_low", "e1")]
 
 
 def test_linear_scale():
@@ -2684,10 +2483,9 @@ def test_linear_scale():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -2696,14 +2494,11 @@ def test_linear_scale():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("linear_scale", "e1")]
-    )
+    ) == [("linear_scale", "e1")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -2719,9 +2514,7 @@ def test_linear_scale():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,linear).
     """
-        )
-        == [("linear_scale", "e1"), ("linear_scale", "e2")]
-    )
+    ) == [("linear_scale", "e1"), ("linear_scale", "e2")]
 
 
 def test_log_scale():
@@ -2744,10 +2537,9 @@ def test_log_scale():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -2756,14 +2548,11 @@ def test_log_scale():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("log_scale", "e1")]
-    )
+    ) == [("log_scale", "e1")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -2779,9 +2568,7 @@ def test_log_scale():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,log).
     """
-        )
-        == [("log_scale", "e1"), ("log_scale", "e2")]
-    )
+    ) == [("log_scale", "e1"), ("log_scale", "e2")]
 
 
 def test_ordinal_scale():
@@ -2804,10 +2591,9 @@ def test_ordinal_scale():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -2816,14 +2602,11 @@ def test_ordinal_scale():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("ordinal_scale", "e1")]
-    )
+    ) == [("ordinal_scale", "e1")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -2839,9 +2622,7 @@ def test_ordinal_scale():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,ordinal).
     """
-        )
-        == [("ordinal_scale", "e1"), ("ordinal_scale", "e2")]
-    )
+    ) == [("ordinal_scale", "e1"), ("ordinal_scale", "e2")]
 
 
 def test_categorical_scale():
@@ -2864,10 +2645,9 @@ def test_categorical_scale():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
@@ -2876,9 +2656,7 @@ def test_categorical_scale():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,categorical).
     """
-        )
-        == [("categorical_scale", "e1")]
-    )
+    ) == [("categorical_scale", "e1")]
 
 
 def test_c_c_point():
@@ -2924,10 +2702,9 @@ def test_c_c_point():
     )
 
     # continuous x, y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,point).
 
@@ -2945,9 +2722,7 @@ def test_c_c_point():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,log).
     """
-        )
-        == [("c_c_point", "m1")]
-    )
+    ) == [("c_c_point", "m1")]
 
 
 def test_c_c_line():
@@ -2981,10 +2756,9 @@ def test_c_c_line():
     )
 
     # continuous x, y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,line).
 
@@ -3002,9 +2776,7 @@ def test_c_c_line():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,log).
     """
-        )
-        == [("c_c_line", "m1")]
-    )
+    ) == [("c_c_line", "m1")]
 
 
 def test_c_c_area():
@@ -3035,10 +2807,9 @@ def test_c_c_area():
     )
 
     # continuous x, y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,area).
 
@@ -3056,9 +2827,7 @@ def test_c_c_area():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,log).
     """
-        )
-        == [("c_c_area", "m1")]
-    )
+    ) == [("c_c_area", "m1")]
 
 
 def test_c_c_text():
@@ -3089,10 +2858,9 @@ def test_c_c_text():
     )
 
     # continuous x, y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,text).
 
@@ -3110,9 +2878,7 @@ def test_c_c_text():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,linear).
     """
-        )
-        == [("c_c_text", "m1")]
-    )
+    ) == [("c_c_text", "m1")]
 
 
 def test_c_d_overlap_point():
@@ -3136,10 +2902,9 @@ def test_c_d_overlap_point():
     )
 
     # only x encoding, continuous x
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(number_rows,root,10).
     entity(field,root,wind).
     attribute((field,name),wind,wind).
@@ -3157,9 +2922,7 @@ def test_c_d_overlap_point():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("c_d_overlap_point", "m1")]
-    )
+    ) == [("c_d_overlap_point", "m1")]
 
     # continuous and aggregated x, discrete y
     assert (
@@ -3182,10 +2945,9 @@ def test_c_d_overlap_point():
     )
 
     # continuous x, discrete y, data size > discrete size
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(number_rows,root,100).
     entity(field,root,wind).
     attribute((field,name),wind,wind).
@@ -3203,9 +2965,7 @@ def test_c_d_overlap_point():
     attribute((encoding,channel),e2,y).
     attribute((encoding,binning),e2,10).
     """
-        )
-        == [("c_d_overlap_point", "m1")]
-    )
+    ) == [("c_d_overlap_point", "m1")]
 
 
 def test_c_d_overlap_bar():
@@ -3233,10 +2993,9 @@ def test_c_d_overlap_bar():
     )
 
     # continuous y, discrete x, no overlap
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,bar).
 
@@ -3255,15 +3014,12 @@ def test_c_d_overlap_bar():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("c_d_overlap_bar", "m1")]
-    )
+    ) == [("c_d_overlap_bar", "m1")]
 
     # continuous y, discrete x, non-positional channel color not aggregated
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,bar).
 
@@ -3277,9 +3033,7 @@ def test_c_d_overlap_bar():
     entity(encoding,m1,e3).
     attribute((encoding,channel),e3,color).
     """
-        )
-        == [("c_d_overlap_bar", "m1")]
-    )
+    ) == [("c_d_overlap_bar", "m1")]
 
 
 def test_c_d_overlap_line():
@@ -3306,10 +3060,9 @@ def test_c_d_overlap_line():
     )
 
     # continuous y, discrete x
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,line).
 
@@ -3320,9 +3073,7 @@ def test_c_d_overlap_line():
     entity(encoding,m1,e2).
     attribute((encoding,channel),e2,y).
     """
-        )
-        == [("c_d_overlap_line", "m1")]
-    )
+    ) == [("c_d_overlap_line", "m1")]
 
 
 def test_c_d_overlap_area():
@@ -3350,10 +3101,9 @@ def test_c_d_overlap_area():
     )
 
     # continuous y, discrete x
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,area).
 
@@ -3371,9 +3121,7 @@ def test_c_d_overlap_area():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,log).
     """
-        )
-        == [("c_d_overlap_area", "m1")]
-    )
+    ) == [("c_d_overlap_area", "m1")]
 
 
 def test_c_d_overlap_text():
@@ -3381,10 +3129,9 @@ def test_c_d_overlap_text():
     assert isinstance(b, Block)
 
     #  only y, continuous y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,text).
 
@@ -3395,15 +3142,12 @@ def test_c_d_overlap_text():
     attribute((scale,channel),s1,y).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("c_d_overlap_text", "m1")]
-    )
+    ) == [("c_d_overlap_text", "m1")]
 
     # continuous y, discrete x
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,text).
 
@@ -3421,9 +3165,7 @@ def test_c_d_overlap_text():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,linear).
     """
-        )
-        == [("c_d_overlap_text", "m1")]
-    )
+    ) == [("c_d_overlap_text", "m1")]
 
 
 def test_c_d_overlap_tick():
@@ -3458,10 +3200,9 @@ def test_c_d_overlap_tick():
     )
 
     # continuous x, discrete y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,tick).
 
@@ -3479,9 +3220,7 @@ def test_c_d_overlap_tick():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,ordinal).
     """
-        )
-        == [("c_d_overlap_tick", "m1")]
-    )
+    ) == [("c_d_overlap_tick", "m1")]
 
 
 def test_c_d_no_overlap_point():
@@ -3515,10 +3254,9 @@ def test_c_d_no_overlap_point():
     )
 
     # continuous x, discrete y, data size == discrete size
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(number_rows,root,10).
     entity(field,root,wind).
     attribute((field,name),wind,wind).
@@ -3536,15 +3274,12 @@ def test_c_d_no_overlap_point():
     attribute((encoding,channel),e2,y).
     attribute((encoding,binning),e2,10).
     """
-        )
-        == [("c_d_no_overlap_point", "m1")]
-    )
+    ) == [("c_d_no_overlap_point", "m1")]
 
     # continuous x, discrete y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,point).
 
@@ -3557,9 +3292,7 @@ def test_c_d_no_overlap_point():
 
     helper(no_overlap,m1).
     """
-        )
-        == [("c_d_no_overlap_point", "m1")]
-    )
+    ) == [("c_d_no_overlap_point", "m1")]
 
 
 def test_c_d_no_overlap_bar():
@@ -3594,10 +3327,9 @@ def test_c_d_no_overlap_bar():
     )
 
     # continuous y, discrete x, stacked
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,bar).
 
@@ -3609,9 +3341,7 @@ def test_c_d_no_overlap_bar():
     attribute((encoding,channel),e2,y).
     attribute((encoding,stack),e2,zero).
     """
-        )
-        == [("c_d_no_overlap_bar", "m1")]
-    )
+    ) == [("c_d_no_overlap_bar", "m1")]
 
 
 def test_c_d_no_overlap_tick():
@@ -3619,10 +3349,9 @@ def test_c_d_no_overlap_tick():
     assert isinstance(b, Block)
 
     # continuous aggregated y, discrete x, no overlap
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,tick).
 
@@ -3642,9 +3371,7 @@ def test_c_d_no_overlap_tick():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("c_d_no_overlap_tick", "m1")]
-    )
+    ) == [("c_d_no_overlap_tick", "m1")]
 
 
 def test_d_d_overlap():
@@ -3678,10 +3405,9 @@ def test_d_d_overlap():
     )
 
     # discrete x, y; number_rows > D*D
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(number_rows,root,1000).
     entity(field,root,wind).
     attribute((field,name),wind,wind).
@@ -3707,9 +3433,7 @@ def test_d_d_overlap():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("d_d_overlap", "m1")]
-    )
+    ) == [("d_d_overlap", "m1")]
 
     # discrete x, y; color channel is aggregated
     assert (
@@ -3742,10 +3466,9 @@ def test_d_d_overlap():
     )
 
     # discrete x, y; number_rows > D*D
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(number_rows,root,1000).
     entity(field,root,wind).
     attribute((field,name),wind,wind).
@@ -3766,15 +3489,12 @@ def test_d_d_overlap():
     entity(encoding,m1,e3).
     attribute((encoding,channel),e2,color).
     """
-        )
-        == [("d_d_overlap", "m1")]
-    )
+    ) == [("d_d_overlap", "m1")]
 
     # only discrete x; number_rows > D
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(number_rows,root,1000).
     entity(field,root,wind).
     attribute((field,name),wind,wind).
@@ -3791,9 +3511,7 @@ def test_d_d_overlap():
     attribute((encoding,binning),e1,10).
     helper((encoding,field),e1,wind).
     """
-        )
-        == [("d_d_overlap", "m1")]
-    )
+    ) == [("d_d_overlap", "m1")]
 
 
 def test_d_d_point():
@@ -3801,10 +3519,9 @@ def test_d_d_point():
     assert isinstance(b, Block)
 
     # only x encoding, discrete x
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,point).
 
@@ -3812,15 +3529,12 @@ def test_d_d_point():
     attribute((encoding,channel),e1,x).
     attribute((encoding,binning),e1,10).
     """
-        )
-        == [("d_d_point", "m1")]
-    )
+    ) == [("d_d_point", "m1")]
 
     # discrete x, y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,point).
 
@@ -3832,9 +3546,7 @@ def test_d_d_point():
     attribute((encoding,channel),e2,y).
     attribute((encoding,binning),e2,10).
     """
-        )
-        == [("d_d_point", "m1")]
-    )
+    ) == [("d_d_point", "m1")]
 
 
 def test_d_d_text():
@@ -3862,10 +3574,9 @@ def test_d_d_text():
     )
 
     # discrete x, y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,text).
 
@@ -3880,9 +3591,7 @@ def test_d_d_text():
     attribute((scale,channel),s1,y).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("d_d_text", "m1")]
-    )
+    ) == [("d_d_text", "m1")]
 
 
 def test_d_d_rect():
@@ -3890,10 +3599,9 @@ def test_d_d_rect():
     assert isinstance(b, Block)
 
     # only y encoding, discrete y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     attribute((mark,type),m1,rect).
 
@@ -3904,15 +3612,12 @@ def test_d_d_rect():
     attribute((scale,channel),s1,y).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("d_d_rect", "m1")]
-    )
+    ) == [("d_d_rect", "m1")]
 
     # discrete x, y, one root scale
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     attribute((mark,type),m1,rect).
@@ -3931,9 +3636,7 @@ def test_d_d_rect():
     attribute((scale,channel),s2,y).
     attribute((scale,type),s2,ordinal).
     """
-        )
-        == [("d_d_rect", "m1")]
-    )
+    ) == [("d_d_rect", "m1")]
 
 
 def test_linear_x():
@@ -3958,10 +3661,9 @@ def test_linear_x():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -3971,9 +3673,7 @@ def test_linear_x():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("linear_x", "e1")]
-    )
+    ) == [("linear_x", "e1")]
 
 
 def test_linear_y():
@@ -3998,10 +3698,9 @@ def test_linear_y():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -4011,9 +3710,7 @@ def test_linear_y():
     attribute((scale,channel),s1,y).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("linear_y", "e1")]
-    )
+    ) == [("linear_y", "e1")]
 
 
 def test_linear_color():
@@ -4038,10 +3735,9 @@ def test_linear_color():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -4051,9 +3747,7 @@ def test_linear_color():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("linear_color", "e1")]
-    )
+    ) == [("linear_color", "e1")]
 
 
 def test_linear_size():
@@ -4078,10 +3772,9 @@ def test_linear_size():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -4091,9 +3784,7 @@ def test_linear_size():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("linear_size", "e1")]
-    )
+    ) == [("linear_size", "e1")]
 
 
 def test_linear_text():
@@ -4118,10 +3809,9 @@ def test_linear_text():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -4131,9 +3821,7 @@ def test_linear_text():
     attribute((scale,channel),s1,text).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("linear_text", "e1")]
-    )
+    ) == [("linear_text", "e1")]
 
 
 def test_log_x():
@@ -4158,10 +3846,9 @@ def test_log_x():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -4171,9 +3858,7 @@ def test_log_x():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("log_x", "e1")]
-    )
+    ) == [("log_x", "e1")]
 
 
 def test_log_y():
@@ -4198,10 +3883,9 @@ def test_log_y():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -4211,9 +3895,7 @@ def test_log_y():
     attribute((scale,channel),s1,y).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("log_y", "e1")]
-    )
+    ) == [("log_y", "e1")]
 
 
 def test_log_color():
@@ -4238,10 +3920,9 @@ def test_log_color():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -4251,9 +3932,7 @@ def test_log_color():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("log_color", "e1")]
-    )
+    ) == [("log_color", "e1")]
 
 
 def test_log_size():
@@ -4278,10 +3957,9 @@ def test_log_size():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -4291,9 +3969,7 @@ def test_log_size():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("log_size", "e1")]
-    )
+    ) == [("log_size", "e1")]
 
 
 def test_log_text():
@@ -4318,10 +3994,9 @@ def test_log_text():
     )
 
     # scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     entity(mark,v,m1).
     entity(encoding,m1,e1).
@@ -4331,9 +4006,7 @@ def test_log_text():
     attribute((scale,channel),s1,text).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("log_text", "e1")]
-    )
+    ) == [("log_text", "e1")]
 
 
 def test_ordinal_x():
@@ -4358,10 +4031,9 @@ def test_ordinal_x():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,x).
@@ -4370,9 +4042,7 @@ def test_ordinal_x():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("ordinal_x", "e1")]
-    )
+    ) == [("ordinal_x", "e1")]
 
 
 def test_ordinal_y():
@@ -4397,10 +4067,9 @@ def test_ordinal_y():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
@@ -4409,9 +4078,7 @@ def test_ordinal_y():
     attribute((scale,channel),s1,y).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("ordinal_y", "e1")]
-    )
+    ) == [("ordinal_y", "e1")]
 
 
 def test_ordinal_color():
@@ -4436,10 +4103,9 @@ def test_ordinal_color():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
@@ -4448,9 +4114,7 @@ def test_ordinal_color():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("ordinal_color", "e1")]
-    )
+    ) == [("ordinal_color", "e1")]
 
 
 def test_ordinal_size():
@@ -4475,10 +4139,9 @@ def test_ordinal_size():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,size).
@@ -4487,9 +4150,7 @@ def test_ordinal_size():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("ordinal_size", "e1")]
-    )
+    ) == [("ordinal_size", "e1")]
 
 
 def test_ordinal_shape():
@@ -4514,10 +4175,9 @@ def test_ordinal_shape():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,shape).
@@ -4526,9 +4186,7 @@ def test_ordinal_shape():
     attribute((scale,channel),s1,shape).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("ordinal_shape", "e1")]
-    )
+    ) == [("ordinal_shape", "e1")]
 
 
 def test_ordinal_text():
@@ -4553,10 +4211,9 @@ def test_ordinal_text():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,text).
@@ -4565,9 +4222,7 @@ def test_ordinal_text():
     attribute((scale,channel),s1,text).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("ordinal_text", "e1")]
-    )
+    ) == [("ordinal_text", "e1")]
 
 
 def test_ordinal_detail():
@@ -4592,10 +4247,9 @@ def test_ordinal_detail():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,detail).
@@ -4604,9 +4258,7 @@ def test_ordinal_detail():
     attribute((scale,channel),s1,detail).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("ordinal_detail", "e1")]
-    )
+    ) == [("ordinal_detail", "e1")]
 
 
 def test_categorical_color():
@@ -4631,10 +4283,9 @@ def test_categorical_color():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(mark,v,m1).
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,color).
@@ -4643,9 +4294,7 @@ def test_categorical_color():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,categorical).
     """
-        )
-        == [("categorical_color", "e1")]
-    )
+    ) == [("categorical_color", "e1")]
 
 
 def test_aggregate_count():
@@ -4663,17 +4312,14 @@ def test_aggregate_count():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
     attribute((encoding,aggregate),e1,count).
     """
-        )
-        == [("aggregate_count", "e1")]
-    )
+    ) == [("aggregate_count", "e1")]
 
 
 def test_aggregate_mean():
@@ -4692,17 +4338,14 @@ def test_aggregate_mean():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
     attribute((encoding,aggregate),e1,mean).
     """
-        )
-        == [("aggregate_mean", "e1")]
-    )
+    ) == [("aggregate_mean", "e1")]
 
 
 def test_aggregate_median():
@@ -4721,17 +4364,14 @@ def test_aggregate_median():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
     attribute((encoding,aggregate),e1,median).
     """
-        )
-        == [("aggregate_median", "e1")]
-    )
+    ) == [("aggregate_median", "e1")]
 
 
 def test_aggregate_min():
@@ -4750,17 +4390,14 @@ def test_aggregate_min():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
     attribute((encoding,aggregate),e1,min).
     """
-        )
-        == [("aggregate_min", "e1")]
-    )
+    ) == [("aggregate_min", "e1")]
 
 
 def test_aggregate_max():
@@ -4779,17 +4416,14 @@ def test_aggregate_max():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
     attribute((encoding,aggregate),e1,max).
     """
-        )
-        == [("aggregate_max", "e1")]
-    )
+    ) == [("aggregate_max", "e1")]
 
 
 def test_aggregate_stdev():
@@ -4808,17 +4442,14 @@ def test_aggregate_stdev():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
     attribute((encoding,aggregate),e1,stdev).
     """
-        )
-        == [("aggregate_stdev", "e1")]
-    )
+    ) == [("aggregate_stdev", "e1")]
 
 
 def test_aggregate_sum():
@@ -4837,17 +4468,14 @@ def test_aggregate_sum():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
     attribute((encoding,aggregate),e1,sum).
     """
-        )
-        == [("aggregate_sum", "e1")]
-    )
+    ) == [("aggregate_sum", "e1")]
 
 
 def test_stack_zero():
@@ -4865,18 +4493,15 @@ def test_stack_zero():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
     attribute((encoding,aggregate),e1,count).
     attribute((encoding,stack),e1,zero).
     """
-        )
-        == [("stack_zero", "e1")]
-    )
+    ) == [("stack_zero", "e1")]
 
 
 def test_stack_center():
@@ -4896,18 +4521,15 @@ def test_stack_center():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
     attribute((encoding,aggregate),e1,count).
     attribute((encoding,stack),e1,center).
     """
-        )
-        == [("stack_center", "e1")]
-    )
+    ) == [("stack_center", "e1")]
 
 
 def test_stack_normalize():
@@ -4927,18 +4549,15 @@ def test_stack_normalize():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(encoding,m1,e1).
     attribute((encoding,channel),e1,y).
     attribute((encoding,aggregate),e1,count).
     attribute((encoding,stack),e1,normalize).
     """
-        )
-        == [("stack_normalize", "e1")]
-    )
+    ) == [("stack_normalize", "e1")]
 
 
 def test_value_point():
@@ -4958,18 +4577,15 @@ def test_value_point():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,value).
 
     entity(mark,v,m1).
     attribute((mark,type),m1,point).
     """
-        )
-        == [("value_point", "m1")]
-    )
+    ) == [("value_point", "m1")]
 
 
 def test_value_bar():
@@ -4989,10 +4605,9 @@ def test_value_bar():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,value).
 
     entity(mark,v,m1).
@@ -5001,9 +4616,7 @@ def test_value_bar():
     entity(mark,v,m2).
     attribute((mark,type),m2,bar).
     """
-        )
-        == [("value_bar", "m1"), ("value_bar", "m2")]
-    )
+    ) == [("value_bar", "m1"), ("value_bar", "m2")]
 
 
 def test_value_line():
@@ -5023,18 +4636,15 @@ def test_value_line():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,value).
 
     entity(mark,v,m1).
     attribute((mark,type),m1,line).
     """
-        )
-        == [("value_line", "m1")]
-    )
+    ) == [("value_line", "m1")]
 
 
 def test_value_area():
@@ -5054,18 +4664,15 @@ def test_value_area():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,value).
 
     entity(mark,v,m1).
     attribute((mark,type),m1,area).
     """
-        )
-        == [("value_area", "m1")]
-    )
+    ) == [("value_area", "m1")]
 
 
 def test_value_text():
@@ -5085,18 +4692,15 @@ def test_value_text():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,value).
 
     entity(mark,v,m1).
     attribute((mark,type),m1,text).
     """
-        )
-        == [("value_text", "m1")]
-    )
+    ) == [("value_text", "m1")]
 
 
 def test_value_tick():
@@ -5116,18 +4720,15 @@ def test_value_tick():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,value).
 
     entity(mark,v,m1).
     attribute((mark,type),m1,tick).
     """
-        )
-        == [("value_tick", "m1")]
-    )
+    ) == [("value_tick", "m1")]
 
 
 def test_value_rect():
@@ -5147,10 +4748,9 @@ def test_value_rect():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,value).
 
     entity(mark,v,m1).
@@ -5159,9 +4759,7 @@ def test_value_rect():
     entity(mark,v,m2).
     attribute((mark,type),m2,rect).
     """
-        )
-        == [("value_rect", "m1"), ("value_rect", "m2")]
-    )
+    ) == [("value_rect", "m1"), ("value_rect", "m2")]
 
 
 def test_summary_point():
@@ -5181,18 +4779,15 @@ def test_summary_point():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     attribute((mark,type),m1,point).
     """
-        )
-        == [("summary_point", "m1")]
-    )
+    ) == [("summary_point", "m1")]
 
 
 def test_summary_bar():
@@ -5212,10 +4807,9 @@ def test_summary_bar():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,summary).
 
     entity(mark,v,m1).
@@ -5224,9 +4818,7 @@ def test_summary_bar():
     entity(mark,v,m2).
     attribute((mark,type),m2,bar).
     """
-        )
-        == [("summary_bar", "m1"), ("summary_bar", "m2")]
-    )
+    ) == [("summary_bar", "m1"), ("summary_bar", "m2")]
 
 
 def test_summary_line():
@@ -5246,18 +4838,15 @@ def test_summary_line():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     attribute((mark,type),m1,line).
     """
-        )
-        == [("summary_line", "m1")]
-    )
+    ) == [("summary_line", "m1")]
 
 
 def test_summary_area():
@@ -5277,18 +4866,15 @@ def test_summary_area():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     attribute((mark,type),m1,area).
     """
-        )
-        == [("summary_area", "m1")]
-    )
+    ) == [("summary_area", "m1")]
 
 
 def test_summary_text():
@@ -5308,18 +4894,15 @@ def test_summary_text():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     attribute((mark,type),m1,text).
     """
-        )
-        == [("summary_text", "m1")]
-    )
+    ) == [("summary_text", "m1")]
 
 
 def test_summary_tick():
@@ -5339,18 +4922,15 @@ def test_summary_tick():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,summary).
 
     entity(mark,v,m1).
     attribute((mark,type),m1,tick).
     """
-        )
-        == [("summary_tick", "m1")]
-    )
+    ) == [("summary_tick", "m1")]
 
 
 def test_summary_rect():
@@ -5370,10 +4950,9 @@ def test_summary_rect():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute(task,root,summary).
 
     entity(mark,v,m1).
@@ -5382,9 +4961,7 @@ def test_summary_rect():
     entity(mark,v,m2).
     attribute((mark,type),m2,rect).
     """
-        )
-        == [("summary_rect", "m1"), ("summary_rect", "m2")]
-    )
+    ) == [("summary_rect", "m1"), ("summary_rect", "m2")]
 
 
 def test_value_continuous_x():
@@ -5410,10 +4987,9 @@ def test_value_continuous_x():
     )
 
     # continuous x
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5426,9 +5002,7 @@ def test_value_continuous_x():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("value_continuous_x", "e1")]
-    )
+    ) == [("value_continuous_x", "e1")]
 
 
 def test_value_continuous_y():
@@ -5454,10 +5028,9 @@ def test_value_continuous_y():
     )
 
     # continuous y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5470,9 +5043,7 @@ def test_value_continuous_y():
     attribute((scale,channel),s1,y).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("value_continuous_y", "e1")]
-    )
+    ) == [("value_continuous_y", "e1")]
 
 
 def test_value_continuous_color():
@@ -5502,10 +5073,9 @@ def test_value_continuous_color():
     )
 
     # continuous color
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5518,9 +5088,7 @@ def test_value_continuous_color():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("value_continuous_color", "e1")]
-    )
+    ) == [("value_continuous_color", "e1")]
 
 
 def test_value_continuous_size():
@@ -5546,10 +5114,9 @@ def test_value_continuous_size():
     )
 
     # continuous size
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5562,9 +5129,7 @@ def test_value_continuous_size():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("value_continuous_size", "e1")]
-    )
+    ) == [("value_continuous_size", "e1")]
 
 
 def test_value_continuous_text():
@@ -5589,10 +5154,9 @@ def test_value_continuous_text():
     )
 
     # continuous text
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5605,9 +5169,7 @@ def test_value_continuous_text():
     attribute((scale,channel),s1,text).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("value_continuous_text", "e1")]
-    )
+    ) == [("value_continuous_text", "e1")]
 
 
 def test_value_discrete_x():
@@ -5632,10 +5194,9 @@ def test_value_discrete_x():
     )
 
     # discrete x
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5645,9 +5206,7 @@ def test_value_discrete_x():
     helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
-        )
-        == [("value_discrete_x", "e1")]
-    )
+    ) == [("value_discrete_x", "e1")]
 
 
 def test_value_discrete_y():
@@ -5672,10 +5231,9 @@ def test_value_discrete_y():
     )
 
     # discrete y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5685,9 +5243,7 @@ def test_value_discrete_y():
     helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
-        )
-        == [("value_discrete_y", "e1")]
-    )
+    ) == [("value_discrete_y", "e1")]
 
 
 def test_value_discrete_color():
@@ -5716,10 +5272,9 @@ def test_value_discrete_color():
     )
 
     # discrete color, scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5733,9 +5288,7 @@ def test_value_discrete_color():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("value_discrete_color", "e1")]
-    )
+    ) == [("value_discrete_color", "e1")]
 
 
 def test_value_discrete_size():
@@ -5764,10 +5317,9 @@ def test_value_discrete_size():
     )
 
     # discrete color, scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5781,9 +5333,7 @@ def test_value_discrete_size():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("value_discrete_size", "e1")]
-    )
+    ) == [("value_discrete_size", "e1")]
 
 
 def test_value_discrete_shape():
@@ -5812,10 +5362,9 @@ def test_value_discrete_shape():
     )
 
     # discrete shape, scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5829,9 +5378,7 @@ def test_value_discrete_shape():
     attribute((scale,channel),s1,shape).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("value_discrete_shape", "e1")]
-    )
+    ) == [("value_discrete_shape", "e1")]
 
 
 def test_value_discrete_text():
@@ -5856,10 +5403,9 @@ def test_value_discrete_text():
     )
 
     # discrete text
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5869,9 +5415,7 @@ def test_value_discrete_text():
     helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,10).
     """
-        )
-        == [("value_discrete_text", "e1")]
-    )
+    ) == [("value_discrete_text", "e1")]
 
 
 def test_value_discrete_detail():
@@ -5900,10 +5444,9 @@ def test_value_discrete_detail():
     )
 
     # discrete detail, scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,value).
 
@@ -5917,9 +5460,7 @@ def test_value_discrete_detail():
     attribute((scale,channel),s1,detail).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("value_discrete_detail", "e1")]
-    )
+    ) == [("value_discrete_detail", "e1")]
 
 
 def test_summary_continuous_x():
@@ -5945,10 +5486,9 @@ def test_summary_continuous_x():
     )
 
     # continuous x
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -5961,9 +5501,7 @@ def test_summary_continuous_x():
     attribute((scale,channel),s1,x).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("summary_continuous_x", "e1")]
-    )
+    ) == [("summary_continuous_x", "e1")]
 
 
 def test_summary_continuous_y():
@@ -5989,10 +5527,9 @@ def test_summary_continuous_y():
     )
 
     # continuous y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6005,9 +5542,7 @@ def test_summary_continuous_y():
     attribute((scale,channel),s1,y).
     attribute((scale,type),s1,log).
     """
-        )
-        == [("summary_continuous_y", "e1")]
-    )
+    ) == [("summary_continuous_y", "e1")]
 
 
 def test_summary_continuous_color():
@@ -6037,10 +5572,9 @@ def test_summary_continuous_color():
     )
 
     # continuous color
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6053,9 +5587,7 @@ def test_summary_continuous_color():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("summary_continuous_color", "e1")]
-    )
+    ) == [("summary_continuous_color", "e1")]
 
 
 def test_summary_continuous_size():
@@ -6081,10 +5613,9 @@ def test_summary_continuous_size():
     )
 
     # continuous size
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6097,9 +5628,7 @@ def test_summary_continuous_size():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("summary_continuous_size", "e1")]
-    )
+    ) == [("summary_continuous_size", "e1")]
 
 
 def test_summary_continuous_text():
@@ -6124,10 +5653,9 @@ def test_summary_continuous_text():
     )
 
     # continuous text
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6140,9 +5668,7 @@ def test_summary_continuous_text():
     attribute((scale,channel),s1,text).
     attribute((scale,type),s1,linear).
     """
-        )
-        == [("summary_continuous_text", "e1")]
-    )
+    ) == [("summary_continuous_text", "e1")]
 
 
 def test_summary_discrete_x():
@@ -6167,10 +5693,9 @@ def test_summary_discrete_x():
     )
 
     # discrete x
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6180,9 +5705,7 @@ def test_summary_discrete_x():
     helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
-        )
-        == [("summary_discrete_x", "e1")]
-    )
+    ) == [("summary_discrete_x", "e1")]
 
 
 def test_summary_discrete_y():
@@ -6207,10 +5730,9 @@ def test_summary_discrete_y():
     )
 
     # discrete y
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6220,9 +5742,7 @@ def test_summary_discrete_y():
     helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,20).
     """
-        )
-        == [("summary_discrete_y", "e1")]
-    )
+    ) == [("summary_discrete_y", "e1")]
 
 
 def test_summary_discrete_color():
@@ -6251,10 +5771,9 @@ def test_summary_discrete_color():
     )
 
     # discrete color, scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6268,9 +5787,7 @@ def test_summary_discrete_color():
     attribute((scale,channel),s1,color).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("summary_discrete_color", "e1")]
-    )
+    ) == [("summary_discrete_color", "e1")]
 
 
 def test_summary_discrete_size():
@@ -6299,10 +5816,9 @@ def test_summary_discrete_size():
     )
 
     # discrete color, scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6316,9 +5832,7 @@ def test_summary_discrete_size():
     attribute((scale,channel),s1,size).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("summary_discrete_size", "e1")]
-    )
+    ) == [("summary_discrete_size", "e1")]
 
 
 def test_summary_discrete_shape():
@@ -6347,10 +5861,9 @@ def test_summary_discrete_shape():
     )
 
     # discrete shape, scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6364,9 +5877,7 @@ def test_summary_discrete_shape():
     attribute((scale,channel),s1,shape).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("summary_discrete_shape", "e1")]
-    )
+    ) == [("summary_discrete_shape", "e1")]
 
 
 def test_summary_discrete_text():
@@ -6391,10 +5902,9 @@ def test_summary_discrete_text():
     )
 
     # discrete text
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6404,9 +5914,7 @@ def test_summary_discrete_text():
     helper((encoding,field),e1,precipitation).
     attribute((encoding,binning),e1,10).
     """
-        )
-        == [("summary_discrete_text", "e1")]
-    )
+    ) == [("summary_discrete_text", "e1")]
 
 
 def test_summary_discrete_detail():
@@ -6435,10 +5943,9 @@ def test_summary_discrete_detail():
     )
 
     # discrete detail, scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6452,9 +5959,7 @@ def test_summary_discrete_detail():
     attribute((scale,channel),s1,detail).
     attribute((scale,type),s1,ordinal).
     """
-        )
-        == [("summary_discrete_detail", "e1")]
-    )
+    ) == [("summary_discrete_detail", "e1")]
 
 
 def test_interesting_x():
@@ -6478,10 +5983,9 @@ def test_interesting_x():
     )
 
     # discrete detail, scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),precipitation,true).
     attribute(task,root,summary).
 
@@ -6491,9 +5995,7 @@ def test_interesting_x():
     helper((encoding,field),e1,precipitation).
     attribute((encoding,channel),e1,x).
     """
-        )
-        == [("interesting_x", "e1")]
-    )
+    ) == [("interesting_x", "e1")]
 
 
 def test_interesting_column():
@@ -6517,10 +6019,9 @@ def test_interesting_column():
     )
 
     # discrete detail, scale on root
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     attribute((field,interesting),fd,true).
     attribute((field,name),fd,precipitation).
     attribute(task,root,summary).
@@ -6532,9 +6033,7 @@ def test_interesting_column():
     attribute((facet,field),f,precipitation).
     attribute((facet,channel),f,col).
     """
-        )
-        == [("interesting_column", "f")]
-    )
+    ) == [("interesting_column", "f")]
 
 
 def test_cartesian_coordinate():
@@ -6552,29 +6051,23 @@ def test_cartesian_coordinate():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     attribute((view,coordinates),v,cartesian).
     """
-        )
-        == [("cartesian_coordinate", "v")]
-    )
+    ) == [("cartesian_coordinate", "v")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v1).
     attribute((view,coordinates),v1,cartesian).
     entity(view,root,v2).
     attribute((view,coordinates),v2,cartesian).
     """
-        )
-        == [("cartesian_coordinate", "v1"), ("cartesian_coordinate", "v2")]
-    )
+    ) == [("cartesian_coordinate", "v1"), ("cartesian_coordinate", "v2")]
 
 
 def test_polar_coordinate():
@@ -6592,26 +6085,20 @@ def test_polar_coordinate():
         == []
     )
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v).
     attribute((view,coordinates),v,polar).
     """
-        )
-        == [("polar_coordinate", "v")]
-    )
+    ) == [("polar_coordinate", "v")]
 
-    assert (
-        list_preferences(
-            b.program
-            + """
+    assert list_preferences(
+        b.program
+        + """
     entity(view,root,v1).
     attribute((view,coordinates),v1,polar).
     entity(view,root,v2).
     attribute((view,coordinates),v2,polar).
     """
-        )
-        == [("polar_coordinate", "v1"), ("polar_coordinate", "v2")]
-    )
+    ) == [("polar_coordinate", "v1"), ("polar_coordinate", "v2")]

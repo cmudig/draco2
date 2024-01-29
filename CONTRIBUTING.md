@@ -94,7 +94,8 @@ the above-listed commands which 'block' your current shell session.
 
 ## Making a release
 
-- After pulling the latest commits, run `poetry version prerelease` to update the version number in `pyproject.toml`.
+- After pulling the latest commits, run `poetry version patch/minor/major` to update the version number in
+  `pyproject.toml`.
 - Run `git commit -am "chore: bump version to $(poetry version -s)"` to commit the version bump and add a tag with
   `git tag "v$(poetry version -s)"`.
 - Run `poetry build` to build the package.

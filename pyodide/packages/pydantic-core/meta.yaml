@@ -1,0 +1,16 @@
+package:
+  name: pydantic-core
+  version: 2.11.0
+  top-level:
+    - pydantic_core
+source:
+  url: https://files.pythonhosted.org/packages/4b/f8/c074b0bf58166b803ce23a18b33be12b04930d590278eccbb262aa92ca38/pydantic_core-2.11.0.tar.gz
+  sha256: 55c6d7fdc94a98e0551870774e27be1ec5cd847230015463853d27a73b05ba13
+requirements:
+  run:
+    - typing-extensions
+about:
+  home: https://github.com/pydantic/pydantic-core
+  PyPI: https://pypi.org/project/pydantic-core
+  summary: This package provides the core functionality for pydantic validation and serialization.
+  license: MIT

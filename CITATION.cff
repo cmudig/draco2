@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Yang"
+    given-names: "Junran"
+  - family-names: "Gyarmati"
+    given-names: "Péter Ferenc"
+  - family-names: "Zeng"
+    given-names: "Zehua"
+  - family-names: "Moritz"
+    given-names: "Dominik"
+title: "Draco 2: An Extensible Platform to Model Visualization Design"
+version: 1.0.0
+date-released: 2023-10-23
+url: "https://github.com/cmudig/draco2"
+preferred-citation:
+  type: conference-article
+  authors:
+    - family-names: "Yang"
+      given-names: "Junran"
+    - family-names: "Gyarmati"
+      given-names: "Péter Ferenc"
+    - family-names: "Zeng"
+      given-names: "Zehua"
+    - family-names: "Moritz"
+      given-names: "Dominik"
+  journal: "Proceedings of the 2023 {IEEE} Conference on Visualizations (VIS)"
+  title: "Draco 2: An Extensible Platform to Model Visualization Design"
+  year: 2023
+  organization: "IEEE"

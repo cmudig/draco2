@@ -21,8 +21,6 @@
 [![Lite](https://gist.githubusercontent.com/willeppy/35cdc20a3fc26e393ce76f1df35bcdfc/raw/a7fca1d0a2d62c2b49f60c0217dffbd0fe404471/lite-badge-launch-small.svg)](https://dig.cmu.edu/draco2/jupyterlite)
 [![Pyodide Console](https://img.shields.io/badge/🐍%20launch-Pyodide%20Console-yellowgreen)](https://dig.cmu.edu/draco2/jupyterlite/static/pyodide/console.html)
 
-**Work in Progress**
-
 Draco is a formal framework for representing design knowledge about effective visualization design as a collection of
 constraints. You can use Draco to find effective visualization designs or validate existing ones. Draco's constraints
 are based on Answer Set Programming (ASP) and solved with the [Clingo](https://github.com/potassco/clingo) constraint
@@ -30,19 +28,14 @@ solver. We also implemented a way to learn weights for the recommendation system
 perception experiment. Draco v2 is a much improved version of the first iteration of
 [Draco](https://github.com/uwdata/draco).
 
+- [Draco paper (VIS 2018)](https://idl.cs.washington.edu/files/2019-Draco-InfoVis.pdf)
+- [Draco 2 paper (VIS 2023)](https://arxiv.org/pdf/2308.14247.pdf)
+
 ## Documentation
 
 Read about Draco in the online book at [https://dig.cmu.edu/draco2/](https://dig.cmu.edu/draco2/) or launch it in
 interactive mode using [Binder](https://mybinder.org/v2/gh/cmudig/draco2/HEAD). In the documentation, we just refer to
 _Draco_ without a version.
-
-## What's different from [Draco v1](https://github.com/uwdata/draco)?
-
-- Draco v2 is completely written in Python. No more need to run both Python and Node. We still use ASP for the knowledge
-  base.
-- Generalized and extended chart specification format. The new format is more extensible with custom properties.
-- Support for multiple views and view composition.
-- High test-coverage, documentation, and updated development tooling.
 
 ## Contributing
 

@@ -13,13 +13,13 @@ cover:
 .PHONY: lint
 lint:
 	@echo "==> 👕 Linting"
-	@poetry run black .
+	@poetry run ruff format draco jupyterlite pyodide docs
 	@poetry run ruff .
 
 .PHONY: typecheck
 typecheck:
 	@echo "==> ✅ Type checks"
-	@make mypy pytype pyright
+	@make mypy pytype
 
 .PHONY: mypy
 mypy:
@@ -28,10 +28,6 @@ mypy:
 .PHONY: pytype
 pytype:
 	@poetry run pytype draco
-
-.PHONY: pyright
-pyright:
-	@poetry run npx --yes pyright@latest
 
 book:
 	@echo "==> 📕 Book"
@@ -115,7 +111,7 @@ pyodide-build: pyodide-prepare
 .PHONY: jupyterlite-build
 jupyterlite-build:
 	@echo "==> 💡 Building Jupyter Lite Static Site"
-	@cd jupyterlite && poetry run python build.py && poetry run jupyter lite build
+	@cd jupyterlite && rm -rf lite-dir/static/pyodide && poetry run python build.py && poetry run jupyter lite build
 
 
 # Re-using the Jupyter Lite build target, since it handles the download and 'caching' of our Pyodide distribution.

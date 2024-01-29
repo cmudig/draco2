@@ -13,7 +13,20 @@ Draco has three parts.
 
 The code for Draco is [available as open source on GitHub](https://github.com/cmudig/draco2).
 
+If you use Draco, please cite our [award winning](https://ieeevis.org/year/2023/info/awards/best-paper-awards)
+[paper](https://arxiv.org/abs/2308.14247):
+
+```bibtex
+@misc{draco2,
+   Author = {Junran Yang and Péter Ferenc Gyarmati and Zehua Zeng and Dominik Moritz},
+   Title = {Draco 2: An Extensible Platform to Model Visualization Design},
+   Year = {2023},
+   Organization = {{IEEE}},
+   Eprint = {arXiv:2308.14247},
+   Journal = {Proceedings of the 2023 {IEEE} Conference on Visualizations (VIS)},
+}
+```
+
 ## Installation
 
-You can install the Draco package from PyPI via `pip install draco --pre`. Note that the new version of Draco is
-currently a prerelease.
+You can install the Draco package from [PyPI](https://pypi.org/project/draco/) via `pip install draco`.

@@ -1,13 +1,12 @@
-FROM python:3.10.11-bullseye
+FROM python:3.11.7-bookworm
 
-# Install Node.js as it is needed as a dev dependency
-RUN apt-get update && apt-get install -y \
-    curl \
-    gnupg \
-    ca-certificates \
-    lsb-release &&  \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - &&  \
-    apt-get install -y nodejs && \
+# Install Node.js as it is needed for draco1 vs draco2 comparison demos
+ENV NODE_MAJOR=20
+RUN apt-get update && apt-get install -y ca-certificates curl gnupg && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && apt-get install nodejs -y && \
     npm install -g npm@latest
 
 # Install Clingo so that it is available as an executable for the draco1 vs. draco2 comparison notebook

@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install poetry
         run: pipx install poetry
       - name: Set up Python
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build docker image
         run: docker build -t draco .
 
@@ -59,7 +59,7 @@ jobs:
 
     steps:
       - name: Merge pull requests
-        uses: fastify/github-action-merge-dependabot@v3.9.0
+        uses: fastify/github-action-merge-dependabot@v3.9.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           target: minor
