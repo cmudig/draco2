@@ -14,6 +14,26 @@ violation(log_non_positive) :-
     helper((encoding,scale_type),E,log),
     MIN <= 0.
 
+% @hard(zero_included) Cannot start with zero if the extent includes zero.
+violation(zero_included) :-
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
+    MIN * MAX <= 0,
+    entity(encoding,M,E),
+    helper((encoding,field),E,F),
+    helper(mark_encoding_scale,M,E,S),
+    attribute((scale,zero),S,true).
+
+% @hard(log_zero_included) Cannot use the log scale if the extent includes zero.
+violation(log_zero_included) :-
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
+    MIN * MAX <= 0,
+    entity(encoding,M,E),
+    helper((encoding,field),E,F),
+    helper(mark_encoding_scale,M,E,S),
+    attribute((scale,type),S,log).
+
 % @hard(bin_and_aggregate) Cannot bin and aggregate.
 violation(bin_and_aggregate) :-
     attribute((encoding,binning),E,_),
