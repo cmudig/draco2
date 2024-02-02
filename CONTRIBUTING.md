@@ -24,7 +24,7 @@ as well).
 To create a virtual environment named `draco`, you can run
 
 ```sh
-conda create -n draco python=3.10
+conda create -n draco python=3.11
 conda activate draco
 poetry install
 ```
