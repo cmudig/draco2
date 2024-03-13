@@ -8,6 +8,7 @@ instead of building them locally from source.
 
 If the local and remote Pyodide versions do not match, we build everything from source.
 """
+
 import argparse
 import json
 import sys

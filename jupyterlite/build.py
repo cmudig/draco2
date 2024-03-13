@@ -6,6 +6,7 @@ The script will attempt to use a local Pyodide distro build
 if it exists under `pyodide/pyodide-src/dist`, otherwise
 it will download a pre-built Pyodide distro from the latest release of cmudig/draco2.
 """
+
 import json
 import pathlib
 import shutil
