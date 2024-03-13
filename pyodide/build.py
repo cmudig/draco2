@@ -2,6 +2,7 @@
 Zero-dependency Python script to build a custom Pyodide distribution,
 relying on a basic Unix shell environment with `poetry` and `docker` installed.
 """
+
 import json
 import os
 import pathlib
