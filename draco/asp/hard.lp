@@ -240,6 +240,12 @@ violation(zero_d_n) :-
     T != datetime,
     T != number.
 
+% @hard(zero_linear) Can only use zero with linear scale.
+violation(zero_linear) :-
+    entity(scale,_,S),
+    not attribute((scale,type),S,linear),
+    attribute((scale,zero),S,true).
+
 % @hard(bar_area_without_zero) Bar and area mark requires scale of continuous to start at zero.
 violation(bar_area_without_zero) :-
     attribute((mark,type),M,(bar;area)),
