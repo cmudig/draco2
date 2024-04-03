@@ -1,11 +1,11 @@
 package:
   name: clingo
-  version: 5.6.2
+  version: 5.7.1
   top-level:
     - clingo
 source:
-  url: https://files.pythonhosted.org/packages/fe/a3/f3886a49f6483cff0efc08be5c82ce1573a686aea21e5e7387811bdce587/clingo-5.6.2.tar.gz
-  sha256: 7750f6e47bf2e725f93555cc9acd3b10d2ab73c2a3868e9eb6a098df9a6dd755
+  url: https://files.pythonhosted.org/packages/3b/b3/c7b464426f70fe100cb4f3e5b45623e3eb82ea50f1dffdc2f820f1418fe0/clingo-5.7.1.tar.gz
+  sha256: 17400a1894da46b2d4941a4a85012c98fa8b3c67a5c6b4c73dcd8c8facbc059f
 requirements:
   run:
     - cffi
