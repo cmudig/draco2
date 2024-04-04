@@ -72,7 +72,8 @@ pytest-cov = "^4.1.0"
 optional = true
 
 [tool.poetry.group.web.dependencies]
-jupyterlite = ">=0.2.0,<0.3.0"
+jupyterlite = ">=0.3.0,<0.4.0"
+jupyterlite-pyodide-kernel = "^0.3.1"
 libarchive-c = ">=4,<6"
 pyyaml = "^6.0.1"
 
