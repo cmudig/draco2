@@ -200,9 +200,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                         chart = chart.facet(column=alt.Column(**facet_args))
                     # Should never happen, a pydantic error would be raised sooner
                     case _:  # pragma: no cover
-                        raise ValueError(
-                            f"Unknown facet channel: {channel}"
-                        )  # pragma: no cover
+                        raise ValueError(f"Unknown facet channel: {channel}")
             return chart
         return alt.layer(*layers) if len(layers) > 1 else layers[0]
 
@@ -278,9 +276,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     )
                 else:
                     return chart.mark_arc()
-
-        # Should never happen, a pydantic error would be raised sooner
-        raise ValueError(f"Unknown mark type: {mark_type}")  # pragma: no cover
+            # Should never happen, a pydantic error would be raised sooner
+            case _:  # pragma: no cover
+                raise ValueError(f"Unknown mark type: {mark_type}")
 
     def __visit_encoding(self, ctx: EncodingContext) -> VegaLiteChart:
         """
@@ -410,9 +408,9 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     return chart.encode(theta=alt.Theta(**encoding_args))
             case "color":
                 return chart.encode(color=alt.Color(**encoding_args))
-
-        # Should never happen, a pydantic error would be raised sooner
-        raise ValueError(f"Unknown channel: {encoding.channel}")  # pragma: no cover
+            # Should never happen, a pydantic error would be raised sooner
+            case _:  # pragma: no cover
+                raise ValueError(f"Unknown channel: {encoding.channel}")
 
     @staticmethod
     def __get_encoding_channel_of_field(
