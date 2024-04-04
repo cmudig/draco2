@@ -248,7 +248,7 @@ jobs:
         run: find docs/_build/html/ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload Documentation Site Artifact
         uses: actions/upload-pages-artifact@v2
