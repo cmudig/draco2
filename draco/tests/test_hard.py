@@ -585,6 +585,62 @@ def test_log_non_positive():
     ) == ["log_non_positive"]
 
 
+def test_log_zero_included():
+    b = hard.blocks["log_zero_included"]
+    assert isinstance(b, Block)
+
+    # a log scale with only negative numbers
+    assert no_violations(
+        b.program
+        + """
+    attribute((field,min),precipitation,-10).
+    attribute((field,max),precipitation,-55).
+
+    entity(mark,0,1).
+    entity(encoding,1,2).
+    entity(scale,0,4).
+    attribute((encoding,channel),2,x).
+    helper((encoding,field),2,precipitation).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,log).
+    """
+    )
+
+    # a log scale with only positive numbers
+    assert no_violations(
+        b.program
+        + """
+    attribute((field,min),precipitation,10).
+    attribute((field,max),precipitation,55).
+
+    entity(mark,0,1).
+    entity(encoding,1,2).
+    entity(scale,0,4).
+    attribute((encoding,channel),2,x).
+    helper((encoding,field),2,precipitation).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,log).
+    """
+    )
+
+    # a log scale with both positive and negative numbers
+    assert list_violations(
+        b.program
+        + """
+    attribute((field,min),precipitation,-10).
+    attribute((field,max),precipitation,55).
+
+    entity(mark,0,1).
+    entity(encoding,1,2).
+    entity(scale,0,4).
+    attribute((encoding,channel),2,x).
+    helper((encoding,field),2,precipitation).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,log).
+    """
+    ) == ["log_zero_included"]
+
+
 def test_aggregate_t_valid():
     b = hard.blocks["aggregate_t_valid"]
     assert isinstance(b, Block)
@@ -1754,6 +1810,32 @@ def test_zero_d_n():
     attribute((scale,zero),4,true).
     """
     ) == ["zero_d_n"]
+
+
+def test_zero_linear():
+    b = hard.blocks["zero_linear"]
+    assert isinstance(b, Block)
+
+    # x scale start with 0 with datetime data type
+    assert no_violations(
+        b.program
+        + """
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,linear).
+    attribute((scale,zero),4,true).
+    """
+    )
+
+    assert list_violations(
+        b.program
+        + """
+    entity(scale,0,4).
+    attribute((scale,channel),4,x).
+    attribute((scale,type),4,log).
+    attribute((scale,zero),4,true).
+    """
+    ) == ["zero_linear"]
 
 
 def test_bar_area_without_zero():
