@@ -74,19 +74,20 @@ publish: build
 .PHONY: clean
 clean:
 	@poetry run jupyter-book clean docs
-	@rm -rf .coverage
-	@rm -rf dist
-	@rm -rf pyodide/pyodide-src
-	@rm -rf jupyterlite/lite-dir/static/pyodide
-	@rm -rf jupyterlite/lite-dir/files
-	@rm -f jupyterlite/.jupyterlite.doit.db
-	@find . -type d -name '.pytype' -exec rm -rf {} +
-	@find . -type d -name '.mypy_cache' -exec rm -rf {} +
-	@find . -type d -name '__pycache__' -exec rm -rf {} +
+	@find . -type d -name '*.ipynb_checkpoints' -exec rm -r {} +
 	@find . -type d -name '*pytest_cache*' -exec rm -rf {} +
+	@find . -type d -name '.mypy_cache' -exec rm -rf {} +
+	@find . -type d -name '.pytype' -exec rm -rf {} +
+	@find . -type d -name '.ruff_cache' -exec rm -rf {} +
+	@find . -type d -name '__pycache__' -exec rm -rf {} +
 	@find . -type f -name "*.py[co]" -exec rm -rf {} +
 	@find . -type f -name ".coverage.*" -exec rm -rf {} +
-	@find . -type d -name '*.ipynb_checkpoints' -exec rm -r {} +
+	@rm -f jupyterlite/.jupyterlite.doit.db
+	@rm -rf .coverage
+	@rm -rf dist
+	@rm -rf jupyterlite/lite-dir/files
+	@rm -rf jupyterlite/lite-dir/static/pyodide
+	@rm -rf pyodide/pyodide-src
 
 .PHONY: serve
 serve:
