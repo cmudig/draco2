@@ -1,10 +1,15 @@
 {
   "recommendations": [
+    "abelcour.asp-syntax-highlight",
+    "charliermarsh.ruff",
+    "GitHub.copilot",
     "ms-python.python",
     "ms-python.vscode-pylance",
-    "abelcour.asp-syntax-highlight",
     "ms-toolsai.jupyter",
+    "ms-toolsai.jupyter-keymap",
+    "ms-toolsai.jupyter-renderers",
+    "ms-vscode.makefile-tools",
     "njpwerner.autodocstring",
-    "visualstudioexptteam.vscodeintellicode"
+    "VisualStudioExptTeam.vscodeintellicode"
   ]
 }
