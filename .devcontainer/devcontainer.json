@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.231.6/containers/docker-existing-dockerfile
 {
-  "name": "Draco 2 Development Environment",
+  "name": "Containerized Development Environment",
 
   // Building the container from the local, root-level Dockerfile
   "context": "..",
@@ -36,7 +36,7 @@
     "python.formatting.provider": "black",
     "python.testing.pytestEnabled": true,
     "python.autoComplete.extraPaths": [
-        "/usr/local/lib/python3.10/site-packages"
+        "/usr/local/lib/python3.11/site-packages"
     ],
     "editor.tabSize": 4,
     "editor.detectIndentation": false,
@@ -48,9 +48,16 @@
 
   // Defining handy Python extensions
   "extensions": [
+    "abelcour.asp-syntax-highlight",
+    "charliermarsh.ruff",
+    "GitHub.copilot",
     "ms-python.python",
-    "ms-toolsai.jupyter",
     "ms-python.vscode-pylance",
+    "ms-toolsai.jupyter",
+    "ms-toolsai.jupyter-keymap",
+    "ms-toolsai.jupyter-renderers",
+    "ms-vscode.makefile-tools",
+    "njpwerner.autodocstring",
     "VisualStudioExptTeam.vscodeintellicode"
   ],
 
