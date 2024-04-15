@@ -8,11 +8,14 @@
   "editor.formatOnSave": true,
   "files.trimTrailingWhitespace": true,
   "files.exclude": {
-    ".mypy_cache": true,
-    ".pytype": true,
-    ".pytest_cache": true,
+    "**/*.py[co]": true,
+    "**/*ipynb_checkpoints": true,
+    "**/*pytest_cache*": true,
     "**/__pycache__": true,
-    "**/*ipynb_checkpoints": true
+    "**/mypy_cache": true,
+    "**/ruff_cache": true,
+    ".coverage.*": true,
+    ".pytype": true
   },
   "autoDocstring.docstringFormat": "sphinx",
   "autoDocstring.guessTypes": true

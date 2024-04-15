@@ -1,4 +1,4 @@
-FROM python:3.11.7-bookworm
+FROM python:3.11.9-bookworm
 
 # Install Node.js as it is needed for draco1 vs draco2 comparison demos
 ENV NODE_MAJOR=20
@@ -30,13 +30,16 @@ COPY pyproject.toml poetry.lock ./
 RUN python -m pip install --upgrade pip &&  \
     pip install poetry  && \
     poetry config virtualenvs.create false && \
-    poetry install --with web
+    poetry install --with dev --with web
 
 # Copy the project source code
 COPY . .
 
 # Install draco2 from local sources, needed for notebooks
 RUN pip install -e .
+
+# Install pre-commit hooks
+RUN poetry run pre-commit install
 
 # Grant permissions to the notebook user
 RUN chown -R ${NB_USER} ${HOME}
