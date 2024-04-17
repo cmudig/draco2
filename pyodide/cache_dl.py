@@ -40,6 +40,18 @@ def info(msg: str) -> None:
     print(f"{INFO_COLOR}Info: {msg}{ENDC}")
 
 
+def error(msg: str) -> None:
+    """
+    Prints an error message to stderr and exits with code 1.
+
+    :param msg: the error message to print
+    """
+    ERROR_COLOR = "\033[91m"
+    ENDC = "\033[0m"
+    print(f"{ERROR_COLOR}Error: {msg}{ENDC}", file=sys.stderr)
+    sys.exit(1)
+
+
 class LockfileInfo(TypedDict):
     arch: str
     platform: str
@@ -86,7 +98,13 @@ def resolve_sha256(sha256: str) -> str:
     import os
 
     if sha256.startswith("$("):
-        return os.getenv(sha256[2:-1])
+        varname = sha256[2:-1]
+        varvalue = os.getenv(varname)
+        if varvalue is None:
+            error(f"Available: {list(os.environ.keys())}")
+            raise ValueError(f"Environment variable '{varname}' not found")
+        return varvalue
+
     return sha256
 
 
