@@ -291,6 +291,7 @@ def create_distro_build_script(pyodide_requirements: list) -> None:
     # Executing our custom cache downloader script
     pyodide_cache_dl = [
         "pip install pyyaml",
+        "source Makefile.envs",  # ensure the exported vars are available in `cache_dl.py` env
         f"python cache_dl.py --tag {PYODIDE_REPO_TAG}",
     ]
 

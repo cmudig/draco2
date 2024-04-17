@@ -10,7 +10,6 @@ If the local and remote Pyodide versions do not match, we build everything from 
 """
 
 import argparse
-import json
 import sys
 from pathlib import Path
 from typing import TypedDict
@@ -52,11 +51,17 @@ class LockfilePackage(TypedDict):
     name: str
     version: str
     file_name: str
+    sha256: str
 
 
 class Lockfile(TypedDict):
     info: LockfileInfo
     packages: dict[str, LockfilePackage]
+
+
+class RecipeSource(TypedDict):
+    url: str
+    sha256: str
 
 
 class RecipePackage(TypedDict):
@@ -72,6 +77,17 @@ class RecipeRequirements(TypedDict):
 class Recipe(TypedDict):
     package: RecipePackage
     requirements: RecipeRequirements
+    source: RecipeSource
+
+
+def resolve_sha256(sha256: str) -> str:
+    """Sometimes the value is dynamic in the recipe yaml file
+    like `$(PYTHON_ARCHIVE_SHA256)`, so we need to resolve it"""
+    import os
+
+    if sha256.startswith("$("):
+        return os.getenv(sha256[2:-1])
+    return sha256
 
 
 def get_recipe_path(package_name: str) -> Path:
@@ -90,7 +106,7 @@ def load_recipe(package_name: str) -> Recipe | None:
 def load_lockfile(lockfile_url: str) -> Lockfile | None:
     res = requests.get(lockfile_url)
     if res.status_code == 200:
-        return json.loads(res.text)
+        return res.json()
 
     return None
 
@@ -120,7 +136,7 @@ if __name__ == "__main__":
         default="https://dig.cmu.edu/draco2/jupyterlite/static/pyodide",
         help="Base URL to a hosted Pyodide distribution",
     )
-    parser.add_argument("--tag", default="0.24.1", help="Pyodide version tag")
+    parser.add_argument("--tag", default="0.25.1", help="Pyodide version tag")
 
     args = parser.parse_args()
     pyodide_url = args.url
@@ -156,12 +172,16 @@ if __name__ == "__main__":
 
         # Version specified in the lockfile we downloaded from the remote
         remote_version = str(package["version"]).lower().strip()
+        remote_sha256 = package["sha256"]
+        remote_hash_key = f"{remote_version}@{remote_sha256}"
         # Version specified in the local pyodide git repository under /packages
         local_version = str(recipe["package"]["version"]).lower().strip()
-        if remote_version != local_version:
+        local_sha256 = resolve_sha256(recipe["source"]["sha256"])
+        local_hash_key = f"{local_version}@{local_sha256}"
+        if remote_hash_key != local_hash_key:
             warn(
                 f"🚧 {package['name']} version mismatch "
-                f"(local: {local_version}, remote: {remote_version}). "
+                f"(local: {local_hash_key}, remote: {remote_hash_key}). "
                 "Will build from source."
             )
             needs_rebuild.add(package_name)
