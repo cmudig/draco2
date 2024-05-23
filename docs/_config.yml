@@ -4,7 +4,6 @@
 title: Draco
 author: CMU Data Interaction Group
 copyright: "2023–2024"
-logo: logo-light.png
 
 execute:
   timeout: 600
@@ -48,6 +47,13 @@ sphinx:
     # Print tracebacks for execution errors directly into the terminal, useful in CI (https://jupyterbook.org/en/stable/content/execute.html#execution-tracebacks-in-the-terminal)
     nb_execution_show_tb: True
     nb_execution_timeout: 600
+    html_theme_options:
+      logo:
+        image_light: logo-dark.png
+        image_dark: logo-light.png
+    html_static_path:
+      - "logo-light.png"
+      - "logo-dark.png"
 
 bibtex_bibfiles:
   - references.bib
