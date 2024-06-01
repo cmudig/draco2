@@ -44,7 +44,7 @@ uvicorn = ">=0.25.0,<0.30.0"
 tabulate = "^0.9.0"
 
 [tool.poetry.group.dev.dependencies]
-mypy = ">=1.8.0,<1.9"
+mypy = ">=1.8.0,<1.11"
 pandas-stubs = ">=2.1.4.231227,<3.0.0"
 pre-commit = ">=3.6.0,<4.0"
 pytype = ">=2024.3.19,<2025.0.0"
