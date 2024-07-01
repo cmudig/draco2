@@ -48,7 +48,7 @@ mypy = ">=1.8.0,<1.11"
 pandas-stubs = ">=2.1.4.231227,<3.0.0"
 pre-commit = ">=3.6.0,<4.0"
 pytype = ">=2024.3.19,<2025.0.0"
-ruff = ">=0.1.11,<0.2.0"
+ruff = ">=0.5.0,<0.6.0"
 types-tabulate = "^0.9.0.2"
 
 [tool.poetry.group.docs.dependencies]
@@ -83,13 +83,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 88
-select = [
+lint.select = [
     "E",
     "F",
     "W",
     # isort
     "I001",
 ]
-ignore = ["E501", "W191"]
+lint.ignore = ["E501", "W191"]
 src = ["draco"]
 fix = true

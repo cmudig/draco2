@@ -14,7 +14,7 @@ cover:
 lint:
 	@echo "==> 👕 Linting"
 	@poetry run ruff format draco jupyterlite pyodide docs
-	@poetry run ruff .
+	@poetry run ruff check .
 
 .PHONY: typecheck
 typecheck:
