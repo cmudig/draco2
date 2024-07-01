@@ -1896,13 +1896,13 @@ translation = ["jupyterlab-server (>=2.8.1,<3)"]
 
 [[package]]
 name = "jupyterlite-pyodide-kernel"
-version = "0.3.1"
+version = "0.3.2"
 description = "Python kernel for JupyterLite powered by Pyodide"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jupyterlite_pyodide_kernel-0.3.1-py3-none-any.whl", hash = "sha256:ac9d9dd95adcced57d465a7b298f220d8785845c017ad3abf2a3677ff02631c6"},
-    {file = "jupyterlite_pyodide_kernel-0.3.1.tar.gz", hash = "sha256:cff663cfed4e6319bd3256f09e02d450f94917ba3704d9178d69146bb3467801"},
+    {file = "jupyterlite_pyodide_kernel-0.3.2-py3-none-any.whl", hash = "sha256:ae600571fa755b6fd7a2633a171de3fe490f2b1264bef32cdd7e8c34c95cd5ff"},
+    {file = "jupyterlite_pyodide_kernel-0.3.2.tar.gz", hash = "sha256:0698f4f6cb6d7346063af0a02f47bf102400be639c8ed86689815b7c2a138a1b"},
 ]
 
 [package.dependencies]
@@ -1911,7 +1911,7 @@ pkginfo = "*"
 
 [package.extras]
 dev = ["build", "hatch", "jupyterlab (>=4.0.7,<4.1.0a0)"]
-docs = ["ipywidgets (>=8.1.2,<9)", "jupyter-server-mathjax", "jupyterlab-language-pack-fr-fr", "jupyterlab-language-pack-zh-cn", "libarchive-c", "myst-parser", "pydata-sphinx-theme", "sphinx-copybutton"]
+docs = ["ipywidgets (>=8.1.3,<9)", "jupyter-server-mathjax", "jupyterlab-language-pack-fr-fr", "jupyterlab-language-pack-zh-cn", "libarchive-c", "myst-parser", "pydata-sphinx-theme", "sphinx-copybutton"]
 lint = ["ruff (>=0.3.0)"]
 test = ["pytest", "pytest-console-scripts (>=1.4.0)", "pytest-cov", "pytest-html"]
 
