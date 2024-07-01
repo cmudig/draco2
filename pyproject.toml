@@ -83,13 +83,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 88
-select = [
+lint.select = [
     "E",
     "F",
     "W",
     # isort
     "I001",
 ]
-ignore = ["E501", "W191"]
+lint.ignore = ["E501", "W191"]
 src = ["draco"]
 fix = true
