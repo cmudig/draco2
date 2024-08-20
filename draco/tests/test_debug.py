@@ -146,7 +146,7 @@ def test_plotter_create_chart_used_data(
     chart = instance.create_chart(cfg=config)
 
     # The passed data should be used for visualization
-    assert pd.DataFrame.eq(chart.data, instance.chart_preferences).all().all()
+    assert pd.DataFrame.eq(chart.data, instance.chart_preferences).all().all()  # type: ignore
 
 
 @pytest.mark.parametrize(
