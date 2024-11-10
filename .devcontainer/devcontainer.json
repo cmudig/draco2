@@ -8,58 +8,58 @@
   "dockerFile": "../Dockerfile",
 
   "features": {
-        // Allow using Docker from inside the container on GitHub Codespaces
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
-            "installZsh": true,
-            "upgradePackages": true,
-			"dockerVersion": "latest",
-			"enableNonRootDocker": true,
-			"moby": true
-		},
-        // Allow opening the codespace in a local editor through SSH
-        "ghcr.io/devcontainers/features/sshd:1": {
-            "version": "latest"
-        }
-	},
+    // Allow using Docker from inside the container on GitHub Codespaces
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "installZsh": true,
+      "upgradePackages": true,
+      "dockerVersion": "latest",
+      "enableNonRootDocker": true,
+      "moby": true
+    },
+    // Allow opening the codespace in a local editor through SSH
+    "ghcr.io/devcontainers/features/sshd:1": {
+      "version": "latest"
+    }
+  },
 
-	// Use this environment variable if you need to bind mount your local source code into a new container.
-	"remoteEnv": {
-		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
-	},
+  // Use this environment variable if you need to bind mount your local source code into a new container.
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
 
-  // Adding default settings
-  "settings": {
-    "python.pythonPath": "/usr/local/bin/python",
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.formatting.provider": "black",
-    "python.testing.pytestEnabled": true,
-    "python.autoComplete.extraPaths": [
-        "/usr/local/lib/python3.11/site-packages"
-    ],
-    "editor.tabSize": 4,
-    "editor.detectIndentation": false,
-    "editor.wordWrap": "on",
-    "editor.minimap.enabled": true,
-    "editor.renderWhitespace": "all",
-    "editor.formatOnSave": true
-},
+  "customizations": {
+    "vscode": {
+      // Adding default settings
+      "settings": {
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.formatting.provider": "black",
+        "python.testing.pytestEnabled": true,
+        "editor.tabSize": 4,
+        "editor.detectIndentation": false,
+        "editor.wordWrap": "on",
+        "editor.minimap.enabled": true,
+        "editor.renderWhitespace": "all",
+        "editor.formatOnSave": true
+      },
 
-  // Defining handy Python extensions
-  "extensions": [
-    "abelcour.asp-syntax-highlight",
-    "charliermarsh.ruff",
-    "GitHub.copilot",
-    "ms-python.python",
-    "ms-python.vscode-pylance",
-    "ms-toolsai.jupyter",
-    "ms-toolsai.jupyter-keymap",
-    "ms-toolsai.jupyter-renderers",
-    "ms-vscode.makefile-tools",
-    "njpwerner.autodocstring",
-    "VisualStudioExptTeam.vscodeintellicode"
-  ],
+      // Defining handy Python extensions
+      "extensions": [
+        "abelcour.asp-syntax-highlight",
+        "charliermarsh.ruff",
+        "GitHub.copilot",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.jupyter-keymap",
+        "ms-toolsai.jupyter-renderers",
+        "ms-vscode.makefile-tools",
+        "njpwerner.autodocstring",
+        "VisualStudioExptTeam.vscodeintellicode"
+      ]
+    }
+  },
 
   // Making ports available locally for
   // [Codespaces SSH, Jupyter Book, FastAPI, Jupyter, Pyodide Console, JupyterLite]

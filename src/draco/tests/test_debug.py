@@ -144,9 +144,11 @@ def test_plotter_create_chart_used_data(
     instance: DracoDebugPlotter, config: ChartConfig | DracoDebugChartConfig
 ):
     chart = instance.create_chart(cfg=config)
+    assert isinstance(chart.data, pd.DataFrame)
+    chart_data: pd.DataFrame = chart.data
 
     # The passed data should be used for visualization
-    assert pd.DataFrame.eq(chart.data, instance.chart_preferences).all().all()
+    assert pd.DataFrame.eq(chart_data, instance.chart_preferences).all().all()
 
 
 @pytest.mark.parametrize(

@@ -12,22 +12,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Install poetry
-        run: pipx install poetry
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: ".python-version"
-          cache: "poetry"
-      - name: Install dependencies
-        run: poetry install
 
-      - name: Run tests
-        run: poetry run pytest --cov=./ --cov-report=xml draco
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Run tests with coverage
+        run: make cover COV_REPORT=xml
+
       - name: Check types
         run: make typecheck
-      - name: Check Poetry
-        run: make check
+
       - name: Size of Grounded Programs
         run: make grounding-size
 
@@ -41,8 +38,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Build docker image
-        run: docker build -t draco .
+        run: docker build --build-arg PYTHON_VERSION=$(cat .python-version) -t draco .
 
       - name: Run all make targets
         run: docker run --rm draco bash -c "make"

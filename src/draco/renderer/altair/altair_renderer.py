@@ -202,7 +202,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     case _:  # pragma: no cover
                         raise ValueError(f"Unknown facet channel: {channel}")
             return chart
-        return alt.layer(*layers) if len(layers) > 1 else layers[0]
+        return alt.layer(*layers) if len(layers) > 1 else layers[0]  # type: ignore
 
     def __visit_mark(self, ctx: MarkContext) -> VegaLiteChart:
         """
