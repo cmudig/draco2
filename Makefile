@@ -24,7 +24,7 @@ cover:
 .PHONY: lint
 lint:
 	@echo "==> 👕 Linting"
-	@uv run ruff format $(PACKAGE_ROOT) jupyterlite pyodide docs
+	@uv run ruff format $(PACKAGE_ROOT) docs
 	@uv run ruff check .
 
 .PHONY: typecheck
@@ -40,9 +40,14 @@ mypy:
 pytype:
 	@uv run --all-extras pytype $(PACKAGE_ROOT)
 
+.PHONY: jupyterlite-nb-patch
+jupyterlite-nb-patch:
+	@uv run --with nbformat python docs/jupyterlite_nb_patch.py
+
 book:
 	@echo "==> 📕 Book"
 	@uv run --all-extras jupyter-book build docs
+	@make jupyterlite-nb-patch
 
 # This command does NOT support hot-reloading,
 # but it is useful to quickly get a preview of how the deployed docs would look like.
@@ -55,6 +60,7 @@ book-serve: book
 .PHONY: book-strict
 book-strict:
 	@uv run --all-extras jupyter-book build -W -n --keep-going docs
+	@make jupyterlite-nb-patch
 
 .PHONY: lab
 lab:
@@ -80,7 +86,11 @@ publish: build
 
 .PHONY: clean
 clean:
+	@rm -rf .coverage
+	@rm -rf dist
 	@uv run jupyter-book clean docs
+	@rm -f docs/.jupyterlite.doit.db
+	@rm -rf docs/.cache
 	@find . -type d -name '*.ipynb_checkpoints' -exec rm -r {} +
 	@find . -type d -name '*pytest_cache*' -exec rm -rf {} +
 	@find . -type d -name '.mypy_cache' -exec rm -rf {} +
@@ -89,44 +99,8 @@ clean:
 	@find . -type d -name '__pycache__' -exec rm -rf {} +
 	@find . -type f -name "*.py[co]" -exec rm -rf {} +
 	@find . -type f -name ".coverage.*" -exec rm -rf {} +
-	@rm -f jupyterlite/.jupyterlite.doit.db
-	@rm -rf .coverage
-	@rm -rf dist
-	@rm -rf jupyterlite/lite-dir/files
-	@rm -rf jupyterlite/lite-dir/static/pyodide
-	@rm -rf pyodide/pyodide-src
 
 .PHONY: serve
 serve:
 	@echo "==> 📡 Serve"
 	@uv run --all-extras uvicorn draco.server.__main__:app --reload --host=0.0.0.0
-
-.PHONY: pyodide-prepare
-pyodide-prepare:
-	@uv run python pyodide/build.py --prepare
-
-.PHONY: pyodide-finalize
-pyodide-finalize:
-	@uv run python pyodide/build.py --finalize
-
-.PHONY: pyodide-build
-pyodide-build: pyodide-prepare
-	@echo "==> 🐳 Building Pyodide Distribution"
-	@cd pyodide/pyodide-src && ./run_docker --non-interactive bash -c './build_draco.sh'
-	@make pyodide-finalize
-
-.PHONY: jupyterlite-build
-jupyterlite-build:
-	@echo "==> 💡 Building Jupyter Lite Static Site"
-	@cd jupyterlite && rm -rf lite-dir/static/pyodide && uv run python build.py && poetry run jupyter lite build
-
-# Re-using the Jupyter Lite build target, since it handles the download and 'caching' of our Pyodide distribution.
-.PHONY: pyodide-serve
-pyodide-serve: jupyterlite-build
-	@echo "==> 📡 Serving Pyodide Console at http://localhost:9000/console.html"
-	@uv run python -m http.server --directory dist/jupyterlite/static/pyodide --bind 0.0.0.0 9000
-
-.PHONY: jupyterlite-serve
-jupyterlite-serve: jupyterlite-build
-	@echo "==> 📡 Serving Jupyter Lite at http://localhost:9999"
-	@uv run python -m http.server --directory dist/jupyterlite --bind 0.0.0.0 9999

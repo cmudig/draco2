@@ -5,7 +5,7 @@
     "appUrl": "./lab",
     "litePluginSettings": {
       "@jupyterlite/pyodide-kernel-extension:kernel": {
-        "pyodideUrl": "/static/pyodide/pyodide.js"
+        "pyodideUrl": "https://cdn.jsdelivr.net/pyodide/dev/full/pyodide.js"
       }
     }
   }
