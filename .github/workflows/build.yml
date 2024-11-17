@@ -12,7 +12,7 @@ on:
 jobs:
   docs:
     # No need to rebuild the docs if this is a release
-    if: ${{ github.event_name == 'release' }}
+    if: ${{ github.event_name != 'release' }}
     name: Build Jupyter Book with Jupyter Lite and publish to GitHub Pages
     runs-on: ubuntu-latest
 
