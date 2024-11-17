@@ -1,46 +1,24 @@
-FROM python:3.11.9-bookworm
+ARG PYTHON_VERSION=3.12.7
+FROM python:${PYTHON_VERSION}-slim-bookworm
+COPY --from=ghcr.io/astral-sh/uv:0.5.1 /uv /uvx /bin/
+
+ENV NODE_MAJOR=22
+
+# Install System Dependencies
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y git make gringo
 
 # Install Node.js as it is needed for draco1 vs draco2 comparison demos
-ENV NODE_MAJOR=20
-RUN apt-get update && apt-get install -y ca-certificates curl gnupg && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && apt-get install nodejs -y && \
-    npm install -g npm@latest
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl gnupg \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update && apt-get install nodejs -y \
+    && npm install -g npm@latest
 
-# Install Clingo so that it is available as an executable for the draco1 vs. draco2 comparison notebook
-RUN apt-get update && apt-get install -y gringo
+WORKDIR /home/app
 
-# Create user with a home directory
-ARG NB_USER="draco2"
-ARG NB_UID="1000"
-ENV USER ${NB_USER}
-ENV HOME /home/${NB_USER}
-
-RUN adduser --disabled-password \
-    --gecos "Default user" \
-    --uid ${NB_UID} \
-    ${NB_USER}
-WORKDIR ${HOME}/app
-
-# Install dependencies using Poetry
-# Installing all dependency groups to build a complete dev environment
-COPY pyproject.toml poetry.lock ./
-RUN python -m pip install --upgrade pip &&  \
-    pip install poetry  && \
-    poetry config virtualenvs.create false && \
-    poetry install --with dev --with web
-
-# Copy the project source code
+# Copy the project source code and install dependencies
 COPY . .
-
-# Install draco2 from local sources, needed for notebooks
-RUN pip install -e .
-
-# Install pre-commit hooks
-RUN poetry run pre-commit install
-
-# Grant permissions to the notebook user
-RUN chown -R ${NB_USER} ${HOME}
-USER ${NB_USER}
+RUN make install

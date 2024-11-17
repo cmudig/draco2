@@ -1,6 +1,10 @@
 # General Python Cache
 __pycache__
 
+# Virtualenv
+.venv
+venv
+
 # mypy
 .mypy_cache/
 .dmypy.json
@@ -18,9 +22,13 @@ dmypy.json
 # temporary files
 **/_tmp/*
 
-# PyCharm
+# IDE files
 .idea
+.vscode
 
 .ruff_cache
 .DS_Store
 .dockerignore
+
+# GitHub files
+.github

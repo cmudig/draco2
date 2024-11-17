@@ -130,3 +130,6 @@ dmypy.json
 
 # temporary files
 **/_tmp/*
+
+# JupyterLite CLI
+.jupyterlite.doit.db

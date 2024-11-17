@@ -3,7 +3,7 @@
 
 title: Draco
 author: CMU Data Interaction Group
-copyright: "2023–2024"
+copyright: "2023-2024"
 
 execute:
   timeout: 600
@@ -41,6 +41,7 @@ sphinx:
   extra_extensions:
     - "sphinx.ext.autodoc"
     - "sphinx_autodoc_typehints"
+    - "jupyterlite_sphinx"
   config:
     # Possible `autodoc` configs: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration
     autodoc_preserve_defaults: True
@@ -54,6 +55,8 @@ sphinx:
     html_static_path:
       - "logo-light.png"
       - "logo-dark.png"
+    # Possible `jupyterlite_sphinx` configs: https://jupyterlite-sphinx.readthedocs.io/en/latest/configuration.html
+    jupyterlite_contents: ./
 
 bibtex_bibfiles:
   - references.bib
