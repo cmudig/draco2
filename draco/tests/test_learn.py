@@ -4,7 +4,7 @@ from pathlib import Path
 from draco.data_utils import pairs_to_vec
 from draco.learn import train_model
 
-root_path = Path(__file__).resolve().parents[3]
+root_path = Path(__file__).resolve().parents[2]
 learn_data = {}
 
 with open(root_path / "docs/applications/data/saket2018_draco2.json") as file:

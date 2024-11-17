@@ -1,4 +1,4 @@
-PACKAGE_ROOT = src/draco
+PACKAGE_ROOT = draco
 
 all: lint typecheck cover book grounding-size
 

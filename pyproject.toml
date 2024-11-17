@@ -91,5 +91,5 @@ lint.select = [
     "I001",
 ]
 lint.ignore = ["E501", "W191"]
-src = ["src/draco"]
+src = ["draco"]
 fix = true

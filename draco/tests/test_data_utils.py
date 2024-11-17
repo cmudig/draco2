@@ -10,7 +10,7 @@ from draco.data_utils import count_preferences_memoized, pairs_to_vec, run_in_pa
 draco: Draco = Draco()
 learn_data: dict[str, dict[str, str]] = {}
 
-root_path: Path = Path(__file__).resolve().parents[3]
+root_path: Path = Path(__file__).resolve().parents[2]
 with open(root_path / "docs/applications/data/saket2018_draco2.json") as file:
     i: int = 0
     json_data: dict = json.load(file)
