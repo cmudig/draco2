@@ -49,6 +49,7 @@ server = ["fastapi>=0.115.4", "tabulate>=0.9.0", "uvicorn>=0.32.0"]
 dev = ["pre-commit>=4.0.1"]
 docs = [
     "clyngor>=0.4.3",
+    "draco1",
     "ipywidgets>=8.1.5",
     "jupyter-book>=1.0.3",
     "jupyterlab>=4.3.0",
@@ -76,6 +77,9 @@ test = [
 
 [tool.uv]
 default-groups = ["dev", "docs", "typecheck", "lint", "test"]
+
+[tool.uv.sources]
+draco1 = { git = "https://github.com/peter-gy/draco.git", branch = "named-to-draco1" }
 
 [build-system]
 requires = ["hatchling"]

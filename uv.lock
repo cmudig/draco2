@@ -620,6 +620,7 @@ dev = [
 ]
 docs = [
     { name = "clyngor" },
+    { name = "draco1" },
     { name = "ipywidgets" },
     { name = "jupyter-book" },
     { name = "jupyterlab" },
@@ -664,6 +665,7 @@ requires-dist = [
 dev = [{ name = "pre-commit", specifier = ">=4.0.1" }]
 docs = [
     { name = "clyngor", specifier = ">=0.4.3" },
+    { name = "draco1", git = "https://github.com/peter-gy/draco.git?branch=named-to-draco1" },
     { name = "ipywidgets", specifier = ">=8.1.5" },
     { name = "jupyter-book", specifier = ">=1.0.3" },
     { name = "jupyterlab", specifier = ">=4.3.0" },
@@ -687,6 +689,14 @@ typecheck = [
     { name = "pytype", specifier = ">=2024.10.11" },
     { name = "types-setuptools", specifier = ">=75.3.0.20241107" },
     { name = "types-tabulate", specifier = ">=0.9.0.20240106" },
+]
+
+[[package]]
+name = "draco1"
+version = "0.0.9"
+source = { git = "https://github.com/peter-gy/draco.git?branch=named-to-draco1#5b5b4539e3fb897f3658d642a92ce3a6e2cc6561" }
+dependencies = [
+    { name = "clyngor" },
 ]
 
 [[package]]
