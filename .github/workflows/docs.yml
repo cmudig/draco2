@@ -1,58 +1,47 @@
-name: Build and publish docs
+# This file was created automatically with `myst init --gh-pages` 🪄 💚
 
+name: MyST GitHub Pages Deploy
 on:
   push:
     branches:
       - main
       - ci/test*
+env:
+  # `BASE_URL` determines the website is served from, including CSS & JS assets
+  # You may need to change this to `BASE_URL: ''`
+  BASE_URL: /${{ github.event.repository.name }}
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 jobs:
-  docs:
-    name: Build Jupyter Book and publish to GitHub Pages
-    runs-on: ubuntu-latest
-
-    # This job is responsible for the GH Pages deployment
+  deploy:
     environment:
       name: github-pages
-      url: ${{ steps.gh_pages_deployment.outputs.page_url }}
-
-    # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-
-      - name: Set up Python
-        run: uv python install
-
-      # Required to execute notebooks with Python modules wrapping Node.js modules, such as Draco 1
-      - name: Setup Node
-        uses: actions/setup-node@v4
-
-      # Installing system dependencies required by notebooks to be executed
-      - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install -y gringo
-
-      - name: Make book
-        run: make book
-
-      - name: Display HTML bundle tree
-        run: find docs/_build/html/ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"
-
       - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Documentation Site Artifact
+        uses: actions/configure-pages@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+      - name: Install MyST Markdown
+        run: npm install -g mystmd
+      - name: Build HTML Assets
+        run: cd docs && myst build --html
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./docs/_build/html
-
+          path: "./docs/_build/html"
       - name: Deploy to GitHub Pages
-        id: gh_pages_deployment
+        id: deployment
         uses: actions/deploy-pages@v4

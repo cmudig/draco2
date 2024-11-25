@@ -1,0 +1,60 @@
+version: 1
+project:
+  title: Draco
+  authors:
+    - name: CMU Data Interaction Group
+  copyright: 2023-2024
+  github: cmudig/draco2
+  thebe:
+    binder:
+      repo: cmudig/draco2
+      provider: github
+      url: https://mybinder.org
+      ref: main
+  bibliography:
+    - references.bib
+  exports:
+    - format: pdf
+      template: plain_latex_book
+      output: exports/book.pdf
+  # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
+  toc:
+    - file: intro.md
+    - title: Facts
+      children:
+        - file: facts/intro.md
+        - file: facts/schema.md
+        - file: facts/view.md
+        - file: facts/mark.md
+        - file: facts/encoding.md
+        - file: facts/scale.md
+        - file: facts/task.md
+        - file: facts/facet.md
+        - file: facts/examples.ipynb
+    - title: API
+      children:
+        - file: api/intro.md
+        - file: api/draco.ipynb
+        - file: api/schema.ipynb
+        - file: api/run.ipynb
+        - file: api/facts.ipynb
+        - file: api/programs.md
+        - file: api/debug.md
+        - file: api/renderer.md
+        - file: api/server.md
+    - title: Applications
+      children:
+        - file: applications/recommendation.ipynb
+        - file: applications/draco_learn.ipynb
+        - file: applications/debug_draco.ipynb
+        - file: applications/server.md
+        - file: applications/renderer.ipynb
+        - file: applications/design_space_exploration.ipynb
+        - file: applications/draco1_vs_draco2.ipynb
+    - title: Reference
+      children:
+        - file: bibliography.md
+site:
+  options:
+    favicon: favicon.ico
+  template: book-theme

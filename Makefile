@@ -1,6 +1,6 @@
 PACKAGE_ROOT = draco
 
-all: lint typecheck cover book grounding-size
+all: lint typecheck cover book-html book-pdf grounding-size
 
 .PHONY: install
 install:
@@ -40,27 +40,25 @@ mypy:
 pytype:
 	@uv run --all-extras pytype $(PACKAGE_ROOT)
 
-.PHONY: jupyterlite-nb-patch
-jupyterlite-nb-patch:
-	@uv run --with nbformat python docs/jupyterlite_nb_patch.py
-
 book:
+	@echo "==> 📕 Start Book"
+	@cd docs && uv run --all-extras jupyter-book start
+
+book-html:
 	@echo "==> 📕 Book"
-	@uv run --all-extras jupyter-book build docs
-	@make jupyterlite-nb-patch
+	@cd docs && uv run --all-extras jupyter-book build
+
+book-pdf:
+	@echo "==> 📕 Start Book"
+	@cd docs && uv run --all-extras jupyter-book build --pdf
 
 # This command does NOT support hot-reloading,
 # but it is useful to quickly get a preview of how the deployed docs would look like.
 # Especially useful for previewing `{eval-rst}` blocks.
 .PHONY: book-serve
-book-serve: book
-	@echo "==> 📡 Serving Book at http://localhost:5000"
-	@uv run python -m http.server --directory docs/_build/html --bind 0.0.0.0 5000
-
-.PHONY: book-strict
-book-strict:
-	@uv run --all-extras jupyter-book build -W -n --keep-going docs
-	@make jupyterlite-nb-patch
+book-serve: book-html
+	@echo "==> 📡 Serving Book at http://localhost:5001"
+	@uv run python -m http.server --directory docs/_build/site/public --bind 0.0.0.0 5001
 
 .PHONY: lab
 lab:
