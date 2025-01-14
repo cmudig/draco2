@@ -17,7 +17,7 @@ with open(root_path / "docs/applications/data/saket2018_draco2.json") as file:
 
     for pair in json_data:
         pair["source"] = "saket_2018"
-        pair["pair_id"] = f'{pair["source"]}_{i}'
+        pair["pair_id"] = f"{pair['source']}_{i}"
         learn_data[pair["pair_id"]] = pair
         i += 1
 
@@ -54,6 +54,6 @@ def test_count_preferences_memoized() -> None:
 def test_pairs_to_vecs() -> None:
     data: pd.DataFrame = pairs_to_vec(learn_data)
 
-    assert set(data.negative.columns) == set(
-        draco.soft_constraint_names
-    ), "Feature names do not match."
+    assert set(data.negative.columns) == set(draco.soft_constraint_names), (
+        "Feature names do not match."
+    )

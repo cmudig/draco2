@@ -13,7 +13,7 @@ with open(root_path / "docs/applications/data/saket2018_draco2.json") as file:
 
     for pair in json_data:
         pair["source"] = "saket_2018"
-        pair["pair_id"] = f'{pair["source"]}_{i}'
+        pair["pair_id"] = f"{pair['source']}_{i}"
         learn_data[pair["pair_id"]] = pair
         i += 1
 
