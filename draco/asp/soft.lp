@@ -24,6 +24,28 @@ preference(encoding,E) :-
 preference(encoding_field,E) :-
     attribute((encoding,field),E,_).
 
+% @soft(facet_field) Prefer to use fewer facets with fields.
+preference(facet_field,F) :-
+    attribute((facet,field),F,_).
+
+% @soft(facet_used_before_pos) Prefer not to use faceting until both x and y channels are used.
+preference(facet_used_before_pos,V) :-
+    entity(facet,V,_),
+    entity(mark,V,M),
+    not helper((mark,channel),M,x).
+preference(facet_used_before_pos,V) :-
+    entity(facet,V,_),
+    entity(mark,V,M),
+    not helper((mark,channel),M,y).
+
+% @soft(facet_row) Prefer to use column facets over row facets.
+preference(facet_row,F) :-
+    attribute((facet,channel),F,row).
+
+% @soft(facet_col) Prefer to use row facets over column facets.
+preference(facet_col,F) :-
+    attribute((facet,channel),F,col).
+
 % @soft(same_field) Prefer not to use the same field twice for the same mark.
 preference(same_field,F) :-
     entity(field,_,F),
