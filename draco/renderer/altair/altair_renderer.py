@@ -1,7 +1,7 @@
 import logging
 import warnings
 from dataclasses import dataclass
-from typing import Any, Generic, Literal, TypeVar
+from typing import Any, Generic, Literal, TypeVar, cast
 
 import altair as alt
 from pandas import DataFrame
@@ -34,9 +34,6 @@ VegaLiteChart = TypeVar(
     alt.FacetChart,
     alt.Chart,
     alt.LayerChart,
-)
-AnyAltairChart = (
-    alt.VConcatChart | alt.HConcatChart | alt.FacetChart | alt.Chart | alt.LayerChart
 )
 
 
@@ -102,7 +99,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
     def render(self, spec: dict, data: DataFrame) -> VegaLiteChart:
         typed_spec = SpecificationDict.model_validate(spec)
         # initial chart to be mutated by the visitor callbacks
-        chart: AnyAltairChart = alt.Chart(data)
+        chart: VegaLiteChart = cast(VegaLiteChart, alt.Chart(data))
         chart_views: list[VegaLiteChart] = []
 
         # Traverse the specification dict and invoke the appropriate visitor
@@ -185,6 +182,11 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         """
         view, chart, layers = (ctx.view, ctx.chart, ctx.layers)
         if view.facet is not None:
+            # We collect all facet channels in a single dict so that we can apply them all at once
+            facet_channels: dict[str, Any] = {
+                "row": alt.Undefined,
+                "column": alt.Undefined,
+            }
             for f in view.facet:
                 channel = f.channel
                 facet_args: dict[str, Any] = {
@@ -195,12 +197,15 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     facet_args["bin"] = alt.BinParams(maxbins=f.binning)
                 match channel:
                     case "row":
-                        chart = chart.facet(row=alt.Row(**facet_args))
+                        row = alt.Row(**facet_args)
+                        facet_channels["row"] = row
                     case "col":
-                        chart = chart.facet(column=alt.Column(**facet_args))
+                        column = alt.Column(**facet_args)
+                        facet_channels["column"] = column
                     # Should never happen, a pydantic error would be raised sooner
                     case _:  # pragma: no cover
                         raise ValueError(f"Unknown facet channel: {channel}")
+            chart = chart.facet(**facet_channels)
             return chart
         return alt.layer(*layers) if len(layers) > 1 else layers[0]  # type: ignore
 

@@ -74,7 +74,6 @@ def run_clingo(
 
     if topK:
         config.solve.opt_mode = "optN"
-        config.solve.quiet = 1
 
         obs = Observer()
         ctl.register_observer(obs)
