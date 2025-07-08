@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeAlias, TypeVar, Union
 
-from pandas import DataFrame
+from narwhals.typing import IntoDataFrame
+
+DataType: TypeAlias = Union[dict[Any, Any], IntoDataFrame]
 
 T = TypeVar("T")
 
@@ -14,7 +16,7 @@ class BaseRenderer(ABC, Generic[T]):
     """
 
     @abstractmethod
-    def render(self, spec: dict, data: DataFrame) -> T:
+    def render(self, spec: dict, data: DataType) -> T:
         """
         Render a visualization from a dictionary-based specification and data.
 

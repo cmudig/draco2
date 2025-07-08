@@ -3,6 +3,7 @@ import datetime
 import json
 from pathlib import Path
 
+import narwhals as nw
 import pandas as pd
 import pytest
 
@@ -55,9 +56,46 @@ def test_load_df():
 
 
 def test_load_unsupported_data():
-    df = pd.DataFrame({"datetime": [pd.to_timedelta("2 days")]})
+    # We don't support structs
+    df = pd.DataFrame([{"x": 1}])
     with pytest.raises(ValueError):
         schema.schema_from_dataframe(df)
+
+
+@pytest.mark.parametrize(
+    "dtype,expected",
+    [
+        # Numeric types
+        (nw.dtypes.Int8(), "number"),
+        (nw.dtypes.Int16(), "number"),
+        (nw.dtypes.Int32(), "number"),
+        (nw.dtypes.Int64(), "number"),
+        (nw.dtypes.UInt8(), "number"),
+        (nw.dtypes.UInt16(), "number"),
+        (nw.dtypes.UInt32(), "number"),
+        (nw.dtypes.UInt64(), "number"),
+        (nw.dtypes.Float32(), "number"),
+        (nw.dtypes.Float64(), "number"),
+        # Boolean type
+        (nw.dtypes.Boolean(), "boolean"),
+        # String type
+        (nw.dtypes.String(), "string"),
+        # Temporal types
+        (nw.dtypes.Date(), "datetime"),
+        (nw.dtypes.Datetime(), "datetime"),
+        (nw.dtypes.Duration(), "datetime"),
+    ],
+)
+def test_dtype_to_field_type(dtype: nw.dtypes.DType, expected: schema.FieldType):
+    result = schema.dtype_to_field_type(dtype)
+    assert result == expected
+
+
+def test_dtype_to_field_type_unsupported():
+    # Using List type as an example of unsupported type
+    unsupported_dtype = nw.dtypes.List(nw.dtypes.String())
+    with pytest.raises(ValueError, match="unsupported type"):
+        schema.dtype_to_field_type(unsupported_dtype)
 
 
 @pytest.fixture(scope="session")

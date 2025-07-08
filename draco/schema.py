@@ -1,10 +1,11 @@
 from math import e
 from pathlib import Path
-from typing import Any, Callable, Literal, TypeAlias, TypedDict
+from typing import Callable, Literal, TypeAlias, TypedDict
 
+import narwhals as nw
 import numpy as np
 import pandas as pd
-from pandas._typing import DtypeObj
+from narwhals.typing import IntoDataFrame
 
 # Field types recognized by a Draco schema.
 FieldType: TypeAlias = Literal["number", "string", "boolean", "datetime"]
@@ -44,22 +45,23 @@ class Schema(TypedDict):
     field: list[FieldProps]
 
 
-def dtype_to_field_type(ty: DtypeObj) -> FieldType:
+def dtype_to_field_type(ty: nw.dtypes.DType) -> FieldType:
     """Simple converter that translates Pandas column types to data types for Draco."""
-    if ty in ["float64", "int64"]:
+    if ty.is_numeric():
         return "number"
-    elif ty in ["bool"]:
+    elif isinstance(ty, nw.dtypes.Boolean):
         return "boolean"
-    elif ty in ["object"]:
+    elif isinstance(ty, nw.dtypes.String):
         return "string"
-    elif ty in ["datetime64[ns]"]:
+    elif ty.is_temporal():
         return "datetime"
     else:
         raise ValueError(f"unsupported type {ty}")
 
 
 def schema_from_dataframe(
-    df: pd.DataFrame, parse_data_type=dtype_to_field_type
+    df: IntoDataFrame,
+    parse_data_type=dtype_to_field_type,
 ) -> Schema:
     """Read schema information from the given Pandas dataframe.
 
@@ -67,10 +69,11 @@ def schema_from_dataframe(
     :param parse_data_type: Function to parse data types.
     :return: A dictionary representing the schema.
     """
-    schema: Schema = {"number_rows": df.shape[0], "field": []}
+    nw_df = nw.from_native(df, eager_only=True)
+    schema: Schema = {"number_rows": nw_df.shape[0], "field": []}
 
-    for col in df.columns:
-        column: pd.Series = df[col]
+    for col in nw_df.columns:
+        column = nw_df.get_column(col)
         props: FieldProps = _construct_field_props(column, parse_data_type)
         schema["field"].append(props)
 
@@ -78,16 +81,16 @@ def schema_from_dataframe(
 
 
 def _construct_field_props(
-    column: pd.Series,
-    parse_data_type: Callable[[DtypeObj], FieldType],
+    column: nw.Series,
+    parse_data_type: Callable[[nw.dtypes.DType], FieldType],
 ) -> FieldProps:
     """Construct a `FieldProps` object from a `DataFrame` column."""
     name = str(column.name)
     dtype = column.dtype
-    unique = column.nunique()
+    unique = column.unique().len()
     data_type = parse_data_type(dtype)
 
-    vc = column.value_counts(normalize=True, sort=False)
+    vc = column.value_counts(normalize=True, sort=False).get_column("proportion")
     entropy = -(vc * np.log(vc) / np.log(e)).sum()
     entropy = round(entropy * 1000)
 
@@ -108,7 +111,7 @@ def _construct_field_props(
             type=data_type,
             unique=unique,
             entropy=entropy,
-            freq=objcounts.iloc[0],
+            freq=objcounts.get_column("count").max(),
         )
 
     return BaseFieldProps(name=name, type=data_type, unique=unique, entropy=entropy)
@@ -123,7 +126,7 @@ def schema_from_file(file_path: Path, parse_data_type=dtype_to_field_type) -> Sc
     :return: A dictionary representing the schema.
     """
     if file_path.suffix == ".json":
-        df: Any = pd.read_json(str(file_path))
+        df = pd.read_json(str(file_path))
         return schema_from_dataframe(df, parse_data_type)
     elif file_path.suffix == ".csv":
         df = pd.read_csv(file_path)

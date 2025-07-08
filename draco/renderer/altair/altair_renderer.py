@@ -4,9 +4,8 @@ from dataclasses import dataclass
 from typing import Any, Generic, Literal, TypeVar, cast
 
 import altair as alt
-from pandas import DataFrame
 
-from draco.renderer.base_renderer import BaseRenderer
+from draco.renderer.base_renderer import BaseRenderer, DataType
 
 from .types import (
     Encoding,
@@ -96,9 +95,8 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         """
         self.concat_mode = concat_mode
 
-    def render(self, spec: dict, data: DataFrame) -> VegaLiteChart:
+    def render(self, spec: dict, data: DataType) -> VegaLiteChart:
         typed_spec = SpecificationDict.model_validate(spec)
-        # initial chart to be mutated by the visitor callbacks
         chart: VegaLiteChart = cast(VegaLiteChart, alt.Chart(data))
         chart_views: list[VegaLiteChart] = []
 
