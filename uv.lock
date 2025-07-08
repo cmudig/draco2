@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version < '3.12'",
@@ -29,18 +30,18 @@ wheels = [
 
 [[package]]
 name = "altair"
-version = "5.4.1"
+version = "5.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
     { name = "jsonschema" },
     { name = "narwhals" },
     { name = "packaging" },
-    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.14'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ae/09/38904138a49f29e529b61b4f39954a6837f443d828c1bc57814be7bd4813/altair-5.4.1.tar.gz", hash = "sha256:0ce8c2e66546cb327e5f2d7572ec0e7c6feece816203215613962f0ec1d76a82", size = 636465 }
+sdist = { url = "https://files.pythonhosted.org/packages/16/b1/f2969c7bdb8ad8bbdda031687defdce2c19afba2aa2c8e1d2a17f78376d8/altair-5.5.0.tar.gz", hash = "sha256:d960ebe6178c56de3855a68c47b516be38640b73fb3b5111c2a9ca90546dd73d", size = 705305 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9b/52/4a86a4fa1cc2aae79137cc9510b7080c3e5aede2310d14fae5486feec7f7/altair-5.4.1-py3-none-any.whl", hash = "sha256:0fb130b8297a569d08991fb6fe763582e7569f8a04643bbd9212436e3be04aef", size = 658150 },
+    { url = "https://files.pythonhosted.org/packages/aa/f3/0b6ced594e51cc95d8c1fc1640d3623770d01e4969d29c0bd09945fafefa/altair-5.5.0-py3-none-any.whl", hash = "sha256:91a310b926508d560fe0148d02a194f38b824122641ef528113d029fcd129f8c", size = 731200 },
 ]
 
 [[package]]
@@ -314,7 +315,7 @@ name = "click"
 version = "8.1.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5/click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de", size = 336121 }
 wheels = [
@@ -350,6 +351,16 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/5b/d8/74a7ed8048a317cffaf05db19747b1fff05ce639e28a4d0b45aea274fc68/clingo-5.7.1-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:4b6d3a79bd65e5cec0139d8d481366c3d4fc7921afe54bd014b61b52394b6394", size = 2789582 },
     { url = "https://files.pythonhosted.org/packages/ee/60/972b9eaf520010123df52524e6c9aa9ac473fb881a0cee37539a532e41ad/clingo-5.7.1-cp312-cp312-win32.whl", hash = "sha256:e8532b567f4a2ffb82d59a5d9e09ab304c1fabb5597a70a5eaef249ba728313c", size = 1156641 },
     { url = "https://files.pythonhosted.org/packages/e0/48/03f90c67dc9859309c9df572d77c2a874db1c81a9a8e894b67c91ec0bbcd/clingo-5.7.1-cp312-cp312-win_amd64.whl", hash = "sha256:353782221883ab9a9ac7caeb4a2f82cd46d46c50291c7b6fdfb17a2df95dcf8c", size = 1359953 },
+    { url = "https://files.pythonhosted.org/packages/e7/d7/f594ee738b1040ea827bd8c82c80b65d95afe883cd8c029be9e3c01aa182/clingo-5.7.1-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:9e64b943df5840a392da187a61eaa35996c1f1be73a74a6cd80e4bb7d7da42ee", size = 1756390 },
+    { url = "https://files.pythonhosted.org/packages/b1/e8/7e7724286636df53be434e92747ac2fd6dcabad4240eb489fa6b784c31c4/clingo-5.7.1-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:802ed131322f30f8c44bf9a4df7da6c8cdcd15395b6f46c8274afc278de962f4", size = 1603166 },
+    { url = "https://files.pythonhosted.org/packages/e2/14/a0277d10c44654193783c9eae0a65c8d4b94603fe1545217da2ab6ec04e1/clingo-5.7.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d0a0218203365ef7177729d159bed64f4a62d11caabd971c85271a4d4e34b820", size = 2133775 },
+    { url = "https://files.pythonhosted.org/packages/fc/53/cb0fa752655896b52bd7a3d784c21fee4ecb6162fda99d6cb9bfb477f09b/clingo-5.7.1-cp313-cp313-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:31da4314debdb53732dc2487e0da7519610a803de3deeca97c9be4d91cf05aa1", size = 2389530 },
+    { url = "https://files.pythonhosted.org/packages/18/96/f04da45c6ea710d824e3203115522b22c6b1bdae712f90576983ae1f4fff/clingo-5.7.1-cp313-cp313-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:1f9d6c9ce5e36e44146f117bd6a9dac7803658eea2a22abe7b9e0ed0bfdd3127", size = 2488327 },
+    { url = "https://files.pythonhosted.org/packages/27/15/bf778cd158b727a056048ae4f59d1f85be87edc4c284ea9d326f62129687/clingo-5.7.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:acc3ba0c73bdce99f85b57ac25950bccd6177e5a668ec089c3d9636da6f00608", size = 2232080 },
+    { url = "https://files.pythonhosted.org/packages/be/04/5aa5a2c4d964a31170ddea966dfb6d3c86e13af8bb39b732d4a486b88edb/clingo-5.7.1-cp313-cp313-musllinux_1_2_i686.whl", hash = "sha256:d19c83d8a8d0b645d2703e691b69d72f13920868e518de6966eb11768e84383e", size = 3498441 },
+    { url = "https://files.pythonhosted.org/packages/d1/37/8c8990c63d4f60f81ec60a989ac99adf4d8e0822b5542718922e64b5018a/clingo-5.7.1-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:36536a9e1ba913815a54430532489225d6abc7f66f66527eb301ed496287986e", size = 3229095 },
+    { url = "https://files.pythonhosted.org/packages/bb/ca/af602faf639155bcbdc155cd84ece41c317efde3fd80ff850357a00d3f81/clingo-5.7.1-cp313-cp313-win32.whl", hash = "sha256:6dc9990c8b0488523968508d860601bebb7f513a89c6596cc512adb065f3c04f", size = 1156707 },
+    { url = "https://files.pythonhosted.org/packages/1e/6a/49fe64d11245d7f40543befebed50c356f9d892da17945624a6fcc790993/clingo-5.7.1-cp313-cp313-win_amd64.whl", hash = "sha256:d89c70a8e196b69265ac01f579f9ea98991c0d776abaf5ef82cf4ae4265d42e8", size = 1359905 },
 ]
 
 [[package]]
@@ -599,6 +610,7 @@ source = { editable = "." }
 dependencies = [
     { name = "altair" },
     { name = "clingo" },
+    { name = "narwhals" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "pydantic" },
@@ -650,9 +662,10 @@ typecheck = [
 
 [package.metadata]
 requires-dist = [
-    { name = "altair", specifier = ">=5.4.1" },
+    { name = "altair", specifier = ">=5.5.0" },
     { name = "clingo", specifier = ">=5.7.1" },
     { name = "fastapi", marker = "extra == 'server'", specifier = ">=0.115.4" },
+    { name = "narwhals", specifier = ">=1.46.0" },
     { name = "numpy", specifier = ">=2.1.3" },
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "pydantic", specifier = ">=2.9.2" },
@@ -660,6 +673,7 @@ requires-dist = [
     { name = "tabulate", marker = "extra == 'server'", specifier = ">=0.9.0" },
     { name = "uvicorn", marker = "extra == 'server'", specifier = ">=0.32.0" },
 ]
+provides-extras = ["learn", "server"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pre-commit", specifier = ">=4.0.1" }]
@@ -934,7 +948,7 @@ name = "ipykernel"
 version = "6.29.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "appnope", marker = "platform_system == 'Darwin'" },
+    { name = "appnope", marker = "sys_platform == 'darwin'" },
     { name = "comm" },
     { name = "debugpy" },
     { name = "ipython" },
@@ -1695,11 +1709,11 @@ wheels = [
 
 [[package]]
 name = "narwhals"
-version = "1.13.4"
+version = "1.46.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/64/b7/3aa192f2f8b8be9f33e76314c1f882fdb0499de63cd3c8fc477b8932d0c8/narwhals-1.13.4.tar.gz", hash = "sha256:06f38209717b6586e15cabdccf725bce0374699a2e9778848a829d6e5fcd82b2", size = 173270 }
+sdist = { url = "https://files.pythonhosted.org/packages/06/7f/dd8c5f7978c3136de4d660877a5279e4688ad0c56dbc15ee003c2fe981cd/narwhals-1.46.0.tar.gz", hash = "sha256:fd7e53860b233c2b5566d8b4e1b3e8e9c01b5a87649a9f9a322742000f207a60", size = 512060 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c2/f5/e398fd2271fd740c31f8b30361c1a4ee16c3849ae037aab50bea7fd7aa83/narwhals-1.13.4-py3-none-any.whl", hash = "sha256:1e3068d69d7801cb26fb8ed7b3032591f0c2281d6392ce020d39186aed422b3d", size = 206333 },
+    { url = "https://files.pythonhosted.org/packages/75/64/c46ba7517d90e330c4f35af1256d4b12ba037e2ef17d4aa4d4f11b4a143d/narwhals-1.46.0-py3-none-any.whl", hash = "sha256:f15d2255695d7e99f624f76aa5b765eb3fff8a509d3215049707af3a3feebc90", size = 373394 },
 ]
 
 [[package]]
