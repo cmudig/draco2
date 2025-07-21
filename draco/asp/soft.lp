@@ -214,6 +214,19 @@ preference(horizontal_scrolling_col,F) :-
     helper(facet_cardinality,F,N),
     N > 5.
 
+% @soft(vertical_scrolling_y) Avoid high cardinality on y as it causes vertical scrolling.
+preference(vertical_scrolling_y,E) :-
+    attribute((encoding,channel),E,y),
+    helper(encoding_cardinality,E,N),
+    helper(mark_encoding_discrete_or_binned,_,E),
+    N > 50.
+
+% @soft(vertical_scrolling_row) Avoid high cardinality on row as it causes vertical scrolling.
+preference(vertical_scrolling_row,F) :-
+    attribute((facet,channel),F,row),
+    helper(facet_cardinality,F,N),
+    N > 5.
+
 % @soft(date_scale) Prefer to use linear/ordinal scale type with dates.
 preference(date_scale,E) :-
     attribute((field,type),F,datetime),
