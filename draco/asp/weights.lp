@@ -34,6 +34,7 @@
 #const high_cardinality_categorical_grt10_weight = 10.
 #const high_cardinality_shape_weight = 10.
 #const high_cardinality_size_weight = 1.
+#const high_cardinality_facet_weight = 50.
 #const horizontal_scrolling_x_weight = 20.
 #const horizontal_scrolling_col_weight = 20.
 #const vertical_scrolling_y_weight = 20.

@@ -201,6 +201,12 @@ preference(high_cardinality_size,E) :-
     not helper(mark_encoding_discrete_or_binned,M,E),
     N > 100.
 
+% @soft(high_cardinality_facet) Prefer not to use faceting on row and col when field cardinality is large.
+preference(high_cardinality_facet,F) :-
+    attribute((facet,channel),F,(row;col)),
+    helper(facet_cardinality,F,N),
+    N > 12.
+
 % @soft(horizontal_scrolling_x) Avoid high cardinality on x as it causes horizontal scrolling.
 preference(horizontal_scrolling_x,E) :-
     attribute((encoding,channel),E,x),
