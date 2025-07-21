@@ -3,7 +3,7 @@ from typing import Literal
 from pydantic import (
     BaseModel,
     ConfigDict,
-    PositiveFloat,
+    NonNegativeFloat,
     PositiveInt,
     model_validator,
 )
@@ -45,7 +45,7 @@ FieldUnique = PositiveInt
 The entropy of the field.
 Described as `(field,entropy)`
 """
-FieldEntropy = PositiveFloat
+FieldEntropy = NonNegativeFloat
 
 """
 The minimum value. Only used for numbers.
