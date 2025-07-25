@@ -38,6 +38,12 @@ preference(facet_used_before_pos,V) :-
     entity(mark,V,M),
     not helper((mark,channel),M,y).
 
+% @soft(facet_used_before_color) Prefer not to use faceting until color channel is used.
+preference(facet_used_before_color,V) :-
+    entity(facet,V,_),
+    entity(mark,V,M),
+    not helper((mark,channel),M,color).
+
 % @soft(facet_row) Prefer to use column facets over row facets.
 preference(facet_row,F) :-
     attribute((facet,channel),F,row).

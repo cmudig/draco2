@@ -8,6 +8,7 @@
 #const encoding_field_weight = 6.
 #const facet_field_weight = 6.
 #const facet_used_before_pos_weight = 10.
+#const facet_used_before_color_weight = 10.
 #const facet_row_weight = 1.
 #const facet_col_weight = 0.
 #const same_field_weight = 8.
