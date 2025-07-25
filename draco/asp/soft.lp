@@ -58,6 +58,24 @@ preference(same_field_grt3,F) :-
     entity(mark,_,M),
     { entity(encoding,M,E): helper((encoding,field),E,F) } >= 3.
 
+% @soft(same_mark_type) Prefer not to use the same mark type more than once in the same view.
+preference(same_mark_type,V) :-
+    entity(mark,V,M1),
+    entity(mark,V,M2),
+    M1 != M2,
+    attribute((mark,type),M1,Type),
+    attribute((mark,type),M2,Type).
+
+% @soft(same_channel) Prefer not to use the same channel more than once in the same view.
+preference(same_channel,V) :-
+    entity(encoding,M1,E1),
+    entity(encoding,M2,E2),
+    entity(mark,V,M1),
+    entity(mark,V,M2),
+    E1 != E2,
+    attribute((encoding,channel),E1,Channel),
+    attribute((encoding,channel),E2,Channel).
+
 % @soft(count_grt1) Prefer not to use count more than once.
 preference(count_grt1,M) :-
     entity(mark,_,M),
