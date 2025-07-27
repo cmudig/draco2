@@ -316,6 +316,13 @@ preference(date_not_x,E) :-
     helper((encoding,field),E,F),
     not attribute((encoding,channel),E,x).
 
+% @soft(date_not_line) Prefer line mark when using datetime field.
+preference(date_not_line,M) :-
+    entity(encoding,M,E),
+    helper((encoding,field),E,F),
+    attribute((field,type),F,datetime),
+    not attribute((mark,type),M,line).
+
 % @soft(x_row) Positional interactions as suggested by Kim et al.
 preference(x_row,V) :-
     entity(mark,V,M),

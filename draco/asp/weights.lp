@@ -48,7 +48,8 @@
 #const value_agg_weight = 1.
 #const summary_facet_weight = 0.
 #const c_d_col_weight = 5.
-#const date_not_x_weight = 1.
+#const date_not_x_weight = 10.
+#const date_not_line_weight = 10.
 #const x_row_weight = 1.
 #const y_row_weight = 1.
 #const x_col_weight = 1.
@@ -64,7 +65,7 @@
 #const categorical_scale_weight = 3.
 
 #const c_c_point_weight = 0.
-#const c_c_line_weight = 20.
+#const c_c_line_weight = 5.
 #const c_c_area_weight = 20.
 #const c_c_text_weight = 2.
 
