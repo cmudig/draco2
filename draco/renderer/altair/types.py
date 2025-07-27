@@ -66,6 +66,12 @@ Described as `(field,std)`
 FieldStd = float
 
 """
+The skew of the field. Only used for numbers.
+Described as `(field,skew)`
+"""
+FieldSkew = float
+
+"""
 The frequency of the most common value. Only used for strings.
 Described as `(field,freq)`
 """
@@ -292,6 +298,7 @@ class Field(SchemaBase):
     min: FieldMin | None = None
     max: FieldMax | None = None
     std: FieldStd | None = None
+    skew: FieldSkew | None = None
     freq: FieldFreq | None = None
     interesting: FieldInteresting | None = None
 

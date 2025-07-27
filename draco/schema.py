@@ -1,6 +1,6 @@
 from math import e
 from pathlib import Path
-from typing import Callable, Literal, TypeAlias, TypedDict
+from typing import Callable, Literal, TypeAlias, TypedDict, cast
 
 import narwhals as nw
 import numpy as np
@@ -26,6 +26,7 @@ class NumberFieldProps(BaseFieldProps):
     min: int
     max: int
     std: int
+    skew: int
 
 
 class StringFieldProps(BaseFieldProps):
@@ -103,6 +104,7 @@ def _construct_field_props(
             min=int(column.min()),
             max=int(column.max()),
             std=int(column.std()),
+            skew=int(cast(float, column.skew())),
         )
     elif data_type == "string":
         objcounts = column.value_counts()
@@ -111,7 +113,7 @@ def _construct_field_props(
             type=data_type,
             unique=unique,
             entropy=entropy,
-            freq=objcounts.get_column("count").max(),
+            freq=int(objcounts.get_column("count").max()),
         )
 
     return BaseFieldProps(name=name, type=data_type, unique=unique, entropy=entropy)
