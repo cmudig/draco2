@@ -397,6 +397,14 @@ preference(ordinal_scale,E) :-
 preference(categorical_scale,E) :-
     helper((encoding,scale_type),E,categorical).
 
+% @soft(skewed_not_log) Prefer log scale for skewed fields, only if field min is greater than 0.
+preference(skewed_not_log,E) :-
+    helper((encoding,field),E,F),
+    helper(field_skewed,F),
+    attribute((field,min),F,MIN),
+    MIN > 0,
+    not helper((encoding,scale_type),E,log).
+
 % @soft(c_c_point) Continuous by continuous for point mark.
 preference(c_c_point,M) :-
     helper(is_c_c,M),

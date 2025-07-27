@@ -236,3 +236,8 @@ helper((encoding,field),E,F) :-
 helper((facet,field),FC,F) :-
     attribute((facet,field),FC,N),
     attribute((field,name),F,N).
+
+% @helper(field_skewed) Whether a field is skewed (absolute skew > 5).
+helper(field_skewed,F) :-
+    attribute((field,skew),F,S),
+    |S| > 5.

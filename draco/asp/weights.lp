@@ -62,6 +62,7 @@
 #const log_scale_weight = 1.
 #const ordinal_scale_weight = 2.
 #const categorical_scale_weight = 3.
+#const skewed_not_log_weight = 8.
 
 #const c_c_point_weight = 0.
 #const c_c_line_weight = 5.
