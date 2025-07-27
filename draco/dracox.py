@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Generator, Generic, Mapping, TypeVar, cast
+from typing import Any, Generator, Generic, Mapping, cast
 
 import narwhals as nw
 from narwhals.typing import IntoDataFrame, IntoDataFrameT
@@ -20,13 +20,10 @@ def _compute_weights_df(draco: drc.Draco) -> nw.DataFrame:
     )
 
 
-T = TypeVar("T", bound=IntoDataFrameT)
-
-
 @dataclass(frozen=True)
-class DracoSessionState(Generic[T]):
+class DracoSessionState(Generic[IntoDataFrameT]):  # pytype: disable=invalid-annotation
     dracox: "DracoExpress"
-    data: T
+    data: IntoDataFrameT
     spec: str
     weights: dict[str, int]
 
@@ -90,12 +87,19 @@ class DracoExpress:
         ).to_native()
 
     @classmethod
-    def load_state(cls, state: IntoDataFrameT) -> "DracoSessionState[IntoDataFrameT]":
+    def load_state(  # pytype: disable=not-indexable
+        cls, state: IntoDataFrameT
+    ) -> "DracoSessionState[IntoDataFrameT]":
         state_df = nw.from_native(state)
 
         # Recover dataframe by exploding and unnesting list of structs
         nested_data_df = state_df.select("data").explode("data")
-        data_fields = list(nested_data_df.schema["data"].to_schema().keys())
+
+        # Get the first row to extract the struct field names
+        first_row = nested_data_df.head(1).to_arrow().to_pylist()[0]
+        data_fields = (
+            list(first_row["data"].keys()) if first_row and first_row["data"] else []
+        )
         data_df = nested_data_df.select(
             *(nw.col("data").struct.field(field).alias(field) for field in data_fields)
         )
