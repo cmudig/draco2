@@ -497,6 +497,10 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 "number": "quantitative",
                 "datetime": "quantitative",
             },
+            "symlog": {
+                "number": "quantitative",
+                "datetime": "quantitative",
+            },
             "ordinal": {
                 "number": "ordinal",
                 "string": "ordinal",

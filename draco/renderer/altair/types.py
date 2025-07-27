@@ -137,7 +137,7 @@ ScaleChannel = EncodingChannel
 The scale type. One of linear, log, ordinal, or categorical.
 Described as `(scale,type)`.
 """
-ScaleType = Literal["linear", "log", "ordinal", "categorical"]
+ScaleType = Literal["linear", "log", "symlog", "ordinal", "categorical"]
 
 """
 Whether to include zero in the scale domain.
