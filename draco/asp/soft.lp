@@ -99,7 +99,7 @@ preference(bin_low_unique,E) :-
     attribute((field,unique),F,U),
     helper((encoding,field),E,F),
     attribute((encoding,binning),E,_),
-    U < 15.
+    U < 40.
 
 % @soft(bin_not_linear) Prefer linear scale for bin.
 preference(bin_not_linear,E) :-
