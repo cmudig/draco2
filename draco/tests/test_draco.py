@@ -98,6 +98,7 @@ def test_count_preferences():
         "c_d_overlap_point": 1,
         "continuous_not_zero": 1,
         "continuous_pos_not_zero": 1,
+        "continuous_scale": 1,
         "encoding": 2,
         "encoding_field": 2,
         "linear_scale": 1,

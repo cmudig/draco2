@@ -1,12 +1,12 @@
 % Weights as constants
 
 #const aggregate_weight = 1.
-#const bin_weight = 2.
+#const bin_weight = 4.
 #const bin_high_weight = 10.
 #const bin_low_weight = 6.
 #const encoding_weight = 0.
 #const encoding_field_weight = 6.
-#const facet_field_weight = 6.
+#const facet_field_weight = 4.
 #const facet_used_before_pos_weight = 10.
 #const facet_used_before_color_weight = 10.
 #const facet_row_weight = 1.
@@ -18,7 +18,7 @@
 #const count_grt1_weight = 50.
 #const number_categorical_weight = 10.
 #const bin_low_unique_weight = 15.
-#const bin_not_linear_weight = 1.
+#const bin_not_linear_weight = 4.
 #const only_discrete_weight = 30.
 #const multi_non_pos_weight = 3.
 #const non_pos_used_before_pos_weight = 10.
@@ -38,6 +38,7 @@
 #const high_cardinality_shape_weight = 10.
 #const high_cardinality_size_weight = 1.
 #const high_cardinality_facet_weight = 50.
+#const underplotting_weight = 15.
 #const horizontal_scrolling_x_weight = 20.
 #const horizontal_scrolling_col_weight = 20.
 #const vertical_scrolling_y_weight = 20.
@@ -59,9 +60,10 @@
 #const size_entropy_low_weight = 0.
 
 #const linear_scale_weight = 0.
-#const log_scale_weight = 1.
+#const log_scale_weight = 0.
 #const ordinal_scale_weight = 2.
 #const categorical_scale_weight = 3.
+#const continuous_scale_weight = 4.
 #const skewed_not_log_weight = 8.
 
 #const c_c_point_weight = 0.
@@ -82,6 +84,7 @@
 #const c_d_no_overlap_area_weight = 20.
 #const c_d_no_overlap_text_weight = 30.
 #const c_d_no_overlap_tick_weight = 25.
+#const tick_color_weight = 12.
 
 #const d_d_overlap_weight = 20.
 

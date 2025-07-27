@@ -38,11 +38,17 @@ preference(facet_used_before_pos,V) :-
     entity(mark,V,M),
     not helper((mark,channel),M,y).
 
-% @soft(facet_used_before_color) Prefer not to use faceting until color channel is used.
+% @soft(facet_used_before_color) Prefer not to use faceting until color channel is used,
+% but only if the cardinality of the numeric field is low (<= 10).
 preference(facet_used_before_color,V) :-
     entity(facet,V,_),
     entity(mark,V,M),
-    not helper((mark,channel),M,color).
+    not helper((mark,channel),M,color),
+    entity(encoding,M,E),
+    attribute((encoding,field),E,F),
+    attribute((field,type),F,number),
+    attribute((field,unique),F,N),
+    N < 100.
 
 % @soft(facet_row) Prefer to use column facets over row facets.
 preference(facet_row,F) :-
@@ -231,6 +237,13 @@ preference(high_cardinality_facet,F) :-
     helper(facet_cardinality,F,N),
     N > 12.
 
+% @soft(underplotting) Prefer not to facet when it results in too few data points per facet.
+preference(underplotting,V) :-
+    entity(facet,V,_),
+    attribute(number_rows,root,NR),
+    helper(total_facet_cardinality,V,NF),
+    NR < 3 * NF.
+
 % @soft(horizontal_scrolling_x) Avoid high cardinality on x as it causes horizontal scrolling.
 preference(horizontal_scrolling_x,E) :-
     attribute((encoding,channel),E,x),
@@ -397,13 +410,29 @@ preference(ordinal_scale,E) :-
 preference(categorical_scale,E) :-
     helper((encoding,scale_type),E,categorical).
 
-% @soft(skewed_not_log) Prefer log scale for skewed fields, only if field min is greater than 0.
+% @soft(continuous_scale) Prefer to use linear, log or symlog scale for continuous variables.
+preference(continuous_scale,E) :-
+    helper((encoding,field),E,F),
+    attribute((field,type),F,(number;datetime)),
+    not helper((encoding,scale_type),E,linear),
+    not helper((encoding,scale_type),E,log),
+    not helper((encoding,scale_type),E,symlog).
+
+% @soft(skewed_not_log) Prefer log scale for positive skewed fields and symlog for fields that cross zero.
 preference(skewed_not_log,E) :-
     helper((encoding,field),E,F),
     helper(field_skewed,F),
     attribute((field,min),F,MIN),
     MIN > 0,
     not helper((encoding,scale_type),E,log).
+preference(skewed_not_log,E) :-
+    helper((encoding,field),E,F),
+    helper(field_skewed,F),
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
+    MIN < 1,
+    MAX > 0,
+    not helper((encoding,scale_type),E,symlog).
 
 % @soft(c_c_point) Continuous by continuous for point mark.
 preference(c_c_point,M) :-
@@ -496,6 +525,11 @@ preference(c_d_no_overlap_tick,M) :-
     helper(is_c_d,M),
     helper(no_overlap,M),
     attribute((mark,type),M,tick).
+
+% @soft(tick_color) Prefer not to use color with tick marks as it is difficult to see.
+preference(tick_color,M) :-
+    attribute((mark,type),M,tick),
+    helper((mark,channel),M,color).
 
 % @soft(d_d_overlap) Prefer not to overlap with DxD.
 preference(d_d_overlap,M) :-
