@@ -210,12 +210,6 @@ preference(high_cardinality_categorical_grt10,E) :-
     helper((encoding,scale_type),E,categorical),
     N > 10.
 
-% @soft(low_cardinality_categorical_lte10) Prefer using categorical scale when encoded field has low cardinality.
-preference(low_cardinality_categorical_lte10,E) :-
-    helper(encoding_cardinality,E,N),
-    N <= 10,
-    not helper((encoding,scale_type),E,categorical).
-
 % @soft(high_cardinality_shape) Prefer not to use high cardinality ordinal for shape.
 preference(high_cardinality_shape,E) :-
     helper(encoding_cardinality,E,N),

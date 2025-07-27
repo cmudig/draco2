@@ -35,7 +35,6 @@
 #const binned_orientation_not_x_weight = 1.
 #const high_cardinality_ordinal_weight = 10.
 #const high_cardinality_categorical_grt10_weight = 10.
-#const low_cardinality_categorical_lte10_weight = 10.
 #const high_cardinality_shape_weight = 10.
 #const high_cardinality_size_weight = 1.
 #const high_cardinality_facet_weight = 50.
