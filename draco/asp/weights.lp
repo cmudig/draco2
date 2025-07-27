@@ -19,6 +19,7 @@
 #const number_categorical_weight = 10.
 #const bin_low_unique_weight = 15.
 #const bin_not_linear_weight = 4.
+#const bin_string_weight = 20.
 #const only_discrete_weight = 30.
 #const multi_non_pos_weight = 3.
 #const non_pos_used_before_pos_weight = 10.

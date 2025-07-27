@@ -7,6 +7,8 @@ preference(aggregate,E) :-
 % @soft(bin) Prefer to not bin.
 preference(bin,E) :-
     attribute((encoding,binning),E,_).
+preference(bin,Fa) :-
+    attribute((facet,binning),Fa,_).
 
 % @soft(bin_high) Prefer binning with at most 12 buckets.
 preference(bin_high,E) :-
@@ -105,6 +107,16 @@ preference(bin_low_unique,E) :-
 preference(bin_not_linear,E) :-
     attribute((encoding,binning),E,_),
     not helper((encoding,scale_type),E,linear).
+
+% @soft(bin_string) Prefer not to bin string fields.
+preference(bin_string,E) :-
+    attribute((field,type),F,string),
+    helper((encoding,field),E,F),
+    attribute((encoding,binning),E,_).
+preference(bin_string,Fa) :-
+    attribute((field,type),F,string),
+    helper((facet,field),Fa,F),
+    attribute((facet,binning),Fa,_).
 
 % @soft(only_discrete) Only discrete encoding channels are used in a mark.
 preference(only_discrete,M) :-
