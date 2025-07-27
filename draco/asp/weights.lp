@@ -1,6 +1,6 @@
 % Weights as constants
 
-#const aggregate_weight = 1.
+#const aggregate_weight = 2.
 #const bin_weight = 4.
 #const bin_high_weight = 10.
 #const bin_low_weight = 6.

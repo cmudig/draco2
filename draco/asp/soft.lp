@@ -38,17 +38,11 @@ preference(facet_used_before_pos,V) :-
     entity(mark,V,M),
     not helper((mark,channel),M,y).
 
-% @soft(facet_used_before_color) Prefer not to use faceting until color channel is used,
-% but only if the cardinality of the numeric field is low (<= 10).
+% @soft(facet_used_before_color) Prefer not to use faceting until color channel is used.
 preference(facet_used_before_color,V) :-
     entity(facet,V,_),
     entity(mark,V,M),
-    not helper((mark,channel),M,color),
-    entity(encoding,M,E),
-    attribute((encoding,field),E,F),
-    attribute((field,type),F,number),
-    attribute((field,unique),F,N),
-    N < 100.
+    not helper((mark,channel),M,color).
 
 % @soft(facet_row) Prefer to use column facets over row facets.
 preference(facet_row,F) :-
