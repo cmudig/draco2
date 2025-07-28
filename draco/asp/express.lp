@@ -94,11 +94,6 @@ violation(facet_channel_forbidden) :-
     forbid((facet, channel), Channel),
     attribute((facet,channel),_,Channel).
 
-% @api(require(facet, fieldname)) Guarantee that a field is used either as row or col facet
-violation(facet_field_missing) :-
-    require(facet, FieldName),
-    not attribute((facet,field),_,FieldName).
-
 % @api(observed(facet)) Faceting is used
 observed(facet) :-
     entity(facet,_,_).
