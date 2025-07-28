@@ -222,6 +222,25 @@ preference(high_cardinality_categorical_grt10,E) :-
     helper((encoding,scale_type),E,categorical),
     N > 10.
 
+% @soft(high_cardinality_categorical_line_point_color) Prefer faceting over color for line/point marks with high cardinality categorical data to avoid overplotting.
+preference(high_cardinality_categorical_line_point_color,E) :-
+    entity(encoding,M,E),
+    attribute((mark,type),M,(line;point)),
+    attribute((encoding,channel),E,color),
+    helper((encoding,field),E,F),
+    helper((encoding,scale_type),E,categorical),
+    helper(encoding_cardinality,E,N),
+    N > 4.
+
+% @soft(high_cardinality_categorical_ordinal_color) Prefer not to use ordinal scale with color for categorical data with high cardinality.
+preference(high_cardinality_categorical_ordinal_color,E) :-
+    attribute((encoding,channel),E,color),
+    helper((encoding,field),E,F),
+    attribute((field,type),F,string),
+    helper((encoding,scale_type),E,ordinal),
+    helper(encoding_cardinality,E,N),
+    N > 4.
+
 % @soft(high_cardinality_shape) Prefer not to use high cardinality ordinal for shape.
 preference(high_cardinality_shape,E) :-
     helper(encoding_cardinality,E,N),
