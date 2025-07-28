@@ -82,9 +82,10 @@ class Draco:
             soft_constraints = set(soft.blocks.keys())
             soft_constraints.remove("__preamble__")
             weight_keys = set(self.soft_constraint_names)
+            diff = weight_keys - soft_constraints
 
-            assert soft_constraints == weight_keys, (
-                "Weights dictionary does not match soft constraints"
+            assert len(diff) == 0, (
+                "Weights dictionary does not match soft constraints: " + ", ".join(diff)
             )
 
     def check_spec(self, spec: Specification) -> bool:
