@@ -49,6 +49,7 @@
 #const date_scale_weight = 1.
 #const number_linear_weight = 2.
 #const value_agg_weight = 1.
+#const value_bin_weight = 8.
 #const summary_facet_weight = 0.
 #const c_d_col_weight = 5.
 #const date_not_x_weight = 10.

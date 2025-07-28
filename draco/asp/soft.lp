@@ -329,6 +329,14 @@ preference(value_agg,V) :-
     entity(encoding,M,E),
     attribute((encoding,aggregate),E,_).
 
+% @soft(value_bin) Prefer not to bin for value tasks as it reduces detail needed for value lookup.
+preference(value_bin,E) :-
+    attribute(task,root,value),
+    attribute((encoding,binning),E,_).
+preference(value_bin,Fa) :-
+    attribute(task,root,value),
+    attribute((facet,binning),Fa,_).
+
 % @soft(summary_facet) Prefer not to use facet for summary tasks as it makes it difficult to compare.
 preference(summary_facet,V) :-
     attribute(task,root,summary),
