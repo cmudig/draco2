@@ -96,6 +96,9 @@ def _construct_field_props(
     entropy = round(entropy * 1000)
 
     if data_type == "number":
+        skew = column.skew()
+        # Skew is NaN for fields where each value is the same.
+        field_is_constant = skew is None or np.isnan(skew)
         return NumberFieldProps(
             name=name,
             type=data_type,
@@ -104,7 +107,8 @@ def _construct_field_props(
             min=int(column.min()),
             max=int(column.max()),
             std=int(column.std()),
-            skew=int(cast(float, column.skew())),
+            # For the purpose of reasoning, we treat skew as 0 for constant fields indicating that the distribution is symmetric.
+            skew=0 if field_is_constant else int(cast(float, skew)),
         )
     elif data_type == "string":
         objcounts = column.value_counts()

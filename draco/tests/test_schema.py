@@ -31,6 +31,7 @@ def test_load_df():
     df = pd.DataFrame(
         {
             "numbers": [1, 2],
+            "constant": [1, 1],
             "text": ["a", "a"],
             "bools": [True, False],
             "dates": [datetime.datetime(2018, 1, 1), datetime.datetime(2021, 1, 1)],
@@ -49,6 +50,16 @@ def test_load_df():
                 "std": 0,
                 "skew": 0,
                 "entropy": 693,
+            },
+            {
+                "name": "constant",
+                "type": "number",
+                "unique": 1,
+                "max": 1,
+                "min": 1,
+                "std": 0,
+                "skew": 0,
+                "entropy": 0,
             },
             {"name": "text", "type": "string", "unique": 1, "freq": 2, "entropy": 0},
             {"name": "bools", "type": "boolean", "unique": 2, "entropy": 693},
