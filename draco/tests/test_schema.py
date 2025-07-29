@@ -22,7 +22,15 @@ SIMPLE_SCHEMA = {
             "skew": 0,
             "entropy": 693,
         },
-        {"name": "text", "type": "string", "unique": 1, "freq": 2, "entropy": 0},
+        {
+            "name": "text",
+            "type": "string",
+            "unique": 1,
+            "freq": 2,
+            "entropy": 0,
+            "max_length": 1,
+            "min_length": 1,
+        },
     ],
 }
 
@@ -61,7 +69,15 @@ def test_load_df():
                 "skew": 0,
                 "entropy": 0,
             },
-            {"name": "text", "type": "string", "unique": 1, "freq": 2, "entropy": 0},
+            {
+                "name": "text",
+                "type": "string",
+                "unique": 1,
+                "freq": 2,
+                "entropy": 0,
+                "max_length": 1,
+                "min_length": 1,
+            },
             {"name": "bools", "type": "boolean", "unique": 2, "entropy": 693},
             {"name": "dates", "type": "datetime", "unique": 2, "entropy": 693},
         ],

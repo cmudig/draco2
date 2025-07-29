@@ -33,6 +33,8 @@ class StringFieldProps(BaseFieldProps):
     """Properties of a `string` field in a `Schema`."""
 
     freq: int
+    min_length: int
+    max_length: int
 
 
 # Union of supported field properties.
@@ -118,6 +120,8 @@ def _construct_field_props(
             unique=unique,
             entropy=entropy,
             freq=int(objcounts.get_column("count").max()),
+            min_length=int(column.str.len_chars().min()),
+            max_length=int(column.str.len_chars().max()),
         )
 
     return BaseFieldProps(name=name, type=data_type, unique=unique, entropy=entropy)
