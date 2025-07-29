@@ -240,7 +240,7 @@ helper((facet,field),FC,F) :-
 % @helper(field_skewed) Whether a field is skewed (absolute skew > 5).
 helper(field_skewed,F) :-
     attribute((field,skew),F,S),
-    |S| > 5.
+    |S| > 2.
 
 % @helper(total_facet_cardinality) The total cardinality of all facets in a view (product of individual facet cardinalities).
 helper(total_facet_cardinality,V,1) :-
