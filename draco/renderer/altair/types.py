@@ -4,6 +4,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     NonNegativeFloat,
+    NonNegativeInt,
     PositiveInt,
     model_validator,
 )
@@ -76,6 +77,18 @@ The frequency of the most common value. Only used for strings.
 Described as `(field,freq)`
 """
 FieldFreq = PositiveInt
+
+"""
+The minimum length of the field. Only used for strings.
+Described as `(field,min_length)`
+"""
+FieldMinLength = NonNegativeInt
+
+"""
+The maximum length of a field. Only used for strings.
+Described as `(field,max_length)`
+"""
+FieldMaxLength = NonNegativeInt
 
 """
 When the task regards specific fields, fields can be marked as relevant to the task.
@@ -300,9 +313,11 @@ class Field(SchemaBase):
     std: FieldStd | None = None
     skew: FieldSkew | None = None
     freq: FieldFreq | None = None
+    min_length: FieldMinLength | None = None
+    max_length: FieldMaxLength | None = None
     interesting: FieldInteresting | None = None
 
-    __STRING_ONLY_FIELDS__ = {"freq"}
+    __STRING_ONLY_FIELDS__ = {"freq", "min_length", "max_length"}
     __NUMBER_ONLY_FIELDS__ = {"min", "max", "std"}
 
     @model_validator(mode="before")
