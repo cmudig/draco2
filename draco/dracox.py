@@ -269,6 +269,9 @@ class DracoChartSpec:
         self._chart_cost = _compute_chart_cost(self._features_df)
         self._model = DracoChartModel.model_validate(spec)
 
+    def __repr__(self) -> str:
+        return repr(self.spec)
+
     @property
     def draco(self) -> drc.Draco:
         return self.dracox.draco
