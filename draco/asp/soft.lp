@@ -232,6 +232,36 @@ preference(high_cardinality_categorical_line_point_color,E) :-
     helper(encoding_cardinality,E,N),
     N > 4.
 
+% @soft(high_cardinality_point_color_before_facet) Prefer faceting on both row and col before color for point marks with high cardinality to avoid overplotting.
+preference(high_cardinality_point_color_before_facet,V) :-
+    entity(mark,V,M),
+    attribute((mark,type),M,point),
+    entity(encoding,M,E),
+    helper(encoding_cardinality,E,N),
+    N > 75,
+    helper((mark,channel),M,color),
+    not entity(facet,V,_).
+preference(high_cardinality_point_color_before_facet,V) :-
+    entity(mark,V,M),
+    attribute((mark,type),M,point),
+    entity(encoding,M,E),
+    helper(encoding_cardinality,E,N),
+    N > 75,
+    helper((mark,channel),M,color),
+    entity(facet,V,F1),
+    attribute((facet,channel),F1,row),
+    not entity(facet,V,F2) : attribute((facet,channel),F2,col).
+preference(high_cardinality_point_color_before_facet,V) :-
+    entity(mark,V,M),
+    attribute((mark,type),M,point),
+    entity(encoding,M,E),
+    helper(encoding_cardinality,E,N),
+    N > 75,
+    helper((mark,channel),M,color),
+    entity(facet,V,F1),
+    attribute((facet,channel),F1,col),
+    not entity(facet,V,F2) : attribute((facet,channel),F2,row).
+
 % @soft(high_cardinality_categorical_ordinal_color) Prefer not to use ordinal scale with color for categorical data with high cardinality.
 preference(high_cardinality_categorical_ordinal_color,E) :-
     attribute((encoding,channel),E,color),
