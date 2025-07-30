@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Generic, Literal, TypeVar, cast
 
 import altair as alt
+import narwhals as nw
 
 import draco.renderer.utils as renderer_utils
 from draco.renderer.base_renderer import BaseRenderer, DataType, LabelMapping
@@ -102,6 +103,11 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         typed_spec = SpecificationDict.model_validate(spec)
         chart: VegaLiteChart = cast(VegaLiteChart, alt.Chart(data))
         chart_views: list[VegaLiteChart] = []
+        data_fields: list[str] = (
+            list(data.keys())
+            if isinstance(data, dict)
+            else nw.from_native(data).columns
+        )
 
         def get_label(field: str) -> str | None:
             if label_mapping is not None:
@@ -136,6 +142,12 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                             get_label=get_label,
                         )
                     )
+                chart = chart.encode(
+                    tooltip=[
+                        alt.Tooltip(field, title=get_label(field))
+                        for field in data_fields
+                    ]
+                )
                 layers.append(chart)
             chart = self.__visit_view(
                 ctx=ViewContext(
