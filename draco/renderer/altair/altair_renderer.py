@@ -5,12 +5,12 @@ from typing import Any, Generic, Literal, TypeVar, cast
 
 import altair as alt
 
+import draco.renderer.utils as renderer_utils
 from draco.renderer.base_renderer import BaseRenderer, DataType
 
 from .types import (
     Encoding,
     EncodingChannel,
-    Field,
     FieldName,
     FieldType,
     Mark,
@@ -189,7 +189,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 channel = f.channel
                 facet_args: dict[str, Any] = {
                     "field": f.field,
-                    "type": self.__get_field_type(ctx.spec, f.field),
+                    "type": self.__find_field_type(ctx.spec, f.field),
                 }
                 if f.binning is not None:
                     facet_args["bin"] = alt.BinParams(maxbins=f.binning)
@@ -321,13 +321,13 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         custom_args: dict[str, Any] = {}
         if encoding.field is not None:
             custom_args["field"] = encoding.field
-            custom_args["type"] = self.__get_field_type(spec, encoding.field)
+            custom_args["type"] = self.__find_field_type(spec, encoding.field)
         if encoding.binning is not None:
             custom_args["bin"] = alt.BinParams(maxbins=encoding.binning)
 
         if view.scale is not None:
-            field_type = self.__get_field_type_raw(spec.field, encoding.field)
-            scale_or_none = self.__get_alt_scale_for_encoding(
+            field_type = renderer_utils.find_raw_field_type(spec.field, encoding.field)
+            scale_or_none = self.__find_alt_scale_for_encoding(
                 field_type, mark.type, encoding.channel, view.scale
             )
             if scale_or_none is not None:
@@ -379,11 +379,11 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         custom_args: dict[str, Any] = {}
         if encoding.field is not None:
             custom_args["field"] = encoding.field
-            custom_args["type"] = self.__get_field_type(spec, encoding.field)
+            custom_args["type"] = self.__find_field_type(spec, encoding.field)
 
         if view.scale is not None:
-            field_type = self.__get_field_type_raw(spec.field, encoding.field)
-            scale_or_none = self.__get_alt_scale_for_encoding(
+            field_type = renderer_utils.find_raw_field_type(spec.field, encoding.field)
+            scale_or_none = self.__find_alt_scale_for_encoding(
                 field_type, mark.type, encoding.channel, view.scale
             )
             if scale_or_none is not None:
@@ -416,65 +416,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 raise ValueError(f"Unknown channel: {encoding.channel}")
 
     @staticmethod
-    def __get_encoding_channel_of_field(
-        views: list[View], field_name: FieldName
-    ) -> EncodingChannel | None:
-        """
-        Returns the mark encoding channel for the field with the given name.
-
-        :param views: All the views in the spec to search for.
-        :param field_name: The name of the field to search for.
-        :return: The encoding channel of the field, or `None` if
-                 the field is not found.
-        """
-        for v in views:
-            for m in v.mark:
-                for e in m.encoding:
-                    if e.field == field_name:
-                        return e.channel
-
-        return None
-
-    @staticmethod
-    def __get_scales_of_spec(spec: SpecificationDict) -> list[Scale]:
-        """
-        Returns all the scales in the spec including the top-level
-        shared scale and the view-specific scales.
-
-        :param spec: The spec to search through for scales.
-        :return: A list of all the scales in the spec.
-        """
-        scales: list[Scale] = []
-
-        # Shared scales
-        for s in spec.scale or []:
-            scales.append(s)
-
-        # View-specific scales
-        for v in spec.view:
-            for s in v.scale or []:
-                scales.append(s)
-
-        return scales
-
-    @staticmethod
-    def __get_field_by_name(fields: list[Field], field_name: FieldName) -> Field:
-        """
-        Returns the field with the given name.
-
-        :param fields: The list of fields to search through.
-        :param field_name: The name of the field to search for.
-        :return: The field with the given name.
-        :raises ValueError: If the field is not found.
-        """
-        for f in fields:
-            if f.name == field_name:
-                return f
-
-        raise ValueError(f"Field {field_name} not found")
-
-    @staticmethod
-    def __get_field_type(spec: SpecificationDict, field_name: FieldName) -> str:
+    def __find_field_type(spec: SpecificationDict, field_name: FieldName) -> str:
         """
         Returns the type of the field with the given name.
         Needed to map from Draco-spec data types to Vega-Lite data types.
@@ -484,7 +426,6 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         :param field_name: name of the field to look up
         :return: the type of the field
         """
-        cls = AltairRenderer
         __DEFAULT_KEY__ = "default"
         # Multi-criteria lookup to determine the type of the field
         # based on the scale type (if any) AND the raw data type.
@@ -521,50 +462,24 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             },
         }
 
-        field = cls.__get_field_by_name(spec.field, field_name)
+        field = renderer_utils.find_field_by_name(spec.field, field_name)
         # Look for the encoding channel of the field, so we can match it to a scale
-        channel = cls.__get_encoding_channel_of_field(spec.view, field_name)
+        channel = renderer_utils.find_encoding_channel_of_field(spec.view, field_name)
         # We might have no channel in case of a faceted field
         # --> we map based on the raw data type
         if channel is None:
             return renames[__DEFAULT_KEY__][field.type]
 
         # Look for the scale associated with `channel`
-        scale = cls.__get_scale_for_encoding(channel, cls.__get_scales_of_spec(spec))
+        scales_of_spec = renderer_utils.find_scales_of_spec(spec)
+        scale = renderer_utils.find_scale_for_encoding(channel, scales_of_spec)
         # We might have no scale present for the channel
         # --> we map based on the raw data type
         key = scale.type if scale is not None else __DEFAULT_KEY__
         return renames[key][field.type]
 
     @staticmethod
-    def __get_scale_for_encoding(
-        channel: EncodingChannel, scales: list[Scale]
-    ) -> Scale | None:
-        """
-        Returns the `Scale` for the given encoding channel, if any.
-
-        :param channel: the channel for which to look up a scale
-        :param scales: the list of scales in the view
-        :return: the scale for the given channel, or None if no scale is found
-        """
-        for scale in scales:
-            if scale.channel == channel:
-                return scale
-        return None
-
-    @staticmethod
-    def __get_field_type_raw(
-        fields: list[Field], field_name: FieldName | None
-    ) -> FieldType:
-        if field_name is None:
-            return "number"
-
-        cls = AltairRenderer
-        field_type = cls.__get_field_by_name(fields, field_name)
-        return field_type.type
-
-    @staticmethod
-    def __get_alt_scale_for_encoding(
+    def __find_alt_scale_for_encoding(
         field_type: FieldType,
         mark_type: MarkType,
         channel: EncodingChannel,
@@ -579,7 +494,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         :param scales: the list of scales in the view
         :return: the scale for the given channel, or None if no scale is found
         """
-        scale = AltairRenderer.__get_scale_for_encoding(channel, scales)
+        scale = renderer_utils.find_scale_for_encoding(channel, scales)
         if scale is None:
             return None
 
