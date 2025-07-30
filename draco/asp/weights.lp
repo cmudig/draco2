@@ -49,7 +49,7 @@
 #const vertical_scrolling_row_weight = 20.
 #const date_scale_weight = 1.
 #const number_linear_weight = 2.
-#const value_agg_weight = 4.
+#const value_agg_weight = 5.
 #const value_bin_weight = 8.
 #const summary_facet_weight = 0.
 #const c_d_col_weight = 5.
@@ -132,7 +132,7 @@
 
 #const value_point_weight = 0.
 #const value_bar_weight = 0.
-#const value_line_weight = 0.
+#const value_line_weight = 8.
 #const value_area_weight = 0.
 #const value_text_weight = 0.
 #const value_tick_weight = 0.
