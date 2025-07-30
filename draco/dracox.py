@@ -7,6 +7,7 @@ from narwhals.typing import IntoDataFrame, IntoDataFrameT
 import draco as drc
 from draco.renderer import AltairRenderer
 from draco.renderer.altair.types import SpecificationDict as DracoChartModel
+from draco.renderer.base_renderer import LabelMapping
 from draco.types import Specification
 
 
@@ -292,5 +293,5 @@ class DracoChartSpec:
     def model(self) -> DracoChartModel:
         return self._model
 
-    def render(self, df: IntoDataFrame):
-        return AltairRenderer().render(self.spec, df)
+    def render(self, df: IntoDataFrame, label_mapping: LabelMapping | None = None):
+        return AltairRenderer().render(self.spec, df, label_mapping)

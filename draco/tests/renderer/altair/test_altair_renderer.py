@@ -1094,3 +1094,33 @@ def test_polar(spec: dict, expected_vl: dict, renderer: AltairRenderer):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
+
+
+def test_render_with_dict_label_mapping(renderer: AltairRenderer):
+    mapping = {
+        "temperature": "Temperature (°C)",
+        "wind": "Wind",
+        "condition": "Condition",
+    }
+    chart = renderer.render(
+        scatterplot_columns_spec_d,
+        df,
+        mapping,
+    )
+    vl = chart.to_dict()
+    for fieldname, label in mapping.items():
+        assert f"'field': '{fieldname}'" in str(vl) and f"'title': '{label}'" in str(vl)
+
+
+def test_render_with_callable_label_mapping(renderer: AltairRenderer):
+    fields = ["temperature", "wind", "condition"]
+
+    def label_from_field(field: str) -> str:
+        return field.replace("_", " ").title()
+
+    chart = renderer.render(scatterplot_columns_spec_d, df, label_from_field)
+    vl = chart.to_dict()
+    for fieldname in fields:
+        assert f"'field': '{fieldname}'" in str(
+            vl
+        ) and f"'title': '{label_from_field(fieldname)}'" in str(vl)

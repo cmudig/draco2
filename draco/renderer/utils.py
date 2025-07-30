@@ -8,6 +8,7 @@ from .altair.types import (
     SpecificationDict,
     View,
 )
+from .base_renderer import LabelMapping
 
 
 def find_encoding_channel_of_field(
@@ -101,3 +102,11 @@ def find_encoded_field(
         if e.channel == channel and e.field is not None:
             return find_field_by_name(fields, e.field)
     return None
+
+
+def resolve_label(label_mapping: LabelMapping | None, field_name: FieldName) -> str:
+    if label_mapping is None:
+        return field_name
+    if isinstance(label_mapping, dict):
+        return label_mapping.get(field_name, field_name)
+    return label_mapping(field_name)

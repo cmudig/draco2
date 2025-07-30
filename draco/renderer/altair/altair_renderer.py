@@ -1,12 +1,12 @@
 import logging
 import warnings
 from dataclasses import dataclass
-from typing import Any, Generic, Literal, TypeVar, cast
+from typing import Any, Callable, Generic, Literal, TypeVar, cast
 
 import altair as alt
 
 import draco.renderer.utils as renderer_utils
-from draco.renderer.base_renderer import BaseRenderer, DataType
+from draco.renderer.base_renderer import BaseRenderer, DataType, LabelMapping
 
 from .types import (
     Encoding,
@@ -46,6 +46,7 @@ class RootContext(Generic[VegaLiteChart]):
     spec: SpecificationDict
     chart: VegaLiteChart
     chart_views: list[VegaLiteChart]
+    get_label: Callable[[str], str | None]
 
 
 @dataclass(frozen=True)
@@ -95,10 +96,17 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         """
         self.concat_mode = concat_mode
 
-    def render(self, spec: dict, data: DataType) -> VegaLiteChart:
+    def render(
+        self, spec: dict, data: DataType, label_mapping: LabelMapping | None = None
+    ) -> VegaLiteChart:
         typed_spec = SpecificationDict.model_validate(spec)
         chart: VegaLiteChart = cast(VegaLiteChart, alt.Chart(data))
         chart_views: list[VegaLiteChart] = []
+
+        def get_label(field: str) -> str | None:
+            if label_mapping is not None:
+                return renderer_utils.resolve_label(label_mapping, field)
+            return None
 
         # Traverse the specification dict and invoke the appropriate visitor
         for v in typed_spec.view:
@@ -112,6 +120,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                         layers=layers,
                         view=v,
                         mark=m,
+                        get_label=get_label,
                     )
                 )
                 for e in m.encoding:
@@ -124,6 +133,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                             view=v,
                             mark=m,
                             encoding=e,
+                            get_label=get_label,
                         )
                     )
                 layers.append(chart)
@@ -134,11 +144,18 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     chart_views=chart_views,
                     layers=layers,
                     view=v,
+                    get_label=get_label,
                 )
             )
             chart_views.append(chart)
+
         return self.__visit_root(
-            ctx=RootContext(spec=typed_spec, chart=chart, chart_views=chart_views)
+            ctx=RootContext(
+                spec=typed_spec,
+                chart=chart,
+                chart_views=chart_views,
+                get_label=get_label,
+            )
         )
 
     def __visit_root(self, ctx: RootContext) -> VegaLiteChart:
@@ -187,10 +204,11 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             }
             for f in view.facet:
                 channel = f.channel
+                title_args = self.__get_title_args(ctx, f.field)
                 facet_args: dict[str, Any] = {
                     "field": f.field,
                     "type": self.__find_field_type(ctx.spec, f.field),
-                }
+                } | title_args
                 if f.binning is not None:
                     facet_args["bin"] = alt.BinParams(maxbins=f.binning)
                 match channel:
@@ -333,11 +351,13 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             if scale_or_none is not None:
                 custom_args["scale"] = scale_or_none
 
+        title_args = self.__get_title_args(ctx, encoding.field)
         encoding_args = (
             encoding.model_dump(
                 exclude_none=True, exclude={"channel", "field", "binning"}
             )
             | custom_args
+            | title_args
         )
 
         match encoding.channel:
@@ -389,11 +409,13 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             if scale_or_none is not None:
                 custom_args["scale"] = scale_or_none
 
+        title_args = self.__get_title_args(ctx, encoding.field)
         encoding_args = (
             encoding.model_dump(
                 exclude_none=True, exclude={"channel", "field", "binning", "scale"}
             )
             | custom_args
+            | title_args
         )
 
         match encoding.channel:
@@ -517,3 +539,12 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             del scale_args["type"]
 
         return alt.Scale(**scale_args) if scale_args else None
+
+    @staticmethod
+    def __get_title_args(ctx: RootContext, field: FieldName | None) -> dict[str, Any]:
+        if field is None:
+            return {}
+        label = ctx.get_label(field)
+        if label is None:
+            return {}
+        return {"title": label}
