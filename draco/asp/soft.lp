@@ -54,8 +54,8 @@ preference(facet_row,F) :-
 preference(facet_col,F) :-
     attribute((facet,channel),F,col).
 
-% @soft(string_max_length_row_facet) Prefer string fields with shorter max label length on row facet channel, as it is more difficult to read long rotated labels.
-preference(string_max_length_row_facet,F) :-
+% @soft(string_max_length_vertical) Prefer string fields with shorter max label length on channels displaying labels vertically (row facet, x-axis), as it is more difficult to read long rotated labels, so we opt for shorter ones.
+preference(string_max_length_vertical,F) :-
     attribute((facet,channel),F,row),
     helper((facet,field),F,Field1),
     attribute((field,type),Field1,string),
@@ -64,11 +64,31 @@ preference(string_max_length_row_facet,F) :-
     attribute((field,max_length),Field2,Length2),
     Field1 != Field2,
     Length1 > Length2.
+preference(string_max_length_vertical,E) :-
+    % Labels on x-axis are rotated, so they are vertical.
+    attribute((encoding,channel),E,x),
+    helper((encoding,field),E,Field1),
+    attribute((field,type),Field1,string),
+    attribute((field,max_length),Field1,Length1),
+    attribute((field,type),Field2,string),
+    attribute((field,max_length),Field2,Length2),
+    Field1 != Field2,
+    Length1 > Length2.
 
-% @soft(string_max_length_col_facet) Prefer string fields with longer max label length on column facet channel, as it is easier to read long labels from left to right.
-preference(string_max_length_col_facet,F) :-
+% @soft(string_max_length_horizontal) Prefer string fields with longer max label length on channels displaying labels horizontally (column facet, y-axis), as it is easier to read long labels from left to right, so we opt for longer ones.
+preference(string_max_length_horizontal,F) :-
     attribute((facet,channel),F,col),
     helper((facet,field),F,Field1),
+    attribute((field,type),Field1,string),
+    attribute((field,max_length),Field1,Length1),
+    attribute((field,type),Field2,string),
+    attribute((field,max_length),Field2,Length2),
+    Field1 != Field2,
+    Length1 < Length2.
+preference(string_max_length_horizontal,E) :-
+    % Labels on y-axis are not rotated, so they are horizontal.
+    attribute((encoding,channel),E,y),
+    helper((encoding,field),E,Field1),
     attribute((field,type),Field1,string),
     attribute((field,max_length),Field1,Length1),
     attribute((field,type),Field2,string),
