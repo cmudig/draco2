@@ -94,6 +94,7 @@
 #const d_d_overlap_weight = 20.
 
 #const d_d_point_weight = 0.
+#const d_d_point_color_weight = 1.
 #const d_d_text_weight = 1.
 #const d_d_rect_weight = 0.
 

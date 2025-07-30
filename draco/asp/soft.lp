@@ -604,6 +604,15 @@ preference(d_d_point,M) :-
     helper(is_d_d,M),
     attribute((mark,type),M,point).
 
+% @soft(d_d_point_color) Discrete by discrete for point mark with color encoding numeric field.
+preference(d_d_point_color,M) :-
+    helper(is_d_d,M),
+    attribute((mark,type),M,point),
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,color),
+    helper((encoding,field),E,F),
+    attribute((field,type),F,number).
+
 % @soft(d_d_text) Discrete by discrete for text mark.
 preference(d_d_text,M) :-
     helper(is_d_d,M),
