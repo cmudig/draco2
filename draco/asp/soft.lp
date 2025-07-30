@@ -54,6 +54,28 @@ preference(facet_row,F) :-
 preference(facet_col,F) :-
     attribute((facet,channel),F,col).
 
+% @soft(string_max_length_row_facet) Prefer string fields with shorter max label length on row facet channel, as it is more difficult to read long rotated labels.
+preference(string_max_length_row_facet,F) :-
+    attribute((facet,channel),F,row),
+    helper((facet,field),F,Field1),
+    attribute((field,type),Field1,string),
+    attribute((field,max_length),Field1,Length1),
+    attribute((field,type),Field2,string),
+    attribute((field,max_length),Field2,Length2),
+    Field1 != Field2,
+    Length1 > Length2.
+
+% @soft(string_max_length_col_facet) Prefer string fields with longer max label length on column facet channel, as it is easier to read long labels from left to right.
+preference(string_max_length_col_facet,F) :-
+    attribute((facet,channel),F,col),
+    helper((facet,field),F,Field1),
+    attribute((field,type),Field1,string),
+    attribute((field,max_length),Field1,Length1),
+    attribute((field,type),Field2,string),
+    attribute((field,max_length),Field2,Length2),
+    Field1 != Field2,
+    Length1 < Length2.
+
 % @soft(same_field) Prefer not to use the same field twice for the same mark.
 preference(same_field,F) :-
     entity(field,_,F),
