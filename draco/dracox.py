@@ -257,8 +257,7 @@ class DracoChartSpec:
     def __init__(self, dracox: DracoExpress, spec: dict[str, Any]):
         self.dracox = dracox
         self.spec = spec
-        self._data_schema_facts = _compute_data_schema_facts(spec)
-        self._facts = drc.dict_to_facts(spec)
+        self._facts = _compute_data_schema_facts(spec) + drc.dict_to_facts(spec)
         self._features_df = _compute_features_df(
             self.draco.count_preferences(self._facts) or {},
             self.dracox.weights_df,
