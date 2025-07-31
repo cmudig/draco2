@@ -96,17 +96,27 @@ preference(string_max_length_horizontal,E) :-
     Field1 != Field2,
     Length1 < Length2.
 
-% @soft(same_field) Prefer not to use the same field twice for the same mark.
+% @soft(same_field) Prefer not to use the same field twice across encodings in the same view.
 preference(same_field,F) :-
     entity(field,_,F),
-    entity(mark,_,M),
-    { entity(encoding,M,E): helper((encoding,field),E,F) } = 2.
+    entity(view,_,V),
+    { entity(encoding,M,E): entity(mark,V,M), helper((encoding,field),E,F) } = 2.
 
-% @soft(same_field_grt3) Prefer not to use the same field three or more times for the same mark.
+% @soft(same_field_grt3) Prefer not to use the same field three or more times across encodings in the same view.
 preference(same_field_grt3,F) :-
     entity(field,_,F),
-    entity(mark,_,M),
-    { entity(encoding,M,E): helper((encoding,field),E,F) } >= 3.
+    entity(view,_,V),
+    { entity(encoding,M,E): entity(mark,V,M), helper((encoding,field),E,F) } >= 3.
+
+% @soft(same_field_encoding_facet) Prefer not to use the same field in both encodings and facets in the same view.
+preference(same_field_encoding_facet,F) :-
+    entity(field,_,F),
+    entity(view,_,V),
+    entity(mark,V,M),
+    entity(encoding,M,E),
+    helper((encoding,field),E,F),
+    entity(facet,V,Fa),
+    helper((facet,field),Fa,F).
 
 % @soft(same_mark_type) Prefer not to use the same mark type more than once in the same view.
 preference(same_mark_type,V) :-
