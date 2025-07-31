@@ -87,15 +87,23 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
     represented as an `Altair <https://altair-viz.github.io/>`_ chart object.
     """
 
-    def __init__(self, concat_mode: Literal["hconcat", "vconcat"] | None = None):
+    def __init__(
+        self,
+        concat_mode: Literal["hconcat", "vconcat"] | None = None,
+        mark_config: dict[str, dict[str, Any]] | None = None,
+    ):
         """
         Instantiates a new `Altair <https://altair-viz.github.io/>`-based renderer.
 
         :param concat_mode: The concatenation mode to use
                             when concatenating multiple views.
                             Only the first view is returned if `None`.
+        :param mark_config: Optional custom mark configuration.
+                            The keys are the mark types, the values are the
+                            configuration dictionaries for the mark type.
         """
         self.concat_mode = concat_mode
+        self.mark_config = mark_config or {}
 
     def render(
         self, spec: dict, data: DataType, label_mapping: LabelMapping | None = None
@@ -256,8 +264,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         # Should never happen, a pydantic error would be raised sooner
         raise ValueError(f"Unknown coordinate type: {coord}")  # pragma: no cover
 
-    @staticmethod
-    def __visit_mark_cartesian(ctx: MarkContext) -> VegaLiteChart:
+    def __visit_mark_cartesian(self, ctx: MarkContext) -> VegaLiteChart:
         """
         Handles mark-specific configuration.
         Responsible for applying the mark type to a chart in cartesian coordinates.
@@ -267,27 +274,27 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         :raises ValueError: if the mark type is not supported
         """
         chart, mark_type = (ctx.chart, ctx.mark.type)
+        mark_config = self.mark_config.get(mark_type, {})
         match mark_type:
             case "point":
-                return chart.mark_point()
+                return chart.mark_point(**mark_config)
             case "bar":
-                return chart.mark_bar()
+                return chart.mark_bar(**mark_config)
             case "line":
-                return chart.mark_line(point=True)
+                return chart.mark_line(**mark_config)
             case "area":
-                return chart.mark_area()
+                return chart.mark_area(**mark_config)
             case "text":
-                return chart.mark_text()
+                return chart.mark_text(**mark_config)
             case "tick":
-                return chart.mark_tick()
+                return chart.mark_tick(**mark_config)
             case "rect":
-                return chart.mark_rect()
+                return chart.mark_rect(**mark_config)
 
         # Should never happen, a pydantic error would be raised sooner
         raise ValueError(f"Unknown mark type: {mark_type}")  # pragma: no cover
 
-    @staticmethod
-    def __visit_mark_polar(ctx: MarkContext) -> VegaLiteChart:
+    def __visit_mark_polar(self, ctx: MarkContext) -> VegaLiteChart:
         """
         Handles mark-specific configuration.
         Responsible for applying the mark type to a chart in polar coordinates.
@@ -304,8 +311,12 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     # We are setting a white stroke here so that the radial
                     # slices are visually separated from each other.
                     # See https://github.com/cmudig/draco2/pull/438#discussion_r1042469389  # noqa: E501
-                    return chart.mark_arc(stroke="#ffffff") + chart.mark_text(
-                        radiusOffset=15
+                    return chart.mark_arc(
+                        stroke="#ffffff",
+                        **self.mark_config.get("arc", {}),
+                    ) + chart.mark_text(
+                        radiusOffset=15,
+                        **self.mark_config.get("text", {}),
                     )
                 else:
                     return chart.mark_arc()
