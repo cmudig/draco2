@@ -329,6 +329,12 @@ preference(high_cardinality_shape,E) :-
     attribute((encoding,channel),E,shape),
     N > 8.
 
+% @soft(high_cardinality_text) Prefer not to use text channel for fields with high cardinality.
+preference(high_cardinality_text,E) :-
+    helper(encoding_cardinality,E,N),
+    attribute((encoding,channel),E,text),
+    N > 100.
+
 % @soft(high_cardinality_size) Prefer not to use size when the cardinality is large on x or y.
 preference(high_cardinality_size,E) :-
     helper((mark,channel),M,size),
