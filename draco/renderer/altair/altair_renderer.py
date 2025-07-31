@@ -273,7 +273,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             case "bar":
                 return chart.mark_bar()
             case "line":
-                return chart.mark_line()
+                return chart.mark_line(point=True)
             case "area":
                 return chart.mark_area()
             case "text":
