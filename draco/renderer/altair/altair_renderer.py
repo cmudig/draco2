@@ -359,6 +359,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             ctx.mark,
             ctx.encoding,
         )
+        field_type = renderer_utils.find_raw_field_type(spec.field, encoding.field)
         custom_args: dict[str, Any] = {}
         if encoding.field is not None:
             custom_args["field"] = encoding.field
@@ -366,8 +367,18 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         if encoding.binning is not None:
             custom_args["bin"] = alt.BinParams(maxbins=encoding.binning)
 
+        # TODO(peter-gy): remove this default, compute temporal cadence in data schema and set timeUnit accordingly
+        if field_type == "datetime":
+            custom_args["timeUnit"] = "year"
+
+        # TODO(peter-gy): extend ASP core to reason about field sorting
+        if field_type in {"number", "string"}:
+            if encoding.channel == "x":
+                custom_args["sort"] = "-y"
+            elif encoding.channel == "y":
+                custom_args["sort"] = "-x"
+
         if view.scale is not None:
-            field_type = renderer_utils.find_raw_field_type(spec.field, encoding.field)
             scale_or_none = self.__find_alt_scale_for_encoding(
                 field_type, mark.type, encoding.channel, view.scale
             )
