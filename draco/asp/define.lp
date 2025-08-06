@@ -52,7 +52,7 @@ domain(scale_channel,V,C) :-
 
 % @definition(scale_type) Scale types.
 domain(discrete_scale,(ordinal;categorical)).
-domain(continuous_scale,(log;linear)).
+domain(continuous_scale,(log;symlog;linear)).
 domain(scale_type,T) :- domain(discrete_scale,T).
 domain(scale_type,T) :- domain(continuous_scale,T).
 
