@@ -108,7 +108,8 @@ def _construct_field_props(
             entropy=entropy,
             min=int(column.min()),
             max=int(column.max()),
-            std=int(column.std()),
+            # For the purpose of reasoning, we treat standard deviation as 0 for constant fields indicating that there is zero variability.
+            std=0 if field_is_constant else int(column.std()),
             # For the purpose of reasoning, we treat skew as 0 for constant fields indicating that the distribution is symmetric.
             skew=0 if field_is_constant else int(cast(float, skew)),
         )
