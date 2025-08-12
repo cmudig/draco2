@@ -368,13 +368,14 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             custom_args["bin"] = alt.BinParams(maxbins=encoding.binning)
 
         # TODO(peter-gy): move `seconds_span_to_vegalite_time_unit` to utils and expose its params via renderer ctor
+        # TODO(peter-gy): revise how we compute temporal cadence: if we have only yearly data it does not make sense to include anything other than year. We need more than just `span_seconds` to know this.
         if field_type == "datetime":
             if fieldname := ctx.encoding.field:
                 field = renderer_utils.find_field_by_name(spec.field, fieldname)
                 if field.span_seconds is not None:
                     custom_args["timeUnit"] = seconds_span_to_vegalite_time_unit(
                         field.span_seconds,
-                        level=2,
+                        level=1,
                     )
 
         # TODO(peter-gy): extend ASP core to reason about field sorting
