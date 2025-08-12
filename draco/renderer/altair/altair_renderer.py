@@ -367,7 +367,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         if encoding.binning is not None:
             custom_args["bin"] = alt.BinParams(maxbins=encoding.binning)
 
-        # TODO(peter-gy): remove this default, compute temporal cadence in data schema and set timeUnit accordingly
+        # TODO(peter-gy): move `seconds_span_to_vegalite_time_unit` to utils and expose its params via renderer ctor
         if field_type == "datetime":
             if fieldname := ctx.encoding.field:
                 field = renderer_utils.find_field_by_name(spec.field, fieldname)
