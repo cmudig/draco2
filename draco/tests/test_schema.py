@@ -78,15 +78,26 @@ def test_load_df():
                 "max_length": 1,
                 "min_length": 1,
             },
-            {"name": "bools", "type": "boolean", "unique": 2, "entropy": 693},
-            {"name": "dates", "type": "datetime", "unique": 2, "entropy": 693},
+            {
+                "name": "bools",
+                "type": "boolean",
+                "unique": 2,
+                "entropy": 693,
+            },
+            {
+                "name": "dates",
+                "type": "datetime",
+                "unique": 2,
+                "entropy": 693,
+                "span_seconds": 94694400,
+            },
         ],
     }
 
 
 def test_load_unsupported_data():
-    # We don't support structs
-    df = pd.DataFrame([{"x": 1}])
+    # We don't nested fields
+    df = pd.DataFrame([{"a": [1, 2, 3]}])
     with pytest.raises(ValueError):
         schema.schema_from_dataframe(df)
 

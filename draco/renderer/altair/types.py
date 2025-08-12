@@ -91,6 +91,12 @@ Described as `(field,max_length)`
 FieldMaxLength = NonNegativeInt
 
 """
+The time span of the field in seconds. Only used for datetime fields.
+Described as `(field,span_seconds)`
+"""
+FieldSpanSeconds = NonNegativeInt
+
+"""
 When the task regards specific fields, fields can be marked as relevant to the task.
 Described as `(field,interesting)`
 """
@@ -315,6 +321,7 @@ class Field(SchemaBase):
     freq: FieldFreq | None = None
     min_length: FieldMinLength | None = None
     max_length: FieldMaxLength | None = None
+    span_seconds: FieldSpanSeconds | None = None
     interesting: FieldInteresting | None = None
 
     __STRING_ONLY_FIELDS__ = {"freq", "min_length", "max_length"}

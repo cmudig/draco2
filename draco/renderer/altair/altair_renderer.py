@@ -369,7 +369,13 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
 
         # TODO(peter-gy): remove this default, compute temporal cadence in data schema and set timeUnit accordingly
         if field_type == "datetime":
-            custom_args["timeUnit"] = "year"
+            if fieldname := ctx.encoding.field:
+                field = renderer_utils.find_field_by_name(spec.field, fieldname)
+                if field.span_seconds is not None:
+                    custom_args["timeUnit"] = seconds_span_to_vegalite_time_unit(
+                        field.span_seconds,
+                        level=2,
+                    )
 
         # TODO(peter-gy): extend ASP core to reason about field sorting
         if field_type in {"number", "string"}:
@@ -582,3 +588,112 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         if label is None:
             return {}
         return {"title": label}
+
+
+def seconds_span_to_vegalite_time_unit(
+    span_seconds: int,
+    utc: bool = False,
+    hierarchical: bool = True,
+    level: int | None = None,
+    binned: bool = False,
+) -> str:
+    """
+    Convert a time span in seconds to the most appropriate Vega-Lite time unit.
+
+    Supports hierarchical time units (e.g., 'yearmonthdate') for better temporal granularity
+    when dealing with larger time spans that benefit from multiple levels of detail.
+
+    :param span_seconds: The time span in seconds
+    :param utc: Whether to use UTC time units (adds 'utc' prefix)
+    :param hierarchical: Whether to use hierarchical time units (e.g., 'yearmonthdate' instead of just 'year')
+    :param level: Limit hierarchical depth (1=single unit, 2=two units, etc.). None means no limit.
+    :param binned: Whether to add 'binned' prefix for chronological time units
+    :return: The appropriate Vega-Lite time unit string
+
+    Examples:
+        - seconds_span_to_vegalite_time_unit(3600) -> "hours"
+        - seconds_span_to_vegalite_time_unit(31536000, hierarchical=True) -> "yearmonthdate"
+        - seconds_span_to_vegalite_time_unit(31536000, level=2) -> "yearmonth"
+        - seconds_span_to_vegalite_time_unit(3600, utc=True, binned=True) -> "binnedhours"
+    """
+    # Define time unit thresholds in seconds
+    MINUTE = 60
+    HOUR = 60 * MINUTE
+    DAY = 24 * HOUR
+    WEEK = 7 * DAY
+    MONTH = 30 * DAY  # Approximate
+    QUARTER = 3 * MONTH  # Approximate
+    YEAR = 365 * DAY  # Approximate
+
+    # Hierarchical time unit combinations based on span
+    hierarchical_units = {
+        "milliseconds": ["milliseconds"],
+        "seconds": ["seconds"],
+        "minutes": ["minutes", "seconds"],
+        "hours": ["hours", "minutes"],
+        "day": ["day", "hours"],
+        "week": ["week", "day"],
+        "month": ["month", "date"],
+        "quarter": ["quarter", "month"],
+        "year": ["year", "month", "date"],
+        "multi_year": ["year", "month", "date", "hours"],
+    }
+
+    # Determine base time unit
+    if span_seconds < 1:
+        base_unit = "milliseconds"
+    elif span_seconds < MINUTE:
+        base_unit = "seconds"
+    elif span_seconds < HOUR:
+        base_unit = "minutes"
+    elif span_seconds < DAY:
+        base_unit = "hours"
+    elif span_seconds < WEEK:
+        base_unit = "day"
+    elif span_seconds < MONTH:
+        base_unit = "week"
+    elif span_seconds < QUARTER:
+        base_unit = "month"
+    elif span_seconds < YEAR:
+        base_unit = "quarter"
+    elif span_seconds < 5 * YEAR:
+        base_unit = "year"
+    else:
+        base_unit = "multi_year"
+
+    # Get time unit components
+    if hierarchical:
+        units = hierarchical_units[base_unit].copy()
+
+        # Apply level limitation if specified
+        if level is not None:
+            if level <= 0:
+                units = []  # Empty list for level 0 or negative
+            else:
+                units = units[:level]
+
+        # Create hierarchical time unit string
+        time_unit = "".join(units)
+    else:
+        # Use only the primary unit
+        if base_unit == "multi_year":
+            time_unit = "year"
+        elif base_unit == "day":
+            time_unit = "date"  # Use 'date' for calendar days in non-hierarchical mode
+        else:
+            time_unit = hierarchical_units[base_unit][0]
+
+    # Add prefixes
+    prefixes = []
+    if binned and base_unit not in [
+        "milliseconds",
+        "seconds",
+        "minutes",
+    ]:  # Binned prefix for chronological units
+        prefixes.append("binned")
+    if utc:
+        prefixes.append("utc")
+
+    prefix = "".join(prefixes)
+
+    return f"{prefix}{time_unit}"

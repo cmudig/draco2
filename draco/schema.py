@@ -37,8 +37,14 @@ class StringFieldProps(BaseFieldProps):
     max_length: int
 
 
+class TemporalFieldProps(BaseFieldProps):
+    """Properties of a `datetime` field in a `Schema`."""
+
+    span_seconds: int
+
+
 # Union of supported field properties.
-FieldProps = NumberFieldProps | StringFieldProps | BaseFieldProps
+FieldProps = NumberFieldProps | StringFieldProps | TemporalFieldProps | BaseFieldProps
 
 
 class Schema(TypedDict):
@@ -88,10 +94,10 @@ def _construct_field_props(
     parse_data_type: Callable[[nw.dtypes.DType], FieldType],
 ) -> FieldProps:
     """Construct a `FieldProps` object from a `DataFrame` column."""
-    name = str(column.name)
     dtype = column.dtype
-    unique = column.unique().len()
     data_type = parse_data_type(dtype)
+    name = str(column.name)
+    unique = column.unique().len()
 
     vc = column.value_counts(normalize=True, sort=False).get_column("proportion")
     entropy = -(vc * np.log(vc) / np.log(e)).sum()
@@ -123,6 +129,14 @@ def _construct_field_props(
             freq=int(objcounts.get_column("count").max()),
             min_length=int(column.str.len_chars().min()),
             max_length=int(column.str.len_chars().max()),
+        )
+    elif data_type == "datetime":
+        return TemporalFieldProps(
+            name=name,
+            type=data_type,
+            unique=unique,
+            entropy=entropy,
+            span_seconds=int((column.max() - column.min()).total_seconds()),
         )
 
     return BaseFieldProps(name=name, type=data_type, unique=unique, entropy=entropy)
