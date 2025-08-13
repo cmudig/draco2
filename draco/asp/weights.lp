@@ -59,6 +59,7 @@
 #const c_d_col_weight = 5.
 #const date_not_x_weight = 10.
 #const date_not_line_weight = 10.
+#const line_multi_number_weight = 20.
 #const x_row_weight = 1.
 #const y_row_weight = 1.
 #const x_col_weight = 1.
@@ -76,6 +77,7 @@
 #const skewed_not_log_weight = 8.
 
 #const c_c_point_weight = 0.
+#const c_c_point_color_weight = 10.
 #const c_c_line_weight = 5.
 #const c_c_area_weight = 20.
 #const c_c_text_weight = 2.

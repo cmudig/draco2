@@ -379,7 +379,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     )
 
         # TODO(peter-gy): extend ASP core to reason about field sorting
-        if field_type in {"number", "string"}:
+        if field_type in {"string"}:
             if encoding.channel == "x":
                 custom_args["sort"] = "-y"
             elif encoding.channel == "y":

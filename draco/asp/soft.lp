@@ -451,6 +451,11 @@ preference(date_not_line,M) :-
     attribute((field,type),F,datetime),
     not attribute((mark,type),M,line).
 
+% @soft(line_multi_number) Discourage using line mark when there is more than one number field.
+preference(line_multi_number,M) :-
+    attribute((mark,type),M,line),
+    { helper((encoding,field),E,F) : entity(encoding,M,E), attribute((field,type),F,number) } > 1.
+
 % @soft(x_row) Positional interactions as suggested by Kim et al.
 preference(x_row,V) :-
     entity(mark,V,M),
@@ -559,6 +564,12 @@ preference(skewed_not_log,E) :-
 preference(c_c_point,M) :-
     helper(is_c_c,M),
     attribute((mark,type),M,point).
+
+% @soft(c_c_point_color) Continuous by continuous for point mark with color encoding.
+preference(c_c_point_color,M) :-
+    helper(is_c_c,M),
+    attribute((mark,type),M,point),
+    helper((mark,channel),M,color).
 
 % @soft(c_c_line) Continuous by continuous for line mark.
 preference(c_c_line,M) :-
