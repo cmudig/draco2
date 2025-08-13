@@ -7,6 +7,8 @@ preference(aggregate,E) :-
 % @soft(bin) Prefer to not bin.
 preference(bin,E) :-
     attribute((encoding,binning),E,_).
+preference(bin,Fa) :-
+    attribute((facet,binning),Fa,_).
 
 % @soft(bin_high) Prefer binning with at most 12 buckets.
 preference(bin_high,E) :-
@@ -38,6 +40,12 @@ preference(facet_used_before_pos,V) :-
     entity(mark,V,M),
     not helper((mark,channel),M,y).
 
+% @soft(facet_used_before_color) Prefer not to use faceting until color channel is used.
+preference(facet_used_before_color,V) :-
+    entity(facet,V,_),
+    entity(mark,V,M),
+    not helper((mark,channel),M,color).
+
 % @soft(facet_row) Prefer to use column facets over row facets.
 preference(facet_row,F) :-
     attribute((facet,channel),F,row).
@@ -46,17 +54,87 @@ preference(facet_row,F) :-
 preference(facet_col,F) :-
     attribute((facet,channel),F,col).
 
-% @soft(same_field) Prefer not to use the same field twice for the same mark.
+% @soft(string_max_length_vertical) Prefer string fields with shorter max label length on channels displaying labels vertically (row facet, x-axis), as it is more difficult to read long rotated labels, so we opt for shorter ones.
+preference(string_max_length_vertical,F) :-
+    attribute((facet,channel),F,row),
+    helper((facet,field),F,Field1),
+    attribute((field,type),Field1,string),
+    attribute((field,max_length),Field1,Length1),
+    attribute((field,type),Field2,string),
+    attribute((field,max_length),Field2,Length2),
+    Field1 != Field2,
+    Length1 > Length2.
+preference(string_max_length_vertical,E) :-
+    % Labels on x-axis are rotated, so they are vertical.
+    attribute((encoding,channel),E,x),
+    helper((encoding,field),E,Field1),
+    attribute((field,type),Field1,string),
+    attribute((field,max_length),Field1,Length1),
+    attribute((field,type),Field2,string),
+    attribute((field,max_length),Field2,Length2),
+    Field1 != Field2,
+    Length1 > Length2.
+
+% @soft(string_max_length_horizontal) Prefer string fields with longer max label length on channels displaying labels horizontally (column facet, y-axis), as it is easier to read long labels from left to right, so we opt for longer ones.
+preference(string_max_length_horizontal,F) :-
+    attribute((facet,channel),F,col),
+    helper((facet,field),F,Field1),
+    attribute((field,type),Field1,string),
+    attribute((field,max_length),Field1,Length1),
+    attribute((field,type),Field2,string),
+    attribute((field,max_length),Field2,Length2),
+    Field1 != Field2,
+    Length1 < Length2.
+preference(string_max_length_horizontal,E) :-
+    % Labels on y-axis are not rotated, so they are horizontal.
+    attribute((encoding,channel),E,y),
+    helper((encoding,field),E,Field1),
+    attribute((field,type),Field1,string),
+    attribute((field,max_length),Field1,Length1),
+    attribute((field,type),Field2,string),
+    attribute((field,max_length),Field2,Length2),
+    Field1 != Field2,
+    Length1 < Length2.
+
+% @soft(same_field) Prefer not to use the same field twice across encodings in the same view.
 preference(same_field,F) :-
     entity(field,_,F),
-    entity(mark,_,M),
-    { entity(encoding,M,E): helper((encoding,field),E,F) } = 2.
+    entity(view,_,V),
+    { entity(encoding,M,E): entity(mark,V,M), helper((encoding,field),E,F) } = 2.
 
-% @soft(same_field_grt3) Prefer not to use the same field three or more times for the same mark.
+% @soft(same_field_grt3) Prefer not to use the same field three or more times across encodings in the same view.
 preference(same_field_grt3,F) :-
     entity(field,_,F),
-    entity(mark,_,M),
-    { entity(encoding,M,E): helper((encoding,field),E,F) } >= 3.
+    entity(view,_,V),
+    { entity(encoding,M,E): entity(mark,V,M), helper((encoding,field),E,F) } >= 3.
+
+% @soft(same_field_encoding_facet) Prefer not to use the same field in both encodings and facets in the same view.
+preference(same_field_encoding_facet,F) :-
+    entity(field,_,F),
+    entity(view,_,V),
+    entity(mark,V,M),
+    entity(encoding,M,E),
+    helper((encoding,field),E,F),
+    entity(facet,V,Fa),
+    helper((facet,field),Fa,F).
+
+% @soft(same_mark_type) Prefer not to use the same mark type more than once in the same view.
+preference(same_mark_type,V) :-
+    entity(mark,V,M1),
+    entity(mark,V,M2),
+    M1 != M2,
+    attribute((mark,type),M1,Type),
+    attribute((mark,type),M2,Type).
+
+% @soft(same_channel) Prefer not to use the same channel more than once in the same view.
+preference(same_channel,V) :-
+    entity(encoding,M1,E1),
+    entity(encoding,M2,E2),
+    entity(mark,V,M1),
+    entity(mark,V,M2),
+    E1 != E2,
+    attribute((encoding,channel),E1,Channel),
+    attribute((encoding,channel),E2,Channel).
 
 % @soft(count_grt1) Prefer not to use count more than once.
 preference(count_grt1,M) :-
@@ -75,12 +153,22 @@ preference(bin_low_unique,E) :-
     attribute((field,unique),F,U),
     helper((encoding,field),E,F),
     attribute((encoding,binning),E,_),
-    U < 15.
+    U < 40.
 
 % @soft(bin_not_linear) Prefer linear scale for bin.
 preference(bin_not_linear,E) :-
     attribute((encoding,binning),E,_),
     not helper((encoding,scale_type),E,linear).
+
+% @soft(bin_string) Prefer not to bin string fields.
+preference(bin_string,E) :-
+    attribute((field,type),F,string),
+    helper((encoding,field),E,F),
+    attribute((encoding,binning),E,_).
+preference(bin_string,Fa) :-
+    attribute((field,type),F,string),
+    helper((facet,field),Fa,F),
+    attribute((facet,binning),Fa,_).
 
 % @soft(only_discrete) Only discrete encoding channels are used in a mark.
 preference(only_discrete,M) :-
@@ -186,11 +274,66 @@ preference(high_cardinality_categorical_grt10,E) :-
     helper((encoding,scale_type),E,categorical),
     N > 10.
 
+% @soft(high_cardinality_categorical_line_point_color) Prefer faceting over color for line/point marks with high cardinality categorical data to avoid overplotting.
+preference(high_cardinality_categorical_line_point_color,E) :-
+    entity(encoding,M,E),
+    attribute((mark,type),M,(line;point)),
+    attribute((encoding,channel),E,color),
+    helper((encoding,field),E,F),
+    helper((encoding,scale_type),E,categorical),
+    helper(encoding_cardinality,E,N),
+    N > 4.
+
+% @soft(high_cardinality_point_color_before_facet) Prefer faceting on both row and col before color for point marks with high cardinality to avoid overplotting.
+preference(high_cardinality_point_color_before_facet,V) :-
+    entity(mark,V,M),
+    attribute((mark,type),M,point),
+    entity(encoding,M,E),
+    helper(encoding_cardinality,E,N),
+    N > 75,
+    helper((mark,channel),M,color),
+    not entity(facet,V,_).
+preference(high_cardinality_point_color_before_facet,V) :-
+    entity(mark,V,M),
+    attribute((mark,type),M,point),
+    entity(encoding,M,E),
+    helper(encoding_cardinality,E,N),
+    N > 75,
+    helper((mark,channel),M,color),
+    entity(facet,V,F1),
+    attribute((facet,channel),F1,row),
+    not entity(facet,V,F2) : attribute((facet,channel),F2,col).
+preference(high_cardinality_point_color_before_facet,V) :-
+    entity(mark,V,M),
+    attribute((mark,type),M,point),
+    entity(encoding,M,E),
+    helper(encoding_cardinality,E,N),
+    N > 75,
+    helper((mark,channel),M,color),
+    entity(facet,V,F1),
+    attribute((facet,channel),F1,col),
+    not entity(facet,V,F2) : attribute((facet,channel),F2,row).
+
+% @soft(high_cardinality_categorical_ordinal_color) Prefer not to use ordinal scale with color for categorical data with high cardinality.
+preference(high_cardinality_categorical_ordinal_color,E) :-
+    attribute((encoding,channel),E,color),
+    helper((encoding,field),E,F),
+    attribute((field,type),F,string),
+    helper((encoding,scale_type),E,ordinal),
+    helper(encoding_cardinality,E,N),
+    N > 4.
+
 % @soft(high_cardinality_shape) Prefer not to use high cardinality ordinal for shape.
 preference(high_cardinality_shape,E) :-
     helper(encoding_cardinality,E,N),
     attribute((encoding,channel),E,shape),
     N > 8.
+
+% @soft(high_cardinality_text) Prefer not to use text channel for fields with high cardinality.
+preference(high_cardinality_text,E) :-
+    helper(encoding_cardinality,E,N),
+    attribute((encoding,channel),E,text),
+    N > 100.
 
 % @soft(high_cardinality_size) Prefer not to use size when the cardinality is large on x or y.
 preference(high_cardinality_size,E) :-
@@ -200,6 +343,19 @@ preference(high_cardinality_size,E) :-
     attribute((encoding,channel),E,(x;y)),
     not helper(mark_encoding_discrete_or_binned,M,E),
     N > 100.
+
+% @soft(high_cardinality_facet) Prefer not to use faceting on row and col when field cardinality is large.
+preference(high_cardinality_facet,F) :-
+    attribute((facet,channel),F,(row;col)),
+    helper(facet_cardinality,F,N),
+    N > 12.
+
+% @soft(underplotting) Prefer not to facet when it results in too few data points per facet.
+preference(underplotting,V) :-
+    entity(facet,V,_),
+    attribute(number_rows,root,NR),
+    helper(total_facet_cardinality,V,NF),
+    NR < 3 * NF.
 
 % @soft(horizontal_scrolling_x) Avoid high cardinality on x as it causes horizontal scrolling.
 preference(horizontal_scrolling_x,E) :-
@@ -211,6 +367,19 @@ preference(horizontal_scrolling_x,E) :-
 % @soft(horizontal_scrolling_col) Avoid high cardinality on column as it causes horizontal scrolling.
 preference(horizontal_scrolling_col,F) :-
     attribute((facet,channel),F,col),
+    helper(facet_cardinality,F,N),
+    N > 5.
+
+% @soft(vertical_scrolling_y) Avoid high cardinality on y as it causes vertical scrolling.
+preference(vertical_scrolling_y,E) :-
+    attribute((encoding,channel),E,y),
+    helper(encoding_cardinality,E,N),
+    helper(mark_encoding_discrete_or_binned,_,E),
+    N > 50.
+
+% @soft(vertical_scrolling_row) Avoid high cardinality on row as it causes vertical scrolling.
+preference(vertical_scrolling_row,F) :-
+    attribute((facet,channel),F,row),
     helper(facet_cardinality,F,N),
     N > 5.
 
@@ -248,6 +417,14 @@ preference(value_agg,V) :-
     entity(encoding,M,E),
     attribute((encoding,aggregate),E,_).
 
+% @soft(value_bin) Prefer not to bin for value tasks as it reduces detail needed for value lookup.
+preference(value_bin,E) :-
+    attribute(task,root,value),
+    attribute((encoding,binning),E,_).
+preference(value_bin,Fa) :-
+    attribute(task,root,value),
+    attribute((facet,binning),Fa,_).
+
 % @soft(summary_facet) Prefer not to use facet for summary tasks as it makes it difficult to compare.
 preference(summary_facet,V) :-
     attribute(task,root,summary),
@@ -266,6 +443,18 @@ preference(date_not_x,E) :-
     attribute((field,type),F,datetime),
     helper((encoding,field),E,F),
     not attribute((encoding,channel),E,x).
+
+% @soft(date_not_line) Prefer line mark when using datetime field.
+preference(date_not_line,M) :-
+    entity(encoding,M,E),
+    helper((encoding,field),E,F),
+    attribute((field,type),F,datetime),
+    not attribute((mark,type),M,line).
+
+% @soft(line_multi_number) Discourage using line mark when there is more than one number field.
+preference(line_multi_number,M) :-
+    attribute((mark,type),M,line),
+    { helper((encoding,field),E,F) : entity(encoding,M,E), attribute((field,type),F,number) } > 1.
 
 % @soft(x_row) Positional interactions as suggested by Kim et al.
 preference(x_row,V) :-
@@ -347,10 +536,40 @@ preference(ordinal_scale,E) :-
 preference(categorical_scale,E) :-
     helper((encoding,scale_type),E,categorical).
 
+% @soft(continuous_scale) Prefer to use linear, log or symlog scale for continuous variables.
+preference(continuous_scale,E) :-
+    helper((encoding,field),E,F),
+    attribute((field,type),F,(number;datetime)),
+    not helper((encoding,scale_type),E,linear),
+    not helper((encoding,scale_type),E,log),
+    not helper((encoding,scale_type),E,symlog).
+
+% @soft(skewed_not_log) Prefer log scale for positive skewed fields and symlog for fields that cross zero.
+preference(skewed_not_log,E) :-
+    helper((encoding,field),E,F),
+    helper(field_skewed,F),
+    attribute((field,min),F,MIN),
+    MIN > 0,
+    not helper((encoding,scale_type),E,log).
+preference(skewed_not_log,E) :-
+    helper((encoding,field),E,F),
+    helper(field_skewed,F),
+    attribute((field,min),F,MIN),
+    attribute((field,max),F,MAX),
+    MIN < 1,
+    MAX > 0,
+    not helper((encoding,scale_type),E,symlog).
+
 % @soft(c_c_point) Continuous by continuous for point mark.
 preference(c_c_point,M) :-
     helper(is_c_c,M),
     attribute((mark,type),M,point).
+
+% @soft(c_c_point_color) Continuous by continuous for point mark with color encoding.
+preference(c_c_point_color,M) :-
+    helper(is_c_c,M),
+    attribute((mark,type),M,point),
+    helper((mark,channel),M,color).
 
 % @soft(c_c_line) Continuous by continuous for line mark.
 preference(c_c_line,M) :-
@@ -439,6 +658,11 @@ preference(c_d_no_overlap_tick,M) :-
     helper(no_overlap,M),
     attribute((mark,type),M,tick).
 
+% @soft(tick_color) Prefer not to use color with tick marks as it is difficult to see.
+preference(tick_color,M) :-
+    attribute((mark,type),M,tick),
+    helper((mark,channel),M,color).
+
 % @soft(d_d_overlap) Prefer not to overlap with DxD.
 preference(d_d_overlap,M) :-
     helper(is_d_d,M),
@@ -448,6 +672,15 @@ preference(d_d_overlap,M) :-
 preference(d_d_point,M) :-
     helper(is_d_d,M),
     attribute((mark,type),M,point).
+
+% @soft(d_d_point_color) Discrete by discrete for point mark with color encoding numeric field.
+preference(d_d_point_color,M) :-
+    helper(is_d_d,M),
+    attribute((mark,type),M,point),
+    entity(encoding,M,E),
+    attribute((encoding,channel),E,color),
+    helper((encoding,field),E,F),
+    attribute((field,type),F,number).
 
 % @soft(d_d_text) Discrete by discrete for text mark.
 preference(d_d_text,M) :-
