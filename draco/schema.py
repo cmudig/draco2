@@ -1,6 +1,6 @@
 from math import e
 from pathlib import Path
-from typing import Callable, Literal, TypeAlias, TypedDict
+from typing import Callable, Literal, TypeAlias, TypedDict, cast
 
 import narwhals as nw
 import numpy as np
@@ -26,16 +26,25 @@ class NumberFieldProps(BaseFieldProps):
     min: int
     max: int
     std: int
+    skew: int
 
 
 class StringFieldProps(BaseFieldProps):
     """Properties of a `string` field in a `Schema`."""
 
     freq: int
+    min_length: int
+    max_length: int
+
+
+class TemporalFieldProps(BaseFieldProps):
+    """Properties of a `datetime` field in a `Schema`."""
+
+    span_seconds: int
 
 
 # Union of supported field properties.
-FieldProps = NumberFieldProps | StringFieldProps | BaseFieldProps
+FieldProps = NumberFieldProps | StringFieldProps | TemporalFieldProps | BaseFieldProps
 
 
 class Schema(TypedDict):
@@ -85,16 +94,19 @@ def _construct_field_props(
     parse_data_type: Callable[[nw.dtypes.DType], FieldType],
 ) -> FieldProps:
     """Construct a `FieldProps` object from a `DataFrame` column."""
-    name = str(column.name)
     dtype = column.dtype
-    unique = column.unique().len()
     data_type = parse_data_type(dtype)
+    name = str(column.name)
+    unique = column.unique().len()
 
     vc = column.value_counts(normalize=True, sort=False).get_column("proportion")
     entropy = -(vc * np.log(vc) / np.log(e)).sum()
     entropy = round(entropy * 1000)
 
     if data_type == "number":
+        skew = column.skew()
+        # Skew is NaN for fields where each value is the same.
+        field_is_constant = skew is None or np.isnan(skew)
         return NumberFieldProps(
             name=name,
             type=data_type,
@@ -102,7 +114,10 @@ def _construct_field_props(
             entropy=entropy,
             min=int(column.min()),
             max=int(column.max()),
-            std=int(column.std()),
+            # For the purpose of reasoning, we treat standard deviation as 0 for constant fields indicating that there is zero variability.
+            std=0 if field_is_constant else int(column.std()),
+            # For the purpose of reasoning, we treat skew as 0 for constant fields indicating that the distribution is symmetric.
+            skew=0 if field_is_constant else int(cast(float, skew)),
         )
     elif data_type == "string":
         objcounts = column.value_counts()
@@ -111,7 +126,17 @@ def _construct_field_props(
             type=data_type,
             unique=unique,
             entropy=entropy,
-            freq=objcounts.get_column("count").max(),
+            freq=int(objcounts.get_column("count").max()),
+            min_length=int(column.str.len_chars().min()),
+            max_length=int(column.str.len_chars().max()),
+        )
+    elif data_type == "datetime":
+        return TemporalFieldProps(
+            name=name,
+            type=data_type,
+            unique=unique,
+            entropy=entropy,
+            span_seconds=int((column.max() - column.min()).total_seconds()),
         )
 
     return BaseFieldProps(name=name, type=data_type, unique=unique, entropy=entropy)
