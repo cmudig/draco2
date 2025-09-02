@@ -29,7 +29,7 @@ jobs:
         run: make grounding-size
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5.4.3
+        uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -57,7 +57,7 @@ jobs:
 
     steps:
       - name: Merge pull requests
-        uses: fastify/github-action-merge-dependabot@v3.11.1
+        uses: fastify/github-action-merge-dependabot@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           target: minor
