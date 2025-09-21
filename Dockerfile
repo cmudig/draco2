@@ -1,5 +1,5 @@
-ARG PYTHON_VERSION=3.12.7
-FROM python:${PYTHON_VERSION}-slim-bookworm
+ARG PYTHON_VERSION=3.13.7
+FROM python:${PYTHON_VERSION}-slim-trixie
 COPY --from=ghcr.io/astral-sh/uv:0.5.1 /uv /uvx /bin/
 
 ENV NODE_MAJOR=22
