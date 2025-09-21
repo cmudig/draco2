@@ -96,7 +96,7 @@ def test_load_df():
 
 
 def test_load_unsupported_data():
-    # We don't nested fields
+    # We don't support nested fields
     df = pd.DataFrame([{"a": [1, 2, 3]}])
     with pytest.raises(ValueError):
         schema.schema_from_dataframe(df)
