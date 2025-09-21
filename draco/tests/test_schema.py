@@ -19,9 +19,18 @@ SIMPLE_SCHEMA = {
             "max": 2,
             "min": 1,
             "std": 0,
+            "skew": 0,
             "entropy": 693,
         },
-        {"name": "text", "type": "string", "unique": 1, "freq": 2, "entropy": 0},
+        {
+            "name": "text",
+            "type": "string",
+            "unique": 1,
+            "freq": 2,
+            "entropy": 0,
+            "max_length": 1,
+            "min_length": 1,
+        },
     ],
 }
 
@@ -30,6 +39,7 @@ def test_load_df():
     df = pd.DataFrame(
         {
             "numbers": [1, 2],
+            "constant": [1, 1],
             "text": ["a", "a"],
             "bools": [True, False],
             "dates": [datetime.datetime(2018, 1, 1), datetime.datetime(2021, 1, 1)],
@@ -46,18 +56,47 @@ def test_load_df():
                 "max": 2,
                 "min": 1,
                 "std": 0,
+                "skew": 0,
                 "entropy": 693,
             },
-            {"name": "text", "type": "string", "unique": 1, "freq": 2, "entropy": 0},
-            {"name": "bools", "type": "boolean", "unique": 2, "entropy": 693},
-            {"name": "dates", "type": "datetime", "unique": 2, "entropy": 693},
+            {
+                "name": "constant",
+                "type": "number",
+                "unique": 1,
+                "max": 1,
+                "min": 1,
+                "std": 0,
+                "skew": 0,
+                "entropy": 0,
+            },
+            {
+                "name": "text",
+                "type": "string",
+                "unique": 1,
+                "freq": 2,
+                "entropy": 0,
+                "max_length": 1,
+                "min_length": 1,
+            },
+            {
+                "name": "bools",
+                "type": "boolean",
+                "unique": 2,
+                "entropy": 693,
+            },
+            {
+                "name": "dates",
+                "type": "datetime",
+                "unique": 2,
+                "entropy": 693,
+            },
         ],
     }
 
 
 def test_load_unsupported_data():
-    # We don't support structs
-    df = pd.DataFrame([{"x": 1}])
+    # We don't nested fields
+    df = pd.DataFrame([{"a": [1, 2, 3]}])
     with pytest.raises(ValueError):
         schema.schema_from_dataframe(df)
 
