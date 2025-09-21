@@ -1,11 +1,12 @@
 import random
-from typing import Literal
+from typing import Any, Literal
 
 import pandas as pd
 import pytest
 from deepdiff import DeepDiff
 
 from draco.renderer import AltairRenderer
+from draco.renderer.altair.altair_renderer import seconds_span_to_vegalite_time_unit
 from draco.renderer.altair.types import MarkType
 
 NUM_ROWS = 100
@@ -54,10 +55,17 @@ def renderer_with_hconcat():
 
 def vl_specs_equal(a: dict, b: dict) -> bool:
     exclude_from_comparison = {"config", "datasets", "data", "$schema"}
+
+    def exclude_tooltip_callback(obj: Any, path: list[str] | None) -> bool:
+        if path and "tooltip" in path:
+            return True
+        return False
+
     diff = DeepDiff(
         a,
         b,
         exclude_paths=exclude_from_comparison,
+        exclude_obj_callback=exclude_tooltip_callback,
         ignore_order=True,
     )
     return not diff
@@ -1094,3 +1102,246 @@ def test_polar(spec: dict, expected_vl: dict, renderer: AltairRenderer):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
     assert vl_specs_equal(vl, expected_vl)
+
+
+def test_render_with_dict_label_mapping(renderer: AltairRenderer):
+    mapping = {
+        "temperature": "Temperature (°C)",
+        "wind": "Wind",
+        "condition": "Condition",
+    }
+    chart = renderer.render(
+        scatterplot_columns_spec_d,
+        df,
+        mapping,
+    )
+    vl = chart.to_dict()
+    for fieldname, label in mapping.items():
+        assert f"'field': '{fieldname}'" in str(vl) and f"'title': '{label}'" in str(vl)
+
+
+def test_render_with_callable_label_mapping(renderer: AltairRenderer):
+    fields = ["temperature", "wind", "condition"]
+
+    def label_from_field(field: str) -> str:
+        return field.replace("_", " ").title()
+
+    chart = renderer.render(scatterplot_columns_spec_d, df, label_from_field)
+    vl = chart.to_dict()
+    for fieldname in fields:
+        assert f"'field': '{fieldname}'" in str(
+            vl
+        ) and f"'title': '{label_from_field(fieldname)}'" in str(vl)
+
+
+@pytest.mark.parametrize(
+    "span_seconds, utc, hierarchical, level, binned, expected_time_unit",
+    # fmt: off
+    [
+        # Basic non-hierarchical tests (hierarchical=False)
+        (1, False, False, None, False, "seconds"),
+        (30, False, False, None, False, "seconds"),
+        (59, False, False, None, False, "seconds"),
+        (1 * 60, False, False, None, False, "minutes"),  # 1 minute
+        (1 * 60 * 60, False, False, None, False, "hours"),  # 1 hour
+        (1 * 24 * 60 * 60, False, False, None, False, "date"),  # 1 day
+        (7 * 24 * 60 * 60, False, False, None, False, "week"),  # 1 week
+        (30 * 24 * 60 * 60, False, False, None, False, "month"),  # ~1 month
+        (3 * 30 * 24 * 60 * 60, False, False, None, False, "quarter"),  # ~3 months
+        (365 * 24 * 60 * 60, False, False, None, False, "year"),  # 1 year
+        # UTC variants (non-hierarchical)
+        (1, True, False, None, False, "utcseconds"),
+        (1 * 60 * 60, True, False, None, False, "utchours"),  # 1 hour
+        (1 * 24 * 60 * 60, True, False, None, False, "utcdate"),  # 1 day
+        (365 * 24 * 60 * 60, True, False, None, False, "utcyear"),  # 1 year
+        # Hierarchical tests (hierarchical=True, default)
+        (0.5, False, True, None, False, "milliseconds"),
+        (1, False, True, None, False, "seconds"),
+        (1 * 60, False, True, None, False, "minutesseconds"),  # 1 minute
+        (1 * 60 * 60, False, True, None, False, "hoursminutes"),  # 1 hour
+        (1 * 24 * 60 * 60, False, True, None, False, "dayhours"),  # 1 day
+        (7 * 24 * 60 * 60, False, True, None, False, "weekday"),  # 1 week
+        (30 * 24 * 60 * 60, False, True, None, False, "monthdate"),  # ~1 month
+        (3 * 30 * 24 * 60 * 60, False, True, None, False, "quartermonth"),  # ~3 months
+        (365 * 24 * 60 * 60, False, True, None, False, "yearmonthdate"),  # 1 year
+        (
+            5 * 365 * 24 * 60 * 60,
+            False,
+            True,
+            None,
+            False,
+            "yearmonthdatehours",
+        ),  # 5 years
+        # Hierarchical with UTC
+        (365 * 24 * 60 * 60, True, True, None, False, "utcyearmonthdate"),  # 1 year
+        (1 * 24 * 60 * 60, True, True, None, False, "utcdayhours"),  # 1 day
+        # Level limitations
+        (365 * 24 * 60 * 60, False, True, 1, False, "year"),  # 1 year, level 1
+        (365 * 24 * 60 * 60, False, True, 2, False, "yearmonth"),  # 1 year, level 2
+        (365 * 24 * 60 * 60, False, True, 3, False, "yearmonthdate"),  # 1 year, level 3
+        (1 * 24 * 60 * 60, False, True, 1, False, "day"),  # 1 day, level 1
+        (1 * 24 * 60 * 60, False, True, 2, False, "dayhours"),  # 1 day, level 2
+        (1 * 60, False, True, 1, False, "minutes"),  # 1 minute, level 1
+        # Binned variants (for chronological units)
+        (1 * 60 * 60, False, True, None, True, "binnedhoursminutes"),  # 1 hour
+        (1 * 24 * 60 * 60, False, True, None, True, "binneddayhours"),  # 1 day
+        (365 * 24 * 60 * 60, False, True, None, True, "binnedyearmonthdate"),  # 1 year
+        (
+            365 * 24 * 60 * 60,
+            True,
+            True,
+            None,
+            True,
+            "binnedutcyearmonthdate",
+        ),  # 1 year UTC
+        (
+            365 * 24 * 60 * 60,
+            False,
+            True,
+            2,
+            True,
+            "binnedyearmonth",
+        ),  # 1 year, level 2
+        # Binned should not apply to sub-minute units
+        (1, False, True, None, True, "seconds"),
+        (30, False, True, None, True, "seconds"),
+        (1 * 60, False, True, None, True, "minutesseconds"),  # Minutes get binned
+        # Edge cases
+        (0, False, True, None, False, "milliseconds"),
+        (
+            7 * 24 * 60 * 60 - 1,
+            False,
+            True,
+            None,
+            False,
+            "dayhours",
+        ),  # Just under a week
+        (7 * 24 * 60 * 60, False, True, None, False, "weekday"),  # Exactly a week
+        # Multi-year spans
+        (
+            10 * 365 * 24 * 60 * 60,
+            False,
+            True,
+            None,
+            False,
+            "yearmonthdatehours",
+        ),  # 10 years
+        (
+            10 * 365 * 24 * 60 * 60,
+            False,
+            True,
+            2,
+            False,
+            "yearmonth",
+        ),  # 10 years, level 2
+        (
+            10 * 365 * 24 * 60 * 60,
+            True,
+            True,
+            None,
+            False,
+            "utcyearmonthdatehours",
+        ),  # 10 years UTC
+    ],
+    # fmt: on
+)
+def test_seconds_span_to_vegalite_time_unit_comprehensive(
+    span_seconds, utc, hierarchical, level, binned, expected_time_unit
+):
+    """Test the enhanced seconds_span_to_vegalite_time_unit function with various configurations."""
+    result = seconds_span_to_vegalite_time_unit(
+        span_seconds=span_seconds,
+        utc=utc,
+        hierarchical=hierarchical,
+        level=level,
+        binned=binned,
+    )
+    assert result == expected_time_unit
+
+
+def test_seconds_span_to_vegalite_time_unit_backward_compatibility():
+    """Test that the function maintains backward compatibility with the old signature."""
+    # Test old signature style (positional args)
+    assert seconds_span_to_vegalite_time_unit(1 * 60 * 60) == "hoursminutes"  # 1 hour
+    assert (
+        seconds_span_to_vegalite_time_unit(1 * 60 * 60, True) == "utchoursminutes"
+    )  # 1 hour UTC
+
+    # Test that hierarchical=True is the default
+    assert (
+        seconds_span_to_vegalite_time_unit(365 * 24 * 60 * 60) == "yearmonthdate"
+    )  # 1 year
+
+    # Test that old non-hierarchical behavior can still be achieved
+    assert (
+        seconds_span_to_vegalite_time_unit(365 * 24 * 60 * 60, hierarchical=False)
+        == "year"
+    )  # 1 year
+
+
+def test_seconds_span_to_vegalite_time_unit_edge_cases():
+    """Test edge cases for the enhanced seconds_span_to_vegalite_time_unit function."""
+    # Test zero
+    assert seconds_span_to_vegalite_time_unit(0) == "milliseconds"
+
+    # Test negative values (should still work)
+    assert seconds_span_to_vegalite_time_unit(-1) == "milliseconds"
+    assert seconds_span_to_vegalite_time_unit(-1 * 60 * 60) == "milliseconds"  # -1 hour
+
+    # Test level edge cases
+    assert (
+        seconds_span_to_vegalite_time_unit(365 * 24 * 60 * 60, level=0) == ""
+    )  # Empty string for level 0
+    assert (
+        seconds_span_to_vegalite_time_unit(365 * 24 * 60 * 60, level=10)
+        == "yearmonthdate"
+    )  # Level beyond available
+
+    # Test combinations of all flags
+    assert (
+        seconds_span_to_vegalite_time_unit(
+            1 * 24 * 60 * 60,
+            utc=True,
+            hierarchical=True,
+            level=2,
+            binned=True,  # 1 day
+        )
+        == "binnedutcdayhours"
+    )
+
+
+@pytest.mark.parametrize(
+    "span_seconds, expected_base_unit",
+    [
+        (0.1, "milliseconds"),
+        (30, "seconds"),
+        (5 * 60, "minutes"),  # 5 minutes
+        (2 * 60 * 60, "hours"),  # 2 hours
+        (36 * 60 * 60, "day"),  # 1.5 days
+        (2 * 7 * 24 * 60 * 60, "week"),  # 2 weeks
+        (2 * 30 * 24 * 60 * 60, "month"),  # 2 months
+        (6 * 30 * 24 * 60 * 60, "quarter"),  # 6 months
+        (365 * 24 * 60 * 60, "year"),  # 1 year
+        (5 * 365 * 24 * 60 * 60, "multi_year"),  # 5 years
+    ],
+)
+def test_time_unit_base_selection(span_seconds, expected_base_unit):
+    """Test that the correct base time unit is selected for different spans."""
+    # We test this indirectly by checking the hierarchical output
+    result = seconds_span_to_vegalite_time_unit(span_seconds, hierarchical=True)
+
+    # Map expected base units to their expected hierarchical outputs
+    expected_hierarchical = {
+        "milliseconds": "milliseconds",
+        "seconds": "seconds",
+        "minutes": "minutesseconds",
+        "hours": "hoursminutes",
+        "day": "dayhours",
+        "week": "weekday",
+        "month": "monthdate",
+        "quarter": "quartermonth",
+        "year": "yearmonthdate",
+        "multi_year": "yearmonthdatehours",
+    }
+
+    assert result == expected_hierarchical[expected_base_unit]

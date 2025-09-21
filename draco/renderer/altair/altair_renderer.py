@@ -1,16 +1,17 @@
 import logging
 import warnings
 from dataclasses import dataclass
-from typing import Any, Generic, Literal, TypeVar, cast
+from typing import Any, Callable, Generic, Literal, TypeVar, cast
 
 import altair as alt
+import narwhals as nw
 
-from draco.renderer.base_renderer import BaseRenderer, DataType
+import draco.renderer.utils as renderer_utils
+from draco.renderer.base_renderer import BaseRenderer, DataType, LabelMapping
 
 from .types import (
     Encoding,
     EncodingChannel,
-    Field,
     FieldName,
     FieldType,
     Mark,
@@ -46,6 +47,7 @@ class RootContext(Generic[VegaLiteChart]):
     spec: SpecificationDict
     chart: VegaLiteChart
     chart_views: list[VegaLiteChart]
+    get_label: Callable[[str], str | None]
 
 
 @dataclass(frozen=True)
@@ -85,20 +87,40 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
     represented as an `Altair <https://altair-viz.github.io/>`_ chart object.
     """
 
-    def __init__(self, concat_mode: Literal["hconcat", "vconcat"] | None = None):
+    def __init__(
+        self,
+        concat_mode: Literal["hconcat", "vconcat"] | None = None,
+        mark_config: dict[str, dict[str, Any]] | None = None,
+    ):
         """
         Instantiates a new `Altair <https://altair-viz.github.io/>`-based renderer.
 
         :param concat_mode: The concatenation mode to use
                             when concatenating multiple views.
                             Only the first view is returned if `None`.
+        :param mark_config: Optional custom mark configuration.
+                            The keys are the mark types, the values are the
+                            configuration dictionaries for the mark type.
         """
         self.concat_mode = concat_mode
+        self.mark_config = mark_config or {}
 
-    def render(self, spec: dict, data: DataType) -> VegaLiteChart:
+    def render(
+        self, spec: dict, data: DataType, label_mapping: LabelMapping | None = None
+    ) -> VegaLiteChart:
         typed_spec = SpecificationDict.model_validate(spec)
         chart: VegaLiteChart = cast(VegaLiteChart, alt.Chart(data))
         chart_views: list[VegaLiteChart] = []
+        data_fields: list[str] = (
+            list(data.keys())
+            if isinstance(data, dict)
+            else nw.from_native(data).columns
+        )
+
+        def get_label(field: str) -> str | None:
+            if label_mapping is not None:
+                return renderer_utils.resolve_label(label_mapping, field)
+            return None
 
         # Traverse the specification dict and invoke the appropriate visitor
         for v in typed_spec.view:
@@ -112,6 +134,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                         layers=layers,
                         view=v,
                         mark=m,
+                        get_label=get_label,
                     )
                 )
                 for e in m.encoding:
@@ -124,8 +147,15 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                             view=v,
                             mark=m,
                             encoding=e,
+                            get_label=get_label,
                         )
                     )
+                chart = chart.encode(
+                    tooltip=[
+                        alt.Tooltip(field, title=get_label(field))
+                        for field in data_fields
+                    ]
+                )
                 layers.append(chart)
             chart = self.__visit_view(
                 ctx=ViewContext(
@@ -134,11 +164,18 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     chart_views=chart_views,
                     layers=layers,
                     view=v,
+                    get_label=get_label,
                 )
             )
             chart_views.append(chart)
+
         return self.__visit_root(
-            ctx=RootContext(spec=typed_spec, chart=chart, chart_views=chart_views)
+            ctx=RootContext(
+                spec=typed_spec,
+                chart=chart,
+                chart_views=chart_views,
+                get_label=get_label,
+            )
         )
 
     def __visit_root(self, ctx: RootContext) -> VegaLiteChart:
@@ -187,10 +224,11 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             }
             for f in view.facet:
                 channel = f.channel
+                title_args = self.__get_title_args(ctx, f.field)
                 facet_args: dict[str, Any] = {
                     "field": f.field,
-                    "type": self.__get_field_type(ctx.spec, f.field),
-                }
+                    "type": self.__find_field_type(ctx.spec, f.field),
+                } | title_args
                 if f.binning is not None:
                     facet_args["bin"] = alt.BinParams(maxbins=f.binning)
                 match channel:
@@ -226,8 +264,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         # Should never happen, a pydantic error would be raised sooner
         raise ValueError(f"Unknown coordinate type: {coord}")  # pragma: no cover
 
-    @staticmethod
-    def __visit_mark_cartesian(ctx: MarkContext) -> VegaLiteChart:
+    def __visit_mark_cartesian(self, ctx: MarkContext) -> VegaLiteChart:
         """
         Handles mark-specific configuration.
         Responsible for applying the mark type to a chart in cartesian coordinates.
@@ -237,27 +274,27 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         :raises ValueError: if the mark type is not supported
         """
         chart, mark_type = (ctx.chart, ctx.mark.type)
+        mark_config = self.mark_config.get(mark_type, {})
         match mark_type:
             case "point":
-                return chart.mark_point()
+                return chart.mark_point(**mark_config)
             case "bar":
-                return chart.mark_bar()
+                return chart.mark_bar(**mark_config)
             case "line":
-                return chart.mark_line()
+                return chart.mark_line(**mark_config)
             case "area":
-                return chart.mark_area()
+                return chart.mark_area(**mark_config)
             case "text":
-                return chart.mark_text()
+                return chart.mark_text(**mark_config)
             case "tick":
-                return chart.mark_tick()
+                return chart.mark_tick(**mark_config)
             case "rect":
-                return chart.mark_rect()
+                return chart.mark_rect(**mark_config)
 
         # Should never happen, a pydantic error would be raised sooner
         raise ValueError(f"Unknown mark type: {mark_type}")  # pragma: no cover
 
-    @staticmethod
-    def __visit_mark_polar(ctx: MarkContext) -> VegaLiteChart:
+    def __visit_mark_polar(self, ctx: MarkContext) -> VegaLiteChart:
         """
         Handles mark-specific configuration.
         Responsible for applying the mark type to a chart in polar coordinates.
@@ -274,8 +311,12 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                     # We are setting a white stroke here so that the radial
                     # slices are visually separated from each other.
                     # See https://github.com/cmudig/draco2/pull/438#discussion_r1042469389  # noqa: E501
-                    return chart.mark_arc(stroke="#ffffff") + chart.mark_text(
-                        radiusOffset=15
+                    return chart.mark_arc(
+                        stroke="#ffffff",
+                        **self.mark_config.get("arc", {}),
+                    ) + chart.mark_text(
+                        radiusOffset=15,
+                        **self.mark_config.get("text", {}),
                     )
                 else:
                     return chart.mark_arc()
@@ -318,26 +359,46 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             ctx.mark,
             ctx.encoding,
         )
+        field_type = renderer_utils.find_raw_field_type(spec.field, encoding.field)
         custom_args: dict[str, Any] = {}
         if encoding.field is not None:
             custom_args["field"] = encoding.field
-            custom_args["type"] = self.__get_field_type(spec, encoding.field)
+            custom_args["type"] = self.__find_field_type(spec, encoding.field)
         if encoding.binning is not None:
             custom_args["bin"] = alt.BinParams(maxbins=encoding.binning)
 
+        # TODO(peter-gy): move `seconds_span_to_vegalite_time_unit` to utils and expose its params via renderer ctor
+        # TODO(peter-gy): revise how we compute temporal cadence: if we have only yearly data it does not make sense to include anything other than year. We need more than just `span_seconds` to know this.
+        if field_type == "datetime":
+            if fieldname := ctx.encoding.field:
+                field = renderer_utils.find_field_by_name(spec.field, fieldname)
+                if field.span_seconds is not None:
+                    custom_args["timeUnit"] = seconds_span_to_vegalite_time_unit(
+                        field.span_seconds,
+                        level=1,
+                    )
+
+        # TODO(peter-gy): extend ASP core to reason about field sorting
+        if field_type in {"string"}:
+            if encoding.channel == "x":
+                custom_args["sort"] = "-y"
+            elif encoding.channel == "y":
+                custom_args["sort"] = "-x"
+
         if view.scale is not None:
-            field_type = self.__get_field_type_raw(spec.field, encoding.field)
-            scale_or_none = self.__get_alt_scale_for_encoding(
+            scale_or_none = self.__find_alt_scale_for_encoding(
                 field_type, mark.type, encoding.channel, view.scale
             )
             if scale_or_none is not None:
                 custom_args["scale"] = scale_or_none
 
+        title_args = self.__get_title_args(ctx, encoding.field)
         encoding_args = (
             encoding.model_dump(
                 exclude_none=True, exclude={"channel", "field", "binning"}
             )
             | custom_args
+            | title_args
         )
 
         match encoding.channel:
@@ -379,21 +440,23 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         custom_args: dict[str, Any] = {}
         if encoding.field is not None:
             custom_args["field"] = encoding.field
-            custom_args["type"] = self.__get_field_type(spec, encoding.field)
+            custom_args["type"] = self.__find_field_type(spec, encoding.field)
 
         if view.scale is not None:
-            field_type = self.__get_field_type_raw(spec.field, encoding.field)
-            scale_or_none = self.__get_alt_scale_for_encoding(
+            field_type = renderer_utils.find_raw_field_type(spec.field, encoding.field)
+            scale_or_none = self.__find_alt_scale_for_encoding(
                 field_type, mark.type, encoding.channel, view.scale
             )
             if scale_or_none is not None:
                 custom_args["scale"] = scale_or_none
 
+        title_args = self.__get_title_args(ctx, encoding.field)
         encoding_args = (
             encoding.model_dump(
                 exclude_none=True, exclude={"channel", "field", "binning", "scale"}
             )
             | custom_args
+            | title_args
         )
 
         match encoding.channel:
@@ -416,65 +479,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 raise ValueError(f"Unknown channel: {encoding.channel}")
 
     @staticmethod
-    def __get_encoding_channel_of_field(
-        views: list[View], field_name: FieldName
-    ) -> EncodingChannel | None:
-        """
-        Returns the mark encoding channel for the field with the given name.
-
-        :param views: All the views in the spec to search for.
-        :param field_name: The name of the field to search for.
-        :return: The encoding channel of the field, or `None` if
-                 the field is not found.
-        """
-        for v in views:
-            for m in v.mark:
-                for e in m.encoding:
-                    if e.field == field_name:
-                        return e.channel
-
-        return None
-
-    @staticmethod
-    def __get_scales_of_spec(spec: SpecificationDict) -> list[Scale]:
-        """
-        Returns all the scales in the spec including the top-level
-        shared scale and the view-specific scales.
-
-        :param spec: The spec to search through for scales.
-        :return: A list of all the scales in the spec.
-        """
-        scales: list[Scale] = []
-
-        # Shared scales
-        for s in spec.scale or []:
-            scales.append(s)
-
-        # View-specific scales
-        for v in spec.view:
-            for s in v.scale or []:
-                scales.append(s)
-
-        return scales
-
-    @staticmethod
-    def __get_field_by_name(fields: list[Field], field_name: FieldName) -> Field:
-        """
-        Returns the field with the given name.
-
-        :param fields: The list of fields to search through.
-        :param field_name: The name of the field to search for.
-        :return: The field with the given name.
-        :raises ValueError: If the field is not found.
-        """
-        for f in fields:
-            if f.name == field_name:
-                return f
-
-        raise ValueError(f"Field {field_name} not found")
-
-    @staticmethod
-    def __get_field_type(spec: SpecificationDict, field_name: FieldName) -> str:
+    def __find_field_type(spec: SpecificationDict, field_name: FieldName) -> str:
         """
         Returns the type of the field with the given name.
         Needed to map from Draco-spec data types to Vega-Lite data types.
@@ -484,7 +489,6 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         :param field_name: name of the field to look up
         :return: the type of the field
         """
-        cls = AltairRenderer
         __DEFAULT_KEY__ = "default"
         # Multi-criteria lookup to determine the type of the field
         # based on the scale type (if any) AND the raw data type.
@@ -494,6 +498,10 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
                 "datetime": "temporal",
             },
             "log": {
+                "number": "quantitative",
+                "datetime": "quantitative",
+            },
+            "symlog": {
                 "number": "quantitative",
                 "datetime": "quantitative",
             },
@@ -517,50 +525,24 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             },
         }
 
-        field = cls.__get_field_by_name(spec.field, field_name)
+        field = renderer_utils.find_field_by_name(spec.field, field_name)
         # Look for the encoding channel of the field, so we can match it to a scale
-        channel = cls.__get_encoding_channel_of_field(spec.view, field_name)
+        channel = renderer_utils.find_encoding_channel_of_field(spec.view, field_name)
         # We might have no channel in case of a faceted field
         # --> we map based on the raw data type
         if channel is None:
             return renames[__DEFAULT_KEY__][field.type]
 
         # Look for the scale associated with `channel`
-        scale = cls.__get_scale_for_encoding(channel, cls.__get_scales_of_spec(spec))
+        scales_of_spec = renderer_utils.find_scales_of_spec(spec)
+        scale = renderer_utils.find_scale_for_encoding(channel, scales_of_spec)
         # We might have no scale present for the channel
         # --> we map based on the raw data type
         key = scale.type if scale is not None else __DEFAULT_KEY__
         return renames[key][field.type]
 
     @staticmethod
-    def __get_scale_for_encoding(
-        channel: EncodingChannel, scales: list[Scale]
-    ) -> Scale | None:
-        """
-        Returns the `Scale` for the given encoding channel, if any.
-
-        :param channel: the channel for which to look up a scale
-        :param scales: the list of scales in the view
-        :return: the scale for the given channel, or None if no scale is found
-        """
-        for scale in scales:
-            if scale.channel == channel:
-                return scale
-        return None
-
-    @staticmethod
-    def __get_field_type_raw(
-        fields: list[Field], field_name: FieldName | None
-    ) -> FieldType:
-        if field_name is None:
-            return "number"
-
-        cls = AltairRenderer
-        field_type = cls.__get_field_by_name(fields, field_name)
-        return field_type.type
-
-    @staticmethod
-    def __get_alt_scale_for_encoding(
+    def __find_alt_scale_for_encoding(
         field_type: FieldType,
         mark_type: MarkType,
         channel: EncodingChannel,
@@ -575,7 +557,7 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
         :param scales: the list of scales in the view
         :return: the scale for the given channel, or None if no scale is found
         """
-        scale = AltairRenderer.__get_scale_for_encoding(channel, scales)
+        scale = renderer_utils.find_scale_for_encoding(channel, scales)
         if scale is None:
             return None
 
@@ -598,3 +580,121 @@ class AltairRenderer(BaseRenderer[VegaLiteChart]):
             del scale_args["type"]
 
         return alt.Scale(**scale_args) if scale_args else None
+
+    @staticmethod
+    def __get_title_args(ctx: RootContext, field: FieldName | None) -> dict[str, Any]:
+        if field is None:
+            return {}
+        label = ctx.get_label(field)
+        if label is None:
+            return {}
+        return {"title": label}
+
+
+def seconds_span_to_vegalite_time_unit(
+    span_seconds: int,
+    utc: bool = False,
+    hierarchical: bool = True,
+    level: int | None = None,
+    binned: bool = False,
+) -> str:
+    """
+    Convert a time span in seconds to the most appropriate Vega-Lite time unit.
+
+    Supports hierarchical time units (e.g., 'yearmonthdate') for better temporal granularity
+    when dealing with larger time spans that benefit from multiple levels of detail.
+
+    :param span_seconds: The time span in seconds
+    :param utc: Whether to use UTC time units (adds 'utc' prefix)
+    :param hierarchical: Whether to use hierarchical time units (e.g., 'yearmonthdate' instead of just 'year')
+    :param level: Limit hierarchical depth (1=single unit, 2=two units, etc.). None means no limit.
+    :param binned: Whether to add 'binned' prefix for chronological time units
+    :return: The appropriate Vega-Lite time unit string
+
+    Examples:
+        - seconds_span_to_vegalite_time_unit(3600) -> "hours"
+        - seconds_span_to_vegalite_time_unit(31536000, hierarchical=True) -> "yearmonthdate"
+        - seconds_span_to_vegalite_time_unit(31536000, level=2) -> "yearmonth"
+        - seconds_span_to_vegalite_time_unit(3600, utc=True, binned=True) -> "binnedhours"
+    """
+    # Define time unit thresholds in seconds
+    MINUTE = 60
+    HOUR = 60 * MINUTE
+    DAY = 24 * HOUR
+    WEEK = 7 * DAY
+    MONTH = 30 * DAY  # Approximate
+    QUARTER = 3 * MONTH  # Approximate
+    YEAR = 365 * DAY  # Approximate
+
+    # Hierarchical time unit combinations based on span
+    hierarchical_units = {
+        "milliseconds": ["milliseconds"],
+        "seconds": ["seconds"],
+        "minutes": ["minutes", "seconds"],
+        "hours": ["hours", "minutes"],
+        "day": ["day", "hours"],
+        "week": ["week", "day"],
+        "month": ["month", "date"],
+        "quarter": ["quarter", "month"],
+        "year": ["year", "month", "date"],
+        "multi_year": ["year", "month", "date", "hours"],
+    }
+
+    # Determine base time unit
+    if span_seconds < 1:
+        base_unit = "milliseconds"
+    elif span_seconds < MINUTE:
+        base_unit = "seconds"
+    elif span_seconds < HOUR:
+        base_unit = "minutes"
+    elif span_seconds < DAY:
+        base_unit = "hours"
+    elif span_seconds < WEEK:
+        base_unit = "day"
+    elif span_seconds < MONTH:
+        base_unit = "week"
+    elif span_seconds < QUARTER:
+        base_unit = "month"
+    elif span_seconds < YEAR:
+        base_unit = "quarter"
+    elif span_seconds < 5 * YEAR:
+        base_unit = "year"
+    else:
+        base_unit = "multi_year"
+
+    # Get time unit components
+    if hierarchical:
+        units = hierarchical_units[base_unit].copy()
+
+        # Apply level limitation if specified
+        if level is not None:
+            if level <= 0:
+                units = []  # Empty list for level 0 or negative
+            else:
+                units = units[:level]
+
+        # Create hierarchical time unit string
+        time_unit = "".join(units)
+    else:
+        # Use only the primary unit
+        if base_unit == "multi_year":
+            time_unit = "year"
+        elif base_unit == "day":
+            time_unit = "date"  # Use 'date' for calendar days in non-hierarchical mode
+        else:
+            time_unit = hierarchical_units[base_unit][0]
+
+    # Add prefixes
+    prefixes = []
+    if binned and base_unit not in [
+        "milliseconds",
+        "seconds",
+        "minutes",
+    ]:  # Binned prefix for chronological units
+        prefixes.append("binned")
+    if utc:
+        prefixes.append("utc")
+
+    prefix = "".join(prefixes)
+
+    return f"{prefix}{time_unit}"

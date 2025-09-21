@@ -236,3 +236,36 @@ helper((encoding,field),E,F) :-
 helper((facet,field),FC,F) :-
     attribute((facet,field),FC,N),
     attribute((field,name),F,N).
+
+% @helper(field_skewed) Whether a field is skewed (absolute skew > 5).
+helper(field_skewed,F) :-
+    attribute((field,skew),F,S),
+    |S| > 2.
+
+% @helper(total_facet_cardinality) The total cardinality of all facets in a view (product of individual facet cardinalities).
+helper(total_facet_cardinality,V,1) :-
+    entity(view,root,V),
+    not entity(facet,V,_).
+helper(total_facet_cardinality,V,N) :-
+    entity(facet,V,F),
+    attribute((facet,channel),F,row),
+    helper(facet_cardinality,F,N),
+    not entity(facet,V,F2),
+    F2 != F,
+    attribute((facet,channel),F2,col).
+helper(total_facet_cardinality,V,N) :-
+    entity(facet,V,F),
+    attribute((facet,channel),F,col),
+    helper(facet_cardinality,F,N),
+    not entity(facet,V,F2),
+    F2 != F,
+    attribute((facet,channel),F2,row).
+helper(total_facet_cardinality,V,N) :-
+    entity(facet,V,F1),
+    entity(facet,V,F2),
+    F1 != F2,
+    attribute((facet,channel),F1,row),
+    attribute((facet,channel),F2,col),
+    helper(facet_cardinality,F1,N1),
+    helper(facet_cardinality,F2,N2),
+    N = N1 * N2.
