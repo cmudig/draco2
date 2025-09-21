@@ -89,6 +89,7 @@ def test_load_df():
                 "type": "datetime",
                 "unique": 2,
                 "entropy": 693,
+                "span_seconds": 94694400,
             },
         ],
     }

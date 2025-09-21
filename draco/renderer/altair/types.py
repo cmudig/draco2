@@ -3,7 +3,8 @@ from typing import Literal
 from pydantic import (
     BaseModel,
     ConfigDict,
-    PositiveFloat,
+    NonNegativeFloat,
+    NonNegativeInt,
     PositiveInt,
     model_validator,
 )
@@ -45,7 +46,7 @@ FieldUnique = PositiveInt
 The entropy of the field.
 Described as `(field,entropy)`
 """
-FieldEntropy = PositiveFloat
+FieldEntropy = NonNegativeFloat
 
 """
 The minimum value. Only used for numbers.
@@ -66,10 +67,34 @@ Described as `(field,std)`
 FieldStd = float
 
 """
+The skew of the field. Only used for numbers.
+Described as `(field,skew)`
+"""
+FieldSkew = float
+
+"""
 The frequency of the most common value. Only used for strings.
 Described as `(field,freq)`
 """
 FieldFreq = PositiveInt
+
+"""
+The minimum length of the field. Only used for strings.
+Described as `(field,min_length)`
+"""
+FieldMinLength = NonNegativeInt
+
+"""
+The maximum length of a field. Only used for strings.
+Described as `(field,max_length)`
+"""
+FieldMaxLength = NonNegativeInt
+
+"""
+The time span of the field in seconds. Only used for datetime fields.
+Described as `(field,span_seconds)`
+"""
+FieldSpanSeconds = NonNegativeInt
 
 """
 When the task regards specific fields, fields can be marked as relevant to the task.
@@ -292,10 +317,14 @@ class Field(SchemaBase):
     min: FieldMin | None = None
     max: FieldMax | None = None
     std: FieldStd | None = None
+    skew: FieldSkew | None = None
     freq: FieldFreq | None = None
+    min_length: FieldMinLength | None = None
+    max_length: FieldMaxLength | None = None
+    span_seconds: FieldSpanSeconds | None = None
     interesting: FieldInteresting | None = None
 
-    __STRING_ONLY_FIELDS__ = {"freq"}
+    __STRING_ONLY_FIELDS__ = {"freq", "min_length", "max_length"}
     __NUMBER_ONLY_FIELDS__ = {"min", "max", "std"}
 
     @model_validator(mode="before")
