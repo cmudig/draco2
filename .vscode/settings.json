@@ -14,8 +14,7 @@
     "**/__pycache__": true,
     "**/mypy_cache": true,
     "**/ruff_cache": true,
-    ".coverage.*": true,
-    ".pytype": true
+    ".coverage.*": true
   },
   "autoDocstring.docstringFormat": "sphinx",
   "autoDocstring.guessTypes": true

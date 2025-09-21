@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from .shared import ClingoModel
 
 
-class RunClingoDTO(BaseModel):  # pytype: disable=base-class-error
+class RunClingoDTO(BaseModel):
     """Data Transfer Object to run clingo via ``draco.run.run_clingo``."""
 
     program: str | Iterable[str]

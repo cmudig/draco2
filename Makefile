@@ -30,15 +30,11 @@ lint:
 .PHONY: typecheck
 typecheck:
 	@echo "==> ✅ Type checks"
-	@make mypy pytype
+	@make mypy
 
 .PHONY: mypy
 mypy:
 	@uv run --all-extras mypy --check-untyped-defs $(PACKAGE_ROOT)
-
-.PHONY: pytype
-pytype:
-	@uv run --all-extras pytype $(PACKAGE_ROOT)
 
 .PHONY: jupyterlite-nb-patch
 jupyterlite-nb-patch:
@@ -94,7 +90,6 @@ clean:
 	@find . -type d -name '*.ipynb_checkpoints' -exec rm -r {} +
 	@find . -type d -name '*pytest_cache*' -exec rm -rf {} +
 	@find . -type d -name '.mypy_cache' -exec rm -rf {} +
-	@find . -type d -name '.pytype' -exec rm -rf {} +
 	@find . -type d -name '.ruff_cache' -exec rm -rf {} +
 	@find . -type d -name '__pycache__' -exec rm -rf {} +
 	@find . -type f -name "*.py[co]" -exec rm -rf {} +

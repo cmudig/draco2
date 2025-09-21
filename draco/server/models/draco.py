@@ -7,7 +7,7 @@ from draco.types import Specification
 from .shared import ClingoModel
 
 
-class CheckSpecDTO(BaseModel):  # pytype: disable=base-class-error
+class CheckSpecDTO(BaseModel):
     """Data Transfer Object to check a specification via ``Draco.check_spec``."""
 
     spec: Specification
@@ -16,7 +16,7 @@ class CheckSpecDTO(BaseModel):  # pytype: disable=base-class-error
 CheckSpecReturn = bool
 
 
-class CompleteSpecDTO(BaseModel):  # pytype: disable=base-class-error
+class CompleteSpecDTO(BaseModel):
     """Data Transfer Object to complete a specification via ``Draco.complete_spec``."""
 
     spec: Specification
@@ -26,7 +26,7 @@ class CompleteSpecDTO(BaseModel):  # pytype: disable=base-class-error
 CompleteSpecReturn = list[ClingoModel]
 
 
-class CountPreferencesDTO(BaseModel):  # pytype: disable=base-class-error
+class CountPreferencesDTO(BaseModel):
     """Data Transfer Object to count preferences via ``Draco.count_preferences``."""
 
     spec: Specification
@@ -35,7 +35,7 @@ class CountPreferencesDTO(BaseModel):  # pytype: disable=base-class-error
 CountPreferencesReturn = DefaultDict[str, int] | None
 
 
-class GetViolationsDTO(BaseModel):  # pytype: disable=base-class-error
+class GetViolationsDTO(BaseModel):
     """Data Transfer Object to get violations via ``Draco.get_violations``."""
 
     spec: Specification
