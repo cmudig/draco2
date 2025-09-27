@@ -30,7 +30,7 @@ classifiers = [
 ]
 dependencies = [
     "altair>=5.5.0",
-    "clingo>=5.7.1",
+    "clingo>=5.8.0",
     "narwhals>=1.46.0",
     "numpy>=2.1.3",
     "pandas>=2.2.3",
