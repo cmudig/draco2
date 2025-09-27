@@ -42,8 +42,8 @@ jobs:
       - name: Build docker image
         run: docker build --build-arg PYTHON_VERSION=$(cat .python-version) -t draco .
 
-      - name: Run all make targets
-        run: docker run --rm draco bash -c "make"
+      - name: Test dockerized environment
+        run: docker run --rm draco bash -c "make env-test"
 
   automerge:
     needs:

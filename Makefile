@@ -13,6 +13,9 @@ test:
 	@echo "==> 🧪 Tests"
 	@uv run --all-extras pytest -svv $(PACKAGE_ROOT)
 
+.PHONY: env-test
+env-test: lint typecheck cover grounding-size
+
 # Default coverage report format
 COV_REPORT ?= term-missing
 
