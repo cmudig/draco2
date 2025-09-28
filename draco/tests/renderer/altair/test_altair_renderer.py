@@ -1,5 +1,5 @@
 import random
-from typing import Literal
+from typing import Any, Literal
 
 import pandas as pd
 import pytest
@@ -8,9 +8,11 @@ from deepdiff import DeepDiff
 from draco.renderer import AltairRenderer
 from draco.renderer.altair.types import MarkType
 
+# Workbench: https://marimo.app/#code/JYWwDg9gTgLgBCAhlUEBQaD6mDmBTAOzykRjwBNMB3YGACzgF44AiAVwIGsCIqCW0iMGCYJkqAHQBBYQAoAlBjQABIWAkBjPABttacngBmcTLLDkANHBIFyEEPIBcaOK7gA5AKoBZTACUAeQB1AGVRAEYABkiXN3JjZnMJABFSRAAxEhA8WVi3NwBvPPySlnJSPBZHOCTyskwbfFkWACZIloBmSKjwliswYmAIcgBnRi9fQND5C2KStxYycGJSNihK6oBtGzsQCQ5gQ2gQWXCrABZz+TgjqBM4YAJrRAImif9gkPkAXVn5+ZYNFsVTg2xeu32BEOx1kkSsUUi11u90ez1eOXeUy+vzm-xYYHWGmAYFopCG-C2O3skOhUBOcLgCKR0BRT0aGJ8H2mOP+pQ0EFstHJIKpew0dAgwC0I1yvN5mzKKAAXkrtJUrCwjjg+qwSI8dSwRhwDSMeFQWL84Jxxpysbj5jN7XAAL7FRT5eLFdYwNYEJSqYSaHTaWR0YAGTD8gyMAAqUDYeEUBmMpicxVAkFgYhQIAgcEQIwQ6HyGeg8EQ2hgiGAdwL+cr6fAZbRu0bmfgYHBdbr5i9eB9UCe5isoqUhxMmAIiGy2CYzBY2CQj2wVWKagk8YICjQQA
 NUM_ROWS = 100
 df = pd.DataFrame(
     {
+        "date": pd.date_range("20230101", periods=NUM_ROWS),
         "temperature": [random.uniform(1, 44) for _ in range(NUM_ROWS)],
         "wind": [random.uniform(0, 100) for _ in range(NUM_ROWS)],
         "precipitation": [random.uniform(0, 100) for _ in range(NUM_ROWS)],
@@ -27,6 +29,7 @@ def data(fields):
         "field": [
             x
             for x in [
+                {"name": "date", "type": "datetime"},
                 {"name": "temperature", "type": "number"},
                 {"name": "wind", "type": "number"},
                 {"name": "precipitation", "type": "number"},
@@ -52,15 +55,32 @@ def renderer_with_hconcat():
     return AltairRenderer(concat_mode="hconcat")
 
 
-def vl_specs_equal(a: dict, b: dict) -> bool:
+@pytest.fixture
+def renderer_with_mark_config():
+    # Common use case ensuring that line charts have points shown without encoding them as a dedicated layer
+    return AltairRenderer(mark_config={"line": {"point": True}})
+
+
+def assert_vl_specs_equal(a: dict, b: dict):
     exclude_from_comparison = {"config", "datasets", "data", "$schema"}
+
+    def exclude_tooltip_callback(obj: Any, path: list[str] | None) -> bool:
+        if path and "tooltip" in path:
+            return True
+        return False
+
     diff = DeepDiff(
         a,
         b,
         exclude_paths=exclude_from_comparison,
+        exclude_obj_callback=exclude_tooltip_callback,
         ignore_order=True,
     )
-    return not diff
+
+    if diff:
+        raise AssertionError(
+            f"Vega-Lite specs differ:\n{diff.pretty()}"
+        )  # pragma: no cover
 
 
 def build_spec(*args):
@@ -431,7 +451,7 @@ def test_single_view_single_mark(
 ):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
-    assert vl_specs_equal(vl, expected_vl)
+    assert_vl_specs_equal(vl, expected_vl)
 
 
 # https://dig.cmu.edu/draco2/facts/examples.html#stacked-bar-chart
@@ -548,7 +568,7 @@ normalized_stacked_bar_spec_vl = {
 def test_stacked(spec: dict, expected_vl: dict, renderer: AltairRenderer):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
-    assert vl_specs_equal(vl, expected_vl)
+    assert_vl_specs_equal(vl, expected_vl)
 
 
 # https://dig.cmu.edu/draco2/facts/examples.html#bar-with-a-tick
@@ -616,7 +636,7 @@ bar_with_tick_spec_vl = {
 def test_multi_mark(spec: dict, expected_vl: dict, renderer: AltairRenderer):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
-    assert vl_specs_equal(vl, expected_vl)
+    assert_vl_specs_equal(vl, expected_vl)
 
 
 # https://dig.cmu.edu/draco2/facts/examples.html#facet-scatterplot-into-columns
@@ -751,6 +771,34 @@ scatterplot_columns_binned_spec_vl = {
         "mark": {"type": "point"},
     },
 }
+scatterplot_columns_binned_spec_titled_vl = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
+    "config": {"view": {"continuousHeight": 300, "continuousWidth": 400}},
+    "facet": {
+        "column": {
+            "bin": {"maxbins": 10},
+            "field": "temperature",
+            "type": "quantitative",
+            "title": "Temperature",
+        }
+    },
+    "spec": {
+        "encoding": {
+            "x": {
+                "field": "condition",
+                "type": "ordinal",
+                "title": "Condition",
+            },
+            "y": {
+                "field": "wind",
+                "scale": {"type": "linear"},
+                "type": "quantitative",
+                "title": "Wind",
+            },
+        },
+        "mark": {"type": "point"},
+    },
+}
 
 
 @pytest.mark.parametrize(
@@ -764,7 +812,7 @@ scatterplot_columns_binned_spec_vl = {
 def test_facets(spec: dict, expected_vl: dict, renderer: AltairRenderer):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
-    assert vl_specs_equal(vl, expected_vl)
+    assert_vl_specs_equal(vl, expected_vl)
 
 
 # https://dig.cmu.edu/draco2/facts/examples.html#tick-plot-and-histogram
@@ -915,7 +963,7 @@ def test_multiple_views_no_concat(
 ):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
-    assert vl_specs_equal(vl, expected_vl)
+    assert_vl_specs_equal(vl, expected_vl)
 
 
 @pytest.mark.parametrize(
@@ -938,7 +986,69 @@ def test_multiple_views_hconcat(
 ):
     chart = renderer_with_hconcat.render(spec, df)
     vl = chart.to_dict()
-    assert vl_specs_equal(vl, expected_vl)
+    assert_vl_specs_equal(vl, expected_vl)
+
+
+def test_renderer_with_literal_label_mapping(renderer: AltairRenderer):
+    spec = scatterplot_columns_binned_spec_d
+    expected_vl = scatterplot_columns_binned_spec_titled_vl
+    chart = renderer.render(
+        spec,
+        df,
+        label_mapping={col: col.capitalize() for col in df.columns},
+    )
+    vl = chart.to_dict()
+    assert_vl_specs_equal(vl, expected_vl)
+
+
+def test_renderer_with_dynamic_label_mapping(renderer: AltairRenderer):
+    spec = scatterplot_columns_binned_spec_d
+    expected_vl = scatterplot_columns_binned_spec_titled_vl
+    chart = renderer.render(
+        spec,
+        df,
+        label_mapping=lambda col: col.capitalize(),
+    )
+    vl = chart.to_dict()
+    assert_vl_specs_equal(vl, expected_vl)
+
+
+line_spec_with_mark_config_d = build_spec(
+    data(["date", "wind"]),
+    {
+        "view": [
+            {
+                "mark": [
+                    {
+                        "type": "line",
+                        "encoding": [
+                            {"channel": "x", "field": "date"},
+                            {"channel": "y", "field": "wind"},
+                        ],
+                    }
+                ],
+            }
+        ]
+    },
+)
+line_spec_with_mark_config_vl = {
+    "config": {"view": {"continuousWidth": 300, "continuousHeight": 300}},
+    # we are testing for the presence of point=True
+    "mark": {"type": "line", "point": True},
+    "encoding": {
+        "x": {"field": "date", "type": "temporal"},
+        "y": {"field": "wind", "type": "quantitative"},
+    },
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+}
+
+
+def test_renderer_with_mark_config(renderer_with_mark_config: AltairRenderer):
+    spec = line_spec_with_mark_config_d
+    expected_vl = line_spec_with_mark_config_vl
+    chart = renderer_with_mark_config.render(spec, df)
+    vl = chart.to_dict()
+    assert_vl_specs_equal(vl, expected_vl)
 
 
 @pytest.mark.parametrize(
@@ -961,7 +1071,7 @@ def test_multiple_views_vconcat(
 ):
     chart = renderer_with_vconcat.render(spec, df)
     vl = chart.to_dict()
-    assert vl_specs_equal(vl, expected_vl)
+    assert_vl_specs_equal(vl, expected_vl)
 
 
 def test_unknown_field_raises_value_error(renderer: AltairRenderer):
@@ -1093,4 +1203,4 @@ polar_radial_chart_spec_vl = {
 def test_polar(spec: dict, expected_vl: dict, renderer: AltairRenderer):
     chart = renderer.render(spec, df)
     vl = chart.to_dict()
-    assert vl_specs_equal(vl, expected_vl)
+    assert_vl_specs_equal(vl, expected_vl)
