@@ -1,5 +1,5 @@
 import random
-from typing import Any, Literal
+from typing import Literal
 
 import pandas as pd
 import pytest
@@ -64,16 +64,10 @@ def renderer_with_mark_config():
 def assert_vl_specs_equal(a: dict, b: dict):
     exclude_from_comparison = {"config", "datasets", "data", "$schema"}
 
-    def exclude_tooltip_callback(obj: Any, path: list[str] | None) -> bool:
-        if path and "tooltip" in path:
-            return True
-        return False
-
     diff = DeepDiff(
         a,
         b,
         exclude_paths=exclude_from_comparison,
-        exclude_obj_callback=exclude_tooltip_callback,
         ignore_order=True,
     )
 
