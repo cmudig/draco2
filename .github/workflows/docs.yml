@@ -33,7 +33,7 @@ jobs:
 
       # Required to execute notebooks with Python modules wrapping Node.js modules, such as Draco 1
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
 
       # Installing system dependencies required by notebooks to be executed
       - name: Install system dependencies
