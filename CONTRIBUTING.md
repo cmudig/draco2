@@ -7,29 +7,9 @@ This document describes how you can set up your development environment if you w
 
 ## Development setup
 
-This project uses [Poetry](https://python-poetry.org). Please skim the documentation if you are not familiar with
-Poetry.
+This project uses [uv](https://docs.astral.sh/uv/). Please skim the documentation if you are not familiar with uv.
 
-After installing the dependencies with `poetry install`, you can activate the virtual environment with `poetry shell`.
-
-## Development setup with Conda
-
-You can set up this project with Poetry inside a Conda environment. Running inside a Conda environment can be useful to
-install difficult to install native dependencies (like numpy). You can install any dependencies that are stubborn before
-running `poetry install`.
-
-Install Conda (we use [miniforge](https://github.com/conda-forge/miniforge) but any other Conda distribution should work
-as well).
-
-To create a virtual environment named `draco`, you can run
-
-```sh
-conda create -n draco python=3.11
-conda activate draco
-poetry install
-```
-
-Next time you want to work on Draco, you can just run `conda activate draco`.
+After installing the dependencies with `uv sync`, you can run commands in the virtual environment with `uv run <command>` or activate it manually with `source .venv/bin/activate` (or `.venv\Scripts\activate` on Windows).
 
 ## Install the pre-commit hooks
 
@@ -43,10 +23,10 @@ You can run various test and lint commands via [`make`](https://www.gnu.org/soft
 
 ## Update dependencies
 
-Run `poetry show -o` to show the latest versions of the packages Draco depends on. Then update the dependencies
+Run `uv tree --outdated -d1` to show the latest versions of the packages Draco depends on. Then update the dependencies
 accordingly.
 
-Run `poetry update` to update dependencies within the specified range and update the lockfile.
+Run `uv lock --upgrade` to update dependencies within the specified range and update the lockfile.
 
 ## Writing constraints
 
@@ -94,14 +74,13 @@ the above-listed commands which 'block' your current shell session.
 
 ## Making a release
 
-- After pulling the latest commits, run `poetry version patch/minor/major` to update the version number in
-  `pyproject.toml`.
-- Run `git commit -am "chore: bump version to $(poetry version -s)"` to commit the version bump and add a tag with
-  `git tag "v$(poetry version -s)"`.
-- Run `poetry build` to build the package.
-- Configure the PyPI credentials with `poetry config pypi-token.pypi <token>`.
-- Run `poetry publish -r testpypi` to publish the package to [TestPyPI](https://test.pypi.org/project/draco/).
-- Run `poetry publish` to publish the package to [PyPI](https://pypi.org/project/draco/).
+- After pulling the latest commits, manually update the version number in `pyproject.toml`.
+- Run `git commit -am "chore: bump version to <new-version>"` to commit the version bump and add a tag with
+  `git tag "v<new-version>"`.
+- Run `uv build` to build the package.
+- Configure PyPI credentials (e.g., in `~/.pypirc` or use environment variables for authentication).
+- Run `uv publish --index-url https://test.pypi.org/legacy/` to publish the package to [TestPyPI](https://test.pypi.org/project/draco/).
+- Run `uv publish` to publish the package to [PyPI](https://pypi.org/project/draco/).
 - Push the commits and tags with `git push && git push --tags`.
 - Create a [release on GitHub](https://github.com/cmudig/draco2/releases) for the new version tag.
 
