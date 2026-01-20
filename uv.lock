@@ -820,7 +820,7 @@ docs = [
     { name = "jupyter-book", specifier = ">=1.0.3,<2.0" },
     { name = "jupyterlab", specifier = ">=4.3.0" },
     { name = "jupyterlite-pyodide-kernel", specifier = ">=0.4.3" },
-    { name = "jupyterlite-sphinx", specifier = ">=0.16.5" },
+    { name = "jupyterlite-sphinx", specifier = ">=0.16.5,<0.22" },
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "sphinx-autodoc-typehints", specifier = ">=2.3.0" },
     { name = "toml", specifier = ">=0.10.2" },
@@ -1492,20 +1492,19 @@ wheels = [
 
 [[package]]
 name = "jupyterlite-sphinx"
-version = "0.22.0"
+version = "0.16.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "docutils" },
     { name = "jupyter-server" },
     { name = "jupyterlab-server" },
     { name = "jupyterlite-core" },
-    { name = "jupytext" },
     { name = "nbformat" },
     { name = "sphinx" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/24/c3/d4f3a0d8abac7fa3e4b83d7b6b1451719d36b8567e02be228ed4476e37bf/jupyterlite_sphinx-0.22.0.tar.gz", hash = "sha256:586cefe8d1f5c9634dd23d96ea89237d014abfa3ed6cb556b8c133baa6b5f779", size = 19551, upload-time = "2025-09-19T11:57:57.964Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e9/b9/8697005fdce3eb3f8307a1d56711d6ab025d10b684dd1619850e0fb3c6fd/jupyterlite_sphinx-0.16.5.tar.gz", hash = "sha256:15abc18f7fa5ba9f207cfe268ed489c225b8e308e287ab5a315dcc4684125f32", size = 15339, upload-time = "2024-08-08T08:39:25.675Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/41/fb/7e3db926bba6c3b7a80f86c52cd8f0bcd323222e4611f5f65ee23eedb6a7/jupyterlite_sphinx-0.22.0-py3-none-any.whl", hash = "sha256:8d1acf3982a8bc4526e189efbb8b0da8bec7f6fca99b5fbe9ea5f7f113e66b22", size = 22100, upload-time = "2025-09-19T11:57:56.205Z" },
+    { url = "https://files.pythonhosted.org/packages/f6/71/d7fa0b7d802f359539019dfe2ec9e4b0b11b14ce815748b5adc8d28bb283/jupyterlite_sphinx-0.16.5-py3-none-any.whl", hash = "sha256:9429bfd0310d18c3cd4273e342a7e67e5a07b6baf21b150c26a54fae1b2a0077", size = 17914, upload-time = "2024-08-08T08:39:23.607Z" },
 ]
 
 [[package]]
