@@ -820,7 +820,7 @@ docs = [
     { name = "jupyter-book", specifier = ">=1.0.3,<2.0" },
     { name = "jupyterlab", specifier = ">=4.3.0" },
     { name = "jupyterlite-pyodide-kernel", specifier = ">=0.4.3" },
-    { name = "jupyterlite-sphinx", specifier = ">=0.16.5" },
+    { name = "jupyterlite-sphinx", specifier = ">=0.22" },
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "sphinx-autodoc-typehints", specifier = ">=2.3.0" },
     { name = "toml", specifier = ">=0.10.2" },
