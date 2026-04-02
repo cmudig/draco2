@@ -55,4 +55,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: gh_pages_deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
