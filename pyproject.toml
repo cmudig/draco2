@@ -52,7 +52,7 @@ docs = [
     "clyngor>=0.4.3",
     "draco1",
     "ipywidgets>=8.1.5",
-    "jupyter-book>=1.0.3,<2.0",
+    "jupyter-book>=1.0.3,<3.0",
     "jupyterlab>=4.3.0",
     "jupyterlite-pyodide-kernel>=0.4.3",
     "jupyterlite-sphinx>=0.16.5,<0.22",  # v0.22+ has Python 3.13 Path.glob() incompatibility
