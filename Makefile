@@ -81,7 +81,7 @@ grounding-size: $(PACKAGE_ROOT)/asp/examples/*
 .PHONY: publish
 publish: build
 	@echo "==> 📰 Publish"
-	@poetry publish --dry-run
+	@uv publish --dry-run
 
 .PHONY: clean
 clean:
