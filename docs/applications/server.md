@@ -93,8 +93,8 @@ import uvicorn
 
 draco_api = DracoAPI()
 
-if __name__ == '__main__':
-    uvicorn.run("my_server:draco_api.app", host='127.0.0.1', port=8000, reload=True)
+if __name__ == "__main__":
+    uvicorn.run("my_server:draco_api.app", host="127.0.0.1", port=8000, reload=True)
 ```
 
 #### Customizing Existing Routes
@@ -118,12 +118,8 @@ from draco.server.routers import DracoRouter, UtilityRouter
 from draco.server import DracoAPI
 
 draco = Draco()
-draco_router = DracoRouter(draco,
-                           prefix='/my-draco',
-                           tags=['My Draco Tag'])
-utility_router = UtilityRouter(draco,
-                               prefix='/my-utility',
-                               tags=['My Utility Tag'])
+draco_router = DracoRouter(draco, prefix="/my-draco", tags=["My Draco Tag"])
+utility_router = UtilityRouter(draco, prefix="/my-utility", tags=["My Utility Tag"])
 my_base_routers = [draco_router, utility_router]
 my_api = DracoAPI(draco=draco, base_routers=my_base_routers)
 ```
