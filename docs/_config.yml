@@ -56,7 +56,10 @@ sphinx:
       - "logo-light.png"
       - "logo-dark.png"
     # Possible `jupyterlite_sphinx` configs: https://jupyterlite-sphinx.readthedocs.io/en/latest/configuration.html
-    jupyterlite_contents: ./
+    jupyterlite_contents:
+      - api
+      - applications
+      - facts
 
 bibtex_bibfiles:
   - references.bib
