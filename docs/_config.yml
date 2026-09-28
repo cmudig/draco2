@@ -5,6 +5,10 @@ title: Draco
 author: CMU Data Interaction Group
 copyright: "2023-2024"
 
+# Staging directory that jupyterlite-sphinx creates inside the source tree
+exclude_patterns:
+  - _contents
+
 execute:
   timeout: 600
 
