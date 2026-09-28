@@ -31,7 +31,7 @@ Run `uv lock --upgrade` to update dependencies within the specified range and up
 ## Writing constraints
 
 For more information about writing constraints and optimization-based problems, take a look at the
-[Pottasco guide](https://github.com/potassco/guide/releases/).
+[Potassco guide](https://github.com/potassco/guide/releases/).
 
 ## Server Development
 

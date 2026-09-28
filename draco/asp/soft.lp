@@ -295,7 +295,7 @@ preference(y_col,V) :-
     entity(facet,V,F),
     attribute((facet,channel),F,col).
 
-% @soft(color_entropy_high) Entropy, primary quantive interactions as suggested by Kim et al.
+% @soft(color_entropy_high) Entropy, primary quantitative interactions as suggested by Kim et al.
 preference(color_entropy_high,E) :-
     attribute((field,entropy),F,EN),
     helper((encoding,field),E,F),
@@ -304,7 +304,7 @@ preference(color_entropy_high,E) :-
     helper(enc_interesting,E),
     EN > 3000.
 
-% @soft(color_entropy_low) Entropy, primary quantive interactions as suggested by Kim et al.
+% @soft(color_entropy_low) Entropy, primary quantitative interactions as suggested by Kim et al.
 preference(color_entropy_low,E) :-
     attribute((field,entropy),F,EN),
     helper((encoding,field),E,F),
@@ -313,7 +313,7 @@ preference(color_entropy_low,E) :-
     helper(enc_interesting,E),
     EN <= 3000.
 
-% @soft(size_entropy_high) Entropy, primary quantive interactions as suggested by Kim et al.
+% @soft(size_entropy_high) Entropy, primary quantitative interactions as suggested by Kim et al.
 preference(size_entropy_high,E) :-
     attribute((field,entropy),F,EN),
     helper((encoding,field),E,F),
@@ -322,7 +322,7 @@ preference(size_entropy_high,E) :-
     helper(enc_interesting,E),
     EN > 3000.
 
-% @soft(size_entropy_low) Entropy, primary quantive interactions as suggested by Kim et al.
+% @soft(size_entropy_low) Entropy, primary quantitative interactions as suggested by Kim et al.
 preference(size_entropy_low,E) :-
     attribute((field,entropy),F,EN),
     helper((encoding,field),E,F),
