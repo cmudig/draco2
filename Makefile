@@ -89,6 +89,7 @@ clean:
 	@rm -rf dist
 	@uv run jupyter-book clean docs
 	@rm -f docs/.jupyterlite.doit.db
+	@rm -rf docs/_contents
 	@rm -rf docs/.cache
 	@find . -type d -name '*.ipynb_checkpoints' -exec rm -r {} +
 	@find . -type d -name '*pytest_cache*' -exec rm -rf {} +
