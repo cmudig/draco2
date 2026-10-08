@@ -3,7 +3,7 @@
 % helpers to generate attributes based on whether they are required.
 { attribute(N,root,V) : domain(N,V) } = 1 :- root_required(N).
 { attribute((N,A),E,V): domain((N,A),V) } = 1 :- entity(N,_,E), required((N,A)).
-0 { attribute((N,A),E,V): domain((N,A),V) } 1 :- entity(N,_,E), not_required((N,A)).
+0 { attribute((N,A),E,V): domain((N,A),V) } 1 :- entity(N,_,E), not required((N,A)).
 
 % maximum number of non-layered views.
 #const max_views = 1.
@@ -34,9 +34,9 @@ required((mark,type)).
 root_required(task).
 
 % @generator(encoding_attribute) Encoding with binning, aggregate, field or stack.
-not_required((encoding,binning)).
-not_required((encoding,aggregate)).
-not_required((encoding,stack)).
+:- required((encoding,binning)).
+:- required((encoding,aggregate)).
+:- required((encoding,stack)).
 0 { attribute((encoding,field),E,N): domain((field,name),N) } 1 :- entity(encoding,_,E).
 
 % generator(scale) generate scales such that their ids and channels corresponds to the encodings in each view.
@@ -45,7 +45,7 @@ attribute((scale,channel),(s,E),C) :- entity(scale,V,(s,E)), attribute((encoding
 
 required((scale,channel)).
 required((scale,type)).
-not_required((scale,zero)).
+:- required((scale,zero)).
 
 % generator(facet) Each specification can have at most both row and col facet.
 facet_id(0..1).
@@ -53,5 +53,5 @@ facet_id(0..1).
 :- entity(facet,V,(fc,1)), not entity(facet,V,(fc,0)),facet_id(1), facet_id(0).
 
 required((facet,channel)).
-not_required((facet,binning)).
+:- required((facet,binning)).
 { attribute((facet,field),E,N): domain((field,name),N) } = 1 :- entity(facet,_,E).
