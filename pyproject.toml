@@ -2,7 +2,7 @@
 name = "draco"
 version = "2.0.1"
 description = "Visualization recommendation using constraints"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 authors = [
     { name = "Dominik Moritz", email = "domoritz@cmu.edu" },
     { name = "Chenglong Wang", email = "clwang@cs.washington.edu" },
@@ -25,7 +25,6 @@ classifiers = [
     "Natural Language :: English",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: POSIX :: Linux",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
