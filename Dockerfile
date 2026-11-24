@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION=3.13.7
+ARG PYTHON_VERSION=3.14.10
 FROM python:${PYTHON_VERSION}-slim-trixie
 COPY --from=ghcr.io/astral-sh/uv:0.8.19 /uv /uvx /bin/
 
